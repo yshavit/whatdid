@@ -27,8 +27,7 @@ class MainMenu: NSObject, NSMenuDelegate {
     }
     
     func menuWillOpen(_ menu: NSMenu) {
-        taskAdditionView?.projectField.becomeFirstResponder()
-        // taskAdditionWindow.makeKeyAndOrderFront(self)
+        // taskAdditionView?.projectField.becomeFirstResponder()
     }
     
     @objc func selectedTaskAdditionItem() {

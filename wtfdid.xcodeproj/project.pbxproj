@@ -9,10 +9,11 @@
 /* Begin PBXBuildFile section */
 		7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */; };
 		7E8C04E023714F0800A0C3A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04DF23714F0800A0C3A6 /* Assets.xcassets */; };
-		7E8C04E323714F0800A0C3A6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04E123714F0800A0C3A6 /* MainMenu.xib */; };
 		7E8C04EF23714F0800A0C3A6 /* wtfdidTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04EE23714F0800A0C3A6 /* wtfdidTests.swift */; };
 		7E8C04FA23714F0800A0C3A6 /* wtfdidUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04F923714F0800A0C3A6 /* wtfdidUITests.swift */; };
-		7EFEE80023B15AA7002928A2 /* MainMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFEE7FF23B15AA7002928A2 /* MainMenuController.swift */; };
+		7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04E123714F0800A0C3A6 /* MainMenu.xib */; };
+		7EA6E22824BD6C5F004B9297 /* TaskAdditionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA6E22724BD6C5F004B9297 /* TaskAdditionView.xib */; };
+		7EFEE80023B15AA7002928A2 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFEE7FF23B15AA7002928A2 /* MainMenu.swift */; };
 		7EFEE80223B16EA6002928A2 /* TaskAdditionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFEE80123B16EA6002928A2 /* TaskAdditionView.swift */; };
 /* End PBXBuildFile section */
 
@@ -46,7 +47,8 @@
 		7E8C04F523714F0800A0C3A6 /* wtfdidUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = wtfdidUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E8C04F923714F0800A0C3A6 /* wtfdidUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = wtfdidUITests.swift; sourceTree = "<group>"; };
 		7E8C04FB23714F0800A0C3A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7EFEE7FF23B15AA7002928A2 /* MainMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuController.swift; sourceTree = "<group>"; };
+		7EA6E22724BD6C5F004B9297 /* TaskAdditionView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskAdditionView.xib; sourceTree = "<group>"; };
+		7EFEE7FF23B15AA7002928A2 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		7EFEE80123B16EA6002928A2 /* TaskAdditionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskAdditionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -101,10 +103,11 @@
 				7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */,
 				7E8C04DF23714F0800A0C3A6 /* Assets.xcassets */,
 				7E8C04E123714F0800A0C3A6 /* MainMenu.xib */,
-				7EFEE7FF23B15AA7002928A2 /* MainMenuController.swift */,
+				7EFEE7FF23B15AA7002928A2 /* MainMenu.swift */,
 				7E8C04E423714F0800A0C3A6 /* Info.plist */,
 				7E8C04E523714F0800A0C3A6 /* wtfdid.entitlements */,
 				7EFEE80123B16EA6002928A2 /* TaskAdditionView.swift */,
+				7EA6E22724BD6C5F004B9297 /* TaskAdditionView.xib */,
 			);
 			path = wtfdid;
 			sourceTree = "<group>";
@@ -232,7 +235,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E8C04E023714F0800A0C3A6 /* Assets.xcassets in Resources */,
-				7E8C04E323714F0800A0C3A6 /* MainMenu.xib in Resources */,
+				7EA6E22824BD6C5F004B9297 /* TaskAdditionView.xib in Resources */,
+				7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,7 +263,7 @@
 			files = (
 				7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */,
 				7EFEE80223B16EA6002928A2 /* TaskAdditionView.swift in Sources */,
-				7EFEE80023B15AA7002928A2 /* MainMenuController.swift in Sources */,
+				7EFEE80023B15AA7002928A2 /* MainMenu.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
