@@ -8,17 +8,23 @@
 
 import Cocoa
 
-class TaskAdditionView: NSView {
-    @IBOutlet var contentView: TaskAdditionView!
+class TaskAdditionViewController: NSViewController {
+    @IBOutlet var contentView: NSView!
     
     var project: String!
     @IBOutlet weak var projectField: NSTextField!
     @IBOutlet weak var taskField: NSTextField!
     @IBOutlet weak var notesField: NSTextField!
     
+    override func loadView() {
+        print("here loadView")
+        Bundle.main.loadNibNamed("TaskAdditionView", owner: self, topLevelObjects: nil)
+    }
+    
+/*
     override init(frame: NSRect) {
         super.init(frame: frame)
-        if Bundle.main.loadNibNamed("TaskAdditionView", owner: self, topLevelObjects: nil) {
+        if  {
             addSubview(contentView)
         }
     }
@@ -26,5 +32,5 @@ class TaskAdditionView: NSView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-    
+*/
 }

@@ -13,7 +13,7 @@ class MainMenu: NSObject, NSMenuDelegate {
     @IBOutlet weak var statusMenu: NSMenu!
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     @IBOutlet weak var addTaskItem: NSMenuItem?
-    var taskAdditionView: TaskAdditionView?
+    var taskAdditionView: TaskAdditionViewController?
     
     override func awakeFromNib() {
         statusItem.button?.title = "✐"
@@ -21,7 +21,7 @@ class MainMenu: NSObject, NSMenuDelegate {
         statusMenu.delegate = self
         
         if let item = addTaskItem {
-            taskAdditionView = TaskAdditionView()
+            taskAdditionView = TaskAdditionViewController()
             item.view = taskAdditionView?.contentView
         }
     }
