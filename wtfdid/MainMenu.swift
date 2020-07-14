@@ -30,6 +30,10 @@ class MainMenu: NSObject, NSMenuDelegate {
         taskAdditionView?.grabFocus()
     }
     
+    func menuDidClose(_ menu: NSMenu) {
+        taskAdditionView?.reset()
+    }
+    
     @objc func selectedTaskAdditionItem() {
         print("here: selectedTaskAdditionItem")
     }
