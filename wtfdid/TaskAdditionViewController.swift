@@ -6,6 +6,16 @@ class TaskAdditionViewController: NSViewController {
     @IBOutlet weak var taskField: NSTextField!
     @IBOutlet weak var noteField: NSTextField!
     
+    override func viewDidLoad() {
+        for field in [projectField, taskField, noteField] {
+            if let plainString = field?.placeholderString {
+                field?.placeholderAttributedString = NSAttributedString(
+                    string: plainString,
+                    attributes: [.foregroundColor: NSColor.secondarySelectedControlColor])
+            }
+        }
+    }
+    
     func reset() {
         noteField.stringValue = ""
         if projectField.stringValue.isEmpty {
