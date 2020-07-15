@@ -18,7 +18,7 @@ class TaskAdditionViewController: NSViewController {
     }
     
     @objc private func grabFocusNow() {
-        var firstResponder = projectField
+        var firstResponder = noteField
         if projectField.stringValue.isEmpty {
             firstResponder = projectField
         } else if taskField.stringValue.isEmpty {

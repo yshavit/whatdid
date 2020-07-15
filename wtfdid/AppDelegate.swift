@@ -10,13 +10,19 @@ import Cocoa
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
-
+    
+    @IBOutlet weak var systemMenu: MainMenu!
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Insert code here to initialize your application
+        NSApp.setActivationPolicy(.accessory)
     }
-
-    func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
+    
+    func applicationDidBecomeActive(_ notification: Notification) {
+        systemMenu.open()
+    }
+    
+    func applicationDidResignActive(_ notification: Notification) {
+        systemMenu.hideItem()
     }
 
 }
