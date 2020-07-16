@@ -42,10 +42,10 @@
 
 /* Begin PBXFileReference section */
 		7E37A27324BFF676005BA1DF /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		7E37A28C24BFFFCB005BA1DF /* Project+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
-		7E37A28D24BFFFCB005BA1DF /* Project+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
-		7E37A28E24BFFFCB005BA1DF /* TaskEntry+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskEntry+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
-		7E37A28F24BFFFCB005BA1DF /* TaskEntry+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskEntry+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
+		7E37A28C24BFFFCB005BA1DF /* Project+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7E37A28D24BFFFCB005BA1DF /* Project+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		7E37A28E24BFFFCB005BA1DF /* TaskEntry+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskEntry+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7E37A28F24BFFFCB005BA1DF /* TaskEntry+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskEntry+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7E37A29424C00266005BA1DF /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		7E8C04DA23714F0700A0C3A6 /* wtfdid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wtfdid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
