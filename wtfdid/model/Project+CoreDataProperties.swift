@@ -2,7 +2,7 @@
 //  Project+CoreDataProperties.swift
 //  wtfdid
 //
-//  Created by Yuval Shavit on 7/15/20.
+//  Created by Yuval Shavit on 7/16/20.
 //  Copyright © 2020 Yuval Shavit. All rights reserved.
 //
 //
@@ -17,24 +17,25 @@ extension Project {
         return NSFetchRequest<Project>(entityName: "Project")
     }
 
-    @NSManaged public var project: String
-    @NSManaged public var taskEntries: NSSet
+    @NSManaged public var lastUsed: Date?
+    @NSManaged public var project: String?
+    @NSManaged public var tasks: NSSet?
 
 }
 
-// MARK: Generated accessors for taskEntries
+// MARK: Generated accessors for tasks
 extension Project {
 
-    @objc(addTaskEntriesObject:)
-    @NSManaged public func addToTaskEntries(_ value: TaskEntry)
+    @objc(addTasksObject:)
+    @NSManaged public func addToTasks(_ value: Task)
 
-    @objc(removeTaskEntriesObject:)
-    @NSManaged public func removeFromTaskEntries(_ value: TaskEntry)
+    @objc(removeTasksObject:)
+    @NSManaged public func removeFromTasks(_ value: Task)
 
-    @objc(addTaskEntries:)
-    @NSManaged public func addToTaskEntries(_ values: NSSet)
+    @objc(addTasks:)
+    @NSManaged public func addToTasks(_ values: NSSet)
 
-    @objc(removeTaskEntries:)
-    @NSManaged public func removeFromTaskEntries(_ values: NSSet)
+    @objc(removeTasks:)
+    @NSManaged public func removeFromTasks(_ values: NSSet)
 
 }
