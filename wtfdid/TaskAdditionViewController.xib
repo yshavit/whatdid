@@ -64,6 +64,9 @@
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <outlet property="nextKeyView" destination="SlX-hv-UdU" id="C4I-Ek-U7E"/>
+                    </connections>
                 </textField>
                 <button verticalHuggingPriority="751" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="Gbe-gJ-QCw" userLabel="sleep">
                     <rect key="frame" x="377" y="0.0" width="49" height="32"/>
