@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19F101" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Project" representedClassName="Project" syncable="YES">
+        <attribute name="project" attributeType="String"/>
+        <relationship name="taskEntries" toMany="YES" deletionRule="Cascade" destinationEntity="TaskEntry" inverseName="partOf" inverseEntity="TaskEntry"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="project"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="TaskEntry" representedClassName="TaskEntry" syncable="YES">
+        <attribute name="enteredAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        <attribute name="task" optional="YES" attributeType="String"/>
+        <relationship name="partOf" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Project" inverseName="taskEntries" inverseEntity="Project"/>
+    </entity>
+    <elements>
+        <element name="Project" positionX="-142.80078125" positionY="-105.2265625" width="128" height="73"/>
+        <element name="TaskEntry" positionX="-36" positionY="18" width="128" height="103"/>
+    </elements>
+</model>

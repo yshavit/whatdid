@@ -7,6 +7,7 @@ class TaskAdditionViewController: NSViewController {
     @IBOutlet weak var noteField: NSTextField!
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         for field in [projectField, taskField, noteField] {
             if let plainString = field?.placeholderString {
                 field?.placeholderAttributedString = NSAttributedString(
