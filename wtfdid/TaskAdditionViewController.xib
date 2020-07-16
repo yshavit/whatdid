@@ -22,7 +22,7 @@
                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SlX-hv-UdU" userLabel="Project">
                     <rect key="frame" x="5" y="7" width="105" height="21"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="left" placeholderString="project" drawsBackground="YES" id="1cN-Cw-QCW" userLabel="Project Field Cell">
-                        <font key="font" size="10" name="HelveticaNeue"/>
+                        <font key="font" size="12" name="HelveticaNeue"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
@@ -41,7 +41,7 @@
                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZDB-dg-mYM" userLabel="Task">
                     <rect key="frame" x="115" y="7" width="105" height="21"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="left" placeholderString="task" drawsBackground="YES" id="f93-1l-4Cm" userLabel="Task Field Cell">
-                        <font key="font" size="10" name="HelveticaNeue"/>
+                        <font key="font" size="12" name="HelveticaNeue"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
@@ -60,7 +60,7 @@
                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gFd-Jp-z4K" userLabel="Notes">
                     <rect key="frame" x="224" y="7" width="157" height="21"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="left" placeholderString="notes" drawsBackground="YES" id="2nb-l8-kLe" userLabel="Notes Field Cell">
-                        <font key="font" size="10" name="HelveticaNeue"/>
+                        <font key="font" size="12" name="HelveticaNeue"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>

@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  wtfdid
-//
-//  Created by Yuval Shavit on 11/5/19.
-//  Copyright © 2019 Yuval Shavit. All rights reserved.
-//
-
 import Cocoa
 
 @NSApplicationMain
@@ -14,6 +6,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var systemMenu: MainMenu!
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        // Our Info.plist starts us off as background. Now that we're started, become an accessory app.
+        // This approach lets us start the app deactivated.
         NSApp.setActivationPolicy(.accessory)
     }
     
