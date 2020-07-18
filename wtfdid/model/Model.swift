@@ -2,6 +2,13 @@ import Cocoa
 
 class Model {
     
+    private let lastEntryDateDispatch = DispatchQueue(label: "com.yuvalshavit.wtfdid.model.var", qos: .default)
+    private var _lastEntryDate = Date()
+    
+    init() {
+        lastEntryDate = Date()
+    }
+    
     private lazy var container: NSPersistentContainer = {
         let localContainer = NSPersistentContainer(name: "Model")
         localContainer.loadPersistentStores { description, error in
@@ -12,6 +19,21 @@ class Model {
         localContainer.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return localContainer
     }()
+    
+    var lastEntryDate : Date {
+        get {
+            return lastEntryDateDispatch.sync(execute: {
+                print("getting lastEntryDate = \(self._lastEntryDate)")
+                return self._lastEntryDate
+            })
+        }
+        set(date) {
+            lastEntryDateDispatch.async(execute: {
+                self._lastEntryDate = date
+                print("setting lastEntryDate to \(date)")
+            })
+        }
+    }
 
     func listProjects() -> [Project] {
         var result : [Project]!
@@ -49,13 +71,16 @@ class Model {
         }
     }
     
-    func addEntry(project: String, task: String, notes: String, now: Date, callback: @escaping (Error?)->()) {
+    func addEntryNow(project: String, task: String, notes: String, callback: @escaping (Error?)->()) {
         container.performBackgroundTask({context in
+            let lastUpdate = self.lastEntryDate
+            let now = Date()
+            self.lastEntryDate = now
             context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
             
             let projectData = Project.init(context: context)
             projectData.project = project
-            projectData.lastUsed = now
+            projectData.lastUsed = lastUpdate
             
             let taskData = Task.init(context: context)
             taskData.project = projectData
@@ -64,7 +89,7 @@ class Model {
             
             let entry = Entry.init(context: context)
             entry.task = taskData
-            entry.timeApproximatelyStarted = now // TODO
+            entry.timeApproximatelyStarted = lastUpdate
             entry.timeEntered = now
             entry.notes = notes
             

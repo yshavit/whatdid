@@ -4,7 +4,7 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
     public static let instance = NSApplication.shared.delegate as! AppDelegate
     
-    public lazy var model = Model()
+    public let model = Model()
     @IBOutlet private weak var systemMenu: MainMenu!
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
