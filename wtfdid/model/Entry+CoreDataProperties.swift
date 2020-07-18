@@ -18,8 +18,8 @@ extension Entry {
     }
 
     @NSManaged public var notes: String?
-    @NSManaged public var timeApproximatelyStarted: Date?
-    @NSManaged public var timeEntered: Date?
-    @NSManaged public var task: Task?
+    @NSManaged public var timeApproximatelyStarted: Date
+    @NSManaged public var timeEntered: Date
+    @NSManaged public var task: Task
 
 }
