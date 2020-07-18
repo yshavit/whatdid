@@ -99,7 +99,7 @@
                 <constraint firstItem="Efq-cs-myP" firstAttribute="top" secondItem="SlX-hv-UdU" secondAttribute="top" id="vLu-pS-qMu"/>
                 <constraint firstItem="DBN-oW-2X9" firstAttribute="leading" secondItem="SlX-hv-UdU" secondAttribute="trailing" id="ypl-76-pYv"/>
             </constraints>
-            <point key="canvasLocation" x="139" y="155"/>
+            <point key="canvasLocation" x="-140" y="-162"/>
         </view>
         <viewController title="Task Addition View Controller" nibName="TaskAdditionViewController" id="bP9-Bw-QYO" customClass="TaskAdditionViewController" customModule="wtfdid" customModuleProvider="target"/>
     </objects>
