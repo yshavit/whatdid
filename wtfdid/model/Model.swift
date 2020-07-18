@@ -63,19 +63,19 @@ class Model {
             context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
             
             let projectData = Project.init(context: context)
-            projectData.project = project
+            projectData.project = project.trimmingCharacters(in: .whitespacesAndNewlines)
             projectData.lastUsed = lastUpdate
             
             let taskData = Task.init(context: context)
             taskData.project = projectData
-            taskData.task = task
+            taskData.task = task.trimmingCharacters(in: .whitespacesAndNewlines)
             taskData.lastUsed = now
             
             let entry = Entry.init(context: context)
             entry.task = taskData
+            entry.notes = notes.trimmingCharacters(in: .whitespacesAndNewlines)
             entry.timeApproximatelyStarted = lastUpdate
             entry.timeEntered = now
-            entry.notes = notes
             
             var maybeError : Error?
             do {
