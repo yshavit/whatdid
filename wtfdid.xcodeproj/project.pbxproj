@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7E30B46124C38D91003F3679 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E30B46024C38D91003F3679 /* Atomic.swift */; };
 		7E37A27424BFF676005BA1DF /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A27224BFF676005BA1DF /* Model.xcdatamodeld */; };
 		7E37A29024BFFFCB005BA1DF /* Project+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A28C24BFFFCB005BA1DF /* Project+CoreDataClass.swift */; };
 		7E37A29124BFFFCB005BA1DF /* Project+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A28D24BFFFCB005BA1DF /* Project+CoreDataProperties.swift */; };
@@ -43,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7E30B46024C38D91003F3679 /* Atomic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
 		7E37A27324BFF676005BA1DF /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		7E37A28C24BFFFCB005BA1DF /* Project+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7E37A28D24BFFFCB005BA1DF /* Project+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				7E8C04E523714F0800A0C3A6 /* wtfdid.entitlements */,
 				7EFEE80123B16EA6002928A2 /* TaskAdditionViewController.swift */,
 				7EA6E22724BD6C5F004B9297 /* TaskAdditionViewController.xib */,
+				7E30B46024C38D91003F3679 /* Atomic.swift */,
 			);
 			path = wtfdid;
 			sourceTree = "<group>";
@@ -305,6 +308,7 @@
 				7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */,
 				7EFEE80223B16EA6002928A2 /* TaskAdditionViewController.swift in Sources */,
 				7E37A29B24C0293E005BA1DF /* Entry+CoreDataProperties.swift in Sources */,
+				7E30B46124C38D91003F3679 /* Atomic.swift in Sources */,
 				7EFEE80023B15AA7002928A2 /* MainMenu.swift in Sources */,
 				7E37A27424BFF676005BA1DF /* Model.xcdatamodeld in Sources */,
 				7E37A29124BFFFCB005BA1DF /* Project+CoreDataProperties.swift in Sources */,

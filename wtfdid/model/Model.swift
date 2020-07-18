@@ -2,8 +2,7 @@ import Cocoa
 
 class Model {
     
-    private let lastEntryDateDispatch = DispatchQueue(label: "com.yuvalshavit.wtfdid.model.var", qos: .default)
-    private var _lastEntryDate = Date()
+    @Atomic.Var private var lastEntryDate : Date
     
     init() {
         lastEntryDate = Date()
@@ -19,21 +18,6 @@ class Model {
         localContainer.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return localContainer
     }()
-    
-    var lastEntryDate : Date {
-        get {
-            return lastEntryDateDispatch.sync(execute: {
-                print("getting lastEntryDate = \(self._lastEntryDate)")
-                return self._lastEntryDate
-            })
-        }
-        set(date) {
-            lastEntryDateDispatch.async(execute: {
-                self._lastEntryDate = date
-                print("setting lastEntryDate to \(date)")
-            })
-        }
-    }
 
     func listProjects() -> [Project] {
         var result : [Project]!
