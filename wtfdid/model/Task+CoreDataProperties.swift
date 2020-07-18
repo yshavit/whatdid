@@ -17,10 +17,10 @@ extension Task {
         return NSFetchRequest<Task>(entityName: "Task")
     }
 
-    @NSManaged public var lastUsed: Date?
-    @NSManaged public var task: String?
-    @NSManaged public var entries: NSSet?
-    @NSManaged public var project: Project?
+    @NSManaged public var lastUsed: Date
+    @NSManaged public var task: String
+    @NSManaged public var entries: Set<Entry>
+    @NSManaged public var project: Project
 
 }
 

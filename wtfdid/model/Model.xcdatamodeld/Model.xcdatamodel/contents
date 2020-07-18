@@ -7,7 +7,7 @@
         <relationship name="task" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Task" inverseName="entries" inverseEntity="Task"/>
     </entity>
     <entity name="Project" representedClassName="Project" syncable="YES">
-        <attribute name="lastUsed" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lastUsed" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="project" attributeType="String"/>
         <relationship name="tasks" toMany="YES" deletionRule="Cascade" destinationEntity="Task" inverseName="project" inverseEntity="Task"/>
         <uniquenessConstraints>
@@ -17,10 +17,15 @@
         </uniquenessConstraints>
     </entity>
     <entity name="Task" representedClassName="Task" syncable="YES">
-        <attribute name="lastUsed" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="task" optional="YES" attributeType="String"/>
+        <attribute name="lastUsed" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="task" attributeType="String"/>
         <relationship name="entries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Entry" inverseName="task" inverseEntity="Entry"/>
         <relationship name="project" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Project" inverseName="tasks" inverseEntity="Project"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="task"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <elements>
         <element name="Entry" positionX="-54" positionY="9" width="128" height="103"/>

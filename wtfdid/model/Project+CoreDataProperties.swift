@@ -17,9 +17,9 @@ extension Project {
         return NSFetchRequest<Project>(entityName: "Project")
     }
 
-    @NSManaged public var lastUsed: Date?
-    @NSManaged public var project: String?
-    @NSManaged public var tasks: NSSet?
+    @NSManaged public var lastUsed: Date
+    @NSManaged public var project: String
+    @NSManaged public var tasks: Set<Task>
 
 }
 

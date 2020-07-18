@@ -37,4 +37,23 @@ class TaskAdditionViewController: NSViewController {
         }
         firstResponder?.becomeFirstResponder()
     }
+    
+    @IBAction func notesFieldAction(_ sender: NSTextField) {
+        
+        AppDelegate.instance.model.addEntry(
+            project: projectField.stringValue,
+            task: taskField.stringValue,
+            notes: noteField.stringValue,
+            now: Date(),
+            callback: {(maybeError) in
+                AppDelegate.instance.model.printAll()
+                AppDelegate.instance.hideMenu()
+            }
+        )
+    }
+    
+    @IBAction func projectOrTaskEnter(_ sender: NSTextField) {
+        sender.nextKeyView?.becomeFirstResponder()
+    }
+    
 }
