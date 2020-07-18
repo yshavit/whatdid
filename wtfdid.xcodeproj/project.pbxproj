@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7E30B46124C38D91003F3679 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E30B46024C38D91003F3679 /* Atomic.swift */; };
+		7E30B46524C3B5CD003F3679 /* AutoCompletingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E30B46424C3B5CD003F3679 /* AutoCompletingTextField.swift */; };
 		7E37A27424BFF676005BA1DF /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A27224BFF676005BA1DF /* Model.xcdatamodeld */; };
 		7E37A29024BFFFCB005BA1DF /* Project+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A28C24BFFFCB005BA1DF /* Project+CoreDataClass.swift */; };
 		7E37A29124BFFFCB005BA1DF /* Project+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A28D24BFFFCB005BA1DF /* Project+CoreDataProperties.swift */; };
@@ -45,6 +46,7 @@
 
 /* Begin PBXFileReference section */
 		7E30B46024C38D91003F3679 /* Atomic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
+		7E30B46424C3B5CD003F3679 /* AutoCompletingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletingTextField.swift; sourceTree = "<group>"; };
 		7E37A27324BFF676005BA1DF /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		7E37A28C24BFFFCB005BA1DF /* Project+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7E37A28D24BFFFCB005BA1DF /* Project+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				7EFEE80123B16EA6002928A2 /* TaskAdditionViewController.swift */,
 				7EA6E22724BD6C5F004B9297 /* TaskAdditionViewController.xib */,
 				7E30B46024C38D91003F3679 /* Atomic.swift */,
+				7E30B46424C3B5CD003F3679 /* AutoCompletingTextField.swift */,
 			);
 			path = wtfdid;
 			sourceTree = "<group>";
@@ -315,6 +318,7 @@
 				7E37A29024BFFFCB005BA1DF /* Project+CoreDataClass.swift in Sources */,
 				7E37A29A24C0293E005BA1DF /* Entry+CoreDataClass.swift in Sources */,
 				7E37A29D24C0293E005BA1DF /* Task+CoreDataProperties.swift in Sources */,
+				7E30B46524C3B5CD003F3679 /* AutoCompletingTextField.swift in Sources */,
 				7E37A29C24C0293E005BA1DF /* Task+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

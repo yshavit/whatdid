@@ -54,5 +54,4 @@ class TaskAdditionViewController: NSViewController {
     @IBAction func projectOrTaskEnter(_ sender: NSTextField) {
         sender.nextKeyView?.becomeFirstResponder()
     }
-    
 }
