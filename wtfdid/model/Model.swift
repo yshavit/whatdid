@@ -33,6 +33,30 @@ class Model {
         return result
     }
     
+    func listProjectsByPrefix(_ prefix: String) -> [String] {
+        var results : [String]!
+        container.viewContext.performAndWait {
+            let request = NSFetchRequest<Project>(entityName: "Project")
+            
+            let projects : [Project]
+            do {
+                request.sortDescriptors = [
+                    .init(key: "lastUsed", ascending: false),
+                    .init(key: "project", ascending: true)
+                ]
+                request.predicate = NSPredicate(format: "project BEGINSWITH %@", prefix)
+                projects = try request.execute()
+            } catch {
+                print("couldn't load projects: \(error)")
+                projects = []
+            }
+            results = projects.map({$0.project})
+            
+        }
+        return results
+    }
+
+    
     func printAll() {
         container.viewContext.performAndWait {
             do {

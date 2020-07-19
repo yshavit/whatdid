@@ -6,10 +6,13 @@
         <attribute name="timeEntered" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="task" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Task" inverseName="entries" inverseEntity="Task"/>
     </entity>
-    <entity name="Project" representedClassName="Project" syncable="YES">
+    <entity name="Project" representedClassName="Project" versionHashModifier="1" syncable="YES">
         <attribute name="lastUsed" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="project" attributeType="String"/>
         <relationship name="tasks" toMany="YES" deletionRule="Cascade" destinationEntity="Task" inverseName="project" inverseEntity="Task"/>
+        <fetchIndex name="byLastUsed">
+            <fetchIndexElement property="lastUsed" type="Binary" order="descending"/>
+        </fetchIndex>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="project"/>

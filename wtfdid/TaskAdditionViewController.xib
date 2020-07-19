@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="noteField" destination="gFd-Jp-z4K" id="Tmu-n1-THn"/>
                 <outlet property="projectField" destination="SlX-hv-UdU" id="Cdg-rR-P02"/>
+                <outlet property="projectFieldCell" destination="1cN-Cw-QCW" id="oXc-gM-YXY"/>
                 <outlet property="taskField" destination="ZDB-dg-mYM" id="bdL-Rc-s2I"/>
                 <outlet property="view" destination="DTt-1H-bbG" id="Fqy-MQ-MOc"/>
             </connections>
@@ -28,7 +29,6 @@
                     </textFieldCell>
                     <connections>
                         <action selector="projectOrTaskEnter:" target="-2" id="W1E-ac-enE"/>
-                        <outlet property="delegate" destination="-2" id="13K-bH-71x"/>
                         <outlet property="nextKeyView" destination="ZDB-dg-mYM" id="eVN-3c-BHE"/>
                     </connections>
                 </textField>
