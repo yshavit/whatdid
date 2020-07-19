@@ -20,9 +20,9 @@
             <rect key="frame" x="0.0" y="0.0" width="422" height="31"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SlX-hv-UdU" userLabel="Project" customClass="AutoCompletingTextField" customModule="wtfdid" customModuleProvider="target">
+                <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SlX-hv-UdU" userLabel="Project" customClass="AutoCompletingTextField" customModule="wtfdid" customModuleProvider="target">
                     <rect key="frame" x="5" y="7" width="105" height="21"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" placeholderString="project" drawsBackground="YES" id="1cN-Cw-QCW" userLabel="Project Field Cell">
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" placeholderString="project" drawsBackground="YES" id="1cN-Cw-QCW" userLabel="Project Field Cell" customClass="AutoCompletingTextCell" customModule="wtfdid" customModuleProvider="target">
                         <font key="font" size="12" name="HelveticaNeue"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
