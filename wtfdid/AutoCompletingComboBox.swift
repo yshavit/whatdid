@@ -24,32 +24,23 @@ class AutoCompletingComboBox: NSComboBox, NSComboBoxDelegate {
     
     override func textDidChange(_ notification: Notification) {
         super.textDidChange(notification)
-        if isAutoCompleting {
-            print("<<< END")
-            isAutoCompleting = false
-        } else {
-            print("<<< START")
-            isAutoCompleting = true
-            updateSuggestions()
-        }
-    }
-    
-    override func textDidBeginEditing(_ notification: Notification) {
-        print("cell: \(cell)")
         updateSuggestions()
     }
-    
+
+    override func textDidBeginEditing(_ notification: Notification) {
+        super.textDidBeginEditing(notification)
+        updateSuggestions()
+    }
+
     override func textDidEndEditing(_ notification: Notification) {
+        super.textDidEndEditing(notification)
         cell?.setAccessibilityExpanded(false)
-        print("done editing")
     }
     
     private func updateSuggestions() {
-        let autocompletes = lookups(stringValue)
-        print("text is now: \(stringValue); projects=\(autocompletes)")
         removeAllItems()
-        addItems(withObjectValues: autocompletes)
-        if autocompletes.count > 0 {
+        addItems(withObjectValues: lookups(stringValue))
+        if numberOfItems > 0 {
             cell?.setAccessibilityExpanded(true)
         }
     }
