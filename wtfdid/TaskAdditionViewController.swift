@@ -47,7 +47,6 @@ class TaskAdditionViewController: NSViewController {
             task: taskField.stringValue,
             notes: noteField.stringValue,
             callback: {(maybeError) in
-                AppDelegate.instance.model.printAll()
                 AppDelegate.instance.hideMenu()
             }
         )
