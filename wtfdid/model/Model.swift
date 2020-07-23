@@ -47,6 +47,7 @@ class Model {
                 if !prefix.isEmpty {
                     request.predicate = NSPredicate(format: "project BEGINSWITH %@", prefix)
                 }
+                request.fetchLimit = 10
                 projects = try request.execute()
             } catch {
                 print("couldn't load projects: \(error)")
@@ -76,6 +77,7 @@ class Model {
                         NSPredicate(format: "task BEGINSWITH %@", prefix)])
                 }
                 request.predicate = predicate
+                request.fetchLimit = 10
                 tasks = try request.execute()
             } catch {
                 print("couldn't load projects: \(error)")
