@@ -2,9 +2,9 @@ import Cocoa
 
 class TaskAdditionViewController: NSViewController {
     
-    @IBOutlet weak var projectField: NSTextField!
-    @IBOutlet weak var taskField: NSTextField!
-    @IBOutlet weak var noteField: NSTextField!
+    @IBOutlet weak var projectField: AutoCompletingComboBox!
+    @IBOutlet weak var taskField: AutoCompletingComboBox!
+    @IBOutlet weak var noteField: NSComboBox!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -15,6 +15,8 @@ class TaskAdditionViewController: NSViewController {
                     attributes: [.foregroundColor: NSColor.secondarySelectedControlColor])
             }
         }
+        projectField.setAutoCompleteLookups({prefix in AppDelegate.instance.model.listProjects(prefix: prefix)})
+        taskField.setAutoCompleteLookups({prefix in AppDelegate.instance.model.listTasks(project: self.self.projectField.stringValue, prefix: prefix)})
     }
     
     func reset() {
@@ -45,7 +47,6 @@ class TaskAdditionViewController: NSViewController {
             task: taskField.stringValue,
             notes: noteField.stringValue,
             callback: {(maybeError) in
-                AppDelegate.instance.model.printAll()
                 AppDelegate.instance.hideMenu()
             }
         )
@@ -54,5 +55,4 @@ class TaskAdditionViewController: NSViewController {
     @IBAction func projectOrTaskEnter(_ sender: NSTextField) {
         sender.nextKeyView?.becomeFirstResponder()
     }
-    
 }

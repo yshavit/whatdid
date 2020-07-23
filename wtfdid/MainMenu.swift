@@ -20,6 +20,7 @@ class MainMenu: NSObject, NSMenuDelegate {
         statusItem.button?.title = "✐"
         statusItem.menu = statusMenu
         statusMenu.delegate = self
+        
     }
     
     /**
