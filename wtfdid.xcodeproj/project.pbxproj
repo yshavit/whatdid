@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		7E30B46124C38D91003F3679 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E30B46024C38D91003F3679 /* Atomic.swift */; };
-		7E30B46524C3B5CD003F3679 /* AutoCompletingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E30B46424C3B5CD003F3679 /* AutoCompletingTextField.swift */; };
 		7E37A27424BFF676005BA1DF /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A27224BFF676005BA1DF /* Model.xcdatamodeld */; };
 		7E37A29024BFFFCB005BA1DF /* Project+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A28C24BFFFCB005BA1DF /* Project+CoreDataClass.swift */; };
 		7E37A29124BFFFCB005BA1DF /* Project+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A28D24BFFFCB005BA1DF /* Project+CoreDataProperties.swift */; };
@@ -23,7 +22,6 @@
 		7E8C04FA23714F0800A0C3A6 /* wtfdidUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04F923714F0800A0C3A6 /* wtfdidUITests.swift */; };
 		7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04E123714F0800A0C3A6 /* MainMenu.xib */; };
 		7EA6E22824BD6C5F004B9297 /* TaskAdditionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA6E22724BD6C5F004B9297 /* TaskAdditionViewController.xib */; };
-		7EE427A724C3F46D002C51F3 /* AutoCompletingTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE427A624C3F46D002C51F3 /* AutoCompletingTextCell.swift */; };
 		7EE427AB24C42EBD002C51F3 /* AutoCompletingComboBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE427AA24C42EBD002C51F3 /* AutoCompletingComboBox.swift */; };
 		7EFEE80023B15AA7002928A2 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFEE7FF23B15AA7002928A2 /* MainMenu.swift */; };
 		7EFEE80223B16EA6002928A2 /* TaskAdditionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFEE80123B16EA6002928A2 /* TaskAdditionViewController.swift */; };
@@ -48,7 +46,6 @@
 
 /* Begin PBXFileReference section */
 		7E30B46024C38D91003F3679 /* Atomic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
-		7E30B46424C3B5CD003F3679 /* AutoCompletingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletingTextField.swift; sourceTree = "<group>"; };
 		7E37A27324BFF676005BA1DF /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		7E37A28C24BFFFCB005BA1DF /* Project+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7E37A28D24BFFFCB005BA1DF /* Project+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -70,7 +67,6 @@
 		7E8C04F923714F0800A0C3A6 /* wtfdidUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = wtfdidUITests.swift; sourceTree = "<group>"; };
 		7E8C04FB23714F0800A0C3A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7EA6E22724BD6C5F004B9297 /* TaskAdditionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskAdditionViewController.xib; sourceTree = "<group>"; };
-		7EE427A624C3F46D002C51F3 /* AutoCompletingTextCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletingTextCell.swift; sourceTree = "<group>"; };
 		7EE427AA24C42EBD002C51F3 /* AutoCompletingComboBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletingComboBox.swift; sourceTree = "<group>"; };
 		7EFEE7FF23B15AA7002928A2 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		7EFEE80123B16EA6002928A2 /* TaskAdditionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskAdditionViewController.swift; sourceTree = "<group>"; };
@@ -157,8 +153,6 @@
 				7EFEE80123B16EA6002928A2 /* TaskAdditionViewController.swift */,
 				7EA6E22724BD6C5F004B9297 /* TaskAdditionViewController.xib */,
 				7E30B46024C38D91003F3679 /* Atomic.swift */,
-				7E30B46424C3B5CD003F3679 /* AutoCompletingTextField.swift */,
-				7EE427A624C3F46D002C51F3 /* AutoCompletingTextCell.swift */,
 				7EE427AA24C42EBD002C51F3 /* AutoCompletingComboBox.swift */,
 			);
 			path = wtfdid;
@@ -319,14 +313,12 @@
 				7E37A29B24C0293E005BA1DF /* Entry+CoreDataProperties.swift in Sources */,
 				7EE427AB24C42EBD002C51F3 /* AutoCompletingComboBox.swift in Sources */,
 				7E30B46124C38D91003F3679 /* Atomic.swift in Sources */,
-				7EE427A724C3F46D002C51F3 /* AutoCompletingTextCell.swift in Sources */,
 				7EFEE80023B15AA7002928A2 /* MainMenu.swift in Sources */,
 				7E37A27424BFF676005BA1DF /* Model.xcdatamodeld in Sources */,
 				7E37A29124BFFFCB005BA1DF /* Project+CoreDataProperties.swift in Sources */,
 				7E37A29024BFFFCB005BA1DF /* Project+CoreDataClass.swift in Sources */,
 				7E37A29A24C0293E005BA1DF /* Entry+CoreDataClass.swift in Sources */,
 				7E37A29D24C0293E005BA1DF /* Task+CoreDataProperties.swift in Sources */,
-				7E30B46524C3B5CD003F3679 /* AutoCompletingTextField.swift in Sources */,
 				7E37A29C24C0293E005BA1DF /* Task+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

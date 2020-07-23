@@ -2,10 +2,9 @@ import Cocoa
 
 class TaskAdditionViewController: NSViewController {
     
-    @IBOutlet weak var projectField: AutoCompletingTextField!
-    @IBOutlet weak var taskField: NSTextField!
-    @IBOutlet weak var noteField: NSTextField!
-    @IBOutlet weak var projectFieldCell: AutoCompletingTextCell!
+    @IBOutlet weak var projectField: AutoCompletingComboBox!
+    @IBOutlet weak var taskField: NSComboBox!
+    @IBOutlet weak var noteField: NSComboBox!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,8 +15,9 @@ class TaskAdditionViewController: NSViewController {
                     attributes: [.foregroundColor: NSColor.secondarySelectedControlColor])
             }
         }
-        projectFieldCell.setAutoCompleteLookups({prefix in AppDelegate.instance.model.listProjectsByPrefix(prefix)})
-        projectField.autoCompleteLookups = {prefix in AppDelegate.instance.model.listProjectsByPrefix(prefix)}
+        projectField.setAutoCompleteLookups({prefix in AppDelegate.instance.model.listProjectsByPrefix(prefix)})
+        // TODO look tasks up by project
+//        taskField.setAutoCompleteLookups({prefix in AppDelegate.instance.model.listProjectsByPrefix(prefix)})
     }
     
     func reset() {

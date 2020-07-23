@@ -7,119 +7,133 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="TaskAdditionViewController" customModule="wtfdid" customModuleProvider="target">
             <connections>
-                <outlet property="noteField" destination="gFd-Jp-z4K" id="Tmu-n1-THn"/>
-                <outlet property="projectField" destination="SlX-hv-UdU" id="Cdg-rR-P02"/>
-                <outlet property="projectFieldCell" destination="1cN-Cw-QCW" id="oXc-gM-YXY"/>
-                <outlet property="taskField" destination="ZDB-dg-mYM" id="bdL-Rc-s2I"/>
+                <outlet property="noteField" destination="Zy9-oh-6fD" id="nfd-Ms-aMS"/>
+                <outlet property="projectField" destination="ahq-DU-gr9" id="FaR-Mn-nGq"/>
+                <outlet property="taskField" destination="dGG-J5-KA1" id="ozn-WV-Rwn"/>
                 <outlet property="view" destination="DTt-1H-bbG" id="Fqy-MQ-MOc"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <view id="DTt-1H-bbG">
-            <rect key="frame" x="0.0" y="0.0" width="422" height="146"/>
+            <rect key="frame" x="0.0" y="0.0" width="445" height="29"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SlX-hv-UdU" userLabel="Project" customClass="AutoCompletingTextField" customModule="wtfdid" customModuleProvider="target">
-                    <rect key="frame" x="5" y="122" width="105" height="21"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" placeholderString="project" drawsBackground="YES" id="1cN-Cw-QCW" userLabel="Project Field Cell" customClass="AutoCompletingTextCell" customModule="wtfdid" customModuleProvider="target">
-                        <font key="font" size="12" name="HelveticaNeue"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <action selector="projectOrTaskEnter:" target="-2" id="W1E-ac-enE"/>
-                        <outlet property="nextKeyView" destination="ZDB-dg-mYM" id="eVN-3c-BHE"/>
-                    </connections>
-                </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DBN-oW-2X9" userLabel="project_task_separator">
-                    <rect key="frame" x="108" y="127" width="9" height="16"/>
+                <box boxType="custom" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="04A-0F-FVu" userLabel="Box Project">
+                    <rect key="frame" x="3" y="5" width="105" height="22"/>
+                    <view key="contentView" id="4iu-EK-7NX">
+                        <rect key="frame" x="1" y="1" width="103" height="20"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ahq-DU-gr9" userLabel="Project Combo" customClass="AutoCompletingComboBox" customModule="wtfdid" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="-2" width="106" height="23"/>
+                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="project" drawsBackground="YES" usesSingleLineMode="YES" buttonBordered="NO" completes="NO" numberOfVisibleItems="5" id="bQR-K9-wwH">
+                                    <font key="font" size="12" name="HelveticaNeue"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </comboBoxCell>
+                                <connections>
+                                    <outlet property="nextKeyView" destination="dGG-J5-KA1" id="4xq-uE-eBQ"/>
+                                </connections>
+                            </comboBox>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="ahq-DU-gr9" firstAttribute="centerY" secondItem="4iu-EK-7NX" secondAttribute="centerY" id="FL7-sV-LxK"/>
+                            <constraint firstItem="ahq-DU-gr9" firstAttribute="width" secondItem="4iu-EK-7NX" secondAttribute="width" id="Rm0-8y-KPf"/>
+                            <constraint firstItem="ahq-DU-gr9" firstAttribute="centerX" secondItem="4iu-EK-7NX" secondAttribute="centerX" id="nAB-MF-iuY"/>
+                        </constraints>
+                    </view>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="22" id="A60-CV-IrZ"/>
+                        <constraint firstAttribute="width" constant="105" id="Szl-vo-sAS"/>
+                    </constraints>
+                </box>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DBN-oW-2X9" userLabel="Separator project-to-task">
+                    <rect key="frame" x="108" y="8" width="9" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="b9W-xF-Uy1"/>
+                        <constraint firstAttribute="width" constant="5" id="pdn-Pg-CGr"/>
+                    </constraints>
                     <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="/" id="vwy-Dv-Ah1">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZDB-dg-mYM" userLabel="Task" customClass="AutoCompletingTextField" customModule="wtfdid" customModuleProvider="target">
-                    <rect key="frame" x="115" y="122" width="105" height="21"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" placeholderString="task" drawsBackground="YES" id="f93-1l-4Cm" userLabel="Task Field Cell">
-                        <font key="font" size="12" name="HelveticaNeue"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <action selector="projectOrTaskEnter:" target="-2" id="TBw-Go-xGV"/>
-                        <outlet property="nextKeyView" destination="gFd-Jp-z4K" id="LP3-sN-fUA"/>
-                    </connections>
-                </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Efq-cs-myP" userLabel="task_notes_separator">
-                    <rect key="frame" x="218" y="127" width="8" height="16"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title=":" id="6He-uU-09L">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gFd-Jp-z4K" userLabel="Notes">
-                    <rect key="frame" x="224" y="122" width="157" height="21"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" placeholderString="notes" drawsBackground="YES" id="2nb-l8-kLe" userLabel="Notes Field Cell">
-                        <font key="font" size="12" name="HelveticaNeue"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <action selector="notesFieldAction:" target="-2" id="Jpp-yA-Hjx"/>
-                        <outlet property="nextKeyView" destination="SlX-hv-UdU" id="C4I-Ek-U7E"/>
-                    </connections>
-                </textField>
-                <button verticalHuggingPriority="751" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="Gbe-gJ-QCw" userLabel="sleep">
-                    <rect key="frame" x="377" y="115" width="49" height="32"/>
-                    <buttonCell key="cell" type="push" title="⌚︎" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="M08-zm-c23">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                </button>
-                <box fixedFrame="YES" boxType="custom" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="04A-0F-FVu">
-                    <rect key="frame" x="20" y="38" width="177" height="22"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <view key="contentView" id="4iu-EK-7NX">
-                        <rect key="frame" x="1" y="1" width="175" height="20"/>
+                <box boxType="custom" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="O1J-td-hSB" userLabel="Box Task">
+                    <rect key="frame" x="118" y="5" width="105" height="22"/>
+                    <view key="contentView" id="72N-p6-pOu">
+                        <rect key="frame" x="1" y="1" width="103" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ahq-DU-gr9" customClass="AutoCompletingComboBox" customModule="wtfdid" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="-3" width="178" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="project" drawsBackground="YES" usesSingleLineMode="YES" buttonBordered="NO" numberOfVisibleItems="5" id="bQR-K9-wwH">
+                            <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dGG-J5-KA1" userLabel="Task Combo" customClass="AutoCompletingComboBox" customModule="wtfdid" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="-2" width="106" height="23"/>
+                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="task" drawsBackground="YES" usesSingleLineMode="YES" buttonBordered="NO" completes="NO" numberOfVisibleItems="5" id="j83-oj-gZW">
                                     <font key="font" size="12" name="HelveticaNeue"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </comboBoxCell>
                             </comboBox>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="dGG-J5-KA1" firstAttribute="centerY" secondItem="72N-p6-pOu" secondAttribute="centerY" id="8y8-aa-KY6"/>
+                            <constraint firstItem="dGG-J5-KA1" firstAttribute="centerX" secondItem="72N-p6-pOu" secondAttribute="centerX" id="Nf8-we-QYz"/>
+                            <constraint firstItem="dGG-J5-KA1" firstAttribute="centerY" secondItem="72N-p6-pOu" secondAttribute="centerY" id="Wuw-qS-DOn"/>
+                            <constraint firstItem="dGG-J5-KA1" firstAttribute="centerX" secondItem="72N-p6-pOu" secondAttribute="centerX" id="YeV-7c-JOx"/>
+                            <constraint firstItem="dGG-J5-KA1" firstAttribute="width" secondItem="72N-p6-pOu" secondAttribute="width" id="ZcE-TJ-h8q"/>
+                        </constraints>
+                    </view>
+                </box>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Efq-cs-myP" userLabel="Separator task-to-notes">
+                    <rect key="frame" x="224" y="8" width="8" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title=":" id="6He-uU-09L">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <box boxType="custom" cornerRadius="4" title="Box" id="Q2z-pS-9ab" userLabel="Box Notes">
+                    <rect key="frame" x="232" y="5" width="210" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <view key="contentView" id="GfA-Cy-FfV">
+                        <rect key="frame" x="1" y="1" width="208" height="20"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Zy9-oh-6fD" userLabel="Notes Combo">
+                                <rect key="frame" x="0.0" y="-2" width="211" height="23"/>
+                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="notes" drawsBackground="YES" usesSingleLineMode="YES" buttonBordered="NO" completes="NO" numberOfVisibleItems="5" id="zqC-dn-qDE">
+                                    <font key="font" size="12" name="HelveticaNeue"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </comboBoxCell>
+                            </comboBox>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="Zy9-oh-6fD" firstAttribute="width" secondItem="GfA-Cy-FfV" secondAttribute="width" id="X8I-U7-70F"/>
+                            <constraint firstItem="Zy9-oh-6fD" firstAttribute="centerX" secondItem="GfA-Cy-FfV" secondAttribute="centerX" id="eak-UZ-5Iy"/>
+                            <constraint firstItem="Zy9-oh-6fD" firstAttribute="centerY" secondItem="GfA-Cy-FfV" secondAttribute="centerY" id="ofL-u3-C0T"/>
+                        </constraints>
                     </view>
                 </box>
             </subviews>
             <constraints>
-                <constraint firstItem="Gbe-gJ-QCw" firstAttribute="top" secondItem="SlX-hv-UdU" secondAttribute="top" id="1gB-Bl-YN9"/>
-                <constraint firstItem="ZDB-dg-mYM" firstAttribute="bottom" secondItem="Gbe-gJ-QCw" secondAttribute="bottom" id="5JB-a6-NNu"/>
-                <constraint firstItem="gFd-Jp-z4K" firstAttribute="width" secondItem="ZDB-dg-mYM" secondAttribute="width" multiplier="1.5" id="7Ct-r9-I8c"/>
-                <constraint firstItem="SlX-hv-UdU" firstAttribute="leading" secondItem="DTt-1H-bbG" secondAttribute="leading" constant="5" id="Aoq-IF-OFX"/>
-                <constraint firstItem="gFd-Jp-z4K" firstAttribute="top" secondItem="SlX-hv-UdU" secondAttribute="top" id="B2s-OE-5mD"/>
-                <constraint firstItem="SlX-hv-UdU" firstAttribute="top" secondItem="DTt-1H-bbG" secondAttribute="top" constant="3" id="Hho-yU-css"/>
-                <constraint firstItem="Gbe-gJ-QCw" firstAttribute="leading" secondItem="gFd-Jp-z4K" secondAttribute="trailing" constant="2" id="JDb-VP-1XE"/>
-                <constraint firstItem="Efq-cs-myP" firstAttribute="leading" secondItem="ZDB-dg-mYM" secondAttribute="trailing" id="K6N-sB-NVp"/>
-                <constraint firstItem="ZDB-dg-mYM" firstAttribute="leading" secondItem="DBN-oW-2X9" secondAttribute="trailing" id="MOj-tg-13o"/>
-                <constraint firstItem="Gbe-gJ-QCw" firstAttribute="bottom" secondItem="SlX-hv-UdU" secondAttribute="bottom" id="RJX-kN-Kpu"/>
-                <constraint firstItem="DBN-oW-2X9" firstAttribute="top" secondItem="SlX-hv-UdU" secondAttribute="top" id="SSk-fE-mBd"/>
-                <constraint firstItem="ZDB-dg-mYM" firstAttribute="width" secondItem="SlX-hv-UdU" secondAttribute="width" id="Uda-CJ-hyq"/>
-                <constraint firstItem="gFd-Jp-z4K" firstAttribute="leading" secondItem="Efq-cs-myP" secondAttribute="trailing" id="Y1y-7W-fUZ"/>
-                <constraint firstAttribute="trailing" secondItem="Gbe-gJ-QCw" secondAttribute="trailing" constant="2" id="aDB-RN-Xgn"/>
-                <constraint firstItem="gFd-Jp-z4K" firstAttribute="bottom" secondItem="Gbe-gJ-QCw" secondAttribute="bottom" id="ebh-aG-OzL"/>
-                <constraint firstItem="ZDB-dg-mYM" firstAttribute="top" secondItem="SlX-hv-UdU" secondAttribute="top" id="fYP-lV-Uad"/>
-                <constraint firstItem="Efq-cs-myP" firstAttribute="top" secondItem="SlX-hv-UdU" secondAttribute="top" id="vLu-pS-qMu"/>
-                <constraint firstItem="DBN-oW-2X9" firstAttribute="leading" secondItem="SlX-hv-UdU" secondAttribute="trailing" id="ypl-76-pYv"/>
+                <constraint firstItem="O1J-td-hSB" firstAttribute="leading" secondItem="DBN-oW-2X9" secondAttribute="trailing" constant="3" id="5vC-aB-Ocn"/>
+                <constraint firstItem="04A-0F-FVu" firstAttribute="top" secondItem="DTt-1H-bbG" secondAttribute="top" constant="2" id="7uW-c1-WUT"/>
+                <constraint firstItem="Q2z-pS-9ab" firstAttribute="leading" secondItem="Efq-cs-myP" secondAttribute="trailing" constant="2" id="NNW-Xj-dQI"/>
+                <constraint firstItem="Efq-cs-myP" firstAttribute="centerY" secondItem="DBN-oW-2X9" secondAttribute="centerY" id="Quh-De-dwc"/>
+                <constraint firstItem="DBN-oW-2X9" firstAttribute="leading" secondItem="04A-0F-FVu" secondAttribute="trailing" constant="2" id="Rhi-hk-Hor"/>
+                <constraint firstItem="Q2z-pS-9ab" firstAttribute="centerY" secondItem="04A-0F-FVu" secondAttribute="centerY" id="SIE-jd-I4Q"/>
+                <constraint firstItem="DBN-oW-2X9" firstAttribute="centerY" secondItem="04A-0F-FVu" secondAttribute="centerY" id="VzY-J3-WiU"/>
+                <constraint firstItem="O1J-td-hSB" firstAttribute="centerY" secondItem="04A-0F-FVu" secondAttribute="centerY" id="XBM-MR-0GA"/>
+                <constraint firstItem="Q2z-pS-9ab" firstAttribute="height" secondItem="04A-0F-FVu" secondAttribute="height" id="dI2-T6-vTh"/>
+                <constraint firstItem="O1J-td-hSB" firstAttribute="height" secondItem="04A-0F-FVu" secondAttribute="height" id="nEj-wB-fUN"/>
+                <constraint firstItem="Efq-cs-myP" firstAttribute="width" secondItem="DBN-oW-2X9" secondAttribute="width" multiplier="0.8" id="ous-hF-4Fz"/>
+                <constraint firstItem="Efq-cs-myP" firstAttribute="height" secondItem="DBN-oW-2X9" secondAttribute="height" id="sCg-7K-UBE"/>
+                <constraint firstItem="O1J-td-hSB" firstAttribute="width" secondItem="04A-0F-FVu" secondAttribute="width" id="w8M-f7-EQS"/>
+                <constraint firstItem="04A-0F-FVu" firstAttribute="leading" secondItem="DTt-1H-bbG" secondAttribute="leading" constant="3" id="yhj-ai-h08"/>
+                <constraint firstAttribute="trailing" secondItem="Q2z-pS-9ab" secondAttribute="trailing" constant="3" id="yhj-ai-h09"/>
             </constraints>
-            <point key="canvasLocation" x="-140" y="-105"/>
+            <point key="canvasLocation" x="-126" y="-163.5"/>
         </view>
         <viewController title="Task Addition View Controller" nibName="TaskAdditionViewController" id="bP9-Bw-QYO" customClass="TaskAdditionViewController" customModule="wtfdid" customModuleProvider="target"/>
     </objects>
