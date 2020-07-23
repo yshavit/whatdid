@@ -104,12 +104,13 @@
                         <subviews>
                             <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Zy9-oh-6fD" userLabel="Notes Combo">
                                 <rect key="frame" x="0.0" y="-2" width="211" height="23"/>
-                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="notes" drawsBackground="YES" usesSingleLineMode="YES" buttonBordered="NO" completes="NO" numberOfVisibleItems="5" id="zqC-dn-qDE">
+                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" placeholderString="notes" drawsBackground="YES" usesSingleLineMode="YES" buttonBordered="NO" completes="NO" numberOfVisibleItems="5" id="zqC-dn-qDE">
                                     <font key="font" size="12" name="HelveticaNeue"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </comboBoxCell>
                                 <connections>
+                                    <action selector="notesFieldAction:" target="-2" id="z5c-Kn-yUz"/>
                                     <outlet property="nextKeyView" destination="ahq-DU-gr9" id="bhR-a3-mhg"/>
                                 </connections>
                             </comboBox>

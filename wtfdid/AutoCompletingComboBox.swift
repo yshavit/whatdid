@@ -1,11 +1,3 @@
-//
-//  AutoCompletingComboBox.swift
-//  wtfdid
-//
-//  Created by Yuval Shavit on 7/19/20.
-//  Copyright © 2020 Yuval Shavit. All rights reserved.
-//
-
 import Cocoa
 
 class AutoCompletingComboBox: NSComboBox, NSComboBoxDelegate {
@@ -22,26 +14,31 @@ class AutoCompletingComboBox: NSComboBox, NSComboBoxDelegate {
     
     var isAutoCompleting = false
     
+    override func becomeFirstResponder() -> Bool {
+        updateSuggestions()
+        if indexOfSelectedItem < 0 && numberOfItems > 0 {
+            selectItem(at: 0)
+        }
+        return super.becomeFirstResponder()
+    }
+    
     override func textDidChange(_ notification: Notification) {
         super.textDidChange(notification)
         updateSuggestions()
     }
 
-    override func textDidBeginEditing(_ notification: Notification) {
-        super.textDidBeginEditing(notification)
-        updateSuggestions()
-    }
-
     override func textDidEndEditing(_ notification: Notification) {
         super.textDidEndEditing(notification)
-        cell?.setAccessibilityExpanded(false)
+        let isBacktab = notification.userInfo?["NSTextMovement"] as? Int == NSTextMovement.backtab.rawValue
+        if !isBacktab {
+            cell?.setAccessibilityExpanded(false)
+            nextKeyView?.becomeFirstResponder()
+        }
     }
     
     private func updateSuggestions() {
         removeAllItems()
         addItems(withObjectValues: lookups(stringValue))
-        if numberOfItems > 0 {
-            cell?.setAccessibilityExpanded(true)
-        }
+        cell?.setAccessibilityExpanded(numberOfItems > 0)
     }
 }

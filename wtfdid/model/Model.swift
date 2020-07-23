@@ -44,7 +44,9 @@ class Model {
                     .init(key: "lastUsed", ascending: false),
                     .init(key: "project", ascending: true)
                 ]
-                request.predicate = NSPredicate(format: "project BEGINSWITH %@", prefix)
+                if !prefix.isEmpty {
+                    request.predicate = NSPredicate(format: "project BEGINSWITH %@", prefix)
+                }
                 projects = try request.execute()
             } catch {
                 print("couldn't load projects: \(error)")
@@ -67,7 +69,13 @@ class Model {
                     .init(key: "lastUsed", ascending: false),
                     .init(key: "task", ascending: true)
                 ]
-                request.predicate = NSPredicate(format: "project.project = %@ AND task BEGINSWITH %@", project, prefix)
+                var predicate = NSPredicate(format: "project.project = %@", project)
+                if !prefix.isEmpty {
+                    predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                        predicate,
+                        NSPredicate(format: "task BEGINSWITH %@", prefix)])
+                }
+                request.predicate = predicate
                 tasks = try request.execute()
             } catch {
                 print("couldn't load projects: \(error)")
