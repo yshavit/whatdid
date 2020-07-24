@@ -12,19 +12,18 @@ class ScheduledPtnWindowController: NSWindowController, NSWindowDelegate {
     private static let POPUP_WINDOW_BUFFER = 3
     private var taskAdditionsPane : TaskAdditionViewController!
     
+    @IBOutlet weak var panel: NSPanel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        print("awakening: window=\(window), self=\(self)")
         window?.level = .floating
         taskAdditionsPane = TaskAdditionViewController()
         window?.contentViewController = taskAdditionsPane
-        print("awakened: window=\(window)")
+        panel.becomesKeyOnlyIfNeeded = true 
     }
     
     func show() {
-        print("showing (window=\(window)), self=\(self)")
         if let mainFrame = NSScreen.main?.visibleFrame, let currWindow = window {
-            print("yes")
             let buffer = CGFloat(ScheduledPtnWindowController.POPUP_WINDOW_BUFFER)
             let pos = NSPoint(
                 x: mainFrame.origin.x + mainFrame.width - currWindow.frame.width - buffer,

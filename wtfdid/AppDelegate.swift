@@ -6,6 +6,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     public let model = Model()
     @IBOutlet private weak var systemMenu: MainMenu!
+    @IBOutlet weak var sptn: ScheduledPtnWindowController!
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Our Info.plist starts us off as background. Now that we're started, become an accessory app.
@@ -27,22 +28,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.systemMenu.statusMenu.cancelTracking()
         }
     }
-    
-    var sptn : ScheduledPtnWindowController?
-    
+
     func schedulePtn() {
         let when = DispatchTime.now().advanced(by: DispatchTimeInterval.seconds(2))
-//        DispatchQueue.main.asyncAfter(deadline: when, execute: {
-
-        var loaded: NSArray?
-        Bundle.main.loadNibNamed("ScheduledPtnWindowController", owner: self, topLevelObjects: &loaded)
-        print("loaded: \(loaded?[1])")
-        
-            print("schedulePtn: showing window")
-            self.sptn = ScheduledPtnWindowController()
-            self.sptn?.show()
-            print("schedulePtn: done")
-//        })
+        DispatchQueue.main.asyncAfter(deadline: when, execute: {
+            self.sptn.show()
+        })
     }
 
 }

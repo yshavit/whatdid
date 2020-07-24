@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -13,6 +14,7 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="wtfdid" customModuleProvider="target">
             <connections>
+                <outlet property="sptn" destination="fTe-Bg-dOv" id="hAk-5z-xsO"/>
                 <outlet property="systemMenu" destination="NNK-i5-XAG" id="oab-R7-oJy"/>
             </connections>
         </customObject>
@@ -25,5 +27,22 @@
         <menu id="TmO-Yj-Dje" userLabel="Main Menu">
             <point key="canvasLocation" x="-45" y="-185"/>
         </menu>
+        <window title="What are you working on?" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" id="MZY-5U-1re" customClass="NSPanel">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" utility="YES" nonactivatingPanel="YES" HUD="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="566" y="354" width="480" height="270"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <view key="contentView" id="LZk-f4-v4Y">
+                <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+            </view>
+            <point key="canvasLocation" x="153" y="142"/>
+        </window>
+        <customObject id="fTe-Bg-dOv" customClass="ScheduledPtnWindowController" customModule="wtfdid" customModuleProvider="target">
+            <connections>
+                <outlet property="panel" destination="MZY-5U-1re" id="hWV-hK-qQb"/>
+                <outlet property="window" destination="MZY-5U-1re" id="Yiy-G5-DFp"/>
+            </connections>
+        </customObject>
     </objects>
 </document>
