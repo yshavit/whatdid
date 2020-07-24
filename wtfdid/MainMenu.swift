@@ -29,6 +29,9 @@ class MainMenu: NSObject, NSMenuDelegate {
     func open() {
         if taskAdditionView == nil {
             taskAdditionView = TaskAdditionViewController()
+            taskAdditionView?.closeAction = {
+                AppDelegate.instance.hideMenu()
+            }
         }
         let newItem = NSMenuItem(title: "Error", action: nil, keyEquivalent: "")
         newItem.view = taskAdditionView?.view

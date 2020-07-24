@@ -18,6 +18,11 @@ class ScheduledPtnWindowController: NSWindowController, NSWindowDelegate {
         super.awakeFromNib()
         window?.level = .floating
         taskAdditionsPane = TaskAdditionViewController()
+        taskAdditionsPane.closeAction = {
+            DispatchQueue.main.async {
+                self.window?.orderOut(self)
+            }
+        }
         window?.contentViewController = taskAdditionsPane
         panel.becomesKeyOnlyIfNeeded = true
     }
