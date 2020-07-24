@@ -12,14 +12,14 @@ class ScheduledPtnWindowController: NSWindowController, NSWindowDelegate {
     private static let POPUP_WINDOW_BUFFER = 3
     private var taskAdditionsPane : TaskAdditionViewController!
     
-    @IBOutlet weak var panel: NSPanel!
+    @IBOutlet private weak var panel: NSPanel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         window?.level = .floating
         taskAdditionsPane = TaskAdditionViewController()
         window?.contentViewController = taskAdditionsPane
-        panel.becomesKeyOnlyIfNeeded = true 
+        panel.becomesKeyOnlyIfNeeded = true
     }
     
     func show() {
@@ -33,4 +33,9 @@ class ScheduledPtnWindowController: NSWindowController, NSWindowDelegate {
         showWindow(self)
     }
     
+    func focus() {
+        if window?.isVisible ?? false {
+            window?.makeKeyAndOrderFront(self)
+        }
+    }
 }
