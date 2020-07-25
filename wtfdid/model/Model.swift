@@ -2,7 +2,7 @@ import Cocoa
 
 class Model {
     
-    @Atomic.Var private var lastEntryDate : Date
+    @Atomic private var lastEntryDate : Date
     
     init() {
         lastEntryDate = Date()

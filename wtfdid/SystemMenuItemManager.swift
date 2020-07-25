@@ -19,19 +19,23 @@ class SystemMenuItemManager: NSWindowController, NSWindowDelegate, NSMenuDelegat
             }
         }
         window?.contentViewController = taskAdditionsPane
-        self.window?.delegate = self
-        self.window?.standardWindowButton(.closeButton)?.isHidden = true
+        window?.delegate = self
+        window?.standardWindowButton(.closeButton)?.isHidden = true
+        window?.isMovable = false
         
         statusItem.button?.title = "✐"
         statusItem.button?.target = self
-        statusItem.button?.action = #selector(showAndFocus)
+        statusItem.button?.action = #selector(handleStatusItemPress)
     }
     
-    @objc func showAndFocus() {
+    @objc private func handleStatusItemPress() {
         if window?.isVisible ?? false {
             window?.close()
         } else {
             show()
+            AppDelegate.instance.onDeactivation {
+                self.window?.close()
+            }
             focus()
         }
     }
@@ -51,11 +55,12 @@ class SystemMenuItemManager: NSWindowController, NSWindowDelegate, NSMenuDelegat
     }
     
     func focus() {
-        if !NSApp.isActive {
-            NSApp.activate(ignoringOtherApps: true)
-        }
         if window?.isVisible ?? false {
+            if !NSApp.isActive {
+                NSApp.activate(ignoringOtherApps: true)
+            }
             window?.makeKeyAndOrderFront(self)
+            taskAdditionsPane.grabFocus()
         }
     }
     
