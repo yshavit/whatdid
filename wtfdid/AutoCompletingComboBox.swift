@@ -12,9 +12,7 @@ class AutoCompletingComboBox: NSComboBox, NSComboBoxDelegate {
         self.delegate = self
         completes = true
     }
-    
-    var isAutoCompleting = false
-    
+
     override func becomeFirstResponder() -> Bool {
         return super.becomeFirstResponder()
         updateSuggestions()
@@ -37,7 +35,6 @@ class AutoCompletingComboBox: NSComboBox, NSComboBoxDelegate {
     private func updateSuggestions() {
         removeAllItems()
         addItems(withObjectValues: lookups(stringValue))
-        isAutoCompleting = true
         cell?.setAccessibilityExpanded(numberOfItems > 0)
     }
 }
