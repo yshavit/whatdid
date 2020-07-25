@@ -5,6 +5,7 @@ class TaskAdditionViewController: NSViewController {
     @IBOutlet weak var projectField: AutoCompletingComboBox!
     @IBOutlet weak var taskField: AutoCompletingComboBox!
     @IBOutlet weak var noteField: NSComboBox!
+    @IBOutlet weak var breakButton: NSButton!
     
     var closeAction : () -> Void = {}
     
@@ -19,6 +20,12 @@ class TaskAdditionViewController: NSViewController {
         }
         projectField.setAutoCompleteLookups({prefix in AppDelegate.instance.model.listProjects(prefix: prefix)})
         taskField.setAutoCompleteLookups({prefix in AppDelegate.instance.model.listTasks(project: self.self.projectField.stringValue, prefix: prefix)})
+        setBreakButtonTitle()
+    }
+    
+    func setBreakButtonTitle() {
+        let combo = AppDelegate.keyComboString(keyEquivalent: breakButton.keyEquivalent, keyEquivalentMask: breakButton.keyEquivalentModifierMask)
+        breakButton.title = combo.isEmpty ? "Break" : "Break (\(combo))"
     }
     
     func reset() {

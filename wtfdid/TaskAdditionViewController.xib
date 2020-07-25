@@ -7,6 +7,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="TaskAdditionViewController" customModule="wtfdid" customModuleProvider="target">
             <connections>
+                <outlet property="breakButton" destination="2EZ-2e-8Xo" id="n7F-l7-UP1"/>
                 <outlet property="noteField" destination="Zy9-oh-6fD" id="nfd-Ms-aMS"/>
                 <outlet property="projectField" destination="ahq-DU-gr9" id="FaR-Mn-nGq"/>
                 <outlet property="taskField" destination="dGG-J5-KA1" id="ozn-WV-Rwn"/>
@@ -126,7 +127,7 @@
                     <rect key="frame" x="395" y="4" width="47" height="19"/>
                     <buttonCell key="cell" type="roundRect" title="Break" bezelStyle="roundedRect" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cZl-pO-D4o">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="controlContent"/>
+                        <font key="font" metaFont="label" size="12"/>
                         <string key="keyEquivalent">B</string>
                         <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                     </buttonCell>
