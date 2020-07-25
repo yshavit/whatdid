@@ -9,7 +9,9 @@
 import Cocoa
 
 class ScheduledPtnWindowController: NSWindowController, NSWindowDelegate, NSMenuDelegate {
-    private static let POPUP_WINDOW_BUFFER = 3
+    
+    private let POPUP_INTERVAL_MINUTES = 15
+    private let POPUP_INTERVAL_JITTER_MINUTES = 3
     
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
@@ -72,7 +74,9 @@ class ScheduledPtnWindowController: NSWindowController, NSWindowDelegate, NSMenu
     }
 
     func schedulePopup() {
-        let when = DispatchTime.now().advanced(by: DispatchTimeInterval.milliseconds(1500))
+        let jitterMinutes = Int.random(in: -POPUP_INTERVAL_JITTER_MINUTES...POPUP_INTERVAL_JITTER_MINUTES)
+        let minutes = POPUP_INTERVAL_MINUTES + jitterMinutes
+        let when = DispatchTime.now().advanced(by: DispatchTimeInterval.seconds(minutes * 60))
         DispatchQueue.main.asyncAfter(deadline: when, execute: {
             self.show()
         })
