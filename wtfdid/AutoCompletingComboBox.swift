@@ -10,16 +10,14 @@ class AutoCompletingComboBox: NSComboBox, NSComboBoxDelegate {
 
     override func awakeFromNib() {
         self.delegate = self
+        completes = true
     }
     
     var isAutoCompleting = false
     
     override func becomeFirstResponder() -> Bool {
-        updateSuggestions()
-        if indexOfSelectedItem < 0 && numberOfItems > 0 {
-            selectItem(at: 0)
-        }
         return super.becomeFirstResponder()
+        updateSuggestions()
     }
     
     override func textDidChange(_ notification: Notification) {
@@ -39,6 +37,7 @@ class AutoCompletingComboBox: NSComboBox, NSComboBoxDelegate {
     private func updateSuggestions() {
         removeAllItems()
         addItems(withObjectValues: lookups(stringValue))
+        isAutoCompleting = true
         cell?.setAccessibilityExpanded(numberOfItems > 0)
     }
 }

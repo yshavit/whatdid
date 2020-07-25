@@ -15,20 +15,16 @@
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="wtfdid" customModuleProvider="target">
             <connections>
                 <outlet property="scheduledPtnWindowController" destination="fTe-Bg-dOv" id="hAk-5z-xsO"/>
-                <outlet property="systemMenu" destination="NNK-i5-XAG" id="oab-R7-oJy"/>
             </connections>
         </customObject>
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
-        <customObject id="NNK-i5-XAG" customClass="MainMenu" customModule="wtfdid" customModuleProvider="target">
+        <customObject id="fTe-Bg-dOv" customClass="ScheduledPtnWindowController" customModule="wtfdid" customModuleProvider="target">
             <connections>
-                <outlet property="statusMenu" destination="TmO-Yj-Dje" id="JK7-DV-xYp"/>
+                <outlet property="window" destination="MZY-5U-1re" id="Yiy-G5-DFp"/>
             </connections>
         </customObject>
-        <menu id="TmO-Yj-Dje" userLabel="Main Menu">
-            <point key="canvasLocation" x="-45" y="-185"/>
-        </menu>
-        <window title="What are you working on?" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" id="MZY-5U-1re" customClass="NSPanel">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES" utility="YES" nonactivatingPanel="YES" HUD="YES"/>
+        <window title="What are you working on?" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" titleVisibility="hidden" id="MZY-5U-1re" customClass="NSPanel">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" utility="YES" HUD="YES" fullSizeContentView="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="566" y="354" width="480" height="270"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
@@ -38,11 +34,5 @@
             </view>
             <point key="canvasLocation" x="153" y="142"/>
         </window>
-        <customObject id="fTe-Bg-dOv" customClass="ScheduledPtnWindowController" customModule="wtfdid" customModuleProvider="target">
-            <connections>
-                <outlet property="panel" destination="MZY-5U-1re" id="hWV-hK-qQb"/>
-                <outlet property="window" destination="MZY-5U-1re" id="Yiy-G5-DFp"/>
-            </connections>
-        </customObject>
     </objects>
 </document>
