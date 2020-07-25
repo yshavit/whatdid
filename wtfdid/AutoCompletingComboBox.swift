@@ -14,8 +14,8 @@ class AutoCompletingComboBox: NSComboBox, NSComboBoxDelegate {
     }
 
     override func becomeFirstResponder() -> Bool {
-        return super.becomeFirstResponder()
         updateSuggestions()
+        return super.becomeFirstResponder()
     }
     
     override func textDidChange(_ notification: Notification) {

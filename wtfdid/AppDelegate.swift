@@ -30,4 +30,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             hook()
         }
     }
+    
+    static func keyComboString(keyEquivalent: String, keyEquivalentMask: NSEvent.ModifierFlags) -> String {
+        var keyAdjusted = keyEquivalent
+        var maskAdjusted = keyEquivalentMask
+        if keyEquivalent.count == 1, let firstKey = keyEquivalent.first {
+            keyAdjusted = keyAdjusted.uppercased()
+            if firstKey.isUppercase {
+                maskAdjusted = NSEvent.ModifierFlags(arrayLiteral: keyEquivalentMask)
+                maskAdjusted.insert(.shift)
+            }
+        }
+        return "\(maskAdjusted)\(keyAdjusted)"
+    }
 }
