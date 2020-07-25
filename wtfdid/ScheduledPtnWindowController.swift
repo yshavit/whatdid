@@ -66,6 +66,15 @@ class ScheduledPtnWindowController: NSWindowController, NSWindowDelegate, NSMenu
     }
     
     func windowWillClose(_ notification: Notification) {
+        NSApp.hide(self)
         statusItem.button?.isHighlighted = false
+        schedulePopup()
+    }
+
+    func schedulePopup() {
+        let when = DispatchTime.now().advanced(by: DispatchTimeInterval.milliseconds(1500))
+        DispatchQueue.main.asyncAfter(deadline: when, execute: {
+            self.show()
+        })
     }
 }

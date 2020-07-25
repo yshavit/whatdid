@@ -19,15 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             self.scheduledPtnWindowController.focus()
         }
-        schedulePtn()
+        scheduledPtnWindowController.schedulePopup()
     }
-
-    func schedulePtn() {
-        let when = DispatchTime.now().advanced(by: DispatchTimeInterval.milliseconds(500))
-        DispatchQueue.main.asyncAfter(deadline: when, execute: {
-            self.scheduledPtnWindowController.show()
-        })
-    }
-
 }
 
