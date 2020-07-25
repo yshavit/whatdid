@@ -6,6 +6,8 @@ class TaskAdditionViewController: NSViewController {
     @IBOutlet weak var taskField: AutoCompletingComboBox!
     @IBOutlet weak var noteField: NSComboBox!
     
+    var closeAction : () -> Void = {}
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         for field in [projectField, taskField, noteField] {
@@ -46,9 +48,7 @@ class TaskAdditionViewController: NSViewController {
             project: projectField.stringValue,
             task: taskField.stringValue,
             notes: noteField.stringValue,
-            callback: {(maybeError) in
-                AppDelegate.instance.hideMenu()
-            }
+            callback: closeAction
         )
     }
     

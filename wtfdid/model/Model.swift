@@ -2,7 +2,7 @@ import Cocoa
 
 class Model {
     
-    @Atomic.Var private var lastEntryDate : Date
+    @Atomic private var lastEntryDate : Date
     
     init() {
         lastEntryDate = Date()
@@ -111,7 +111,7 @@ class Model {
         }
     }
     
-    func addEntryNow(project: String, task: String, notes: String, callback: @escaping (Error?)->()) {
+    func addEntryNow(project: String, task: String, notes: String, callback: @escaping ()->()) {
         container.performBackgroundTask({context in
             let lastUpdate = self.lastEntryDate
             let now = Date()
@@ -133,15 +133,12 @@ class Model {
             entry.timeApproximatelyStarted = lastUpdate
             entry.timeEntered = now
             
-            var maybeError : Error?
             do {
                 try context.save()
-                maybeError = nil
             } catch {
                 print("error saving entry: \(error)")
-                maybeError = error
             }
-            callback(maybeError)
+            callback()
         })
     }
 }
