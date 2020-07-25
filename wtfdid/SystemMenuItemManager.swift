@@ -41,6 +41,9 @@ class SystemMenuItemManager: NSWindowController, NSWindowDelegate, NSMenuDelegat
     }
     
     func show() {
+        if window?.isVisible ?? false {
+            return
+        }
         if let mainFrame = NSScreen.main?.visibleFrame, let button = statusItem.button {
             let buttonBoundsAbsolute = button.window?.convertToScreen(button.bounds)
             let pos = NSPoint(
