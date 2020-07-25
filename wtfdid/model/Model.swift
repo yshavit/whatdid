@@ -2,6 +2,11 @@ import Cocoa
 
 class Model {
     
+    private static let BUILTIN_PROJECT = "\0__built_in"
+    private static let BREAK_TASK = "break"
+    private static let BREAK_TASK_NOTES = ""
+    private static let NO_BUILTINS = NSPredicate(format: "project != %@", BUILTIN_PROJECT)
+    
     @Atomic private var lastEntryDate : Date
     
     init() {
@@ -18,12 +23,13 @@ class Model {
         localContainer.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return localContainer
     }()
-
+    
     func listProjects() -> [Project] {
         var result : [Project]!
         container.viewContext.performAndWait {
             let request = NSFetchRequest<Project>(entityName: "Project")
             do {
+                request.predicate = Model.NO_BUILTINS
                 result = try request.execute()
             } catch {
                 print("couldn't load projects: \(error)")
@@ -44,9 +50,9 @@ class Model {
                     .init(key: "lastUsed", ascending: false),
                     .init(key: "project", ascending: true)
                 ]
-                if !prefix.isEmpty {
-                    request.predicate = NSPredicate(format: "project BEGINSWITH %@", prefix)
-                }
+                request.predicate = prefix.isEmpty
+                    ? Model.NO_BUILTINS
+                    : NSPredicate(format: "project BEGINSWITH %@", prefix)
                 request.fetchLimit = 10
                 projects = try request.execute()
             } catch {
@@ -109,6 +115,10 @@ class Model {
             }
             
         }
+    }
+    
+    func addBreakEntry(callback: @escaping () -> ()) {
+        addEntryNow(project: Model.BUILTIN_PROJECT, task: Model.BREAK_TASK, notes: Model.BREAK_TASK_NOTES, callback: callback)
     }
     
     func addEntryNow(project: String, task: String, notes: String, callback: @escaping ()->()) {

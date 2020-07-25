@@ -43,11 +43,16 @@ class TaskAdditionViewController: NSViewController {
     }
     
     @IBAction func notesFieldAction(_ sender: NSTextField) {
-        
         AppDelegate.instance.model.addEntryNow(
             project: projectField.stringValue,
             task: taskField.stringValue,
             notes: noteField.stringValue,
+            callback: closeAction
+        )
+    }
+    
+    @IBAction func breakButtonPressed(_ sender: Any) {
+        AppDelegate.instance.model.addBreakEntry(
             callback: closeAction
         )
     }

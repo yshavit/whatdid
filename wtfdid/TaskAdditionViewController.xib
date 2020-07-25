@@ -16,11 +16,11 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <view id="DTt-1H-bbG">
-            <rect key="frame" x="0.0" y="0.0" width="445" height="29"/>
+            <rect key="frame" x="0.0" y="0.0" width="445" height="51"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <box boxType="custom" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="04A-0F-FVu" userLabel="Box Project">
-                    <rect key="frame" x="3" y="5" width="105" height="22"/>
+                    <rect key="frame" x="3" y="27" width="105" height="22"/>
                     <view key="contentView" id="4iu-EK-7NX">
                         <rect key="frame" x="1" y="1" width="103" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -49,7 +49,7 @@
                     </constraints>
                 </box>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DBN-oW-2X9" userLabel="Separator project-to-task">
-                    <rect key="frame" x="108" y="8" width="9" height="16"/>
+                    <rect key="frame" x="108" y="30" width="9" height="16"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="16" id="b9W-xF-Uy1"/>
                         <constraint firstAttribute="width" constant="5" id="pdn-Pg-CGr"/>
@@ -61,7 +61,7 @@
                     </textFieldCell>
                 </textField>
                 <box boxType="custom" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="O1J-td-hSB" userLabel="Box Task">
-                    <rect key="frame" x="118" y="5" width="105" height="22"/>
+                    <rect key="frame" x="118" y="27" width="105" height="22"/>
                     <view key="contentView" id="72N-p6-pOu">
                         <rect key="frame" x="1" y="1" width="103" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -88,7 +88,7 @@
                     </view>
                 </box>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Efq-cs-myP" userLabel="Separator task-to-notes">
-                    <rect key="frame" x="224" y="8" width="8" height="16"/>
+                    <rect key="frame" x="224" y="30" width="8" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title=":" id="6He-uU-09L">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -96,7 +96,7 @@
                     </textFieldCell>
                 </textField>
                 <box boxType="custom" cornerRadius="4" title="Box" id="Q2z-pS-9ab" userLabel="Box Notes">
-                    <rect key="frame" x="232" y="5" width="210" height="22"/>
+                    <rect key="frame" x="232" y="27" width="210" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <view key="contentView" id="GfA-Cy-FfV">
                         <rect key="frame" x="1" y="1" width="208" height="20"/>
@@ -122,11 +122,25 @@
                         </constraints>
                     </view>
                 </box>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2EZ-2e-8Xo">
+                    <rect key="frame" x="395" y="4" width="47" height="19"/>
+                    <buttonCell key="cell" type="roundRect" title="Break" bezelStyle="roundedRect" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cZl-pO-D4o">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="controlContent"/>
+                        <string key="keyEquivalent">B</string>
+                        <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="breakButtonPressed:" target="-2" id="Akq-VD-7pc"/>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
                 <constraint firstItem="O1J-td-hSB" firstAttribute="leading" secondItem="DBN-oW-2X9" secondAttribute="trailing" constant="3" id="5vC-aB-Ocn"/>
                 <constraint firstItem="04A-0F-FVu" firstAttribute="top" secondItem="DTt-1H-bbG" secondAttribute="top" constant="2" id="7uW-c1-WUT"/>
+                <constraint firstItem="2EZ-2e-8Xo" firstAttribute="top" secondItem="04A-0F-FVu" secondAttribute="bottom" constant="4" id="CJX-1f-8FG"/>
                 <constraint firstItem="Q2z-pS-9ab" firstAttribute="leading" secondItem="Efq-cs-myP" secondAttribute="trailing" constant="2" id="NNW-Xj-dQI"/>
+                <constraint firstItem="2EZ-2e-8Xo" firstAttribute="trailing" secondItem="Q2z-pS-9ab" secondAttribute="trailing" id="PBo-su-Tbd"/>
                 <constraint firstItem="Efq-cs-myP" firstAttribute="centerY" secondItem="DBN-oW-2X9" secondAttribute="centerY" id="Quh-De-dwc"/>
                 <constraint firstItem="DBN-oW-2X9" firstAttribute="leading" secondItem="04A-0F-FVu" secondAttribute="trailing" constant="2" id="Rhi-hk-Hor"/>
                 <constraint firstItem="Q2z-pS-9ab" firstAttribute="centerY" secondItem="04A-0F-FVu" secondAttribute="centerY" id="SIE-jd-I4Q"/>
@@ -140,7 +154,7 @@
                 <constraint firstItem="04A-0F-FVu" firstAttribute="leading" secondItem="DTt-1H-bbG" secondAttribute="leading" constant="3" id="yhj-ai-h08"/>
                 <constraint firstAttribute="trailing" secondItem="Q2z-pS-9ab" secondAttribute="trailing" constant="3" id="yhj-ai-h09"/>
             </constraints>
-            <point key="canvasLocation" x="-126" y="-163.5"/>
+            <point key="canvasLocation" x="-126.5" y="-152.5"/>
         </view>
         <viewController title="Task Addition View Controller" nibName="TaskAdditionViewController" id="bP9-Bw-QYO" customClass="TaskAdditionViewController" customModule="wtfdid" customModuleProvider="target"/>
     </objects>
