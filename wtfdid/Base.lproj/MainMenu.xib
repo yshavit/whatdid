@@ -18,7 +18,7 @@
             </connections>
         </customObject>
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
-        <customObject id="fTe-Bg-dOv" customClass="ScheduledPtnWindowController" customModule="wtfdid" customModuleProvider="target">
+        <customObject id="fTe-Bg-dOv" customClass="SystemMenuItemManager" customModule="wtfdid" customModuleProvider="target">
             <connections>
                 <outlet property="window" destination="MZY-5U-1re" id="Yiy-G5-DFp"/>
             </connections>

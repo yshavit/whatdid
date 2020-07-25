@@ -1,14 +1,6 @@
-//
-//  ScheduledPtnWindowController.swift
-//  wtfdid
-//
-//  Created by Yuval Shavit on 7/24/20.
-//  Copyright © 2020 Yuval Shavit. All rights reserved.
-//
-
 import Cocoa
 
-class ScheduledPtnWindowController: NSWindowController, NSWindowDelegate, NSMenuDelegate {
+class SystemMenuItemManager: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     
     private let POPUP_INTERVAL_MINUTES = 15
     private let POPUP_INTERVAL_JITTER_MINUTES = 3
