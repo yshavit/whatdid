@@ -6,6 +6,7 @@ class TaskAdditionViewController: NSViewController {
     @IBOutlet weak var taskField: AutoCompletingComboBox!
     @IBOutlet weak var noteField: NSComboBox!
     @IBOutlet weak var breakButton: NSButton!
+    private var optionIsPressed = false
     
     var closeAction : () -> Void = {}
     
@@ -24,8 +25,10 @@ class TaskAdditionViewController: NSViewController {
     }
     
     func setBreakButtonTitle() {
-        let combo = AppDelegate.keyComboString(keyEquivalent: breakButton.keyEquivalent, keyEquivalentMask: breakButton.keyEquivalentModifierMask)
-        breakButton.title = combo.isEmpty ? "Break" : "Break (\(combo))"
+        let optionsToDisplay = breakButton.keyEquivalentModifierMask.subtracting(.option)
+        let combo = AppDelegate.keyComboString(keyEquivalent: breakButton.keyEquivalent, keyEquivalentMask: optionsToDisplay)
+        let name = optionIsPressed ? "Skip this session" : "Break"
+        breakButton.title = combo.isEmpty ? name : "\(name) (\(combo))"
     }
     
     func reset() {
@@ -33,6 +36,20 @@ class TaskAdditionViewController: NSViewController {
         if projectField.stringValue.isEmpty {
             taskField.stringValue = ""
         }
+    }
+    
+    override func flagsChanged(with event: NSEvent) {
+        let optionIsNowPressed = event.modifierFlags.contains(.option)
+        if optionIsNowPressed != optionIsPressed {
+            optionIsPressed = optionIsNowPressed
+            if optionIsNowPressed {
+                breakButton.keyEquivalentModifierMask.insert(.option)
+            } else {
+                breakButton.keyEquivalentModifierMask.remove(.option)
+            }
+            setBreakButtonTitle()
+        }
+        
     }
     
     func grabFocus() {
@@ -59,9 +76,14 @@ class TaskAdditionViewController: NSViewController {
     }
     
     @IBAction func breakButtonPressed(_ sender: Any) {
-        AppDelegate.instance.model.addBreakEntry(
-            callback: closeAction
-        )
+        if optionIsPressed {
+            AppDelegate.instance.model.setLastEntryDateToNow()
+            closeAction()
+        } else {
+            AppDelegate.instance.model.addBreakEntry(
+                callback: closeAction
+            )
+        }
     }
     
     @IBAction func projectOrTaskEnter(_ sender: NSTextField) {

@@ -24,6 +24,10 @@ class Model {
         return localContainer
     }()
     
+    func setLastEntryDateToNow() {
+        lastEntryDate = Date()
+    }
+    
     func listProjects() -> [Project] {
         var result : [Project]!
         container.viewContext.performAndWait {
