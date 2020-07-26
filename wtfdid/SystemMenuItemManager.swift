@@ -79,15 +79,20 @@ class SystemMenuItemManager: NSWindowController, NSWindowDelegate, NSMenuDelegat
     func schedulePopup() {
         let jitterMinutes = Int.random(in: -POPUP_INTERVAL_JITTER_MINUTES...POPUP_INTERVAL_JITTER_MINUTES)
         let minutes = POPUP_INTERVAL_MINUTES + jitterMinutes
+        NSLog("Scheduling a popup in %d minutes", minutes)
         let when = DispatchWallTime.now() + .seconds(minutes * 60)
         DispatchQueue.main.asyncAfter(wallDeadline: when, execute: {
-            if !self.snoozing {
+            if self.snoozing {
+                NSLog("Ignoring a popup request due to snooze.")
+            } else {
+                NSLog("Showing a scheduled popup.")
                 self.show()
             }
         })
     }
     
     func snooze(until date: Date) {
+        NSLog("Snoozing until %@", AppDelegate.DEBUG_DATE_FORMATTER.string(from: date))
         snoozing = true
         window?.close()
         let wakeupTime = DispatchWallTime.now() + .seconds(Int(date.timeIntervalSinceNow))
