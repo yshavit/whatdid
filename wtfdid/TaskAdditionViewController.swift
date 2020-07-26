@@ -54,10 +54,6 @@ class TaskAdditionViewController: NSViewController {
         let incrementInterval = Double(30 * 60.0)
         snoozeUntil = Date(timeIntervalSince1970: (snoozeUntil.timeIntervalSince1970 / incrementInterval).rounded(.up) * incrementInterval)
         
-        //let clock1 : Character = "\u{}"
-        let clock1 = 0x1F550
-        let clockHalfHour = 0xC
-        
         snoozeButton.removeAllItems()
         for _ in 0..<numberOfOptions {
             var hourComponent = Calendar.current.component(.hour, from: snoozeUntil)
@@ -66,16 +62,7 @@ class TaskAdditionViewController: NSViewController {
             } else if hourComponent > 12 {
                 hourComponent -= 12
             }
-            // clock1 is 1-based, so if the hour component is 1, we need to add 0
-            var clockCodePoint = clock1 + hourComponent - 1
-            if Calendar.current.component(.minute, from: snoozeUntil) > 0 {
-                clockCodePoint += clockHalfHour
-            }
-            var clockDescription = formatter.string(from: snoozeUntil)
-            if let clockChar = UnicodeScalar(clockCodePoint)?.description {
-                clockDescription += " \(clockChar)"
-            }
-            snoozeButton.addItem(withTitle: clockDescription)
+            snoozeButton.addItem(withTitle: formatter.string(from: snoozeUntil))
             if let item = snoozeButton.item(at: snoozeButton.itemTitles.count - 1) {
                 item.representedObject = Date(timeIntervalSince1970: snoozeUntil.timeIntervalSince1970)
             }
