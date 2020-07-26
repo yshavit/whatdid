@@ -8,7 +8,7 @@ class SystemMenuItemManager: NSWindowController, NSWindowDelegate, NSMenuDelegat
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
     private var taskAdditionsPane : TaskAdditionViewController!
-    private var snoozeUntil : Date?
+    private var snoozing = false
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -71,7 +71,7 @@ class SystemMenuItemManager: NSWindowController, NSWindowDelegate, NSMenuDelegat
     func windowWillClose(_ notification: Notification) {
         NSApp.hide(self)
         statusItem.button?.isHighlighted = false
-        if snoozeUntil != nil {
+        if !snoozing {
             schedulePopup()
         }
     }
@@ -79,20 +79,20 @@ class SystemMenuItemManager: NSWindowController, NSWindowDelegate, NSMenuDelegat
     func schedulePopup() {
         let jitterMinutes = Int.random(in: -POPUP_INTERVAL_JITTER_MINUTES...POPUP_INTERVAL_JITTER_MINUTES)
         let minutes = POPUP_INTERVAL_MINUTES + jitterMinutes
-        let when = DispatchTime.now().advanced(by: DispatchTimeInterval.seconds(minutes * 60))
-        DispatchQueue.main.asyncAfter(deadline: when, execute: {
-            if self.snoozeUntil != nil {
+        let when = DispatchWallTime.now() + .seconds(minutes * 60)
+        DispatchQueue.main.asyncAfter(wallDeadline: when, execute: {
+            if !self.snoozing {
                 self.show()
             }
         })
     }
     
     func snooze(until date: Date) {
-        snoozeUntil = date
+        snoozing = true
         window?.close()
-        let wakeupDate = DispatchTime.now().advanced(by: DispatchTimeInterval.seconds(Int(date.timeIntervalSinceNow)))
-        DispatchQueue.main.asyncAfter(deadline: wakeupDate, execute: {
-            self.snoozeUntil = nil
+        let wakeupTime = DispatchWallTime.now() + .seconds(Int(date.timeIntervalSinceNow))
+        DispatchQueue.main.asyncAfter(wallDeadline: wakeupTime, execute: {
+            self.snoozing = false
             self.show()
         })
     }

@@ -48,16 +48,17 @@ class TaskAdditionViewController: NSViewController {
         // The 10 minutes is so that if it's currently 2:29:59, you won't be annoyed with a "snooze until 2:30" button.
         let bufferMinutes = 10
         let formatter = DateFormatter()
+        let snoozeIntervalMinutes = 30.0
         formatter.dateFormat = "h:mm a"
         formatter.amSymbol = "am"
         formatter.pmSymbol = "pm"
         
         var snoozeUntil = Date().addingTimeInterval(TimeInterval(bufferMinutes * 60))
         // Round it up (always up) to the nearest half-hour
-        let incrementInterval = Double(30 * 60.0)
+        let incrementInterval = Double(snoozeIntervalMinutes * 60.0)
         snoozeUntil = Date(timeIntervalSince1970: (snoozeUntil.timeIntervalSince1970 / incrementInterval).rounded(.up) * incrementInterval)
 
-        snoozeButton.title = formatter.string(from: snoozeUntil) + "   " // extra space for the pulldown option
+        snoozeButton.title = "Snooze until \(formatter.string(from: snoozeUntil))   " // extra space for the pulldown option
         self.snoozeUntil = Date(timeIntervalSince1970: snoozeUntil.timeIntervalSince1970)
         snoozeExtraOptions.itemArray[1...].forEach({menuItem in
             snoozeUntil.addTimeInterval(incrementInterval)

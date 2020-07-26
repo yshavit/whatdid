@@ -152,7 +152,7 @@
                     <constraints>
                         <constraint firstAttribute="width" secondItem="6Gq-oc-vfH" secondAttribute="height" multiplier="1:1" id="bV0-2h-AoJ"/>
                     </constraints>
-                    <popUpButtonCell key="cell" type="recessed" bezelStyle="recessed" alignment="right" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" altersStateOfSelectedItem="NO" id="Hnx-zc-rwK">
+                    <popUpButtonCell key="cell" type="recessed" bezelStyle="recessed" alignment="right" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" preferredEdge="maxX" altersStateOfSelectedItem="NO" id="Hnx-zc-rwK">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                         <font key="font" metaFont="systemBold" size="12"/>
                         <menu key="menu" id="MkS-Y6-q1O">
