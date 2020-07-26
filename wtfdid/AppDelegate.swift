@@ -31,6 +31,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    func snooze(until date: Date) {
+        self.scheduledPtnWindowController.snooze(until: date)
+    }
+    
     static func keyComboString(keyEquivalent: String, keyEquivalentMask: NSEvent.ModifierFlags) -> String {
         var keyAdjusted = keyEquivalent
         var maskAdjusted = keyEquivalentMask

@@ -10,6 +10,8 @@
                 <outlet property="breakButton" destination="2EZ-2e-8Xo" id="n7F-l7-UP1"/>
                 <outlet property="noteField" destination="Zy9-oh-6fD" id="nfd-Ms-aMS"/>
                 <outlet property="projectField" destination="ahq-DU-gr9" id="FaR-Mn-nGq"/>
+                <outlet property="snoozeButton" destination="PRb-8Z-xKW" id="yf7-ea-7JK"/>
+                <outlet property="snoozeExtraOptions" destination="6Gq-oc-vfH" id="mPP-B4-e3m"/>
                 <outlet property="taskField" destination="dGG-J5-KA1" id="ozn-WV-Rwn"/>
                 <outlet property="view" destination="DTt-1H-bbG" id="Fqy-MQ-MOc"/>
             </connections>
@@ -135,21 +137,63 @@
                         <action selector="breakButtonPressed:" target="-2" id="Akq-VD-7pc"/>
                     </connections>
                 </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PRb-8Z-xKW" userLabel="Snooze button">
+                    <rect key="frame" x="315" y="4" width="75" height="19"/>
+                    <buttonCell key="cell" type="roundRect" title="snooze      " bezelStyle="roundedRect" alignment="left" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fvB-eq-u2R">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="label" size="12"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="snoozeButtonPressed:" target="-2" id="LGR-cA-wkO"/>
+                    </connections>
+                </button>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6Gq-oc-vfH" userLabel="Snooze options">
+                    <rect key="frame" x="372" y="4" width="18" height="19"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="6Gq-oc-vfH" secondAttribute="height" multiplier="1:1" id="bV0-2h-AoJ"/>
+                    </constraints>
+                    <popUpButtonCell key="cell" type="recessed" bezelStyle="recessed" alignment="right" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" preferredEdge="maxX" altersStateOfSelectedItem="NO" id="Hnx-zc-rwK">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
+                        <font key="font" metaFont="systemBold" size="12"/>
+                        <menu key="menu" id="MkS-Y6-q1O">
+                            <items>
+                                <menuItem state="on" hidden="YES" id="RJe-CM-J1j"/>
+                                <menuItem title="+0:30" id="EEG-l9-W6J">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem title="+1:00" id="f72-lG-yCX">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem title="+1:30" id="Smf-g4-WWj">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <action selector="snoozeExtraOptionsSelected:" target="-2" id="Bu1-fR-VpD"/>
+                    </connections>
+                </popUpButton>
             </subviews>
             <constraints>
                 <constraint firstItem="O1J-td-hSB" firstAttribute="leading" secondItem="DBN-oW-2X9" secondAttribute="trailing" constant="3" id="5vC-aB-Ocn"/>
                 <constraint firstItem="04A-0F-FVu" firstAttribute="top" secondItem="DTt-1H-bbG" secondAttribute="top" constant="2" id="7uW-c1-WUT"/>
                 <constraint firstItem="2EZ-2e-8Xo" firstAttribute="top" secondItem="04A-0F-FVu" secondAttribute="bottom" constant="4" id="CJX-1f-8FG"/>
+                <constraint firstItem="6Gq-oc-vfH" firstAttribute="trailing" secondItem="PRb-8Z-xKW" secondAttribute="trailing" id="HWw-IL-3sg"/>
                 <constraint firstItem="Q2z-pS-9ab" firstAttribute="leading" secondItem="Efq-cs-myP" secondAttribute="trailing" constant="2" id="NNW-Xj-dQI"/>
+                <constraint firstItem="2EZ-2e-8Xo" firstAttribute="leading" secondItem="PRb-8Z-xKW" secondAttribute="trailing" constant="5" id="Nbp-nE-yZN"/>
                 <constraint firstItem="2EZ-2e-8Xo" firstAttribute="trailing" secondItem="Q2z-pS-9ab" secondAttribute="trailing" id="PBo-su-Tbd"/>
                 <constraint firstItem="Efq-cs-myP" firstAttribute="centerY" secondItem="DBN-oW-2X9" secondAttribute="centerY" id="Quh-De-dwc"/>
                 <constraint firstItem="DBN-oW-2X9" firstAttribute="leading" secondItem="04A-0F-FVu" secondAttribute="trailing" constant="2" id="Rhi-hk-Hor"/>
                 <constraint firstItem="Q2z-pS-9ab" firstAttribute="centerY" secondItem="04A-0F-FVu" secondAttribute="centerY" id="SIE-jd-I4Q"/>
                 <constraint firstItem="DBN-oW-2X9" firstAttribute="centerY" secondItem="04A-0F-FVu" secondAttribute="centerY" id="VzY-J3-WiU"/>
                 <constraint firstItem="O1J-td-hSB" firstAttribute="centerY" secondItem="04A-0F-FVu" secondAttribute="centerY" id="XBM-MR-0GA"/>
+                <constraint firstItem="6Gq-oc-vfH" firstAttribute="height" secondItem="PRb-8Z-xKW" secondAttribute="height" id="YYG-Tc-RwY"/>
+                <constraint firstItem="6Gq-oc-vfH" firstAttribute="top" secondItem="PRb-8Z-xKW" secondAttribute="top" id="a0f-ih-6Hh"/>
                 <constraint firstItem="Q2z-pS-9ab" firstAttribute="height" secondItem="04A-0F-FVu" secondAttribute="height" id="dI2-T6-vTh"/>
                 <constraint firstItem="O1J-td-hSB" firstAttribute="height" secondItem="04A-0F-FVu" secondAttribute="height" id="nEj-wB-fUN"/>
                 <constraint firstItem="Efq-cs-myP" firstAttribute="width" secondItem="DBN-oW-2X9" secondAttribute="width" multiplier="0.8" id="ous-hF-4Fz"/>
+                <constraint firstItem="PRb-8Z-xKW" firstAttribute="top" secondItem="2EZ-2e-8Xo" secondAttribute="top" id="rEo-U8-3C5"/>
                 <constraint firstItem="Efq-cs-myP" firstAttribute="height" secondItem="DBN-oW-2X9" secondAttribute="height" id="sCg-7K-UBE"/>
                 <constraint firstItem="O1J-td-hSB" firstAttribute="width" secondItem="04A-0F-FVu" secondAttribute="width" id="w8M-f7-EQS"/>
                 <constraint firstItem="04A-0F-FVu" firstAttribute="leading" secondItem="DTt-1H-bbG" secondAttribute="leading" constant="3" id="yhj-ai-h08"/>
