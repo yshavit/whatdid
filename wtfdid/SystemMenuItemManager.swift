@@ -8,6 +8,7 @@ class SystemMenuItemManager: NSWindowController, NSWindowDelegate, NSMenuDelegat
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
     private var taskAdditionsPane : TaskAdditionViewController!
+    private var snoozeUntil : Date?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -70,7 +71,9 @@ class SystemMenuItemManager: NSWindowController, NSWindowDelegate, NSMenuDelegat
     func windowWillClose(_ notification: Notification) {
         NSApp.hide(self)
         statusItem.button?.isHighlighted = false
-        schedulePopup()
+        if snoozeUntil != nil {
+            schedulePopup()
+        }
     }
 
     func schedulePopup() {
@@ -78,6 +81,18 @@ class SystemMenuItemManager: NSWindowController, NSWindowDelegate, NSMenuDelegat
         let minutes = POPUP_INTERVAL_MINUTES + jitterMinutes
         let when = DispatchTime.now().advanced(by: DispatchTimeInterval.seconds(minutes * 60))
         DispatchQueue.main.asyncAfter(deadline: when, execute: {
+            if self.snoozeUntil != nil {
+                self.show()
+            }
+        })
+    }
+    
+    func snooze(until date: Date) {
+        snoozeUntil = date
+        window?.close()
+        let wakeupDate = DispatchTime.now().advanced(by: DispatchTimeInterval.seconds(Int(date.timeIntervalSinceNow)))
+        DispatchQueue.main.asyncAfter(deadline: wakeupDate, execute: {
+            self.snoozeUntil = nil
             self.show()
         })
     }
