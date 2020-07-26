@@ -5,6 +5,7 @@ import HotKey
 class AppDelegate: NSObject, NSApplicationDelegate {
     public static let instance = NSApplication.shared.delegate as! AppDelegate
     public static let DEBUG_DATE_FORMATTER = ISO8601DateFormatter()
+    let VERSION_STRING = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "???????"
     
     public let model = Model()
     @IBOutlet weak var scheduledPtnWindowController: SystemMenuItemManager!
@@ -18,6 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        NSLog("Starting wtfdid with build %@", VERSION_STRING)
         AppDelegate.DEBUG_DATE_FORMATTER.timeZone = TimeZone.autoupdatingCurrent
         // Our Info.plist starts us off as background. Now that we're started, become an accessory app.
         // This approach lets us start the app deactivated.

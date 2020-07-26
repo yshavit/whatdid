@@ -188,6 +188,7 @@
 				7E8C04D623714F0700A0C3A6 /* Sources */,
 				7E8C04D723714F0700A0C3A6 /* Frameworks */,
 				7E8C04D823714F0700A0C3A6 /* Resources */,
+				7E1C2F4F24CE33780070D8CD /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -309,6 +310,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7E1C2F4F24CE33780070D8CD /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "$SRCROOT/buildscripts/set_plist_build.sh\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7E8C04D623714F0700A0C3A6 /* Sources */ = {
