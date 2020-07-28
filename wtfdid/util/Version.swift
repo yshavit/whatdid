@@ -7,9 +7,6 @@ class Version: NSObject {
     
     static var pretty : String {
         get {
-            Bundle.main.infoDictionary?.forEach({(key, value) in
-                print("\(key) => \(value)")
-            })
             return "\(short) (\(full) @\(gitSha))"
         }
     }

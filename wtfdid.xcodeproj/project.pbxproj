@@ -207,7 +207,7 @@
 				7E8C04D623714F0700A0C3A6 /* Sources */,
 				7E8C04D723714F0700A0C3A6 /* Frameworks */,
 				7E8C04D823714F0700A0C3A6 /* Resources */,
-				7E1C2F4F24CE33780070D8CD /* ShellScript */,
+				7E1C2F4F24CE33780070D8CD /* Set gitsha in Info.plist */,
 			);
 			buildRules = (
 			);
@@ -331,7 +331,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		7E1C2F4F24CE33780070D8CD /* ShellScript */ = {
+		7E1C2F4F24CE33780070D8CD /* Set gitsha in Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -340,6 +340,7 @@
 			);
 			inputPaths = (
 			);
+			name = "Set gitsha in Info.plist";
 			outputFileListPaths = (
 			);
 			outputPaths = (
