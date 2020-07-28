@@ -8,6 +8,7 @@ class SystemMenuItemManager: NSWindowController, NSWindowDelegate, NSMenuDelegat
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
     private var taskAdditionsPane : TaskAdditionViewController!
+    private var schedulePopupOnClose = false
     private var snoozing = false
 
     override func awakeFromNib() {
@@ -33,7 +34,7 @@ class SystemMenuItemManager: NSWindowController, NSWindowDelegate, NSMenuDelegat
         if window?.isVisible ?? false {
             window?.close()
         } else {
-            show()
+            show(schedulePopupOnClose: false)
             AppDelegate.instance.onDeactivation {
                 self.window?.close()
             }
@@ -41,10 +42,17 @@ class SystemMenuItemManager: NSWindowController, NSWindowDelegate, NSMenuDelegat
         }
     }
     
-    func show() {
+    func show(schedulePopupOnClose: Bool) {
         if window?.isVisible ?? false {
+            // If this show was from a scheduled popup, mark the currently opened window as
+            // a scheduled popup (even if wasn't originally). Otherwise, the thread of
+            // scheduled popups would die.
+            if schedulePopupOnClose {
+                self.schedulePopupOnClose = true
+            }
             return
         }
+        self.schedulePopupOnClose = schedulePopupOnClose
         if let mainFrame = NSScreen.main?.visibleFrame, let button = statusItem.button {
             let buttonBoundsAbsolute = button.window?.convertToScreen(button.bounds)
             let pos = NSPoint(
@@ -71,7 +79,7 @@ class SystemMenuItemManager: NSWindowController, NSWindowDelegate, NSMenuDelegat
     func windowWillClose(_ notification: Notification) {
         NSApp.hide(self)
         statusItem.button?.isHighlighted = false
-        if !snoozing {
+        if schedulePopupOnClose && !snoozing {
             schedulePopup()
         }
     }
@@ -86,7 +94,7 @@ class SystemMenuItemManager: NSWindowController, NSWindowDelegate, NSMenuDelegat
                 NSLog("Ignoring a popup request due to snooze.")
             } else {
                 NSLog("Showing a scheduled popup.")
-                self.show()
+                self.show(schedulePopupOnClose: true)
             }
         })
     }
@@ -98,7 +106,7 @@ class SystemMenuItemManager: NSWindowController, NSWindowDelegate, NSMenuDelegat
         let wakeupTime = DispatchWallTime.now() + .seconds(Int(date.timeIntervalSinceNow))
         DispatchQueue.main.asyncAfter(wallDeadline: wakeupTime, execute: {
             self.snoozing = false
-            self.show()
+            self.show(schedulePopupOnClose: true)
         })
     }
 }
