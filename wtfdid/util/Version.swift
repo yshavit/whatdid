@@ -7,7 +7,7 @@ class Version: NSObject {
     
     static var pretty : String {
         get {
-            return "\(short) (\(full) @\(gitSha))"
+            return "\(short) (v\(full) @\(gitSha))"
         }
     }
 }
