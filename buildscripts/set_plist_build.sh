@@ -1,29 +1,25 @@
-#!/bin/bash
+#!/bin/bash -e
 
-buildnum="$(git log -n 1 '--pretty=format:%h')"
+sha="$(git log -n 1 '--pretty=format:%h')"
 if [[ $(git status -s | wc -c) -ne 0 ]]; then 
-  # See Version.swift for how we parse this
-  buildnum="${buildnum}FFFF"
+  sha="${sha}.dirty"
 fi
-buildnum="$((16#$buildnum))"
 
+info_plist="$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH"
 target_plist="$TARGET_BUILD_DIR/$INFOPLIST_PATH"
 dsym_plist="$DWARF_DSYM_FOLDER_PATH/$DWARF_DSYM_FILE_NAME/Contents/Info.plist"
-for plist in "$target_plist" "$dsym_plist"; do
+for plist in "$info_plist" "$target_plist" "$dsym_plist"; do
   if [ -f "$plist" ]; then
-    short_string="$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$plist")"
-    if ! grep -q '^[0-9]\+\.[0-9]\+$' <<< "$short_string" ; then
-      self_without_prefix="${0#"$SRCROOT"}"
-      echo "Error!!"
-      echo "Error!!"
-      echo "Error!! .$self_without_prefix:"
-      echo "Error!! Version number must have exactly two parts ('xx.yy', not 'xx' or 'xx.yy.zz')"
-      echo "Error!! Is: $short_string"
-      echo "Error!!"
-      echo "Error!!"
-      exit 1
+    echo "Found plist:  $plist"
+    old_sha=$(/usr/libexec/PlistBuddy -c "Print :ComYuvalShavitWtfdidVersion" "$plist" || echo '<none>')
+    if [[ "$old_sha" != "$sha" ]] ; then
+      echo "Updating sha to $sha (was: $old_sha)"
+      /usr/libexec/PlistBuddy -c "Delete :ComYuvalShavitWtfdidVersion" "$plist" || true
+      /usr/libexec/PlistBuddy -c "Add :ComYuvalShavitWtfdidVersion string $sha" "$plist"
+    else
+      echo "Found old sha ($sha), leaving untouched."
     fi
-    full_string="${short_string}.$buildnum"
-    /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $full_string" "$plist"
+  else
+    echo "Missing plist: $plist"
   fi
 done
