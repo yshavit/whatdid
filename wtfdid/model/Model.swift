@@ -148,9 +148,10 @@ class Model {
             entry.timeEntered = now
             
             do {
+                NSLog("Saving project(%@), task(%@), notes(%@)", project, task, notes)
                 try context.save()
             } catch {
-                print("error saving entry: \(error)")
+                print("Error saving entry: %@", error)
             }
             callback()
         })
