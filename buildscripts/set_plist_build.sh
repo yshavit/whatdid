@@ -4,6 +4,7 @@ sha="$(git log -n 1 '--pretty=format:%h')"
 if [[ $(git status -s | wc -c) -ne 0 ]]; then 
   sha="${sha}.dirty"
 fi
+now="$(/bin/date -u '+%Y.%m%d.%H%M%S')"
 
 info_plist="$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH"
 target_plist="$TARGET_BUILD_DIR/$INFOPLIST_PATH"
@@ -16,6 +17,8 @@ for plist in "$info_plist" "$target_plist" "$dsym_plist"; do
       echo "Updating sha to $sha (was: $old_sha)"
       /usr/libexec/PlistBuddy -c "Delete :ComYuvalShavitWtfdidVersion" "$plist" || true
       /usr/libexec/PlistBuddy -c "Add :ComYuvalShavitWtfdidVersion string $sha" "$plist"
+      # Also set the version string
+      /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $now" "$plist"
     else
       echo "Found old sha ($sha), leaving untouched."
     fi
