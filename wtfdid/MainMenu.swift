@@ -1,6 +1,6 @@
 import Cocoa
 
-class SystemMenuItemManager: NSWindowController, NSWindowDelegate, NSMenuDelegate {
+class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     
     private let POPUP_INTERVAL_MINUTES = 15
     private let POPUP_INTERVAL_JITTER_MINUTES = 3

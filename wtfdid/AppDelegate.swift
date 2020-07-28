@@ -7,7 +7,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     public static let DEBUG_DATE_FORMATTER = ISO8601DateFormatter()
 
     public let model = Model()
-    @IBOutlet weak var scheduledPtnWindowController: SystemMenuItemManager!
+    @IBOutlet weak var scheduledPtnWindowController: MainMenu!
     let focusHotKey = HotKey(key: .x, modifiers: [.command, .shift])
     private var deactivationHooks : Atomic<[() -> Void]> = Atomic(wrappedValue: [])
     
