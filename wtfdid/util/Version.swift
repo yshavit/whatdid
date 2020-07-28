@@ -1,3 +1,5 @@
+// wtfdid?
+
 import Cocoa
 
 class Version: NSObject {
@@ -7,7 +9,7 @@ class Version: NSObject {
     
     static var pretty : String {
         get {
-            return "\(short) (v\(full) @\(gitSha))"
+            return "\(short) (v\(full)@\(gitSha))"
         }
     }
 }

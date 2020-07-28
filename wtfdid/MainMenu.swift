@@ -1,3 +1,5 @@
+// wtfdid?
+
 import Cocoa
 
 class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {

@@ -1,3 +1,5 @@
+// wtfdid?
+
 import Cocoa
 
 @propertyWrapper struct Atomic<T> : CustomStringConvertible {

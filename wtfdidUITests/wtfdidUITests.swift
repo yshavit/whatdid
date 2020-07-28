@@ -1,10 +1,4 @@
-//
-//  wtfdidUITests.swift
-//  wtfdidUITests
-//
-//  Created by Yuval Shavit on 11/5/19.
-//  Copyright © 2019 Yuval Shavit. All rights reserved.
-//
+// wtfdid?
 
 import XCTest
 

@@ -1,10 +1,4 @@
-//
-//  wtfdidTests.swift
-//  wtfdidTests
-//
-//  Created by Yuval Shavit on 11/5/19.
-//  Copyright © 2019 Yuval Shavit. All rights reserved.
-//
+// wtfdid?
 
 import XCTest
 @testable import wtfdid

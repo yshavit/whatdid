@@ -1,11 +1,4 @@
-//
-//  Task+CoreDataProperties.swift
-//  wtfdid
-//
-//  Created by Yuval Shavit on 7/16/20.
-//  Copyright © 2020 Yuval Shavit. All rights reserved.
-//
-//
+// wtfdid?
 
 import Foundation
 import CoreData
