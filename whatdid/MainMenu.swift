@@ -36,6 +36,9 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         if window?.isVisible ?? false {
             window?.close()
         } else {
+            if NSEvent.modifierFlags.contains(.option) {
+                window?.contentViewController = DayEndReportController()
+            }
             show(schedulePopupOnClose: false)
             AppDelegate.instance.onDeactivation {
                 self.window?.close()
@@ -81,6 +84,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     func windowWillClose(_ notification: Notification) {
         NSApp.hide(self)
         statusItem.button?.isHighlighted = false
+        window?.contentViewController = taskAdditionsPane
         if schedulePopupOnClose && !snoozing {
             schedulePopup()
         }
