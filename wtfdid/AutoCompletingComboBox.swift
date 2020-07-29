@@ -11,6 +11,7 @@ class AutoCompletingComboBox: NSComboBox, NSComboBoxDelegate {
     }
 
     override func awakeFromNib() {
+        super.awakeFromNib()
         self.delegate = self
         completes = true
     }
