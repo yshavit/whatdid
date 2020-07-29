@@ -1,8 +1,8 @@
-// wtfdid?
+// whatdid?
 
 import XCTest
 
-class wtfdidUITests: XCTestCase {
+class whatdidUITests: XCTestCase {
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.

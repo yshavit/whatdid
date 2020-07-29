@@ -5,7 +5,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="TaskAdditionViewController" customModule="wtfdid" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner" customClass="TaskAdditionViewController" customModule="whatdid" customModuleProvider="target">
             <connections>
                 <outlet property="breakButton" destination="2EZ-2e-8Xo" id="n7F-l7-UP1"/>
                 <outlet property="noteField" destination="Zy9-oh-6fD" id="nfd-Ms-aMS"/>
@@ -28,7 +28,7 @@
                         <rect key="frame" x="1" y="1" width="103" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ahq-DU-gr9" userLabel="Project Combo" customClass="AutoCompletingComboBox" customModule="wtfdid" customModuleProvider="target">
+                            <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ahq-DU-gr9" userLabel="Project Combo" customClass="AutoCompletingComboBox" customModule="whatdid" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="-2" width="106" height="23"/>
                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="project" drawsBackground="YES" usesSingleLineMode="YES" buttonBordered="NO" completes="NO" numberOfVisibleItems="5" id="bQR-K9-wwH">
                                     <font key="font" size="12" name="HelveticaNeue"/>
@@ -69,7 +69,7 @@
                         <rect key="frame" x="1" y="1" width="103" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dGG-J5-KA1" userLabel="Task Combo" customClass="AutoCompletingComboBox" customModule="wtfdid" customModuleProvider="target">
+                            <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dGG-J5-KA1" userLabel="Task Combo" customClass="AutoCompletingComboBox" customModule="whatdid" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="-2" width="106" height="23"/>
                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="task" drawsBackground="YES" usesSingleLineMode="YES" buttonBordered="NO" completes="NO" numberOfVisibleItems="5" id="j83-oj-gZW">
                                     <font key="font" size="12" name="HelveticaNeue"/>
@@ -201,6 +201,6 @@
             </constraints>
             <point key="canvasLocation" x="-126.5" y="-152.5"/>
         </view>
-        <viewController title="Task Addition View Controller" nibName="TaskAdditionViewController" id="bP9-Bw-QYO" customClass="TaskAdditionViewController" customModule="wtfdid" customModuleProvider="target"/>
+        <viewController title="Task Addition View Controller" nibName="TaskAdditionViewController" id="bP9-Bw-QYO" customClass="TaskAdditionViewController" customModule="whatdid" customModuleProvider="target"/>
     </objects>
 </document>

@@ -1,4 +1,4 @@
-// wtfdid?
+// whatdid?
 
 import Cocoa
 import HotKey
@@ -20,7 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        NSLog("Starting wtfdid with build %@", Version.pretty)
+        NSLog("Starting whatdid with build %@", Version.pretty)
         AppDelegate.DEBUG_DATE_FORMATTER.timeZone = TimeZone.autoupdatingCurrent
         // Our Info.plist starts us off as background. Now that we're started, become an accessory app.
         // This approach lets us start the app deactivated.

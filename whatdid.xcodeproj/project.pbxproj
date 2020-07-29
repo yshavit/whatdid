@@ -20,8 +20,8 @@
 		7E37A29D24C0293E005BA1DF /* Task+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */; };
 		7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */; };
 		7E8C04E023714F0800A0C3A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04DF23714F0800A0C3A6 /* Assets.xcassets */; };
-		7E8C04EF23714F0800A0C3A6 /* wtfdidTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04EE23714F0800A0C3A6 /* wtfdidTests.swift */; };
-		7E8C04FA23714F0800A0C3A6 /* wtfdidUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04F923714F0800A0C3A6 /* wtfdidUITests.swift */; };
+		7E8C04EF23714F0800A0C3A6 /* whatdidTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04EE23714F0800A0C3A6 /* whatdidTests.swift */; };
+		7E8C04FA23714F0800A0C3A6 /* whatdidUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04F923714F0800A0C3A6 /* whatdidUITests.swift */; };
 		7EA1DFC024CA99BF003AD2BC /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */; };
 		7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04E123714F0800A0C3A6 /* MainMenu.xib */; };
 		7EA6E22824BD6C5F004B9297 /* TaskAdditionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA6E22724BD6C5F004B9297 /* TaskAdditionViewController.xib */; };
@@ -35,14 +35,14 @@
 			containerPortal = 7E8C04D223714F0700A0C3A6 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 7E8C04D923714F0700A0C3A6;
-			remoteInfo = wtfdid;
+			remoteInfo = whatdid;
 		};
 		7E8C04F623714F0800A0C3A6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7E8C04D223714F0700A0C3A6 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 7E8C04D923714F0700A0C3A6;
-			remoteInfo = wtfdid;
+			remoteInfo = whatdid;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -57,17 +57,17 @@
 		7E37A29724C0293E005BA1DF /* Entry+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Entry+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7E37A29824C0293E005BA1DF /* Task+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		7E8C04DA23714F0700A0C3A6 /* wtfdid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wtfdid.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7E8C04DA23714F0700A0C3A6 /* whatdid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = whatdid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7E8C04DF23714F0800A0C3A6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7E8C04E223714F0800A0C3A6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		7E8C04E423714F0800A0C3A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7E8C04E523714F0800A0C3A6 /* wtfdid.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = wtfdid.entitlements; sourceTree = "<group>"; };
-		7E8C04EA23714F0800A0C3A6 /* wtfdidTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = wtfdidTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		7E8C04EE23714F0800A0C3A6 /* wtfdidTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = wtfdidTests.swift; sourceTree = "<group>"; };
+		7E8C04E523714F0800A0C3A6 /* whatdid.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = whatdid.entitlements; sourceTree = "<group>"; };
+		7E8C04EA23714F0800A0C3A6 /* whatdidTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = whatdidTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7E8C04EE23714F0800A0C3A6 /* whatdidTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whatdidTests.swift; sourceTree = "<group>"; };
 		7E8C04F023714F0800A0C3A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7E8C04F523714F0800A0C3A6 /* wtfdidUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = wtfdidUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		7E8C04F923714F0800A0C3A6 /* wtfdidUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = wtfdidUITests.swift; sourceTree = "<group>"; };
+		7E8C04F523714F0800A0C3A6 /* whatdidUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = whatdidUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7E8C04F923714F0800A0C3A6 /* whatdidUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whatdidUITests.swift; sourceTree = "<group>"; };
 		7E8C04FB23714F0800A0C3A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		7EA6E22724BD6C5F004B9297 /* TaskAdditionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskAdditionViewController.xib; sourceTree = "<group>"; };
@@ -126,9 +126,9 @@
 		7E8C04D123714F0700A0C3A6 = {
 			isa = PBXGroup;
 			children = (
-				7E8C04DC23714F0700A0C3A6 /* wtfdid */,
-				7E8C04ED23714F0800A0C3A6 /* wtfdidTests */,
-				7E8C04F823714F0800A0C3A6 /* wtfdidUITests */,
+				7E8C04DC23714F0700A0C3A6 /* whatdid */,
+				7E8C04ED23714F0800A0C3A6 /* whatdidTests */,
+				7E8C04F823714F0800A0C3A6 /* whatdidUITests */,
 				7E8C04DB23714F0700A0C3A6 /* Products */,
 				7E2A11DA24C02D38009B18D2 /* Recovered References */,
 			);
@@ -137,14 +137,14 @@
 		7E8C04DB23714F0700A0C3A6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7E8C04DA23714F0700A0C3A6 /* wtfdid.app */,
-				7E8C04EA23714F0800A0C3A6 /* wtfdidTests.xctest */,
-				7E8C04F523714F0800A0C3A6 /* wtfdidUITests.xctest */,
+				7E8C04DA23714F0700A0C3A6 /* whatdid.app */,
+				7E8C04EA23714F0800A0C3A6 /* whatdidTests.xctest */,
+				7E8C04F523714F0800A0C3A6 /* whatdidUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		7E8C04DC23714F0700A0C3A6 /* wtfdid */ = {
+		7E8C04DC23714F0700A0C3A6 /* whatdid */ = {
 			isa = PBXGroup;
 			children = (
 				7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */,
@@ -157,25 +157,25 @@
 				7E37A27524BFF73E005BA1DF /* model */,
 				7EAC528924CFC90800A13B72 /* util */,
 			);
-			path = wtfdid;
+			path = whatdid;
 			sourceTree = "<group>";
 		};
-		7E8C04ED23714F0800A0C3A6 /* wtfdidTests */ = {
+		7E8C04ED23714F0800A0C3A6 /* whatdidTests */ = {
 			isa = PBXGroup;
 			children = (
-				7E8C04EE23714F0800A0C3A6 /* wtfdidTests.swift */,
+				7E8C04EE23714F0800A0C3A6 /* whatdidTests.swift */,
 				7E8C04F023714F0800A0C3A6 /* Info.plist */,
 			);
-			path = wtfdidTests;
+			path = whatdidTests;
 			sourceTree = "<group>";
 		};
-		7E8C04F823714F0800A0C3A6 /* wtfdidUITests */ = {
+		7E8C04F823714F0800A0C3A6 /* whatdidUITests */ = {
 			isa = PBXGroup;
 			children = (
-				7E8C04F923714F0800A0C3A6 /* wtfdidUITests.swift */,
+				7E8C04F923714F0800A0C3A6 /* whatdidUITests.swift */,
 				7E8C04FB23714F0800A0C3A6 /* Info.plist */,
 			);
-			path = wtfdidUITests;
+			path = whatdidUITests;
 			sourceTree = "<group>";
 		};
 		7EAC528924CFC90800A13B72 /* util */ = {
@@ -191,7 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				7E8C04E423714F0800A0C3A6 /* Info.plist */,
-				7E8C04E523714F0800A0C3A6 /* wtfdid.entitlements */,
+				7E8C04E523714F0800A0C3A6 /* whatdid.entitlements */,
 				7E8C04DF23714F0800A0C3A6 /* Assets.xcassets */,
 			);
 			name = boilerplate;
@@ -200,9 +200,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7E8C04D923714F0700A0C3A6 /* wtfdid */ = {
+		7E8C04D923714F0700A0C3A6 /* whatdid */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7E8C04FE23714F0800A0C3A6 /* Build configuration list for PBXNativeTarget "wtfdid" */;
+			buildConfigurationList = 7E8C04FE23714F0800A0C3A6 /* Build configuration list for PBXNativeTarget "whatdid" */;
 			buildPhases = (
 				7E8C04D623714F0700A0C3A6 /* Sources */,
 				7E8C04D723714F0700A0C3A6 /* Frameworks */,
@@ -213,17 +213,17 @@
 			);
 			dependencies = (
 			);
-			name = wtfdid;
+			name = whatdid;
 			packageProductDependencies = (
 				7E10088A24CB5FE100D0BAE6 /* HotKey */,
 			);
-			productName = wtfdid;
-			productReference = 7E8C04DA23714F0700A0C3A6 /* wtfdid.app */;
+			productName = whatdid;
+			productReference = 7E8C04DA23714F0700A0C3A6 /* whatdid.app */;
 			productType = "com.apple.product-type.application";
 		};
-		7E8C04E923714F0800A0C3A6 /* wtfdidTests */ = {
+		7E8C04E923714F0800A0C3A6 /* whatdidTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7E8C050123714F0800A0C3A6 /* Build configuration list for PBXNativeTarget "wtfdidTests" */;
+			buildConfigurationList = 7E8C050123714F0800A0C3A6 /* Build configuration list for PBXNativeTarget "whatdidTests" */;
 			buildPhases = (
 				7E8C04E623714F0800A0C3A6 /* Sources */,
 				7E8C04E723714F0800A0C3A6 /* Frameworks */,
@@ -234,14 +234,14 @@
 			dependencies = (
 				7E8C04EC23714F0800A0C3A6 /* PBXTargetDependency */,
 			);
-			name = wtfdidTests;
-			productName = wtfdidTests;
-			productReference = 7E8C04EA23714F0800A0C3A6 /* wtfdidTests.xctest */;
+			name = whatdidTests;
+			productName = whatdidTests;
+			productReference = 7E8C04EA23714F0800A0C3A6 /* whatdidTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		7E8C04F423714F0800A0C3A6 /* wtfdidUITests */ = {
+		7E8C04F423714F0800A0C3A6 /* whatdidUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7E8C050423714F0800A0C3A6 /* Build configuration list for PBXNativeTarget "wtfdidUITests" */;
+			buildConfigurationList = 7E8C050423714F0800A0C3A6 /* Build configuration list for PBXNativeTarget "whatdidUITests" */;
 			buildPhases = (
 				7E8C04F123714F0800A0C3A6 /* Sources */,
 				7E8C04F223714F0800A0C3A6 /* Frameworks */,
@@ -252,9 +252,9 @@
 			dependencies = (
 				7E8C04F723714F0800A0C3A6 /* PBXTargetDependency */,
 			);
-			name = wtfdidUITests;
-			productName = wtfdidUITests;
-			productReference = 7E8C04F523714F0800A0C3A6 /* wtfdidUITests.xctest */;
+			name = whatdidUITests;
+			productName = whatdidUITests;
+			productReference = 7E8C04F523714F0800A0C3A6 /* whatdidUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -280,7 +280,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 7E8C04D523714F0700A0C3A6 /* Build configuration list for PBXProject "wtfdid" */;
+			buildConfigurationList = 7E8C04D523714F0700A0C3A6 /* Build configuration list for PBXProject "whatdid" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -296,9 +296,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7E8C04D923714F0700A0C3A6 /* wtfdid */,
-				7E8C04E923714F0800A0C3A6 /* wtfdidTests */,
-				7E8C04F423714F0800A0C3A6 /* wtfdidUITests */,
+				7E8C04D923714F0700A0C3A6 /* whatdid */,
+				7E8C04E923714F0800A0C3A6 /* whatdidTests */,
+				7E8C04F423714F0800A0C3A6 /* whatdidUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -377,7 +377,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7E8C04EF23714F0800A0C3A6 /* wtfdidTests.swift in Sources */,
+				7E8C04EF23714F0800A0C3A6 /* whatdidTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,7 +385,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7E8C04FA23714F0800A0C3A6 /* wtfdidUITests.swift in Sources */,
+				7E8C04FA23714F0800A0C3A6 /* whatdidUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,12 +394,12 @@
 /* Begin PBXTargetDependency section */
 		7E8C04EC23714F0800A0C3A6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7E8C04D923714F0700A0C3A6 /* wtfdid */;
+			target = 7E8C04D923714F0700A0C3A6 /* whatdid */;
 			targetProxy = 7E8C04EB23714F0800A0C3A6 /* PBXContainerItemProxy */;
 		};
 		7E8C04F723714F0800A0C3A6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7E8C04D923714F0700A0C3A6 /* wtfdid */;
+			target = 7E8C04D923714F0700A0C3A6 /* whatdid */;
 			targetProxy = 7E8C04F623714F0800A0C3A6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -533,18 +533,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = wtfdid/wtfdid.entitlements;
+				CODE_SIGN_ENTITLEMENTS = whatdid/whatdid.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = wtfdid/Info.plist;
+				INFOPLIST_FILE = whatdid/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.wtfdid;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.whatdid;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
@@ -554,18 +554,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = wtfdid/wtfdid.entitlements;
+				CODE_SIGN_ENTITLEMENTS = whatdid/whatdid.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = wtfdid/Info.plist;
+				INFOPLIST_FILE = whatdid/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.wtfdid;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.whatdid;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
@@ -578,17 +578,17 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = wtfdidTests/Info.plist;
+				INFOPLIST_FILE = whatdidTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.wtfdidTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.whatdidTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/wtfdid.app/Contents/MacOS/wtfdid";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/whatdid.app/Contents/MacOS/whatdid";
 			};
 			name = Debug;
 		};
@@ -599,17 +599,17 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = wtfdidTests/Info.plist;
+				INFOPLIST_FILE = whatdidTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.wtfdidTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.whatdidTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/wtfdid.app/Contents/MacOS/wtfdid";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/whatdid.app/Contents/MacOS/whatdid";
 			};
 			name = Release;
 		};
@@ -619,16 +619,16 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = wtfdidUITests/Info.plist;
+				INFOPLIST_FILE = whatdidUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.wtfdidUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.whatdidUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = wtfdid;
+				TEST_TARGET_NAME = whatdid;
 			};
 			name = Debug;
 		};
@@ -638,23 +638,23 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = wtfdidUITests/Info.plist;
+				INFOPLIST_FILE = whatdidUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.wtfdidUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.whatdidUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = wtfdid;
+				TEST_TARGET_NAME = whatdid;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7E8C04D523714F0700A0C3A6 /* Build configuration list for PBXProject "wtfdid" */ = {
+		7E8C04D523714F0700A0C3A6 /* Build configuration list for PBXProject "whatdid" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7E8C04FC23714F0800A0C3A6 /* Debug */,
@@ -663,7 +663,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7E8C04FE23714F0800A0C3A6 /* Build configuration list for PBXNativeTarget "wtfdid" */ = {
+		7E8C04FE23714F0800A0C3A6 /* Build configuration list for PBXNativeTarget "whatdid" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7E8C04FF23714F0800A0C3A6 /* Debug */,
@@ -672,7 +672,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7E8C050123714F0800A0C3A6 /* Build configuration list for PBXNativeTarget "wtfdidTests" */ = {
+		7E8C050123714F0800A0C3A6 /* Build configuration list for PBXNativeTarget "whatdidTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7E8C050223714F0800A0C3A6 /* Debug */,
@@ -681,7 +681,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7E8C050423714F0800A0C3A6 /* Build configuration list for PBXNativeTarget "wtfdidUITests" */ = {
+		7E8C050423714F0800A0C3A6 /* Build configuration list for PBXNativeTarget "whatdidUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7E8C050523714F0800A0C3A6 /* Debug */,
