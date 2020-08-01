@@ -217,7 +217,7 @@
                                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="0BI-wJ-RVL" userLabel="P1T1 entries">
                                                                             <rect key="frame" x="19" y="0.0" width="130" height="28"/>
                                                                             <textFieldCell key="cell" selectable="YES" id="Hq8-Zz-HD8">
-                                                                                <font key="font" metaFont="menu" size="11"/>
+                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <string key="title">10:00am - 10:30am: foo
 10:30am - 11:00am: bar</string>
                                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -287,7 +287,7 @@
                                                                         <textField hidden="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="RgE-f4-lyU" userLabel="P1T2 entries">
                                                                             <rect key="frame" x="19" y="-28" width="130" height="28"/>
                                                                             <textFieldCell key="cell" selectable="YES" id="h0J-xZ-OxO">
-                                                                                <font key="font" metaFont="menu" size="11"/>
+                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <string key="title">10:00am - 10:30am: foo
 10:30am - 11:00am: bar</string>
                                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>

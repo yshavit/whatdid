@@ -46,10 +46,8 @@ class DayEndReportController: NSViewController {
         projectsContainer.subviews.forEach {$0.removeFromSuperview()}
         
         let projects = Model.GroupedProjects(from: getEntries()) // TODO read from Model
-        let totalSeconds = projects.totalTime
+        let allProjectsTotalTime = projects.totalTime
         projects.forEach {project in
-            // see https://www.raywenderlich.com/1206-os-x-stack-views-with-nsstackview for animations
-            let projectSeconds = project.totalTime
             // The vstack group for the whole project
             let projectVStack = NSStackView()
             projectsContainer.addArrangedSubview(projectVStack)
@@ -63,25 +61,7 @@ class DayEndReportController: NSViewController {
             projectVStack.addArrangedSubview(projectLabel)
             projectLabel.leadingAnchor.constraint(equalTo: projectVStack.leadingAnchor).isActive = true
             
-            // The hstack group and contents for the disclosure button and entry
-            let headerHStack = NSStackView()
-            projectVStack.addArrangedSubview(headerHStack)
-            headerHStack.orientation = .horizontal
-            headerHStack.widthAnchor.constraint(equalTo: projectVStack.widthAnchor).isActive = true
-            headerHStack.leadingAnchor.constraint(equalTo: projectVStack.leadingAnchor).isActive = true
-            // disclosure button
-            let projectDisclosure = createDisclosure(state: .off)
-            headerHStack.addArrangedSubview(projectDisclosure)
-            projectDisclosure.leadingAnchor.constraint(equalTo: headerHStack.leadingAnchor).isActive = true
-            
-            // progress bar
-            let progressBar = NSProgressIndicator()
-            headerHStack.addArrangedSubview(progressBar)
-            progressBar.isIndeterminate = false
-            progressBar.minValue = 0
-            progressBar.maxValue = totalSeconds
-            progressBar.doubleValue = projectSeconds
-            progressBar.trailingAnchor.constraint(equalTo: headerHStack.trailingAnchor).isActive = true
+            let (projectDisclosure, projectProgressBar) = addExpandableProgressBar(to: projectVStack, withDuration: project.totalTime, outOf: allProjectsTotalTime)
             
             // Tasks box
             let tasksBox = NSBox()
@@ -102,13 +82,26 @@ class DayEndReportController: NSViewController {
         }
     }
     
-    let handler = DisclosureHandler()
-    
-    @objc class DisclosureHandler : NSObject {
-        @objc func run() {
-            print("Hi!")
-        }
+    private func addExpandableProgressBar(to enclosing: NSStackView, withDuration duration: TimeInterval, outOf: TimeInterval) -> (ButtonWithClosure, NSProgressIndicator) {
+        let headerHStack = NSStackView()
+        enclosing.addArrangedSubview(headerHStack)
+        headerHStack.orientation = .horizontal
+        headerHStack.widthAnchor.constraint(equalTo: enclosing.widthAnchor).isActive = true
+        headerHStack.leadingAnchor.constraint(equalTo: enclosing.leadingAnchor).isActive = true
+        // disclosure button
+        let disclosure = createDisclosure(state: .off)
+        headerHStack.addArrangedSubview(disclosure)
+        disclosure.leadingAnchor.constraint(equalTo: headerHStack.leadingAnchor).isActive = true
         
+        // progress bar
+        let progressBar = NSProgressIndicator()
+        headerHStack.addArrangedSubview(progressBar)
+        progressBar.isIndeterminate = false
+        progressBar.minValue = 0
+        progressBar.maxValue = outOf
+        progressBar.doubleValue = duration
+        progressBar.trailingAnchor.constraint(equalTo: headerHStack.trailingAnchor).isActive = true
+        return (disclosure, progressBar)
     }
     
     private func getEntries() -> [Model.FlatEntry] {
