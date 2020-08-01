@@ -251,6 +251,10 @@ class Model {
             entries.append(entry)
         }
         
+        func forEach(_ block: (FlatEntry) -> Void) {
+            entries.sorted(by: {$0.from < $1.from}).forEach(block)
+        }
+        
         var totalTime: TimeInterval {
             get {
                 return entries.compactMap { $0.duration }.reduce(0, +)

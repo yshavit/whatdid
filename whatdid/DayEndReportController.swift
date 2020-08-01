@@ -48,6 +48,7 @@ class DayEndReportController: NSViewController {
         let projects = Model.GroupedProjects(from: getEntries()) // TODO read from Model
         let allProjectsTotalTime = projects.totalTime
         projects.forEach {project in
+            let projectTime = project.totalTime
             // The vstack group for the whole project
             let projectVStack = NSStackView()
             projectsContainer.addArrangedSubview(projectVStack)
@@ -55,13 +56,7 @@ class DayEndReportController: NSViewController {
             projectVStack.widthAnchor.constraint(equalTo: projectsContainer.widthAnchor).isActive = true
             projectVStack.leadingAnchor.constraint(equalTo: projectsContainer.leadingAnchor).isActive = true
             
-            // The project label
-            project.add(flatEntry: Model.FlatEntry(from: Date(), to: Date(), project: "p", task: "t", notes: "n"))
-            let projectLabel = NSTextField(labelWithString: project.name)
-            projectVStack.addArrangedSubview(projectLabel)
-            projectLabel.leadingAnchor.constraint(equalTo: projectVStack.leadingAnchor).isActive = true
-            
-            let (projectDisclosure, projectProgressBar) = addExpandableProgressBar(to: projectVStack, withDuration: project.totalTime, outOf: allProjectsTotalTime)
+            let (projectDisclosure, projectProgressBar) = addExpandableProgressBar(to: projectVStack, labeled: project.name, withDuration: projectTime, outOf: allProjectsTotalTime)
             
             // Tasks box
             let tasksBox = NSBox()
@@ -70,19 +65,57 @@ class DayEndReportController: NSViewController {
             tasksBox.titlePosition = .noTitle
             tasksBox.leadingAnchor.constraint(equalTo: projectVStack.leadingAnchor, constant: 3).isActive = true
             tasksBox.trailingAnchor.constraint(equalTo: projectVStack.trailingAnchor, constant: -3).isActive = true
-            projectDisclosure.onPress {button in
-                NSAnimationContext.runAnimationGroup {context in
-                    context.duration = 0.5
-                    context.allowsImplicitAnimation = true
-                    tasksBox.isHidden = button.state == .off
-                    self.view.layoutSubtreeIfNeeded()
+            setUpDisclosureExpansion(disclosure: projectDisclosure, details: tasksBox)
+            
+            let tasksStack = NSStackView()
+            tasksStack.orientation = .vertical
+            tasksBox.contentView = tasksStack
+            
+            let timeFormatter = DateFormatter()
+            timeFormatter.locale = Locale(identifier: "en_US_POSIX")
+            timeFormatter.dateFormat = "HH:mma"
+            timeFormatter.timeZone = .autoupdatingCurrent
+            timeFormatter.amSymbol = "am"
+            timeFormatter.pmSymbol = "pm"
+            project.forEach {task in
+                let (taskDisclosure, taskProgressBar) = addExpandableProgressBar(to: tasksStack, labeled: task.name, withDuration: task.totalTime, outOf: projectTime)
+                var details = ""
+                task.forEach {entry in
+                    details += timeFormatter.string(from: entry.from)
+                    details += " - "
+                    details += timeFormatter.string(from: entry.to)
+                    details += ": "
+                    details += entry.notes ?? "(no notes entered)"
+                    details += "\n"
                 }
+                let taskDetailsView = NSTextField(labelWithString: details.trimmingCharacters(in: .newlines))
+                tasksStack.addArrangedSubview(taskDetailsView)
+                taskDetailsView.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
+                taskDetailsView.leadingAnchor.constraint(equalTo: taskProgressBar.leadingAnchor).isActive = true
+                setUpDisclosureExpansion(disclosure: taskDisclosure, details: taskDetailsView)
             }
-            tasksBox.isHidden = projectDisclosure.state == .off
         }
     }
     
-    private func addExpandableProgressBar(to enclosing: NSStackView, withDuration duration: TimeInterval, outOf: TimeInterval) -> (ButtonWithClosure, NSProgressIndicator) {
+    private func setUpDisclosureExpansion(disclosure: ButtonWithClosure, details: NSView) {
+        disclosure.onPress {button in
+            NSAnimationContext.runAnimationGroup {context in
+                context.duration = 0.3
+                context.allowsImplicitAnimation = true
+                details.isHidden = button.state == .off
+                self.view.layoutSubtreeIfNeeded()
+            }
+        }
+        details.isHidden = disclosure.state == .off
+    }
+    
+    private func addExpandableProgressBar(to enclosing: NSStackView, labeled label: String, withDuration duration: TimeInterval, outOf: TimeInterval) -> (ButtonWithClosure, NSProgressIndicator) {
+        
+
+        let projectLabel = NSTextField(labelWithString: label)
+        enclosing.addArrangedSubview(projectLabel)
+        projectLabel.leadingAnchor.constraint(equalTo: enclosing.leadingAnchor).isActive = true
+        
         let headerHStack = NSStackView()
         enclosing.addArrangedSubview(headerHStack)
         headerHStack.orientation = .horizontal
