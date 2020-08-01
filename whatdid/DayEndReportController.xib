@@ -28,21 +28,27 @@
                 </textField>
                 <scrollView identifier="projects_scroll_all" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h1o-R2-AcD" userLabel="Projects scroll umbrella">
                     <rect key="frame" x="0.0" y="21" width="361" height="132"/>
-                    <clipView key="contentView" identifier="projects_scroll_clip" translatesAutoresizingMaskIntoConstraints="NO" id="JNU-Oy-rUx" userLabel="Projects scroll clip View">
+                    <clipView key="contentView" identifier="projects_scroll_clip" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JNU-Oy-rUx" userLabel="Projects scroll clip View">
                         <rect key="frame" x="1" y="1" width="359" height="130"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view identifier="projects_scroll_container" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fbw-eS-FU5" userLabel="Projects container view">
-                                <rect key="frame" x="0.0" y="0.0" width="361" height="132"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <view identifier="projects_scroll_container" translatesAutoresizingMaskIntoConstraints="NO" id="Fbw-eS-FU5" userLabel="Projects container view">
                                 <subviews>
-                                    <stackView identifier="projects_scroll_vstack" distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8XV-5g-aJo" userLabel="Projects container vstack">
-                                        <rect key="frame" x="0.0" y="0.0" width="361" height="132"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    </stackView>
+                                    <stackView identifier="projects_scroll_vstack" distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8XV-5g-aJo" userLabel="Projects container vstack"/>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstItem="8XV-5g-aJo" firstAttribute="leading" secondItem="Fbw-eS-FU5" secondAttribute="leading" id="5H3-fb-CcA"/>
+                                    <constraint firstItem="8XV-5g-aJo" firstAttribute="width" secondItem="Fbw-eS-FU5" secondAttribute="width" id="FSR-1i-FpP"/>
+                                    <constraint firstItem="8XV-5g-aJo" firstAttribute="height" secondItem="Fbw-eS-FU5" secondAttribute="height" id="IXd-hl-XGd"/>
+                                    <constraint firstItem="8XV-5g-aJo" firstAttribute="top" secondItem="Fbw-eS-FU5" secondAttribute="top" id="OgC-ad-mWN"/>
+                                </constraints>
                             </view>
                         </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Fbw-eS-FU5" secondAttribute="trailing" id="6O0-pd-Ivg"/>
+                            <constraint firstAttribute="bottom" secondItem="Fbw-eS-FU5" secondAttribute="bottom" id="FIJ-Xr-Ppu"/>
+                            <constraint firstItem="Fbw-eS-FU5" firstAttribute="leading" secondItem="JNU-Oy-rUx" secondAttribute="leading" id="Rr0-dQ-kOA"/>
+                            <constraint firstItem="Fbw-eS-FU5" firstAttribute="top" secondItem="JNU-Oy-rUx" secondAttribute="top" id="SAb-8I-utT"/>
+                        </constraints>
                     </clipView>
                     <scroller key="horizontalScroller" identifier="projects_hbar" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aYN-iS-ZsQ" userLabel="Tasks horiz scroller">
                         <rect key="frame" x="1" y="115" width="359" height="16"/>
