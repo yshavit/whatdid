@@ -9,17 +9,27 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="DayEndReportController" customModule="whatdid" customModuleProvider="target">
             <connections>
+                <outlet property="disclosurePrototype" destination="ygu-jz-ofG" id="TL0-Zx-LtI"/>
                 <outlet property="projectsContainer" destination="UTB-GH-C4K" id="QTl-1c-03i"/>
                 <outlet property="view" destination="Qn8-JX-HeH" id="y6a-6x-Afv"/>
             </connections>
         </customObject>
+        <button focusRingType="none" horizontalHuggingPriority="750" verticalHuggingPriority="750" id="ygu-jz-ofG" userLabel="Disclosure prototype">
+            <rect key="frame" x="0.0" y="0.0" width="13" height="13"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <buttonCell key="cell" type="disclosureTriangle" bezelStyle="disclosure" imagePosition="only" alignment="left" borderStyle="border" focusRingType="none" imageScaling="proportionallyDown" inset="2" id="4W1-cn-N9W">
+                <behavior key="behavior" pushIn="YES" changeBackground="YES" changeGray="YES" lightByContents="YES"/>
+                <font key="font" metaFont="system"/>
+            </buttonCell>
+            <point key="canvasLocation" x="-402" y="67"/>
+        </button>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qn8-JX-HeH" userLabel="Top">
-            <rect key="frame" x="0.0" y="0.0" width="361" height="200"/>
+            <rect key="frame" x="0.0" y="0.0" width="361" height="228"/>
             <subviews>
                 <textField identifier="header_label" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-Lm-qUL" userLabel="Header">
-                    <rect key="frame" x="-2" y="184" width="117" height="16"/>
+                    <rect key="frame" x="-2" y="212" width="117" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" identifier="header_cell" title="Some header stuff" id="jJc-W3-EKA" userLabel="Header cell">
                         <font key="font" usesAppearanceFont="YES"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -27,15 +37,15 @@
                     </textFieldCell>
                 </textField>
                 <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LDw-zz-ziZ" userLabel="Projects scroll">
-                    <rect key="frame" x="0.0" y="17" width="361" height="166"/>
+                    <rect key="frame" x="0.0" y="17" width="361" height="194"/>
                     <clipView key="contentView" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vpo-4L-DGR" userLabel="Projects clip">
-                        <rect key="frame" x="1" y="1" width="359" height="164"/>
+                        <rect key="frame" x="1" y="1" width="359" height="192"/>
                         <subviews>
                             <view translatesAutoresizingMaskIntoConstraints="NO" id="W7j-r2-UD7" userLabel="Projects document" customClass="FlippedView" customModule="whatdid" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="166"/>
+                                <rect key="frame" x="0.0" y="0.0" width="361" height="194"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UTB-GH-C4K" userLabel="Projects vstack">
-                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="166"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="361" height="194"/>
                                     </stackView>
                                 </subviews>
                                 <constraints>
@@ -56,13 +66,14 @@
                     <constraints>
                         <constraint firstAttribute="height" relation="lessThanOrEqual" constant="450" id="YOD-2L-dmZ"/>
                         <constraint firstAttribute="height" relation="lessThanOrEqual" secondItem="UTB-GH-C4K" secondAttribute="height" id="dDz-hE-Ybj"/>
+                        <constraint firstItem="W7j-r2-UD7" firstAttribute="width" relation="greaterThanOrEqual" secondItem="LDw-zz-ziZ" secondAttribute="width" id="lhH-sc-DiC"/>
                     </constraints>
                     <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="mcw-YE-dMv">
-                        <rect key="frame" x="1" y="149" width="359" height="16"/>
+                        <rect key="frame" x="1" y="177" width="359" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="hko-IO-o5R">
-                        <rect key="frame" x="344" y="1" width="16" height="164"/>
+                        <rect key="frame" x="344" y="1" width="16" height="192"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                 </scrollView>
@@ -206,7 +217,7 @@
                                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="0BI-wJ-RVL" userLabel="P1T1 entries">
                                                                             <rect key="frame" x="19" y="0.0" width="130" height="28"/>
                                                                             <textFieldCell key="cell" selectable="YES" id="Hq8-Zz-HD8">
-                                                                                <font key="font" metaFont="label" size="11"/>
+                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <string key="title">10:00am - 10:30am: foo
 10:30am - 11:00am: bar</string>
                                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -276,7 +287,7 @@
                                                                         <textField hidden="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="RgE-f4-lyU" userLabel="P1T2 entries">
                                                                             <rect key="frame" x="19" y="-28" width="130" height="28"/>
                                                                             <textFieldCell key="cell" selectable="YES" id="h0J-xZ-OxO">
-                                                                                <font key="font" metaFont="label" size="11"/>
+                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <string key="title">10:00am - 10:30am: foo
 10:30am - 11:00am: bar</string>
                                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>

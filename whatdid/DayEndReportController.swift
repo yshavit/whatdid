@@ -8,11 +8,41 @@ class DayEndReportController: NSViewController {
         super.viewDidLoad()
         // Do view setup here.
     }
+    /// I don't know how to programatically make a nice disclosure button, so I'll just let the xib do it for me :-)
+    @IBOutlet var disclosurePrototype: NSButton!
+    // The serialized version of `disclosurePrototype`
+    private var disclosureArchive : Data!
     
     @IBOutlet weak var projectsContainer: NSStackView!
     
+    override func awakeFromNib() {
+        do {
+            disclosureArchive = try NSKeyedArchiver.archivedData(withRootObject: disclosurePrototype!, requiringSecureCoding: false)
+            disclosurePrototype = nil // free it up
+        } catch {
+            NSLog("Couldn't archive disclosure button: %@", error as NSError)
+        }
+    }
+    
+    private func createDisclosure()  -> NSButton {
+        do {
+            // TODO eventually I should look at the xib xml and just figure out what it's doing
+            let new = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(disclosureArchive)
+            return new as! NSButton
+        } catch {
+            NSLog("error: %@", error as NSError) // TODO return default?
+            fatalError("error: \(error)")
+        }
+    }
+    
+    private func DEBUG(_ stack: NSStackView, _ color: NSColor) {
+        stack.wantsLayer = true
+        stack.layer?.backgroundColor = color.cgColor
+    }
+    
     override func viewWillAppear() {
         projectsContainer.subviews.forEach {$0.removeFromSuperview()}
+        
         let entries = Model.group(entries: getEntries()) // TODO read from Model
         let totalSeconds = Model.FlatEntry.totalSeconds(projects: entries)
         entries.forEach {project, tasks in
@@ -23,17 +53,26 @@ class DayEndReportController: NSViewController {
             projectsContainer.addArrangedSubview(projectVStack)
             projectVStack.orientation = .vertical
             projectVStack.widthAnchor.constraint(equalTo: projectsContainer.widthAnchor).isActive = true
+            projectVStack.leadingAnchor.constraint(equalTo: projectsContainer.leadingAnchor).isActive = true
             
             // The project label
-            projectVStack.addArrangedSubview(NSTextField(labelWithString: project))
+            let projectLabel = NSTextField(labelWithString: project)
+            projectVStack.addArrangedSubview(projectLabel)
+            projectLabel.leadingAnchor.constraint(equalTo: projectVStack.leadingAnchor).isActive = true
             
             // The hstack group and contents for the disclosure button and entry
             let headerHStack = NSStackView()
             projectVStack.addArrangedSubview(headerHStack)
             headerHStack.orientation = .horizontal
             headerHStack.widthAnchor.constraint(equalTo: projectVStack.widthAnchor).isActive = true
-            headerHStack.addArrangedSubview(NSTextField(labelWithString: "V"))
+            headerHStack.leadingAnchor.constraint(equalTo: projectVStack.leadingAnchor).isActive = true
+            // disclosure button
+            let projectDisclosure = createDisclosure()
+            headerHStack.addArrangedSubview(projectDisclosure)
+            projectDisclosure.leadingAnchor.constraint(equalTo: headerHStack.leadingAnchor).isActive = true
+
             
+            // progress bar
             let progressBar = NSProgressIndicator()
             headerHStack.addArrangedSubview(progressBar)
             progressBar.isIndeterminate = false
