@@ -9,10 +9,11 @@ class DayEndReportController: NSViewController {
         // Do view setup here.
     }
     
+    @IBOutlet weak var projectsScroll: NSScrollView!
     @IBOutlet weak var projectsContainer: NSStackView!
     
     override func viewWillAppear() {
-        projectsContainer.subviews.forEach {$0.removeFromSuperview()}
+//        projectsContainer.subviews.forEach {$0.removeFromSuperview()}
         _ = Model.group(entries: getEntries()) // TODO read from Model
     }
     

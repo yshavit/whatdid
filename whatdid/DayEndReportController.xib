@@ -9,54 +9,151 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="DayEndReportController" customModule="whatdid" customModuleProvider="target">
             <connections>
-                <outlet property="projectsContainer" destination="8XV-5g-aJo" id="ddL-TU-m8X"/>
                 <outlet property="view" destination="Qn8-JX-HeH" id="y6a-6x-Afv"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="5" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qn8-JX-HeH" userLabel="Top">
-            <rect key="frame" x="0.0" y="0.0" width="361" height="174"/>
+        <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qn8-JX-HeH" userLabel="Top">
+            <rect key="frame" x="0.0" y="0.0" width="361" height="130"/>
             <subviews>
                 <textField identifier="header_label" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-Lm-qUL" userLabel="Header">
-                    <rect key="frame" x="-2" y="158" width="117" height="16"/>
+                    <rect key="frame" x="-2" y="114" width="117" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" identifier="header_cell" title="Some header stuff" id="jJc-W3-EKA" userLabel="Header cell">
                         <font key="font" usesAppearanceFont="YES"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="findHighlightColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <scrollView identifier="projects_scroll_all" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h1o-R2-AcD" userLabel="Projects scroll umbrella">
-                    <rect key="frame" x="0.0" y="21" width="361" height="132"/>
-                    <clipView key="contentView" identifier="projects_scroll_clip" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JNU-Oy-rUx" userLabel="Projects scroll clip View">
-                        <rect key="frame" x="1" y="1" width="359" height="130"/>
+                <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LDw-zz-ziZ" userLabel="Projects scroll">
+                    <rect key="frame" x="0.0" y="17" width="361" height="96"/>
+                    <clipView key="contentView" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vpo-4L-DGR" userLabel="Projects clip">
+                        <rect key="frame" x="1" y="1" width="359" height="94"/>
                         <subviews>
-                            <view identifier="projects_scroll_container" translatesAutoresizingMaskIntoConstraints="NO" id="Fbw-eS-FU5" userLabel="Projects container view">
+                            <view translatesAutoresizingMaskIntoConstraints="NO" id="W7j-r2-UD7" userLabel="Projects document" customClass="FlippedView" customModule="whatdid" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="634" height="574"/>
                                 <subviews>
-                                    <stackView identifier="projects_scroll_vstack" distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8XV-5g-aJo" userLabel="Projects container vstack"/>
+                                    <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UTB-GH-C4K" userLabel="Projects vstack">
+                                        <rect key="frame" x="0.0" y="0.0" width="634" height="574"/>
+                                        <subviews>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="r0Z-wE-3G3">
+                                                <rect key="frame" x="-6" y="546" width="81" height="32"/>
+                                                <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ckM-hG-6kY">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fwP-HT-Ii1">
+                                                <rect key="frame" x="-6" y="517" width="81" height="32"/>
+                                                <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3zc-q3-RRz">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aNY-RB-Ey6">
+                                                <rect key="frame" x="-6" y="488" width="81" height="32"/>
+                                                <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="AKa-3T-8vi">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
+                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="L8J-Q0-3tV">
+                                                <rect key="frame" x="-2" y="87" width="638" height="400"/>
+                                                <textFieldCell key="cell" selectable="YES" id="4hA-6h-MPn">
+                                                    <font key="font" metaFont="system"/>
+                                                    <mutableString key="title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+et dolore magna aliqua. Quisque non tellus orci ac auctor. Dui id ornare arcu odio ut. Euismod quis
+viverra nibh cras pulvinar mattis. Maecenas volutpat blandit aliquam etiam erat velit scelerisque in
+dictum. Amet aliquam id diam maecenas ultricies mi eget mauris pharetra. Mi tempus imperdiet nulla
+malesuada pellentesque. Egestas maecenas pharetra convallis posuere. Egestas purus viverra accumsan
+in. Facilisis volutpat est velit egestas. Mi in nulla posuere sollicitudin. Consequat nisl vel
+pretium lectus quam id leo. Adipiscing elit duis tristique sollicitudin nibh sit. Mattis molestie a
+iaculis at erat. Augue interdum velit euismod in.
+
+Odio facilisis mauris sit amet massa vitae tortor. Duis convallis convallis tellus id interdum
+velit. Eleifend mi in nulla posuere sollicitudin aliquam ultrices. Facilisis leo vel fringilla est
+ullamcorper eget. Sed libero enim sed faucibus turpis in. Ac ut consequat semper viverra nam. Urna
+porttitor rhoncus dolor purus non enim. In mollis nunc sed id. Lectus vestibulum mattis ullamcorper
+velit. Duis at tellus at urna condimentum. Dolor sit amet consectetur adipiscing. Amet justo donec
+enim diam vulputate ut pharetra sit. Ut pharetra sit amet aliquam. Elit ullamcorper dignissim cras
+tincidunt lobortis feugiat. Mi eget mauris pharetra et ultrices. Commodo ullamcorper a lacus
+vestibulum sed. Nisi quis eleifend quam adipiscing vitae proin.
+
+Odio euismod lacinia at quis risus sed vulputate odio ut. Tempor id eu nisl nunc mi ipsum faucibus
+vitae. Leo duis ut diam quam nulla porttitor massa id. Erat velit scelerisque in dictum non
+consectetur a erat. Scelerisque fermentum dui faucibus in. Enim ut tellus elementum sagittis. Vitae
+proin sagittis nisl rhoncus mattis rhoncus urna. Mi bibendum neque egestas congue quisque egestas
+diam. Duis ultricies lacus sed turpis tincidunt id aliquet risus. Velit dignissim sodales ut eu sem
+integer. Ut morbi tincidunt augue interdum velit. Sed pulvinar proin gravida hendrerit lectus.
+</mutableString>
+                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qeI-uy-LIv">
+                                                <rect key="frame" x="-6" y="51" width="81" height="32"/>
+                                                <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bHP-Xq-yfO">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aRB-Su-bvL">
+                                                <rect key="frame" x="-6" y="22" width="81" height="32"/>
+                                                <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="XcX-bz-uqp">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HMa-o7-A0F">
+                                                <rect key="frame" x="-6" y="-7" width="81" height="32"/>
+                                                <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hKt-tK-336">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
+                                        </subviews>
+                                        <visibilityPriorities>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                        </visibilityPriorities>
+                                        <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                        </customSpacing>
+                                    </stackView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="8XV-5g-aJo" firstAttribute="leading" secondItem="Fbw-eS-FU5" secondAttribute="leading" id="5H3-fb-CcA"/>
-                                    <constraint firstItem="8XV-5g-aJo" firstAttribute="width" secondItem="Fbw-eS-FU5" secondAttribute="width" id="FSR-1i-FpP"/>
-                                    <constraint firstItem="8XV-5g-aJo" firstAttribute="height" secondItem="Fbw-eS-FU5" secondAttribute="height" id="IXd-hl-XGd"/>
-                                    <constraint firstItem="8XV-5g-aJo" firstAttribute="top" secondItem="Fbw-eS-FU5" secondAttribute="top" id="OgC-ad-mWN"/>
+                                    <constraint firstItem="UTB-GH-C4K" firstAttribute="leading" secondItem="W7j-r2-UD7" secondAttribute="leading" id="KQm-zl-TWa"/>
+                                    <constraint firstItem="UTB-GH-C4K" firstAttribute="top" secondItem="W7j-r2-UD7" secondAttribute="top" id="gcv-0e-Dwm"/>
+                                    <constraint firstAttribute="height" secondItem="UTB-GH-C4K" secondAttribute="height" id="n8j-OD-NWB"/>
+                                    <constraint firstAttribute="width" secondItem="UTB-GH-C4K" secondAttribute="width" id="oEw-ZS-QVg"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="Fbw-eS-FU5" secondAttribute="trailing" id="6O0-pd-Ivg"/>
-                            <constraint firstAttribute="bottom" secondItem="Fbw-eS-FU5" secondAttribute="bottom" id="FIJ-Xr-Ppu"/>
-                            <constraint firstItem="Fbw-eS-FU5" firstAttribute="leading" secondItem="JNU-Oy-rUx" secondAttribute="leading" id="Rr0-dQ-kOA"/>
-                            <constraint firstItem="Fbw-eS-FU5" firstAttribute="top" secondItem="JNU-Oy-rUx" secondAttribute="top" id="SAb-8I-utT"/>
+                            <constraint firstAttribute="trailing" secondItem="W7j-r2-UD7" secondAttribute="trailing" id="IxL-a3-0Lb"/>
+                            <constraint firstItem="W7j-r2-UD7" firstAttribute="leading" secondItem="vpo-4L-DGR" secondAttribute="leading" id="mJb-Qh-CPb"/>
+                            <constraint firstAttribute="bottom" secondItem="W7j-r2-UD7" secondAttribute="bottom" id="q16-So-MOf"/>
+                            <constraint firstItem="W7j-r2-UD7" firstAttribute="top" secondItem="vpo-4L-DGR" secondAttribute="top" id="vhC-oa-gzg"/>
                         </constraints>
                     </clipView>
-                    <scroller key="horizontalScroller" identifier="projects_hbar" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aYN-iS-ZsQ" userLabel="Tasks horiz scroller">
-                        <rect key="frame" x="1" y="115" width="359" height="16"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="mcw-YE-dMv">
+                        <rect key="frame" x="1" y="79" width="359" height="16"/>
+                        <autoresizingMask key="autoresizingMask"/>
                     </scroller>
-                    <scroller key="verticalScroller" identifier="projects_vbar" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dZL-MI-blx" userLabel="Tasks vert scroller">
-                        <rect key="frame" x="344" y="1" width="16" height="130"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="hko-IO-o5R">
+                        <rect key="frame" x="344" y="1" width="16" height="94"/>
+                        <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                 </scrollView>
                 <textField identifier="projects_footer" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d5X-74-7gY" userLabel="Footer">
@@ -69,7 +166,7 @@
                 </textField>
             </subviews>
             <constraints>
-                <constraint firstItem="wxD-Lm-qUL" firstAttribute="top" secondItem="Qn8-JX-HeH" secondAttribute="top" id="0t0-Sm-yeO"/>
+                <constraint firstItem="LDw-zz-ziZ" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" id="oDo-5Q-hjJ"/>
             </constraints>
             <visibilityPriorities>
                 <integer value="1000"/>
@@ -81,7 +178,7 @@
                 <real value="3.4028234663852886e+38"/>
                 <real value="3.4028234663852886e+38"/>
             </customSpacing>
-            <point key="canvasLocation" x="-294.5" y="257"/>
+            <point key="canvasLocation" x="-294.5" y="252.5"/>
         </stackView>
         <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="74" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" id="jND-8k-XgR" userLabel="Copy">
             <rect key="frame" x="0.0" y="0.0" width="361" height="164"/>
