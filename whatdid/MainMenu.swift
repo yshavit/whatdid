@@ -10,8 +10,18 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
     private var taskAdditionsPane : TaskAdditionViewController!
-    private var schedulePopupOnClose = false
+    private var windowContents = WindowContents.scheduledPtn
+    private var shouldSchedulePopupOnClose = false
     private var snoozing = false
+    
+    enum WindowContents {
+        /// The PTN window, when it pops up automatically
+        case scheduledPtn
+        /// The PTN window, when the user pops it up manually
+        case manualPtn
+        /// The end-of-day report
+        case dailyEnd
+    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -36,10 +46,10 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         if window?.isVisible ?? false {
             window?.close()
         } else {
-            if NSEvent.modifierFlags.contains(.option) {
-                window?.contentViewController = DayEndReportController()
-            }
-            show(schedulePopupOnClose: false)
+            let showWhat = NSEvent.modifierFlags.contains(.option)
+                ? WindowContents.dailyEnd
+                : WindowContents.manualPtn
+            show(showWhat)
             AppDelegate.instance.onDeactivation {
                 self.window?.close()
             }
@@ -47,17 +57,22 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         }
     }
     
-    func show(schedulePopupOnClose: Bool) {
+    func show(_ contents: WindowContents) {
+        // Always schedule on close if this request was for a scheduled popup, even if the window is already open.
+        // Otherwise, the thread of scheduled popups would die.
+        if contents == .scheduledPtn {
+            shouldSchedulePopupOnClose = true
+        }
         if window?.isVisible ?? false {
-            // If this show was from a scheduled popup, mark the currently opened window as
-            // a scheduled popup (even if wasn't originally). Otherwise, the thread of
-            // scheduled popups would die.
-            if schedulePopupOnClose {
-                self.schedulePopupOnClose = true
-            }
             return
         }
-        self.schedulePopupOnClose = schedulePopupOnClose
+        switch (contents) {
+        case .dailyEnd:
+            window?.contentViewController = DayEndReportController()
+        case .manualPtn, .scheduledPtn:
+            window?.contentViewController = taskAdditionsPane
+        }
+        
         if let mainFrame = NSScreen.main?.visibleFrame, let button = statusItem.button {
             let buttonBoundsAbsolute = button.window?.convertToScreen(button.bounds)
             let pos = NSPoint(
@@ -84,8 +99,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     func windowWillClose(_ notification: Notification) {
         NSApp.hide(self)
         statusItem.button?.isHighlighted = false
-        window?.contentViewController = taskAdditionsPane
-        if schedulePopupOnClose && !snoozing {
+        if shouldSchedulePopupOnClose && !snoozing { // If we're snoozing, the snooze scheduled the next popup
             schedulePopup()
         }
     }
@@ -100,7 +114,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
                 NSLog("Ignoring a popup request due to snooze.")
             } else {
                 NSLog("Showing a scheduled popup.")
-                self.show(schedulePopupOnClose: true)
+                self.show(.scheduledPtn)
             }
         })
     }
@@ -112,7 +126,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         let wakeupTime = DispatchWallTime.now() + .seconds(Int(date.timeIntervalSinceNow))
         DispatchQueue.main.asyncAfter(wallDeadline: wakeupTime, execute: {
             self.snoozing = false
-            self.show(schedulePopupOnClose: true)
+            self.show(.scheduledPtn)
         })
     }
 }
