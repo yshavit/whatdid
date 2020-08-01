@@ -9,66 +9,131 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="DayEndReportController" customModule="whatdid" customModuleProvider="target">
             <connections>
+                <outlet property="projectsContainer" destination="8XV-5g-aJo" id="ddL-TU-m8X"/>
                 <outlet property="view" destination="Qn8-JX-HeH" id="y6a-6x-Afv"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="74" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qn8-JX-HeH" userLabel="Top">
-            <rect key="frame" x="0.0" y="0.0" width="361" height="164"/>
+        <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="5" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qn8-JX-HeH" userLabel="Top">
+            <rect key="frame" x="0.0" y="0.0" width="361" height="174"/>
             <subviews>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-Lm-qUL">
-                    <rect key="frame" x="-2" y="148" width="117" height="16"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" title="Some header stuff" id="jJc-W3-EKA">
+                <textField identifier="header_label" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-Lm-qUL" userLabel="Header">
+                    <rect key="frame" x="-2" y="158" width="117" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" identifier="header_cell" title="Some header stuff" id="jJc-W3-EKA" userLabel="Header cell">
                         <font key="font" usesAppearanceFont="YES"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="findHighlightColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h1o-R2-AcD" userLabel="Projects scroll umbrella">
-                    <rect key="frame" x="0.0" y="16" width="361" height="132"/>
-                    <clipView key="contentView" translatesAutoresizingMaskIntoConstraints="NO" id="JNU-Oy-rUx" userLabel="Projects scroll clip View">
+                <scrollView identifier="projects_scroll_all" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h1o-R2-AcD" userLabel="Projects scroll umbrella">
+                    <rect key="frame" x="0.0" y="21" width="361" height="132"/>
+                    <clipView key="contentView" identifier="projects_scroll_clip" translatesAutoresizingMaskIntoConstraints="NO" id="JNU-Oy-rUx" userLabel="Projects scroll clip View">
                         <rect key="frame" x="1" y="1" width="359" height="130"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view translatesAutoresizingMaskIntoConstraints="NO" id="Fbw-eS-FU5" userLabel="Projects container view">
+                            <view identifier="projects_scroll_container" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fbw-eS-FU5" userLabel="Projects container view">
+                                <rect key="frame" x="0.0" y="0.0" width="361" height="132"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <subviews>
+                                    <stackView identifier="projects_scroll_vstack" distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8XV-5g-aJo" userLabel="Projects container vstack">
+                                        <rect key="frame" x="0.0" y="0.0" width="361" height="132"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    </stackView>
+                                </subviews>
+                            </view>
+                        </subviews>
+                    </clipView>
+                    <scroller key="horizontalScroller" identifier="projects_hbar" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aYN-iS-ZsQ" userLabel="Tasks horiz scroller">
+                        <rect key="frame" x="1" y="115" width="359" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </scroller>
+                    <scroller key="verticalScroller" identifier="projects_vbar" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dZL-MI-blx" userLabel="Tasks vert scroller">
+                        <rect key="frame" x="344" y="1" width="16" height="130"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </scroller>
+                </scrollView>
+                <textField identifier="projects_footer" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d5X-74-7gY" userLabel="Footer">
+                    <rect key="frame" x="-2" y="0.0" width="111" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Some footer stuff" id="kVE-kT-ED3" userLabel="Footer cell">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstItem="wxD-Lm-qUL" firstAttribute="top" secondItem="Qn8-JX-HeH" secondAttribute="top" id="0t0-Sm-yeO"/>
+            </constraints>
+            <visibilityPriorities>
+                <integer value="1000"/>
+                <integer value="1000"/>
+                <integer value="1000"/>
+            </visibilityPriorities>
+            <customSpacing>
+                <real value="3.4028234663852886e+38"/>
+                <real value="3.4028234663852886e+38"/>
+                <real value="3.4028234663852886e+38"/>
+            </customSpacing>
+            <point key="canvasLocation" x="-294.5" y="257"/>
+        </stackView>
+        <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="74" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" id="jND-8k-XgR" userLabel="Copy">
+            <rect key="frame" x="0.0" y="0.0" width="361" height="164"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UXk-rL-DPk">
+                    <rect key="frame" x="-2" y="148" width="117" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Some header stuff" id="cR4-mS-Rdc">
+                        <font key="font" usesAppearanceFont="YES"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="findHighlightColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9d4-OM-39i" userLabel="Projects scroll umbrella">
+                    <rect key="frame" x="0.0" y="16" width="361" height="132"/>
+                    <clipView key="contentView" id="3zy-OP-qA8" userLabel="Projects scroll clip View">
+                        <rect key="frame" x="1" y="1" width="359" height="130"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view translatesAutoresizingMaskIntoConstraints="NO" id="uHX-SL-0ZO" userLabel="Projects container view">
                                 <rect key="frame" x="0.0" y="0.0" width="361" height="132"/>
                                 <subviews>
-                                    <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8XV-5g-aJo" userLabel="Projects container vstack">
+                                    <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KdZ-hS-ki9" userLabel="Projects container vstack">
                                         <rect key="frame" x="0.0" y="0.0" width="361" height="132"/>
                                         <subviews>
-                                            <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ena-MS-dDv" userLabel="Project1 vstack">
+                                            <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lvV-0R-mZM" userLabel="Project1 vstack">
                                                 <rect key="frame" x="0.0" y="0.0" width="361" height="132"/>
                                                 <subviews>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6Nb-sA-Qj6">
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eG4-TC-kLJ">
                                                         <rect key="frame" x="1" y="116" width="57" height="16"/>
-                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Project 1" id="tcw-De-2fn">
+                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Project 1" id="Mto-qN-Fgl">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="usC-D0-nnq" userLabel="Project1 header hstack">
+                                                    <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dtl-gB-39Q" userLabel="Project1 header hstack">
                                                         <rect key="frame" x="5" y="101" width="351" height="15"/>
                                                         <subviews>
-                                                            <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UVs-Uj-pei" userLabel="Project1 disclosure">
+                                                            <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4lX-yd-KDf" userLabel="Project1 disclosure">
                                                                 <rect key="frame" x="-2" y="0.0" width="21" height="15"/>
-                                                                <buttonCell key="cell" type="disclosureTriangle" bezelStyle="disclosure" imagePosition="only" alignment="left" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="AM3-xO-dFc">
+                                                                <buttonCell key="cell" type="disclosureTriangle" bezelStyle="disclosure" imagePosition="only" alignment="left" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="paD-oC-8eg">
                                                                     <behavior key="behavior" pushIn="YES" changeBackground="YES" changeGray="YES" lightByContents="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
                                                             </button>
-                                                            <progressIndicator wantsLayer="YES" maxValue="100" doubleValue="50" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="nxA-gn-Afr" userLabel="Project 1 progress bar">
+                                                            <progressIndicator wantsLayer="YES" maxValue="100" doubleValue="50" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="k5f-3a-Mza" userLabel="Project 1 progress bar">
                                                                 <rect key="frame" x="21" y="-1" width="328" height="17"/>
                                                             </progressIndicator>
                                                         </subviews>
                                                         <constraints>
-                                                            <constraint firstAttribute="bottom" secondItem="nxA-gn-Afr" secondAttribute="bottom" id="1Ou-Hx-hrO"/>
-                                                            <constraint firstItem="UVs-Uj-pei" firstAttribute="top" secondItem="usC-D0-nnq" secondAttribute="top" id="1wB-ek-rhT"/>
-                                                            <constraint firstItem="nxA-gn-Afr" firstAttribute="centerY" secondItem="UVs-Uj-pei" secondAttribute="centerY" id="I9I-cS-fro"/>
-                                                            <constraint firstItem="nxA-gn-Afr" firstAttribute="leading" secondItem="UVs-Uj-pei" secondAttribute="trailing" constant="2" id="Jih-UV-hJy"/>
-                                                            <constraint firstItem="nxA-gn-Afr" firstAttribute="trailing" secondItem="usC-D0-nnq" secondAttribute="trailing" constant="-2" id="Kea-EH-luN"/>
-                                                            <constraint firstAttribute="bottom" secondItem="UVs-Uj-pei" secondAttribute="bottom" id="X46-eU-bRX"/>
-                                                            <constraint firstItem="nxA-gn-Afr" firstAttribute="top" secondItem="usC-D0-nnq" secondAttribute="top" id="doj-XS-6Zh"/>
+                                                            <constraint firstAttribute="bottom" secondItem="4lX-yd-KDf" secondAttribute="bottom" id="42P-lf-WNE"/>
+                                                            <constraint firstItem="k5f-3a-Mza" firstAttribute="trailing" secondItem="dtl-gB-39Q" secondAttribute="trailing" constant="-2" id="Ah5-wb-HuK"/>
+                                                            <constraint firstItem="4lX-yd-KDf" firstAttribute="top" secondItem="dtl-gB-39Q" secondAttribute="top" id="BsU-6x-DAz"/>
+                                                            <constraint firstAttribute="bottom" secondItem="k5f-3a-Mza" secondAttribute="bottom" id="LSb-tz-opH"/>
+                                                            <constraint firstItem="k5f-3a-Mza" firstAttribute="leading" secondItem="4lX-yd-KDf" secondAttribute="trailing" constant="2" id="RK5-4t-cOr"/>
+                                                            <constraint firstItem="k5f-3a-Mza" firstAttribute="centerY" secondItem="4lX-yd-KDf" secondAttribute="centerY" id="fgf-QD-iII"/>
+                                                            <constraint firstItem="k5f-3a-Mza" firstAttribute="top" secondItem="dtl-gB-39Q" secondAttribute="top" id="wbN-xm-05T"/>
                                                         </constraints>
                                                         <visibilityPriorities>
                                                             <integer value="1000"/>
@@ -79,42 +144,42 @@
                                                             <real value="3.4028234663852886e+38"/>
                                                         </customSpacing>
                                                     </stackView>
-                                                    <box boxType="custom" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="AXa-X5-KOH" userLabel="Project1 tasks visual box">
+                                                    <box boxType="custom" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="PPE-sA-Txi" userLabel="Project1 tasks visual box">
                                                         <rect key="frame" x="4" y="3" width="352" height="98"/>
-                                                        <view key="contentView" id="MGf-7S-Het">
+                                                        <view key="contentView" id="snf-1T-LP9">
                                                             <rect key="frame" x="1" y="1" width="350" height="96"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0vf-8U-KAD" userLabel="P1T1 vstack">
+                                                                <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xxs-TG-xs8" userLabel="P1T1 vstack">
                                                                     <rect key="frame" x="0.0" y="34" width="350" height="62"/>
                                                                     <subviews>
-                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oWW-Fe-sTU">
+                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Qq3-pI-0pP">
                                                                             <rect key="frame" x="-2" y="46" width="42" height="16"/>
-                                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Task 1" id="OMG-Tb-Fl9">
+                                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Task 1" id="QJg-MA-QnI">
                                                                                 <font key="font" metaFont="system"/>
                                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                         </textField>
-                                                                        <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w6l-3u-h7e" userLabel="P1T1 header hstack">
+                                                                        <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EeK-f4-qcy" userLabel="P1T1 header hstack">
                                                                             <rect key="frame" x="0.0" y="28" width="349" height="18"/>
                                                                             <subviews>
-                                                                                <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dQ5-y8-nNM">
+                                                                                <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XMr-VW-mrY">
                                                                                     <rect key="frame" x="0.0" y="0.0" width="13" height="18"/>
-                                                                                    <buttonCell key="cell" type="disclosureTriangle" bezelStyle="disclosure" imagePosition="only" alignment="left" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dBb-qt-Blm">
+                                                                                    <buttonCell key="cell" type="disclosureTriangle" bezelStyle="disclosure" imagePosition="only" alignment="left" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="31C-kp-V9V">
                                                                                         <behavior key="behavior" pushIn="YES" changeBackground="YES" changeGray="YES" lightByContents="YES"/>
                                                                                         <font key="font" metaFont="system"/>
                                                                                     </buttonCell>
                                                                                 </button>
-                                                                                <progressIndicator wantsLayer="YES" maxValue="100" doubleValue="30" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="h5q-Me-SCb" userLabel="P1T1 progress bar">
+                                                                                <progressIndicator wantsLayer="YES" maxValue="100" doubleValue="30" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="xh8-lL-CMT" userLabel="P1T1 progress bar">
                                                                                     <rect key="frame" x="21" y="-1" width="328" height="20"/>
                                                                                 </progressIndicator>
                                                                             </subviews>
                                                                             <constraints>
-                                                                                <constraint firstItem="h5q-Me-SCb" firstAttribute="top" secondItem="w6l-3u-h7e" secondAttribute="top" id="DZf-mr-6mu"/>
-                                                                                <constraint firstItem="dQ5-y8-nNM" firstAttribute="top" secondItem="w6l-3u-h7e" secondAttribute="top" id="Prl-K4-FOA"/>
-                                                                                <constraint firstItem="h5q-Me-SCb" firstAttribute="centerY" secondItem="dQ5-y8-nNM" secondAttribute="centerY" id="e7A-3c-Pwh"/>
-                                                                                <constraint firstItem="dQ5-y8-nNM" firstAttribute="leading" secondItem="w6l-3u-h7e" secondAttribute="leading" id="i0z-5F-LIC"/>
+                                                                                <constraint firstItem="xh8-lL-CMT" firstAttribute="top" secondItem="EeK-f4-qcy" secondAttribute="top" id="M6E-PQ-rwi"/>
+                                                                                <constraint firstItem="XMr-VW-mrY" firstAttribute="leading" secondItem="EeK-f4-qcy" secondAttribute="leading" id="TFN-Nj-saw"/>
+                                                                                <constraint firstItem="xh8-lL-CMT" firstAttribute="centerY" secondItem="XMr-VW-mrY" secondAttribute="centerY" id="cJw-4E-prn"/>
+                                                                                <constraint firstItem="XMr-VW-mrY" firstAttribute="top" secondItem="EeK-f4-qcy" secondAttribute="top" id="wBq-eS-5bl"/>
                                                                             </constraints>
                                                                             <visibilityPriorities>
                                                                                 <integer value="1000"/>
@@ -125,9 +190,9 @@
                                                                                 <real value="3.4028234663852886e+38"/>
                                                                             </customSpacing>
                                                                         </stackView>
-                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="wrq-Jd-3Yw" userLabel="P1T1 entries">
+                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="0BI-wJ-RVL" userLabel="P1T1 entries">
                                                                             <rect key="frame" x="19" y="0.0" width="130" height="28"/>
-                                                                            <textFieldCell key="cell" selectable="YES" id="5h2-0b-onS">
+                                                                            <textFieldCell key="cell" selectable="YES" id="Hq8-Zz-HD8">
                                                                                 <font key="font" metaFont="message" size="11"/>
                                                                                 <string key="title">10:00am - 10:30am: foo
 10:30am - 11:00am: bar</string>
@@ -137,11 +202,11 @@
                                                                         </textField>
                                                                     </subviews>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="bottom" secondItem="wrq-Jd-3Yw" secondAttribute="bottom" id="E0m-OL-jvX"/>
-                                                                        <constraint firstItem="wrq-Jd-3Yw" firstAttribute="leading" secondItem="h5q-Me-SCb" secondAttribute="leading" id="Eyq-S6-xgE"/>
-                                                                        <constraint firstItem="wrq-Jd-3Yw" firstAttribute="top" secondItem="h5q-Me-SCb" secondAttribute="bottom" id="UC9-JL-4lY"/>
-                                                                        <constraint firstItem="w6l-3u-h7e" firstAttribute="top" secondItem="oWW-Fe-sTU" secondAttribute="bottom" id="asd-hc-jai"/>
-                                                                        <constraint firstItem="wrq-Jd-3Yw" firstAttribute="top" secondItem="w6l-3u-h7e" secondAttribute="bottom" id="hNz-B8-ieq"/>
+                                                                        <constraint firstItem="0BI-wJ-RVL" firstAttribute="top" secondItem="EeK-f4-qcy" secondAttribute="bottom" id="Rx2-iL-tmZ"/>
+                                                                        <constraint firstItem="0BI-wJ-RVL" firstAttribute="top" secondItem="xh8-lL-CMT" secondAttribute="bottom" id="Ykn-Ug-huW"/>
+                                                                        <constraint firstItem="0BI-wJ-RVL" firstAttribute="leading" secondItem="xh8-lL-CMT" secondAttribute="leading" id="aDI-FO-fY0"/>
+                                                                        <constraint firstAttribute="bottom" secondItem="0BI-wJ-RVL" secondAttribute="bottom" id="qhe-dE-vO6"/>
+                                                                        <constraint firstItem="EeK-f4-qcy" firstAttribute="top" secondItem="Qq3-pI-0pP" secondAttribute="bottom" id="tAe-PG-ui1"/>
                                                                     </constraints>
                                                                     <visibilityPriorities>
                                                                         <integer value="1000"/>
@@ -154,37 +219,37 @@
                                                                         <real value="3.4028234663852886e+38"/>
                                                                     </customSpacing>
                                                                 </stackView>
-                                                                <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nEG-BT-G5I" userLabel="P1T2 vstack">
+                                                                <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="69B-ib-KEd" userLabel="P1T2 vstack">
                                                                     <rect key="frame" x="0.0" y="-1" width="350" height="34"/>
                                                                     <subviews>
-                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5Tt-wS-DwY">
+                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Lhv-IT-Rhf">
                                                                             <rect key="frame" x="-2" y="18" width="44" height="16"/>
-                                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Task 2" id="tge-wc-4Jy">
+                                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Task 2" id="oAU-Us-kOV">
                                                                                 <font key="font" metaFont="system"/>
                                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                         </textField>
-                                                                        <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gNP-5h-uur" userLabel="P1T2 header hstack">
+                                                                        <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bln-mF-nu6" userLabel="P1T2 header hstack">
                                                                             <rect key="frame" x="0.0" y="0.0" width="349" height="18"/>
                                                                             <subviews>
-                                                                                <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OeS-oh-RN8">
+                                                                                <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YPn-Rh-V7L">
                                                                                     <rect key="frame" x="0.0" y="2" width="13" height="14"/>
-                                                                                    <buttonCell key="cell" type="disclosureTriangle" bezelStyle="disclosure" imagePosition="only" alignment="left" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Wp9-M1-WH4">
+                                                                                    <buttonCell key="cell" type="disclosureTriangle" bezelStyle="disclosure" imagePosition="only" alignment="left" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="L8V-Mz-gPB">
                                                                                         <behavior key="behavior" pushIn="YES" changeBackground="YES" changeGray="YES" lightByContents="YES"/>
                                                                                         <font key="font" metaFont="system"/>
                                                                                     </buttonCell>
                                                                                 </button>
-                                                                                <progressIndicator wantsLayer="YES" maxValue="100" doubleValue="20" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="hL0-rF-vle" userLabel="P1T1 progress bar">
+                                                                                <progressIndicator wantsLayer="YES" maxValue="100" doubleValue="20" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="HcI-zY-mDV" userLabel="P1T1 progress bar">
                                                                                     <rect key="frame" x="21" y="-1" width="328" height="20"/>
                                                                                 </progressIndicator>
                                                                             </subviews>
                                                                             <constraints>
-                                                                                <constraint firstItem="hL0-rF-vle" firstAttribute="centerY" secondItem="OeS-oh-RN8" secondAttribute="centerY" id="7Ke-im-z7i"/>
-                                                                                <constraint firstItem="OeS-oh-RN8" firstAttribute="top" secondItem="gNP-5h-uur" secondAttribute="top" constant="2" id="Jwa-Pg-fZf"/>
-                                                                                <constraint firstItem="hL0-rF-vle" firstAttribute="top" secondItem="gNP-5h-uur" secondAttribute="top" id="NUw-vd-lPB"/>
-                                                                                <constraint firstItem="OeS-oh-RN8" firstAttribute="leading" secondItem="gNP-5h-uur" secondAttribute="leading" id="P1q-7t-gbS"/>
-                                                                                <constraint firstAttribute="bottom" secondItem="hL0-rF-vle" secondAttribute="bottom" id="bdD-dn-mBC"/>
+                                                                                <constraint firstAttribute="bottom" secondItem="HcI-zY-mDV" secondAttribute="bottom" id="Bny-D5-IyA"/>
+                                                                                <constraint firstItem="YPn-Rh-V7L" firstAttribute="leading" secondItem="bln-mF-nu6" secondAttribute="leading" id="Gs3-3i-1L3"/>
+                                                                                <constraint firstItem="YPn-Rh-V7L" firstAttribute="top" secondItem="bln-mF-nu6" secondAttribute="top" constant="2" id="Tg9-Nd-NKk"/>
+                                                                                <constraint firstItem="HcI-zY-mDV" firstAttribute="centerY" secondItem="YPn-Rh-V7L" secondAttribute="centerY" id="aKu-AA-9qp"/>
+                                                                                <constraint firstItem="HcI-zY-mDV" firstAttribute="top" secondItem="bln-mF-nu6" secondAttribute="top" id="v14-Ft-74y"/>
                                                                             </constraints>
                                                                             <visibilityPriorities>
                                                                                 <integer value="1000"/>
@@ -195,9 +260,9 @@
                                                                                 <real value="3.4028234663852886e+38"/>
                                                                             </customSpacing>
                                                                         </stackView>
-                                                                        <textField hidden="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="NQp-Xo-18h" userLabel="P1T2 entries">
+                                                                        <textField hidden="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="RgE-f4-lyU" userLabel="P1T2 entries">
                                                                             <rect key="frame" x="19" y="-28" width="130" height="28"/>
-                                                                            <textFieldCell key="cell" selectable="YES" id="hxI-RK-isi">
+                                                                            <textFieldCell key="cell" selectable="YES" id="h0J-xZ-OxO">
                                                                                 <font key="font" metaFont="message" size="11"/>
                                                                                 <string key="title">10:00am - 10:30am: foo
 10:30am - 11:00am: bar</string>
@@ -207,13 +272,13 @@
                                                                         </textField>
                                                                     </subviews>
                                                                     <constraints>
-                                                                        <constraint firstItem="gNP-5h-uur" firstAttribute="leading" secondItem="nEG-BT-G5I" secondAttribute="leading" id="4Fu-2V-SjI"/>
-                                                                        <constraint firstItem="gNP-5h-uur" firstAttribute="top" secondItem="5Tt-wS-DwY" secondAttribute="bottom" id="9M3-Lc-bCl"/>
-                                                                        <constraint firstAttribute="bottom" secondItem="gNP-5h-uur" secondAttribute="bottom" id="eZT-5K-hr7"/>
-                                                                        <constraint firstItem="NQp-Xo-18h" firstAttribute="top" secondItem="gNP-5h-uur" secondAttribute="bottom" id="iwS-Vy-09H"/>
-                                                                        <constraint firstItem="5Tt-wS-DwY" firstAttribute="leading" secondItem="nEG-BT-G5I" secondAttribute="leading" id="llz-jD-ohj"/>
-                                                                        <constraint firstItem="gNP-5h-uur" firstAttribute="top" secondItem="nEG-BT-G5I" secondAttribute="top" constant="16" id="oZ1-At-aEa"/>
-                                                                        <constraint firstItem="NQp-Xo-18h" firstAttribute="leading" secondItem="hL0-rF-vle" secondAttribute="leading" id="pg0-FF-RPn"/>
+                                                                        <constraint firstItem="RgE-f4-lyU" firstAttribute="leading" secondItem="HcI-zY-mDV" secondAttribute="leading" id="38D-qi-hVl"/>
+                                                                        <constraint firstAttribute="bottom" secondItem="bln-mF-nu6" secondAttribute="bottom" id="9L5-DZ-Xr2"/>
+                                                                        <constraint firstItem="bln-mF-nu6" firstAttribute="top" secondItem="Lhv-IT-Rhf" secondAttribute="bottom" id="9Ph-Ve-DbI"/>
+                                                                        <constraint firstItem="bln-mF-nu6" firstAttribute="leading" secondItem="69B-ib-KEd" secondAttribute="leading" id="aS4-12-Yjc"/>
+                                                                        <constraint firstItem="Lhv-IT-Rhf" firstAttribute="leading" secondItem="69B-ib-KEd" secondAttribute="leading" id="cwj-3j-5NO"/>
+                                                                        <constraint firstItem="RgE-f4-lyU" firstAttribute="top" secondItem="bln-mF-nu6" secondAttribute="bottom" id="dyY-FV-PKp"/>
+                                                                        <constraint firstItem="bln-mF-nu6" firstAttribute="top" secondItem="69B-ib-KEd" secondAttribute="top" constant="16" id="sY6-eF-6Q8"/>
                                                                     </constraints>
                                                                     <visibilityPriorities>
                                                                         <integer value="1000"/>
@@ -228,36 +293,36 @@
                                                                 </stackView>
                                                             </subviews>
                                                             <constraints>
-                                                                <constraint firstItem="0vf-8U-KAD" firstAttribute="top" secondItem="MGf-7S-Het" secondAttribute="top" id="0xi-5G-XIq"/>
-                                                                <constraint firstItem="0vf-8U-KAD" firstAttribute="width" secondItem="MGf-7S-Het" secondAttribute="width" id="a5Y-cy-bbb"/>
-                                                                <constraint firstItem="nEG-BT-G5I" firstAttribute="top" secondItem="0vf-8U-KAD" secondAttribute="bottom" constant="1" id="cJ4-up-tNo"/>
-                                                                <constraint firstItem="0vf-8U-KAD" firstAttribute="leading" secondItem="MGf-7S-Het" secondAttribute="leading" id="iZ4-oF-IKY"/>
-                                                                <constraint firstItem="nEG-BT-G5I" firstAttribute="leading" secondItem="MGf-7S-Het" secondAttribute="leading" id="xde-zE-rdv"/>
-                                                                <constraint firstItem="nEG-BT-G5I" firstAttribute="width" secondItem="MGf-7S-Het" secondAttribute="width" id="zj9-JW-zfz"/>
+                                                                <constraint firstItem="xxs-TG-xs8" firstAttribute="width" secondItem="snf-1T-LP9" secondAttribute="width" id="7wI-jU-sXA"/>
+                                                                <constraint firstItem="xxs-TG-xs8" firstAttribute="leading" secondItem="snf-1T-LP9" secondAttribute="leading" id="Hdh-uP-zz0"/>
+                                                                <constraint firstItem="xxs-TG-xs8" firstAttribute="top" secondItem="snf-1T-LP9" secondAttribute="top" id="IiO-qF-G3C"/>
+                                                                <constraint firstItem="69B-ib-KEd" firstAttribute="top" secondItem="xxs-TG-xs8" secondAttribute="bottom" constant="1" id="Vvj-jI-8fZ"/>
+                                                                <constraint firstItem="69B-ib-KEd" firstAttribute="leading" secondItem="snf-1T-LP9" secondAttribute="leading" id="v4g-gh-QAc"/>
+                                                                <constraint firstItem="69B-ib-KEd" firstAttribute="width" secondItem="snf-1T-LP9" secondAttribute="width" id="yoM-HG-t31"/>
                                                             </constraints>
                                                         </view>
                                                         <constraints>
-                                                            <constraint firstAttribute="bottom" secondItem="nEG-BT-G5I" secondAttribute="bottom" id="lXv-yS-nk2"/>
+                                                            <constraint firstAttribute="bottom" secondItem="69B-ib-KEd" secondAttribute="bottom" id="HzN-W6-ajZ"/>
                                                         </constraints>
                                                         <color key="fillColor" name="quaternaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                     </box>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstItem="h5q-Me-SCb" firstAttribute="trailing" secondItem="nxA-gn-Afr" secondAttribute="trailing" id="9xb-wW-88r"/>
-                                                    <constraint firstItem="hL0-rF-vle" firstAttribute="trailing" secondItem="nxA-gn-Afr" secondAttribute="trailing" id="MJe-cL-vyW"/>
-                                                    <constraint firstAttribute="bottom" secondItem="AXa-X5-KOH" secondAttribute="bottom" constant="3" id="PxB-qc-ZOq"/>
-                                                    <constraint firstItem="UVs-Uj-pei" firstAttribute="leading" secondItem="6Nb-sA-Qj6" secondAttribute="leading" id="QzO-Dw-HFT"/>
-                                                    <constraint firstItem="h5q-Me-SCb" firstAttribute="leading" secondItem="nxA-gn-Afr" secondAttribute="leading" id="Uv0-fu-P3x"/>
-                                                    <constraint firstItem="6Nb-sA-Qj6" firstAttribute="leading" secondItem="ena-MS-dDv" secondAttribute="leading" constant="3" id="XER-m1-Cve"/>
-                                                    <constraint firstItem="usC-D0-nnq" firstAttribute="leading" secondItem="ena-MS-dDv" secondAttribute="leading" constant="5" id="XcF-eh-evy"/>
-                                                    <constraint firstItem="AXa-X5-KOH" firstAttribute="top" secondItem="ena-MS-dDv" secondAttribute="top" constant="31" id="aTX-Ri-kyQ"/>
-                                                    <constraint firstItem="AXa-X5-KOH" firstAttribute="top" secondItem="usC-D0-nnq" secondAttribute="bottom" id="b4d-1H-Jw9"/>
-                                                    <constraint firstItem="usC-D0-nnq" firstAttribute="trailing" secondItem="ena-MS-dDv" secondAttribute="trailing" constant="-5" id="ccb-FQ-pK8"/>
-                                                    <constraint firstItem="hL0-rF-vle" firstAttribute="leading" secondItem="nxA-gn-Afr" secondAttribute="leading" id="efh-xZ-Kxb"/>
-                                                    <constraint firstItem="usC-D0-nnq" firstAttribute="top" secondItem="6Nb-sA-Qj6" secondAttribute="bottom" id="kfl-vy-i17"/>
-                                                    <constraint firstAttribute="trailing" secondItem="AXa-X5-KOH" secondAttribute="trailing" constant="5" id="qOg-2G-dBX"/>
-                                                    <constraint firstItem="6Nb-sA-Qj6" firstAttribute="top" secondItem="ena-MS-dDv" secondAttribute="top" id="wBY-Ix-QgT"/>
-                                                    <constraint firstItem="AXa-X5-KOH" firstAttribute="leading" secondItem="ena-MS-dDv" secondAttribute="leading" constant="4" id="y2P-mx-E0q"/>
+                                                    <constraint firstItem="dtl-gB-39Q" firstAttribute="leading" secondItem="lvV-0R-mZM" secondAttribute="leading" constant="5" id="821-OB-YIG"/>
+                                                    <constraint firstItem="PPE-sA-Txi" firstAttribute="top" secondItem="dtl-gB-39Q" secondAttribute="bottom" id="8bO-BO-Byp"/>
+                                                    <constraint firstItem="eG4-TC-kLJ" firstAttribute="leading" secondItem="lvV-0R-mZM" secondAttribute="leading" constant="3" id="BSB-qt-x3p"/>
+                                                    <constraint firstItem="PPE-sA-Txi" firstAttribute="top" secondItem="lvV-0R-mZM" secondAttribute="top" constant="31" id="DJV-Vr-jz5"/>
+                                                    <constraint firstItem="PPE-sA-Txi" firstAttribute="leading" secondItem="lvV-0R-mZM" secondAttribute="leading" constant="4" id="I28-U9-y8l"/>
+                                                    <constraint firstAttribute="trailing" secondItem="PPE-sA-Txi" secondAttribute="trailing" constant="5" id="KJg-pV-kzh"/>
+                                                    <constraint firstItem="4lX-yd-KDf" firstAttribute="leading" secondItem="eG4-TC-kLJ" secondAttribute="leading" id="Q9T-md-Yqa"/>
+                                                    <constraint firstItem="HcI-zY-mDV" firstAttribute="leading" secondItem="k5f-3a-Mza" secondAttribute="leading" id="UHk-wg-iTC"/>
+                                                    <constraint firstItem="eG4-TC-kLJ" firstAttribute="top" secondItem="lvV-0R-mZM" secondAttribute="top" id="dVr-Eq-Q0k"/>
+                                                    <constraint firstItem="xh8-lL-CMT" firstAttribute="trailing" secondItem="k5f-3a-Mza" secondAttribute="trailing" id="htL-EA-ovV"/>
+                                                    <constraint firstAttribute="bottom" secondItem="PPE-sA-Txi" secondAttribute="bottom" constant="3" id="kVv-qG-g7W"/>
+                                                    <constraint firstItem="dtl-gB-39Q" firstAttribute="trailing" secondItem="lvV-0R-mZM" secondAttribute="trailing" constant="-5" id="sHe-kE-YPH"/>
+                                                    <constraint firstItem="xh8-lL-CMT" firstAttribute="leading" secondItem="k5f-3a-Mza" secondAttribute="leading" id="sXw-1z-6Qh"/>
+                                                    <constraint firstItem="HcI-zY-mDV" firstAttribute="trailing" secondItem="k5f-3a-Mza" secondAttribute="trailing" id="wQS-dw-l4p"/>
+                                                    <constraint firstItem="dtl-gB-39Q" firstAttribute="top" secondItem="eG4-TC-kLJ" secondAttribute="bottom" id="ykp-V0-VOW"/>
                                                 </constraints>
                                                 <visibilityPriorities>
                                                     <integer value="1000"/>
@@ -272,10 +337,10 @@
                                             </stackView>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="ena-MS-dDv" firstAttribute="leading" secondItem="8XV-5g-aJo" secondAttribute="leading" id="05s-lQ-h2p"/>
-                                            <constraint firstItem="ena-MS-dDv" firstAttribute="top" secondItem="8XV-5g-aJo" secondAttribute="top" id="LXH-cW-t2v"/>
-                                            <constraint firstItem="ena-MS-dDv" firstAttribute="width" secondItem="8XV-5g-aJo" secondAttribute="width" id="y2g-cT-bLX"/>
-                                            <constraint firstAttribute="bottom" secondItem="ena-MS-dDv" secondAttribute="bottom" id="yLx-oy-MXV"/>
+                                            <constraint firstItem="lvV-0R-mZM" firstAttribute="top" secondItem="KdZ-hS-ki9" secondAttribute="top" id="I6R-uh-3b7"/>
+                                            <constraint firstAttribute="bottom" secondItem="lvV-0R-mZM" secondAttribute="bottom" id="Lze-AF-5nX"/>
+                                            <constraint firstItem="lvV-0R-mZM" firstAttribute="width" secondItem="KdZ-hS-ki9" secondAttribute="width" id="hWB-Oo-Gjd"/>
+                                            <constraint firstItem="lvV-0R-mZM" firstAttribute="leading" secondItem="KdZ-hS-ki9" secondAttribute="leading" id="upl-LU-NgR"/>
                                         </constraints>
                                         <visibilityPriorities>
                                             <integer value="1000"/>
@@ -286,40 +351,42 @@
                                     </stackView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="8XV-5g-aJo" firstAttribute="width" secondItem="Fbw-eS-FU5" secondAttribute="width" id="1BK-LH-oe8"/>
-                                    <constraint firstItem="8XV-5g-aJo" firstAttribute="leading" secondItem="Fbw-eS-FU5" secondAttribute="leading" id="92H-LY-iOu"/>
-                                    <constraint firstAttribute="bottom" secondItem="8XV-5g-aJo" secondAttribute="bottom" id="IJw-oN-06o"/>
-                                    <constraint firstItem="8XV-5g-aJo" firstAttribute="top" secondItem="Fbw-eS-FU5" secondAttribute="top" id="Mum-WF-NFY"/>
+                                    <constraint firstItem="KdZ-hS-ki9" firstAttribute="top" secondItem="uHX-SL-0ZO" secondAttribute="top" id="LTm-VV-ddN"/>
+                                    <constraint firstItem="KdZ-hS-ki9" firstAttribute="width" secondItem="uHX-SL-0ZO" secondAttribute="width" id="isV-xa-fG5"/>
+                                    <constraint firstAttribute="bottom" secondItem="KdZ-hS-ki9" secondAttribute="bottom" id="jQo-wO-KdZ"/>
+                                    <constraint firstItem="KdZ-hS-ki9" firstAttribute="leading" secondItem="uHX-SL-0ZO" secondAttribute="leading" id="zTA-YL-7ZJ"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="Fbw-eS-FU5" secondAttribute="trailing" constant="-2" id="Mi2-Yo-AZc"/>
-                            <constraint firstAttribute="bottom" secondItem="Fbw-eS-FU5" secondAttribute="bottom" id="St9-zw-Ry0"/>
-                            <constraint firstItem="Fbw-eS-FU5" firstAttribute="top" secondItem="JNU-Oy-rUx" secondAttribute="top" constant="-2" id="keh-PP-tjb"/>
-                            <constraint firstItem="Fbw-eS-FU5" firstAttribute="leading" secondItem="JNU-Oy-rUx" secondAttribute="leading" id="nR6-xp-f1K"/>
+                            <constraint firstAttribute="bottom" secondItem="uHX-SL-0ZO" secondAttribute="bottom" id="CZ0-IX-VIH"/>
+                            <constraint firstAttribute="trailing" secondItem="uHX-SL-0ZO" secondAttribute="trailing" constant="-2" id="Fel-gr-c0Q"/>
+                            <constraint firstItem="uHX-SL-0ZO" firstAttribute="top" secondItem="3zy-OP-qA8" secondAttribute="top" constant="-2" id="mMz-6W-Pgr"/>
+                            <constraint firstItem="uHX-SL-0ZO" firstAttribute="leading" secondItem="3zy-OP-qA8" secondAttribute="leading" id="uXI-9W-nav"/>
                         </constraints>
                     </clipView>
                     <constraints>
-                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="9eD-jg-jV2"/>
-                        <constraint firstItem="Fbw-eS-FU5" firstAttribute="leading" secondItem="h1o-R2-AcD" secondAttribute="leading" id="Bxc-Lb-Hdw"/>
-                        <constraint firstItem="Fbw-eS-FU5" firstAttribute="width" secondItem="h1o-R2-AcD" secondAttribute="width" id="DUI-XI-zxE"/>
-                        <constraint firstItem="Fbw-eS-FU5" firstAttribute="trailing" secondItem="dZL-MI-blx" secondAttribute="leading" constant="17" id="Gwa-hp-Gcw"/>
-                        <constraint firstItem="Fbw-eS-FU5" firstAttribute="top" secondItem="h1o-R2-AcD" secondAttribute="top" id="cjI-AE-J1t"/>
-                        <constraint firstItem="aYN-iS-ZsQ" firstAttribute="top" secondItem="Fbw-eS-FU5" secondAttribute="bottom" constant="-16" id="evK-Us-U5t"/>
-                        <constraint firstAttribute="height" constant="132" id="p6I-Le-f8e"/>
-                        <constraint firstAttribute="height" relation="lessThanOrEqual" secondItem="Fbw-eS-FU5" secondAttribute="height" id="xQw-TY-zBL"/>
+                        <constraint firstAttribute="height" constant="132" id="0lO-Hm-chN"/>
+                        <constraint firstItem="v0t-q2-AL3" firstAttribute="top" secondItem="uHX-SL-0ZO" secondAttribute="bottom" constant="-16" id="BAJ-kL-PXE"/>
+                        <constraint firstItem="uHX-SL-0ZO" firstAttribute="top" secondItem="9d4-OM-39i" secondAttribute="top" id="Nhf-A4-P2V"/>
+                        <constraint firstItem="uHX-SL-0ZO" firstAttribute="leading" secondItem="9d4-OM-39i" secondAttribute="leading" id="g0i-w0-Uci"/>
+                        <constraint firstAttribute="height" relation="lessThanOrEqual" secondItem="uHX-SL-0ZO" secondAttribute="height" id="gq2-3m-NTS"/>
+                        <constraint firstItem="uHX-SL-0ZO" firstAttribute="width" secondItem="9d4-OM-39i" secondAttribute="width" id="r66-V6-FVS"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="v2e-xZ-YNl"/>
+                        <constraint firstItem="uHX-SL-0ZO" firstAttribute="trailing" secondItem="NfO-dv-bqR" secondAttribute="leading" constant="17" id="vDS-tX-ME0"/>
                     </constraints>
-                    <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" ambiguous="YES" horizontal="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aYN-iS-ZsQ" userLabel="Tasks horiz scroller">
+                    <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="v0t-q2-AL3" userLabel="Tasks horiz scroller">
                         <rect key="frame" x="1" y="115" width="359" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </scroller>
-                    <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" ambiguous="YES" horizontal="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dZL-MI-blx" userLabel="Tasks vert scroller">
+                    <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="NfO-dv-bqR" userLabel="Tasks vert scroller">
                         <rect key="frame" x="344" y="1" width="16" height="130"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </scroller>
                 </scrollView>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d5X-74-7gY">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="g9O-B0-xg9">
                     <rect key="frame" x="-2" y="0.0" width="111" height="16"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" title="Some footer stuff" id="kVE-kT-ED3">
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Some footer stuff" id="ZAt-HT-NLf">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -327,13 +394,13 @@
                 </textField>
             </subviews>
             <constraints>
-                <constraint firstItem="h1o-R2-AcD" firstAttribute="firstBaseline" secondItem="wxD-Lm-qUL" secondAttribute="baseline" constant="3" id="0Tt-87-u0k"/>
-                <constraint firstItem="d5X-74-7gY" firstAttribute="leading" secondItem="Qn8-JX-HeH" secondAttribute="leading" id="8pP-DR-UDK"/>
-                <constraint firstItem="d5X-74-7gY" firstAttribute="top" secondItem="h1o-R2-AcD" secondAttribute="bottom" id="LyS-oh-e2I"/>
-                <constraint firstItem="wxD-Lm-qUL" firstAttribute="top" secondItem="Qn8-JX-HeH" secondAttribute="top" id="Xup-aO-6xN"/>
-                <constraint firstItem="h1o-R2-AcD" firstAttribute="top" secondItem="wxD-Lm-qUL" secondAttribute="bottom" id="ccO-dx-OTV"/>
-                <constraint firstItem="h1o-R2-AcD" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" id="j0V-FR-oSs"/>
-                <constraint firstItem="wxD-Lm-qUL" firstAttribute="leading" secondItem="Qn8-JX-HeH" secondAttribute="leading" id="rma-1C-zb8"/>
+                <constraint firstItem="UXk-rL-DPk" firstAttribute="leading" secondItem="jND-8k-XgR" secondAttribute="leading" id="16Z-cI-wRC"/>
+                <constraint firstItem="g9O-B0-xg9" firstAttribute="leading" secondItem="jND-8k-XgR" secondAttribute="leading" id="Du3-SL-MCj"/>
+                <constraint firstItem="9d4-OM-39i" firstAttribute="firstBaseline" secondItem="UXk-rL-DPk" secondAttribute="baseline" constant="3" id="PE3-BF-du4"/>
+                <constraint firstItem="g9O-B0-xg9" firstAttribute="top" secondItem="9d4-OM-39i" secondAttribute="bottom" id="Wfm-yZ-0pc"/>
+                <constraint firstItem="9d4-OM-39i" firstAttribute="width" secondItem="jND-8k-XgR" secondAttribute="width" id="aqu-jW-jDa"/>
+                <constraint firstItem="UXk-rL-DPk" firstAttribute="top" secondItem="jND-8k-XgR" secondAttribute="top" id="ecC-kz-8i7"/>
+                <constraint firstItem="9d4-OM-39i" firstAttribute="top" secondItem="UXk-rL-DPk" secondAttribute="bottom" id="uS5-Vs-Irn"/>
             </constraints>
             <visibilityPriorities>
                 <integer value="1000"/>
@@ -345,7 +412,7 @@
                 <real value="3.4028234663852886e+38"/>
                 <real value="3.4028234663852886e+38"/>
             </customSpacing>
-            <point key="canvasLocation" x="-294" y="187"/>
+            <point key="canvasLocation" x="159" y="227"/>
         </stackView>
     </objects>
 </document>
