@@ -27,6 +27,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(.accessory)
         focusHotKey.keyDownHandler = { self.mainMenu.focus() }
         mainMenu.schedulePopup()
+        mainMenu.show(.dailyEnd)
     }
     
     func applicationDidResignActive(_ notification: Notification) {
