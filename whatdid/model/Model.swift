@@ -223,6 +223,23 @@ class Model {
                 && lhs.to < rhs.to
         }
         
+        func durationSeconds() -> Double {
+            return (to.timeIntervalSince1970 - from.timeIntervalSince1970)
+        }
+        
+        static func totalSeconds(projects: [String: [String: [FlatEntry]]]) -> Double {
+            return projects.values.map( { totalSeconds(tasksForProject: $0) }).reduce(0, +)
+        }
+        
+        static func totalSeconds(tasksForProject: [String: [FlatEntry]]) -> Double {
+            return totalSeconds(entriesForTask: tasksForProject.flatMap { $0.value })
+        }
+        
+        static func totalSeconds(entriesForTask: [FlatEntry]) -> Double {
+            return entriesForTask.map { $0.durationSeconds() }.reduce(0, +)
+            
+        }
+        
         private static func isLessThan(lhs: String?, rhs: String?) -> Bool {
             if lhs == nil {
                 return rhs != nil

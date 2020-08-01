@@ -9,12 +9,39 @@ class DayEndReportController: NSViewController {
         // Do view setup here.
     }
     
-    @IBOutlet weak var projectsScroll: NSScrollView!
     @IBOutlet weak var projectsContainer: NSStackView!
     
     override func viewWillAppear() {
-//        projectsContainer.subviews.forEach {$0.removeFromSuperview()}
-        _ = Model.group(entries: getEntries()) // TODO read from Model
+        projectsContainer.subviews.forEach {$0.removeFromSuperview()}
+        let entries = Model.group(entries: getEntries()) // TODO read from Model
+        let totalSeconds = Model.FlatEntry.totalSeconds(projects: entries)
+        entries.forEach {project, tasks in
+            // see https://www.raywenderlich.com/1206-os-x-stack-views-with-nsstackview for animations
+            let projectSeconds = Model.FlatEntry.totalSeconds(tasksForProject: tasks)
+            // The vstack group for the whole project
+            let projectVStack = NSStackView()
+            projectsContainer.addArrangedSubview(projectVStack)
+            projectVStack.orientation = .vertical
+            projectVStack.widthAnchor.constraint(equalTo: projectsContainer.widthAnchor).isActive = true
+            
+            // The project label
+            projectVStack.addArrangedSubview(NSTextField(labelWithString: project))
+            
+            // The hstack group and contents for the disclosure button and entry
+            let headerHStack = NSStackView()
+            projectVStack.addArrangedSubview(headerHStack)
+            headerHStack.orientation = .horizontal
+            headerHStack.widthAnchor.constraint(equalTo: projectVStack.widthAnchor).isActive = true
+            headerHStack.addArrangedSubview(NSTextField(labelWithString: "V"))
+            
+            let progressBar = NSProgressIndicator()
+            headerHStack.addArrangedSubview(progressBar)
+            progressBar.isIndeterminate = false
+            progressBar.minValue = 0
+            progressBar.maxValue = totalSeconds
+            progressBar.doubleValue = projectSeconds
+            progressBar.trailingAnchor.constraint(equalTo: headerHStack.trailingAnchor).isActive = true
+        }
     }
     
     private func getEntries() -> [Model.FlatEntry] {
