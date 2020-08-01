@@ -183,31 +183,82 @@ class Model {
         })
     }
     
-    /// Given a list of FlatEntries, returns a nested map whose first level keys are project names, second level keys are task names
-    /// within those projects, and leaf values are the FlatEntries ordered by time started (with earliest as the first element)
-    static func group(entries: [FlatEntry]) -> [String: [String: [FlatEntry]]] {
-        let byProject = MutableDict<String, MutableDict<String, MutableList<FlatEntry>>>()
-        entries.forEach({entry in
-            var byTask = byProject[entry.project]
-            if byTask == nil {
-                byTask = MutableDict()
-                byProject[entry.project] = byTask
+    class GroupedProjects {
+        var groupedProjects = [String: GroupedProject]()
+        
+        init(from entries: [FlatEntry]) {
+            entries.forEach {entry in add(flatEntry: entry) }
+        }
+        
+        final func add(flatEntry entry: FlatEntry) {
+            var project = groupedProjects[entry.project]
+            if project == nil {
+                project = GroupedProject(name: entry.project)
+                groupedProjects[entry.project] = project
             }
-            var entryList = byTask?[entry.task]
-            if entryList == nil {
-                entryList = MutableList()
-                byTask![entry.task] = entryList
+            project?.add(flatEntry: entry)
+        }
+        
+        func forEach(_ block: (GroupedProject) -> Void) {
+            groupedProjects.values.map { ($0.totalTime, $0) }.sorted(by: { $0.0 > $1.0 }).map { $0.1 }.forEach(block)
+        }
+        
+        var totalTime: TimeInterval {
+            get {
+                return groupedProjects.values.compactMap { $0.totalTime }.reduce(0, +)
             }
-            entryList?.append(entry)
-        })
-        return byProject.asDictionary(mapValuesTo: {byTask in
-            byTask.asDictionary(mapValuesTo: {entries in
-                entries.asList().sorted()
-            })
-        })
+        }
     }
     
-    struct FlatEntry : Comparable {
+    class GroupedProject {
+        let name: String;
+        private var groupedTasks = [String: GroupedTask]()
+        
+        init(name: String) {
+            self.name = name
+        }
+        
+        func add(flatEntry entry: FlatEntry) {
+            var task = groupedTasks[entry.task]
+            if task == nil {
+                task = GroupedTask(name: entry.task)
+                groupedTasks[entry.task] = task
+            }
+            task!.add(flatEntry: entry)
+        }
+        
+        func forEach(_ block: (GroupedTask) -> Void) {
+            // first sort in descending totalTime order
+            groupedTasks.values.map { ($0.totalTime, $0) } . sorted(by: { $0.0 > $1.0 }) . map { $0.1 } . forEach(block)
+        }
+        
+        var totalTime: TimeInterval {
+            get {
+                return groupedTasks.values.compactMap { $0.totalTime }.reduce(0, +)
+            }
+        }
+    }
+    
+    class GroupedTask {
+        let name: String
+        private var entries = [FlatEntry]()
+        
+        init(name: String) {
+            self.name = name
+        }
+        
+        func add(flatEntry entry: FlatEntry) {
+            entries.append(entry)
+        }
+        
+        var totalTime: TimeInterval {
+            get {
+                return entries.compactMap { $0.duration }.reduce(0, +)
+            }
+        }
+    }
+    
+    struct FlatEntry {
         
         let from : Date
         let to : Date
@@ -215,38 +266,9 @@ class Model {
         let task : String
         let notes : String?
         
-        static func < (lhs: Model.FlatEntry, rhs: Model.FlatEntry) -> Bool {
-            return lhs.project < rhs.project
-                && lhs.task < rhs.task
-                && isLessThan(lhs: lhs.notes, rhs: rhs.notes)
-                && lhs.from < rhs.from
-                && lhs.to < rhs.to
-        }
-        
-        func durationSeconds() -> Double {
-            return (to.timeIntervalSince1970 - from.timeIntervalSince1970)
-        }
-        
-        static func totalSeconds(projects: [String: [String: [FlatEntry]]]) -> Double {
-            return projects.values.map( { totalSeconds(tasksForProject: $0) }).reduce(0, +)
-        }
-        
-        static func totalSeconds(tasksForProject: [String: [FlatEntry]]) -> Double {
-            return totalSeconds(entriesForTask: tasksForProject.flatMap { $0.value })
-        }
-        
-        static func totalSeconds(entriesForTask: [FlatEntry]) -> Double {
-            return entriesForTask.map { $0.durationSeconds() }.reduce(0, +)
-            
-        }
-        
-        private static func isLessThan(lhs: String?, rhs: String?) -> Bool {
-            if lhs == nil {
-                return rhs != nil
-            } else if rhs == nil {
-                return false
-            } else {
-                return lhs! < rhs!
+        var duration: TimeInterval {
+            get {
+                return (to.timeIntervalSince1970 - from.timeIntervalSince1970)
             }
         }
     }

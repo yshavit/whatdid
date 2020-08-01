@@ -43,11 +43,11 @@ class DayEndReportController: NSViewController {
     override func viewWillAppear() {
         projectsContainer.subviews.forEach {$0.removeFromSuperview()}
         
-        let entries = Model.group(entries: getEntries()) // TODO read from Model
-        let totalSeconds = Model.FlatEntry.totalSeconds(projects: entries)
-        entries.forEach {project, tasks in
+        let projects = Model.GroupedProjects(from: getEntries()) // TODO read from Model
+        let totalSeconds = projects.totalTime
+        projects.forEach {project in
             // see https://www.raywenderlich.com/1206-os-x-stack-views-with-nsstackview for animations
-            let projectSeconds = Model.FlatEntry.totalSeconds(tasksForProject: tasks)
+            let projectSeconds = project.totalTime
             // The vstack group for the whole project
             let projectVStack = NSStackView()
             projectsContainer.addArrangedSubview(projectVStack)
@@ -56,7 +56,8 @@ class DayEndReportController: NSViewController {
             projectVStack.leadingAnchor.constraint(equalTo: projectsContainer.leadingAnchor).isActive = true
             
             // The project label
-            let projectLabel = NSTextField(labelWithString: project)
+            project.add(flatEntry: Model.FlatEntry(from: Date(), to: Date(), project: "p", task: "t", notes: "n"))
+            let projectLabel = NSTextField(labelWithString: project.name)
             projectVStack.addArrangedSubview(projectLabel)
             projectLabel.leadingAnchor.constraint(equalTo: projectVStack.leadingAnchor).isActive = true
             
