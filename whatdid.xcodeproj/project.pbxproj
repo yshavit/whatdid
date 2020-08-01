@@ -27,6 +27,8 @@
 		7EA1DFC024CA99BF003AD2BC /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */; };
 		7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04E123714F0800A0C3A6 /* MainMenu.xib */; };
 		7EA6E22824BD6C5F004B9297 /* TaskAdditionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA6E22724BD6C5F004B9297 /* TaskAdditionViewController.xib */; };
+		7EDA368B24D51ED600F5E368 /* MutableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA368A24D51ED600F5E368 /* MutableList.swift */; };
+		7EDA368D24D51F0C00F5E368 /* MutableDict.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA368C24D51F0C00F5E368 /* MutableDict.swift */; };
 		7EE427AB24C42EBD002C51F3 /* AutoCompletingComboBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE427AA24C42EBD002C51F3 /* AutoCompletingComboBox.swift */; };
 		7EFEE80223B16EA6002928A2 /* TaskAdditionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFEE80123B16EA6002928A2 /* TaskAdditionViewController.swift */; };
 /* End PBXBuildFile section */
@@ -75,6 +77,8 @@
 		7E8C04FB23714F0800A0C3A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		7EA6E22724BD6C5F004B9297 /* TaskAdditionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskAdditionViewController.xib; sourceTree = "<group>"; };
+		7EDA368A24D51ED600F5E368 /* MutableList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableList.swift; sourceTree = "<group>"; };
+		7EDA368C24D51F0C00F5E368 /* MutableDict.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableDict.swift; sourceTree = "<group>"; };
 		7EE427AA24C42EBD002C51F3 /* AutoCompletingComboBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletingComboBox.swift; sourceTree = "<group>"; };
 		7EFEE80123B16EA6002928A2 /* TaskAdditionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskAdditionViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -189,6 +193,8 @@
 			children = (
 				7E30B46024C38D91003F3679 /* Atomic.swift */,
 				7E1C2F5024CE43C40070D8CD /* Version.swift */,
+				7EDA368A24D51ED600F5E368 /* MutableList.swift */,
+				7EDA368C24D51F0C00F5E368 /* MutableDict.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -365,11 +371,13 @@
 			files = (
 				7E37A29524C00266005BA1DF /* Model.swift in Sources */,
 				7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */,
+				7EDA368B24D51ED600F5E368 /* MutableList.swift in Sources */,
 				7EFEE80223B16EA6002928A2 /* TaskAdditionViewController.swift in Sources */,
 				7E37A29B24C0293E005BA1DF /* Entry+CoreDataProperties.swift in Sources */,
 				7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */,
 				7E07C3B824D121770007FD23 /* DayEndReportController.swift in Sources */,
 				7EE427AB24C42EBD002C51F3 /* AutoCompletingComboBox.swift in Sources */,
+				7EDA368D24D51F0C00F5E368 /* MutableDict.swift in Sources */,
 				7E30B46124C38D91003F3679 /* Atomic.swift in Sources */,
 				7E37A27424BFF676005BA1DF /* Model.xcdatamodeld in Sources */,
 				7E37A29124BFFFCB005BA1DF /* Project+CoreDataProperties.swift in Sources */,
