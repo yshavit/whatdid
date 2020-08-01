@@ -9,7 +9,7 @@ class DayEndReportController: NSViewController {
         // Do view setup here.
     }
     /// I don't know how to programatically make a nice disclosure button, so I'll just let the xib do it for me :-)
-    @IBOutlet var disclosurePrototype: NSButton!
+    @IBOutlet var disclosurePrototype: ButtonWithClosure!
     // The serialized version of `disclosurePrototype`
     private var disclosureArchive : Data!
     
@@ -24,11 +24,13 @@ class DayEndReportController: NSViewController {
         }
     }
     
-    private func createDisclosure()  -> NSButton {
+    private func createDisclosure(state: NSButton.StateValue)  -> ButtonWithClosure {
         do {
             // TODO eventually I should look at the xib xml and just figure out what it's doing
             let new = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(disclosureArchive)
-            return new as! NSButton
+            let button = new as! ButtonWithClosure
+            button.state = state
+            return button
         } catch {
             NSLog("error: %@", error as NSError) // TODO return default?
             fatalError("error: \(error)")
@@ -68,10 +70,9 @@ class DayEndReportController: NSViewController {
             headerHStack.widthAnchor.constraint(equalTo: projectVStack.widthAnchor).isActive = true
             headerHStack.leadingAnchor.constraint(equalTo: projectVStack.leadingAnchor).isActive = true
             // disclosure button
-            let projectDisclosure = createDisclosure()
+            let projectDisclosure = createDisclosure(state: .off)
             headerHStack.addArrangedSubview(projectDisclosure)
             projectDisclosure.leadingAnchor.constraint(equalTo: headerHStack.leadingAnchor).isActive = true
-
             
             // progress bar
             let progressBar = NSProgressIndicator()
@@ -81,7 +82,33 @@ class DayEndReportController: NSViewController {
             progressBar.maxValue = totalSeconds
             progressBar.doubleValue = projectSeconds
             progressBar.trailingAnchor.constraint(equalTo: headerHStack.trailingAnchor).isActive = true
+            
+            // Tasks box
+            let tasksBox = NSBox()
+            projectVStack.addArrangedSubview(tasksBox)
+            tasksBox.title = "Tasks for \(project.name)"
+            tasksBox.titlePosition = .noTitle
+            tasksBox.leadingAnchor.constraint(equalTo: projectVStack.leadingAnchor, constant: 3).isActive = true
+            tasksBox.trailingAnchor.constraint(equalTo: projectVStack.trailingAnchor, constant: -3).isActive = true
+            projectDisclosure.onPress {button in
+                NSAnimationContext.runAnimationGroup {context in
+                    context.duration = 0.5
+                    context.allowsImplicitAnimation = true
+                    tasksBox.isHidden = button.state == .off
+                    self.view.layoutSubtreeIfNeeded()
+                }
+            }
+            tasksBox.isHidden = projectDisclosure.state == .off
         }
+    }
+    
+    let handler = DisclosureHandler()
+    
+    @objc class DisclosureHandler : NSObject {
+        @objc func run() {
+            print("Hi!")
+        }
+        
     }
     
     private func getEntries() -> [Model.FlatEntry] {
