@@ -38,7 +38,7 @@ class Model {
                 request.predicate = Model.NO_BUILTINS
                 result = try request.execute()
             } catch {
-                print("couldn't load projects: \(error)")
+                NSLog("couldn't load projects: %@", error as NSError)
                 result = []
             }
         }
@@ -62,7 +62,7 @@ class Model {
                 request.fetchLimit = 10
                 projects = try request.execute()
             } catch {
-                print("couldn't load projects: \(error)")
+                NSLog("couldn't load projects: %@", error as NSError)
                 projects = []
             }
             results = projects.map({$0.project})
@@ -92,7 +92,7 @@ class Model {
                 request.fetchLimit = 10
                 tasks = try request.execute()
             } catch {
-                print("couldn't load projects: \(error)")
+                NSLog("couldn't load projects: %@", error as NSError)
                 tasks = []
             }
             results = tasks.map({$0.task})
@@ -117,7 +117,7 @@ class Model {
                 }
                 print("")
             } catch {
-                print("couldn't list everything: \(error)")
+                NSLog("couldn't list everything: %@", error as NSError)
             }
             
         }
@@ -153,7 +153,7 @@ class Model {
                 NSLog("Saving project(%@), task(%@), notes(%@)", project, task, notes)
                 try context.save()
             } catch {
-                print("Error saving entry: %@", error)
+                NSLog("Error saving entry: %@", error as NSError)
             }
             callback()
         })
