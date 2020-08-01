@@ -101,6 +101,30 @@ class Model {
         return results
     }
     
+    func listEntries(since: Date) -> [FlatEntry] {
+        var results : [FlatEntry] = []
+        container.viewContext.performAndWait {
+            do {
+                let request = NSFetchRequest<Entry>(entityName: "Entry")
+                request.predicate = NSPredicate(format: "timeApproximatelyStarted >= %@", since as NSDate)
+                let entries = try request.execute()
+                results = entries.map({entry in
+                    FlatEntry(
+                        timeApproximatelyStarted: entry.timeApproximatelyStarted,
+                        timeEntered: entry.timeEntered,
+                        project: entry.task.project.project,
+                        task: entry.task.task,
+                        notes: entry.notes
+                    )
+                })
+            } catch {
+                NSLog("couldn't load projects: %@", error as NSError)
+                results = []
+            }
+        }
+        return results
+    }
+    
     func printAll() {
         container.viewContext.performAndWait {
             do {
@@ -157,5 +181,13 @@ class Model {
             }
             callback()
         })
+    }
+    
+    struct FlatEntry {
+        let timeApproximatelyStarted : Date
+        let timeEntered : Date
+        let project : String
+        let task : String
+        let notes : String?
     }
 }
