@@ -132,7 +132,7 @@ class DayEndReportController: NSViewController {
             headerHStack.widthAnchor.constraint(equalTo: enclosing.widthAnchor).isActive = true
             headerHStack.leadingAnchor.constraint(equalTo: enclosing.leadingAnchor).isActive = true
             // disclosure button
-            disclosure = createDisclosure(state: .off)
+            disclosure = createDisclosure(state: .on)
             headerHStack.addArrangedSubview(disclosure)
             disclosure.leadingAnchor.constraint(equalTo: headerHStack.leadingAnchor).isActive = true
             
