@@ -171,7 +171,6 @@ class DayEndReportController: NSViewController {
     private func animate(_ action: () -> Void, duration: Double = 0.5, andThen: (() -> Void)? = nil) {
         let originalWindowFrameOpt = self.view.window?.frame
         let originalViewBounds = self.view.bounds
-        let originalFrameOriginOpt = self.view.window?.frame.origin
         NSAnimationContext.runAnimationGroup(
             {context in
                 context.duration = duration
@@ -189,28 +188,7 @@ class DayEndReportController: NSViewController {
                         y: originalWindowFrame.minY - deltaHeight,
                         width: originalWindowFrame.width + deltaWidth,
                         height: originalWindowFrame.height + deltaHeight)
-                    
-                    
-                    window.setContentSize(NSSize(width: newViewBounds.width, height: newViewBounds.height))
-                    
-                    let newRequestedOrigin : NSPoint?
-                    if let originalFrameOrigin = originalFrameOriginOpt {
-                        newRequestedOrigin = NSPoint(x: originalFrameOrigin.x, y: originalFrameOrigin.y - deltaHeight)
-                        window.setFrame(newWindowFrame, display: true)
-//                        window.setFrameOrigin(newRequestedOrigin!)
-                    } else {
-                        newRequestedOrigin = nil
-                    }
-
-                    NSLog("")
-                    NSLog("## delta width = %.0f, height = %0.f", deltaWidth, deltaHeight)
-                    NSLog("## x=1, y=2, w=3, h=4 : %@", NSRect(x: 1, y: 2, width: 3, height: 4).debugDescription)
-                    NSLog("original frame opt    : %@", (originalWindowFrameOpt?.debugDescription ?? "<none>"))
-//                    NSLog("original view bounds  : %@", originalViewBounds.debugDescription)
-//                    NSLog("original frame origin : %@", originalFrameOriginOpt.debugDescription)
-                    NSLog("new frame opt:        : %@   => %@", newWindowFrame.debugDescription, window.frame.debugDescription)
-//                    NSLog("new view bounds       : %@", newViewBounds.debugDescription)
-//                    NSLog("new frame origin      : %@   => %@", newRequestedOrigin.debugDescription, window.frame.origin.debugDescription)
+                    window.setFrame(newWindowFrame, display: true)
                 }
             },
             completionHandler: andThen
