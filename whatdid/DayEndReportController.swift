@@ -12,7 +12,9 @@ class DayEndReportController: NSViewController {
     @IBOutlet var disclosurePrototype: ButtonWithClosure!
     // The serialized version of `disclosurePrototype`
     private static var disclosureArchive : Data!
+    @IBOutlet weak var projectsScroll: NSScrollView!
     
+    @IBOutlet weak var projectsScrollHeight: NSLayoutConstraint!
     @IBOutlet weak var projectsContainer: NSStackView!
     
     override func awakeFromNib() {
@@ -106,13 +108,18 @@ class DayEndReportController: NSViewController {
     private func setUpDisclosureExpansion(disclosure: ButtonWithClosure, details: NSView) {
         disclosure.onPress {button in
             NSAnimationContext.runAnimationGroup {context in
-                context.duration = 0.3
+                context.duration = 0
                 context.allowsImplicitAnimation = true
+                
                 details.isHidden = button.state == .off
+                self.projectsScrollHeight.constant = self.projectsContainer.fittingSize.height
                 self.view.layoutSubtreeIfNeeded()
             }
         }
+        
         details.isHidden = disclosure.state == .off
+        self.projectsScrollHeight.constant = self.projectsContainer.fittingSize.height
+        self.view.layoutSubtreeIfNeeded()
     }
     
     struct ExpandableProgressBar {
@@ -132,7 +139,7 @@ class DayEndReportController: NSViewController {
             headerHStack.widthAnchor.constraint(equalTo: enclosing.widthAnchor).isActive = true
             headerHStack.leadingAnchor.constraint(equalTo: enclosing.leadingAnchor).isActive = true
             // disclosure button
-            disclosure = createDisclosure(state: .on)
+            disclosure = createDisclosure(state: .off)
             headerHStack.addArrangedSubview(disclosure)
             disclosure.leadingAnchor.constraint(equalTo: headerHStack.leadingAnchor).isActive = true
             
