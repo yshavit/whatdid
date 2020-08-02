@@ -11,7 +11,7 @@
             <connections>
                 <outlet property="disclosurePrototype" destination="ygu-jz-ofG" id="TL0-Zx-LtI"/>
                 <outlet property="entryStartDatePicker" destination="I9K-te-jfd" id="Zma-bE-IER"/>
-                <outlet property="maxViewHeight" destination="22A-MF-iXT" id="EVn-uE-G4O"/>
+                <outlet property="maxViewHeight" destination="1ka-g6-16p" id="IdU-SA-mes"/>
                 <outlet property="projectsContainer" destination="UTB-GH-C4K" id="QTl-1c-03i"/>
                 <outlet property="projectsScroll" destination="LDw-zz-ziZ" id="ccf-fo-s0s"/>
                 <outlet property="projectsScrollHeight" destination="o6f-K3-YH7" id="2jK-fl-LC2"/>
@@ -30,10 +30,10 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qn8-JX-HeH" userLabel="Top">
-            <rect key="frame" x="0.0" y="0.0" width="400" height="95"/>
+            <rect key="frame" x="0.0" y="0.0" width="400" height="74"/>
             <subviews>
                 <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pKe-k9-zAn">
-                    <rect key="frame" x="0.0" y="71" width="267" height="24"/>
+                    <rect key="frame" x="0.0" y="50" width="267" height="24"/>
                     <subviews>
                         <textField identifier="header_label" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-Lm-qUL" userLabel="Header">
                             <rect key="frame" x="-2" y="4" width="118" height="16"/>
@@ -46,7 +46,7 @@
                         <datePicker verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="I9K-te-jfd">
                             <rect key="frame" x="122" y="0.0" width="148" height="28"/>
                             <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="578-tE-w1E">
-                                <font key="font" metaFont="menu" size="11"/>
+                                <font key="font" metaFont="message" size="11"/>
                                 <date key="date" timeIntervalSinceReferenceDate="-595929600">
                                     <!--1982-02-12 16:00:00 +0000-->
                                 </date>
@@ -74,21 +74,21 @@
                     </customSpacing>
                 </stackView>
                 <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="hAT-mx-IFG">
-                    <rect key="frame" x="0.0" y="64" width="400" height="5"/>
+                    <rect key="frame" x="0.0" y="43" width="400" height="5"/>
                 </box>
                 <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LDw-zz-ziZ" userLabel="Projects scroll">
-                    <rect key="frame" x="0.0" y="25" width="400" height="37"/>
+                    <rect key="frame" x="0.0" y="25" width="400" height="16"/>
                     <clipView key="contentView" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vpo-4L-DGR" userLabel="Projects clip">
-                        <rect key="frame" x="0.0" y="0.0" width="400" height="37"/>
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="16"/>
                         <subviews>
                             <view translatesAutoresizingMaskIntoConstraints="NO" id="W7j-r2-UD7" userLabel="Projects document" customClass="FlippedView" customModule="whatdid" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="400" height="37"/>
+                                <rect key="frame" x="0.0" y="0.0" width="400" height="16"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UTB-GH-C4K" userLabel="Projects vstack">
-                                        <rect key="frame" x="0.0" y="0.0" width="400" height="37"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="400" height="16"/>
                                         <subviews>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SnG-M9-8Cz">
-                                                <rect key="frame" x="-2" y="0.0" width="129" height="37"/>
+                                                <rect key="frame" x="-2" y="0.0" width="129" height="16"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Projects placeholder" id="5Ym-6w-uDi">
                                                     <font key="font" usesAppearanceFont="YES"/>
                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -121,6 +121,7 @@
                         <color key="backgroundColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
                     <constraints>
+                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="16" id="1ka-g6-16p"/>
                         <constraint firstAttribute="trailing" secondItem="W7j-r2-UD7" secondAttribute="trailing" constant="-1" id="Ggd-Ap-vRa"/>
                         <constraint firstItem="W7j-r2-UD7" firstAttribute="leading" secondItem="LDw-zz-ziZ" secondAttribute="leading" constant="1" id="aql-aV-OJW"/>
                         <constraint firstAttribute="height" relation="lessThanOrEqual" secondItem="UTB-GH-C4K" secondAttribute="height" id="dDz-hE-Ybj"/>
@@ -133,7 +134,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="hko-IO-o5R">
-                        <rect key="frame" x="384" y="0.0" width="16" height="37"/>
+                        <rect key="frame" x="384" y="0.0" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                 </scrollView>
@@ -150,7 +151,6 @@
                 </textField>
             </subviews>
             <constraints>
-                <constraint firstAttribute="height" relation="lessThanOrEqual" constant="500" id="22A-MF-iXT"/>
                 <constraint firstItem="hAT-mx-IFG" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" id="nCY-3T-gJp"/>
                 <constraint firstItem="LDw-zz-ziZ" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" id="oDo-5Q-hjJ"/>
             </constraints>
