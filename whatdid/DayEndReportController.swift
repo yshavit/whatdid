@@ -53,15 +53,20 @@ class DayEndReportController: NSViewController {
         }
         // Set up the date picker
         let now = Date()
-        let defaultStartingTime = now.addingTimeInterval(-86400) // only used if we can't compute it correctly
         entryStartDatePicker.maxDate = now
-        var thisMorning = Calendar.current.date(bySettingHour: 7, minute: 0, second: 0, of: now) ?? defaultStartingTime
-        if thisMorning > now {
+        entryStartDatePicker.dateValue = thisMorning(assumingNow: now)
+        
+        updateEntries()
+    }
+    
+    func thisMorning(assumingNow: Date) -> Date {
+        let defaultStartingTime = assumingNow.addingTimeInterval(-86400) // only used if we can't compute it correctly
+        var thisMorning = Calendar.current.date(bySettingHour: 7, minute: 0, second: 0, of: assumingNow) ?? defaultStartingTime
+        if thisMorning > assumingNow {
             // This morning is tomorrow morning! Bump it back a day
             thisMorning = Calendar.current.date(byAdding: DateComponents(day: -1), to: thisMorning) ?? defaultStartingTime
         }
-        entryStartDatePicker.dateValue = thisMorning
-        updateEntries()
+        return thisMorning
     }
     
     @IBAction func userChangedEntryStartDate(_ sender: Any) {
@@ -91,6 +96,7 @@ class DayEndReportController: NSViewController {
         
         let projects = Model.GroupedProjects(from: AppDelegate.instance.model.listEntries(since: since))
         let allProjectsTotalTime = projects.totalTime
+        let todayStart = thisMorning(assumingNow: Date())
         projects.forEach {project in
             // The vstack group for the whole project
             let projectVStack = NSStackView()
@@ -118,10 +124,12 @@ class DayEndReportController: NSViewController {
             
             let timeFormatter = DateFormatter()
             timeFormatter.locale = Locale(identifier: "en_US_POSIX")
-            timeFormatter.dateFormat = "HH:mma"
+            timeFormatter.dateFormat = "h:mma"
             timeFormatter.timeZone = .autoupdatingCurrent
             timeFormatter.amSymbol = "am"
             timeFormatter.pmSymbol = "pm"
+            
+            
             var previousDetailsBottomAnchor : NSLayoutYAxisAnchor?
             project.forEach {task in
                 let taskHeader = ExpandableProgressBar(addTo: tasksStack, labeled: task.name, withDuration: task.totalTime, outOf: allProjectsTotalTime)
@@ -130,10 +138,16 @@ class DayEndReportController: NSViewController {
                 previousDetailsBottomAnchor?.constraint(equalTo: taskHeader.topView.topAnchor, constant: -5).isActive = true
                 var details = ""
                 task.forEach {entry in
+                    if entry.to < todayStart {
+                        timeFormatter.dateFormat = "M/d h:mma"
+                    }
                     details += timeFormatter.string(from: entry.from)
                     details += " - "
+                    if TimeUtil.sameDay(entry.from, entry.to) {
+                        timeFormatter.dateFormat = "h:mma"
+                    }
                     details += timeFormatter.string(from: entry.to)
-                    details += ": "
+                    details += " (" + TimeUtil.daysHoursMinutes(for: entry.duration) + "): "
                     details += entry.notes ?? "(no notes entered)"
                     details += "\n"
                 }
@@ -179,9 +193,17 @@ class DayEndReportController: NSViewController {
         let progressBar: NSProgressIndicator
         
         init(addTo enclosing: NSStackView, labeled label: String, withDuration duration: TimeInterval, outOf: TimeInterval) {
+            let labelStack = NSStackView()
+            enclosing.addArrangedSubview(labelStack)
+            labelStack.orientation = .horizontal
+            labelStack.leadingAnchor.constraint(equalTo: enclosing.leadingAnchor).isActive = true
+            
             let projectLabel = NSTextField(labelWithString: label)
-            enclosing.addArrangedSubview(projectLabel)
-            projectLabel.leadingAnchor.constraint(equalTo: enclosing.leadingAnchor).isActive = true
+            projectLabel.font = NSFont.systemFont(ofSize: NSFont.systemFontSize)
+            labelStack.addView(projectLabel, in: .leading)
+            let durationLabel = NSTextField(labelWithString: TimeUtil.daysHoursMinutes(for: duration))
+            durationLabel.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
+            labelStack.addView(durationLabel, in: .trailing)
             
             let headerHStack = NSStackView()
             enclosing.addArrangedSubview(headerHStack)
@@ -202,8 +224,9 @@ class DayEndReportController: NSViewController {
             progressBar.maxValue = outOf
             progressBar.doubleValue = duration
             progressBar.trailingAnchor.constraint(lessThanOrEqualTo: headerHStack.trailingAnchor).isActive = true
+            progressBar.trailingAnchor.constraint(equalTo: labelStack.trailingAnchor).isActive = true
             
-            topView = projectLabel
+            topView = labelStack
         }
     }
     
