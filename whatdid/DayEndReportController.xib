@@ -26,10 +26,10 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qn8-JX-HeH" userLabel="Top">
-            <rect key="frame" x="0.0" y="0.0" width="361" height="228"/>
+            <rect key="frame" x="0.0" y="0.0" width="361" height="71"/>
             <subviews>
                 <textField identifier="header_label" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-Lm-qUL" userLabel="Header">
-                    <rect key="frame" x="-2" y="212" width="117" height="16"/>
+                    <rect key="frame" x="-2" y="55" width="117" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" identifier="header_cell" title="Some header stuff" id="jJc-W3-EKA" userLabel="Header cell">
                         <font key="font" usesAppearanceFont="YES"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -37,15 +37,33 @@
                     </textFieldCell>
                 </textField>
                 <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LDw-zz-ziZ" userLabel="Projects scroll">
-                    <rect key="frame" x="0.0" y="17" width="361" height="194"/>
+                    <rect key="frame" x="0.0" y="17" width="361" height="37"/>
                     <clipView key="contentView" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vpo-4L-DGR" userLabel="Projects clip">
-                        <rect key="frame" x="1" y="1" width="359" height="192"/>
+                        <rect key="frame" x="1" y="1" width="359" height="35"/>
                         <subviews>
                             <view translatesAutoresizingMaskIntoConstraints="NO" id="W7j-r2-UD7" userLabel="Projects document" customClass="FlippedView" customModule="whatdid" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="361" height="194"/>
+                                <rect key="frame" x="0.0" y="0.0" width="361" height="37"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UTB-GH-C4K" userLabel="Projects vstack">
-                                        <rect key="frame" x="0.0" y="0.0" width="361" height="194"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="361" height="37"/>
+                                        <subviews>
+                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="aBL-xy-zK0">
+                                                <rect key="frame" x="0.0" y="0.0" width="96" height="37"/>
+                                                <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="aCW-9d-FuY">
+                                                    <font key="font" metaFont="system"/>
+                                                    <string key="title">One
+Two</string>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                        </subviews>
+                                        <visibilityPriorities>
+                                            <integer value="1000"/>
+                                        </visibilityPriorities>
+                                        <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                        </customSpacing>
                                     </stackView>
                                 </subviews>
                                 <constraints>
@@ -64,16 +82,17 @@
                         </constraints>
                     </clipView>
                     <constraints>
+                        <constraint firstAttribute="trailing" secondItem="W7j-r2-UD7" secondAttribute="trailing" constant="-1" id="Ggd-Ap-vRa"/>
                         <constraint firstAttribute="height" relation="lessThanOrEqual" constant="450" id="YOD-2L-dmZ"/>
+                        <constraint firstItem="W7j-r2-UD7" firstAttribute="leading" secondItem="LDw-zz-ziZ" secondAttribute="leading" constant="1" id="aql-aV-OJW"/>
                         <constraint firstAttribute="height" relation="lessThanOrEqual" secondItem="UTB-GH-C4K" secondAttribute="height" id="dDz-hE-Ybj"/>
-                        <constraint firstItem="W7j-r2-UD7" firstAttribute="width" relation="greaterThanOrEqual" secondItem="LDw-zz-ziZ" secondAttribute="width" id="lhH-sc-DiC"/>
                     </constraints>
                     <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="mcw-YE-dMv">
-                        <rect key="frame" x="1" y="177" width="359" height="16"/>
+                        <rect key="frame" x="1" y="20" width="359" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="hko-IO-o5R">
-                        <rect key="frame" x="344" y="1" width="16" height="192"/>
+                        <rect key="frame" x="344" y="1" width="16" height="35"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                 </scrollView>
