@@ -80,9 +80,7 @@ class DayEndReportController: NSViewController {
                 spinner.style = .spinning
                 spinner.leadingAnchor.constraint(equalTo: projectsContainer.leadingAnchor).isActive = true
                 spinner.trailingAnchor.constraint(equalTo: projectsContainer.trailingAnchor).isActive = true
-        },
-            
-            duration: 0.25,
+            },
             andThen: {
                 self.animate({ self.updateEntries() })
             }

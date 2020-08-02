@@ -4,10 +4,10 @@ import Cocoa
 
 class Model {
     
-    private static let BUILTIN_PROJECT = "\0__built_in"
+    private static let BREAK_PROJECT = "break"
     private static let BREAK_TASK = "break"
     private static let BREAK_TASK_NOTES = ""
-    private static let NO_BUILTINS = NSPredicate(format: "project != %@", BUILTIN_PROJECT)
+    private static let NO_BUILTINS = NSPredicate(format: "project != %@", BREAK_PROJECT)
     
     @Atomic private var lastEntryDate : Date
     
@@ -112,7 +112,7 @@ class Model {
                     FlatEntry(
                         from: entry.timeApproximatelyStarted,
                         to: entry.timeEntered,
-                        project: entry.task.project.project,
+                        project: entry.task.project.project.trimmingCharacters(in: .controlCharacters),
                         task: entry.task.task,
                         notes: entry.notes
                     )
@@ -125,30 +125,8 @@ class Model {
         return results
     }
     
-    func printAll() {
-        container.viewContext.performAndWait {
-            do {
-                let projectsRequest = NSFetchRequest<Project>(entityName: "Project")
-                let projects = try projectsRequest.execute()
-                for project in projects {
-                    print("\(project.project) (\(project.lastUsed))")
-                    for task in project.tasks {
-                        print("    \(task.task) (\(task.lastUsed))")
-                        for entry in task.entries {
-                            print("        \(entry.notes ?? "<no notes>"): from \(entry.timeApproximatelyStarted) to \(entry.timeEntered)")
-                        }
-                    }
-                }
-                print("")
-            } catch {
-                NSLog("couldn't list everything: %@", error as NSError)
-            }
-            
-        }
-    }
-    
     func addBreakEntry(callback: @escaping () -> ()) {
-        addEntryNow(project: Model.BUILTIN_PROJECT, task: Model.BREAK_TASK, notes: Model.BREAK_TASK_NOTES, callback: callback)
+        addEntryNow(project: Model.BREAK_PROJECT, task: Model.BREAK_TASK, notes: Model.BREAK_TASK_NOTES, callback: callback)
     }
     
     func addEntryNow(project: String, task: String, notes: String, callback: @escaping ()->()) {
