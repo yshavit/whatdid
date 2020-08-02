@@ -102,6 +102,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         if shouldSchedulePopupOnClose && !snoozing { // If we're snoozing, the snooze scheduled the next popup
             schedulePopup()
         }
+        shouldSchedulePopupOnClose = false
     }
 
     func schedulePopup() {
