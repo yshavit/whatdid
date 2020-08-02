@@ -85,7 +85,7 @@ Two</string>
                     </clipView>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="W7j-r2-UD7" secondAttribute="trailing" constant="-1" id="Ggd-Ap-vRa"/>
-                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="150" id="YOD-2L-dmZ"/>
+                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="500" id="YOD-2L-dmZ"/>
                         <constraint firstItem="W7j-r2-UD7" firstAttribute="leading" secondItem="LDw-zz-ziZ" secondAttribute="leading" constant="1" id="aql-aV-OJW"/>
                         <constraint firstAttribute="height" relation="lessThanOrEqual" secondItem="UTB-GH-C4K" secondAttribute="height" id="dDz-hE-Ybj"/>
                         <constraint firstAttribute="height" priority="800" constant="37" id="o6f-K3-YH7"/>

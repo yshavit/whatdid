@@ -108,12 +108,13 @@ class DayEndReportController: NSViewController {
     private func setUpDisclosureExpansion(disclosure: ButtonWithClosure, details: NSView) {
         disclosure.onPress {button in
             NSAnimationContext.runAnimationGroup {context in
-                context.duration = 0
+                context.duration = 0.5
                 context.allowsImplicitAnimation = true
-                
                 details.isHidden = button.state == .off
                 self.projectsScrollHeight.constant = self.projectsContainer.fittingSize.height
                 self.view.layoutSubtreeIfNeeded()
+                let newFrame = self.view.frame
+                self.view.window?.setContentSize(NSSize(width: newFrame.width, height: newFrame.height))
             }
         }
         
