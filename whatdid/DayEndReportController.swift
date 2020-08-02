@@ -12,8 +12,9 @@ class DayEndReportController: NSViewController {
     @IBOutlet var disclosurePrototype: ButtonWithClosure!
     // The serialized version of `disclosurePrototype`
     private static var disclosureArchive : Data!
-    @IBOutlet weak var projectsScroll: NSScrollView!
     
+    @IBOutlet weak var maxViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var projectsScroll: NSScrollView!
     @IBOutlet weak var projectsScrollHeight: NSLayoutConstraint!
     @IBOutlet weak var projectsContainer: NSStackView!
     
@@ -39,12 +40,11 @@ class DayEndReportController: NSViewController {
         }
     }
     
-    private func DEBUG(_ stack: NSStackView, _ color: NSColor) {
-        stack.wantsLayer = true
-        stack.layer?.backgroundColor = color.cgColor
-    }
-    
     override func viewWillAppear() {
+        if let screenHeight = view.window?.screen?.frame.height {
+            maxViewHeight.constant = screenHeight * 0.61802903 // get a golden ratio going
+            NSLog("set max height to %.1f (screen height is %.1f)", maxViewHeight.constant, screenHeight)
+        }
         projectsContainer.subviews.forEach {$0.removeFromSuperview()}
         
         let projects = Model.GroupedProjects(from: getEntries()) // TODO read from Model
@@ -164,11 +164,24 @@ class DayEndReportController: NSViewController {
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss-4:00"
             return dateFormatter.date(from: String(format: "2020-07-31T%02d:%02d:00-4:00", hh, mm))!
         }
-        return [
-            .init(from: d(10, 00), to: d(10, 15), project: "Project1", task: "Task 1", notes: "entry 1"),
-            .init(from: d(10, 15), to: d(10, 30), project: "Project1", task: "Task 1", notes: "entry 2"),
-            .init(from: d(10, 30), to: d(10, 45), project: "Project1", task: "Task 2", notes: "entry 3"),
-            .init(from: d(10, 45), to: d(11, 00), project: "Project2", task: "Task 1", notes: "entry 4"),
-        ].shuffled() // to make it interesting :)
+        var fakeEntries = [
+            Model.FlatEntry(from: d(10, 00), to: d(10, 15), project: "Project1", task: "Task 1", notes: "entry 1"),
+            Model.FlatEntry(from: d(10, 15), to: d(10, 30), project: "Project1", task: "Task 1", notes: "entry 2"),
+            Model.FlatEntry(from: d(10, 30), to: d(10, 45), project: "Project1", task: "Task 2", notes: "entry 3"),
+            Model.FlatEntry(from: d(10, 45), to: d(11, 00), project: "Project2", task: "Task 1", notes: "entry 4"),
+            Model.FlatEntry(from: d(10, 45), to: d(10, 55), project: String(repeating: "long project ", count: 30), task: String(repeating: "long task", count: 20), notes: String(repeating: "long entry", count: 20)),
+        ]
+        (0..<10).forEach {hh in
+            (0..<4).forEach {qh in // quarter hour
+                fakeEntries.append(Model.FlatEntry(
+                    from: d(12 + hh, qh * 15),
+                    to: d(12 + hh, qh * 15 + 14),
+                    project: "Marathon project",
+                    task: "big task #\(qh)",
+                    notes: "session \(hh)"))
+            }
+            
+        }
+        return fakeEntries.shuffled() // to make it interesting :)
     }
 }
