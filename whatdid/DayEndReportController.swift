@@ -151,17 +151,27 @@ class DayEndReportController: NSViewController {
                     details += entry.notes ?? "(no notes entered)"
                     details += "\n"
                 }
-                let taskDetailsView = NSTextField(labelWithString: details.trimmingCharacters(in: .newlines))
+                let taskDescriptions = details.trimmingCharacters(in: .newlines)
+                let taskDetailsView = NSTextField(labelWithString: taskDescriptions)
                 tasksStack.addArrangedSubview(taskDetailsView)
                 taskDetailsView.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
                 taskDetailsView.leadingAnchor.constraint(equalTo: taskHeader.progressBar.leadingAnchor).isActive = true
                 previousDetailsBottomAnchor = taskDetailsView.bottomAnchor
-                setUpDisclosureExpansion(disclosure: taskHeader.disclosure, details: taskDetailsView)
+                // For some reason, especially long (in terms of vertical space) tasks can break the layout when they're hidden:
+                // It shows up as a large vertial blank space. Something something intrinsic size? Anyway, zeroing out the contents
+                // when hidden seems to fix that.
+                let removeTextWhenHidden : (NSButton.StateValue) -> Void = {state in
+                    taskDetailsView.stringValue = state == .off ? "" : taskDescriptions
+                }
+                setUpDisclosureExpansion(disclosure: taskHeader.disclosure, details: taskDetailsView, extraAction: removeTextWhenHidden)
             }
         }
     }
     
     private func animate(_ action: () -> Void, duration: Double = 0.5, andThen: (() -> Void)? = nil) {
+        let originalWindowFrameOpt = self.view.window?.frame
+        let originalViewBounds = self.view.bounds
+        let originalFrameOriginOpt = self.view.window?.frame.origin
         NSAnimationContext.runAnimationGroup(
             {context in
                 context.duration = duration
@@ -169,20 +179,58 @@ class DayEndReportController: NSViewController {
                 action()
                 self.projectsScrollHeight.constant = self.projectsContainer.fittingSize.height
                 self.view.layoutSubtreeIfNeeded()
-                let newFrame = self.view.frame
-                self.view.window?.setContentSize(NSSize(width: newFrame.width, height: newFrame.height))
+                
+                let newViewBounds = self.view.bounds
+                if let window = self.view.window, let originalWindowFrame = originalWindowFrameOpt {
+                    let deltaWidth = newViewBounds.width - originalViewBounds.width
+                    let deltaHeight = newViewBounds.height - originalViewBounds.height
+                    let newWindowFrame = NSRect(
+                        x: originalWindowFrame.minX,
+                        y: originalWindowFrame.minY - deltaHeight,
+                        width: originalWindowFrame.width + deltaWidth,
+                        height: originalWindowFrame.height + deltaHeight)
+                    
+                    
+                    window.setContentSize(NSSize(width: newViewBounds.width, height: newViewBounds.height))
+                    
+                    let newRequestedOrigin : NSPoint?
+                    if let originalFrameOrigin = originalFrameOriginOpt {
+                        newRequestedOrigin = NSPoint(x: originalFrameOrigin.x, y: originalFrameOrigin.y - deltaHeight)
+                        window.setFrame(newWindowFrame, display: true)
+//                        window.setFrameOrigin(newRequestedOrigin!)
+                    } else {
+                        newRequestedOrigin = nil
+                    }
+
+                    NSLog("")
+                    NSLog("## delta width = %.0f, height = %0.f", deltaWidth, deltaHeight)
+                    NSLog("## x=1, y=2, w=3, h=4 : %@", NSRect(x: 1, y: 2, width: 3, height: 4).debugDescription)
+                    NSLog("original frame opt    : %@", (originalWindowFrameOpt?.debugDescription ?? "<none>"))
+//                    NSLog("original view bounds  : %@", originalViewBounds.debugDescription)
+//                    NSLog("original frame origin : %@", originalFrameOriginOpt.debugDescription)
+                    NSLog("new frame opt:        : %@   => %@", newWindowFrame.debugDescription, window.frame.debugDescription)
+//                    NSLog("new view bounds       : %@", newViewBounds.debugDescription)
+//                    NSLog("new frame origin      : %@   => %@", newRequestedOrigin.debugDescription, window.frame.origin.debugDescription)
+                }
             },
             completionHandler: andThen
         )
     }
     
-    private func setUpDisclosureExpansion(disclosure: ButtonWithClosure, details: NSView) {
-        
+    private func setUpDisclosureExpansion(disclosure: ButtonWithClosure, details: NSView, extraAction: ((NSButton.StateValue) -> Void)? = nil) {
         disclosure.onPress {button in
-            self.animate({ details.isHidden = button.state == .off })
+            self.animate({
+                details.isHidden = button.state == .off
+                if let requestedAction = extraAction {
+                    requestedAction(button.state)
+                }
+            })
         }
         
         details.isHidden = disclosure.state == .off
+        if let requestedAction = extraAction {
+            requestedAction(disclosure.state)
+        }
         self.projectsScrollHeight.constant = self.projectsContainer.fittingSize.height
         self.view.layoutSubtreeIfNeeded()
     }
