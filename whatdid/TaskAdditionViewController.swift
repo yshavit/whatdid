@@ -82,7 +82,7 @@ class TaskAdditionViewController: NSViewController {
         if let date = until as? Date {
             AppDelegate.instance.snooze(until: date)
         } else {
-            print("error: date not set up (was \(until ?? "nil"))")
+            NSLog("error: date not set up (was \(until ?? "nil"))")
         }
     }
     

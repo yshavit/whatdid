@@ -18,7 +18,12 @@ class DayEndReportController: NSViewController {
     @IBOutlet weak var projectsScrollHeight: NSLayoutConstraint!
     @IBOutlet weak var projectsContainer: NSStackView!
     
+    @IBOutlet weak var entryStartDatePicker: NSDatePicker!
+    
     override func awakeFromNib() {
+        if #available(OSX 10.15.4, *) {
+            entryStartDatePicker.presentsCalendarOverlay = true
+        }
         do {
             DayEndReportController.disclosureArchive = try NSKeyedArchiver.archivedData(withRootObject: disclosurePrototype!, requiringSecureCoding: false)
             disclosurePrototype = nil // free it up
@@ -41,13 +46,50 @@ class DayEndReportController: NSViewController {
     }
     
     override func viewWillAppear() {
+        // Set the window's max height, using the golden ratio.
         if let screenHeight = view.window?.screen?.frame.height {
-            maxViewHeight.constant = screenHeight * 0.61802903 // get a golden ratio going
+            maxViewHeight.constant = screenHeight * 0.61802903
             NSLog("set max height to %.1f (screen height is %.1f)", maxViewHeight.constant, screenHeight)
         }
+        // Set up the date picker
+        let now = Date()
+        let defaultStartingTime = now.addingTimeInterval(-86400) // only used if we can't compute it correctly
+        entryStartDatePicker.maxDate = now
+        var thisMorning = Calendar.current.date(bySettingHour: 7, minute: 0, second: 0, of: now) ?? defaultStartingTime
+        if thisMorning > now {
+            // This morning is tomorrow morning! Bump it back a day
+            thisMorning = Calendar.current.date(byAdding: DateComponents(day: -1), to: thisMorning) ?? defaultStartingTime
+        }
+        entryStartDatePicker.dateValue = thisMorning
+        updateEntries()
+    }
+    
+    @IBAction func userChangedEntryStartDate(_ sender: Any) {
+        animate(
+            {
+                projectsContainer.subviews.forEach {$0.removeFromSuperview()}
+                let spinner = NSProgressIndicator()
+                projectsContainer.addArrangedSubview(spinner)
+                spinner.startAnimation(self)
+                spinner.isIndeterminate = true
+                spinner.style = .spinning
+                spinner.leadingAnchor.constraint(equalTo: projectsContainer.leadingAnchor).isActive = true
+                spinner.trailingAnchor.constraint(equalTo: projectsContainer.trailingAnchor).isActive = true
+        },
+            
+            duration: 0.25,
+            andThen: {
+                self.animate({ self.updateEntries() })
+            }
+        )
+    }
+    
+    private func updateEntries() {
+        let since = entryStartDatePicker.dateValue
+        NSLog("Updating entries since %@", since as NSDate)
         projectsContainer.subviews.forEach {$0.removeFromSuperview()}
         
-        let projects = Model.GroupedProjects(from: getEntries()) // TODO read from Model
+        let projects = Model.GroupedProjects(from: AppDelegate.instance.model.listEntries(since: since))
         let allProjectsTotalTime = projects.totalTime
         projects.forEach {project in
             // The vstack group for the whole project
@@ -105,17 +147,25 @@ class DayEndReportController: NSViewController {
         }
     }
     
-    private func setUpDisclosureExpansion(disclosure: ButtonWithClosure, details: NSView) {
-        disclosure.onPress {button in
-            NSAnimationContext.runAnimationGroup {context in
-                context.duration = 0.5
+    private func animate(_ action: () -> Void, duration: Double = 0.5, andThen: (() -> Void)? = nil) {
+        NSAnimationContext.runAnimationGroup(
+            {context in
+                context.duration = duration
                 context.allowsImplicitAnimation = true
-                details.isHidden = button.state == .off
+                action()
                 self.projectsScrollHeight.constant = self.projectsContainer.fittingSize.height
                 self.view.layoutSubtreeIfNeeded()
                 let newFrame = self.view.frame
                 self.view.window?.setContentSize(NSSize(width: newFrame.width, height: newFrame.height))
-            }
+            },
+            completionHandler: andThen
+        )
+    }
+    
+    private func setUpDisclosureExpansion(disclosure: ButtonWithClosure, details: NSView) {
+        
+        disclosure.onPress {button in
+            self.animate({ details.isHidden = button.state == .off })
         }
         
         details.isHidden = disclosure.state == .off
