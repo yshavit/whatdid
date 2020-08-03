@@ -92,7 +92,9 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
                 NSApp.activate(ignoringOtherApps: true)
             }
             window?.makeKeyAndOrderFront(self)
-            taskAdditionsPane.grabFocus()
+            if window?.contentView == taskAdditionsPane.view {
+                taskAdditionsPane.grabFocus()
+            }
         }
     }
     
