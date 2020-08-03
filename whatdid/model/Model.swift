@@ -152,7 +152,14 @@ class Model {
             entry.timeEntered = now
             
             do {
-                NSLog("Saving project(%@), task(%@), notes(%@)", project, task, notes)
+                NSLog(
+                    "Saving project(%@), task(%@), notes(%@): %@ (%@ to %@)",
+                    project,
+                    task,
+                    notes,
+                    TimeUtil.daysHoursMinutes(for: now.timeIntervalSince1970 - lastUpdate.timeIntervalSince1970),
+                    lastUpdate.debugDescription,
+                    now.debugDescription)
                 try context.save()
             } catch {
                 NSLog("Error saving entry: %@", error as NSError)
