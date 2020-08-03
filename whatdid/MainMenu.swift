@@ -4,8 +4,8 @@ import Cocoa
 
 class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     
-    private let POPUP_INTERVAL_MINUTES = 15
-    private let POPUP_INTERVAL_JITTER_MINUTES = 3
+    private let POPUP_INTERVAL_MINUTES = 10
+    private let POPUP_INTERVAL_JITTER_MINUTES = 2
     
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
