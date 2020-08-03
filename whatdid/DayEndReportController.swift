@@ -19,6 +19,8 @@ class DayEndReportController: NSViewController {
     @IBOutlet weak var projectsContainer: NSStackView!
     @IBOutlet weak var entryStartDatePicker: NSDatePicker!
     
+    @IBOutlet weak var versionLabel: NSTextField!
+    
     override func awakeFromNib() {
         if #available(OSX 10.15.4, *) {
             entryStartDatePicker.presentsCalendarOverlay = true
@@ -29,6 +31,7 @@ class DayEndReportController: NSViewController {
         } catch {
             NSLog("Couldn't archive disclosure button: %@", error as NSError)
         }
+        versionLabel.stringValue = Version.pretty
     }
     
     private static func createDisclosure(state: NSButton.StateValue)  -> ButtonWithClosure {

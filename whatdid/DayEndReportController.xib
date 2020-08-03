@@ -15,6 +15,7 @@
                 <outlet property="projectsContainer" destination="UTB-GH-C4K" id="QTl-1c-03i"/>
                 <outlet property="projectsScroll" destination="LDw-zz-ziZ" id="ccf-fo-s0s"/>
                 <outlet property="projectsScrollHeight" destination="o6f-K3-YH7" id="2jK-fl-LC2"/>
+                <outlet property="versionLabel" destination="d5X-74-7gY" id="PM5-Ti-8wa"/>
                 <outlet property="view" destination="Qn8-JX-HeH" id="y6a-6x-Afv"/>
             </connections>
         </customObject>
@@ -30,10 +31,10 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qn8-JX-HeH" userLabel="Top">
-            <rect key="frame" x="0.0" y="0.0" width="400" height="74"/>
+            <rect key="frame" x="0.0" y="0.0" width="400" height="72"/>
             <subviews>
                 <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pKe-k9-zAn">
-                    <rect key="frame" x="0.0" y="50" width="267" height="24"/>
+                    <rect key="frame" x="0.0" y="48" width="267" height="24"/>
                     <subviews>
                         <textField identifier="header_label" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-Lm-qUL" userLabel="Header">
                             <rect key="frame" x="-2" y="4" width="118" height="16"/>
@@ -46,7 +47,7 @@
                         <datePicker verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="I9K-te-jfd">
                             <rect key="frame" x="122" y="0.0" width="148" height="28"/>
                             <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="578-tE-w1E">
-                                <font key="font" metaFont="message" size="11"/>
+                                <font key="font" metaFont="controlContent" size="11"/>
                                 <date key="date" timeIntervalSinceReferenceDate="-595929600">
                                     <!--1982-02-12 16:00:00 +0000-->
                                 </date>
@@ -74,10 +75,10 @@
                     </customSpacing>
                 </stackView>
                 <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="hAT-mx-IFG">
-                    <rect key="frame" x="0.0" y="43" width="400" height="5"/>
+                    <rect key="frame" x="0.0" y="41" width="400" height="5"/>
                 </box>
                 <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LDw-zz-ziZ" userLabel="Projects scroll">
-                    <rect key="frame" x="0.0" y="25" width="400" height="16"/>
+                    <rect key="frame" x="0.0" y="23" width="400" height="16"/>
                     <clipView key="contentView" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vpo-4L-DGR" userLabel="Projects clip">
                         <rect key="frame" x="0.0" y="0.0" width="400" height="16"/>
                         <subviews>
@@ -139,18 +140,19 @@
                     </scroller>
                 </scrollView>
                 <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="syR-WQ-af6">
-                    <rect key="frame" x="0.0" y="18" width="400" height="5"/>
+                    <rect key="frame" x="0.0" y="16" width="400" height="5"/>
                 </box>
                 <textField identifier="projects_footer" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d5X-74-7gY" userLabel="Footer">
-                    <rect key="frame" x="-2" y="0.0" width="111" height="16"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" title="Some footer stuff" id="kVE-kT-ED3" userLabel="Footer cell">
-                        <font key="font" metaFont="system"/>
+                    <rect key="frame" x="-2" y="0.0" width="402" height="14"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="version" id="kVE-kT-ED3" userLabel="Footer cell">
+                        <font key="font" metaFont="controlContent" size="11"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
             </subviews>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="d5X-74-7gY" secondAttribute="trailing" constant="2" id="IbK-aX-und"/>
                 <constraint firstItem="hAT-mx-IFG" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" id="nCY-3T-gJp"/>
                 <constraint firstItem="LDw-zz-ziZ" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" id="oDo-5Q-hjJ"/>
             </constraints>
