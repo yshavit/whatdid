@@ -17,7 +17,6 @@ class DayEndReportController: NSViewController {
     @IBOutlet weak var projectsScroll: NSScrollView!
     @IBOutlet weak var projectsScrollHeight: NSLayoutConstraint!
     @IBOutlet weak var projectsContainer: NSStackView!
-    
     @IBOutlet weak var entryStartDatePicker: NSDatePicker!
     
     override func awakeFromNib() {
@@ -59,14 +58,8 @@ class DayEndReportController: NSViewController {
         updateEntries()
     }
     
-    func thisMorning(assumingNow: Date) -> Date {
-        let defaultStartingTime = assumingNow.addingTimeInterval(-86400) // only used if we can't compute it correctly
-        var thisMorning = Calendar.current.date(bySettingHour: 7, minute: 0, second: 0, of: assumingNow) ?? defaultStartingTime
-        if thisMorning > assumingNow {
-            // This morning is tomorrow morning! Bump it back a day
-            thisMorning = Calendar.current.date(byAdding: DateComponents(day: -1), to: thisMorning) ?? defaultStartingTime
-        }
-        return thisMorning
+    func thisMorning(assumingNow now: Date) -> Date {
+        return TimeUtil.dateForTime(.previous, hh: 07, mm: 00, assumingNow: now)
     }
     
     @IBAction func userChangedEntryStartDate(_ sender: Any) {

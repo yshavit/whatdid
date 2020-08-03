@@ -27,6 +27,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(.accessory)
         focusHotKey.keyDownHandler = { self.mainMenu.focus() }
         mainMenu.schedulePopup()
+        scheduleEndOfDaySummary()
+    }
+    
+    func scheduleEndOfDaySummary() {
+        let scheduleEndOfDay = TimeUtil.dateForTime(.next, hh: 19, mm: 00)
+        let timer = Timer(fire: scheduleEndOfDay, interval: 0, repeats: false, block: {_ in
+            self.mainMenu.show(.dailyEnd)
+            self.scheduleEndOfDaySummary()
+        })
+        NSLog("Scheduling summary at %@", scheduleEndOfDay.debugDescription)
+        RunLoop.current.add(timer, forMode: .default)
     }
     
     func applicationDidResignActive(_ notification: Notification) {

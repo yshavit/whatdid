@@ -42,4 +42,31 @@ class TimeUtil {
             && cal.component(.month, from: day1) == cal.component(.month, from: day2)
             && cal.component(.day, from: day1) == cal.component(.day, from: day2)
     }
+    
+    static func dateForTime(_ direction: TimeDirection, hh: Int, mm: Int, assumingNow: Date? = nil) -> Date {
+        let now = assumingNow ?? Date()
+        let cal = Calendar.current
+        var result = cal.date(bySettingHour: hh, minute: mm, second: 00, of: now)
+        NSLog("Finding %@ time at %02d:%02d. Now=%@, initial result = %@", direction.rawValue, hh, mm, now.debugDescription, result.debugDescription)
+        switch direction {
+        case .previous:
+            // We want a result < now, so if result > now, decrement it by a day
+            if let actualResult = result, actualResult > now {
+                result = cal.date(byAdding: .day, value: -1, to: actualResult)
+                NSLog("adjusting -1 day: %@", result.debugDescription)
+            }
+        case .next:
+            // We want a result > now, so if result < now, increment it by a day
+            if let actualResult = result, actualResult < now {
+                result = cal.date(byAdding: .day, value: 1, to: actualResult)
+                NSLog("adjusting +1 day: %@", result.debugDescription)
+            }
+        }
+        return result!
+    }
+    
+    enum TimeDirection : String {
+        case previous
+        case next
+    }
 }
