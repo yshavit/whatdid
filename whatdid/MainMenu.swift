@@ -73,12 +73,21 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
             window?.contentViewController = taskAdditionsPane
         }
         
+        window?.layoutIfNeeded()
         if let mainFrame = NSScreen.main?.visibleFrame, let button = statusItem.button {
             let buttonBoundsAbsolute = button.window?.convertToScreen(button.bounds)
-            let pos = NSPoint(
+            var pos = NSPoint(
                 x: buttonBoundsAbsolute?.minX ?? .zero,
                 y: mainFrame.origin.y + mainFrame.height)
-            window?.setFrameTopLeftPoint(pos)
+            if let myWindow = window {
+                if let screen = myWindow.screen {
+                    let tooFarLeftBy = (pos.x + myWindow.frame.width) - screen.frame.width
+                    if tooFarLeftBy > 0 {
+                        pos.x -= tooFarLeftBy
+                    }
+                }
+                window?.setFrameTopLeftPoint(pos)
+            }
         }
         showWindow(self)
         DispatchQueue.main.async {
