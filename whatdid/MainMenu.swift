@@ -12,6 +12,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     private var taskAdditionsPane : TaskAdditionViewController!
     private var windowContents = WindowContents.scheduledPtn
     private var shouldSchedulePopupOnClose = false
+    private var shouldShowDailySummaryOnClose = false
     private var snoozing = false
     
     enum WindowContents {
@@ -64,6 +65,10 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
             shouldSchedulePopupOnClose = true
         }
         if window?.isVisible ?? false {
+            if contents == .dailyEnd {
+                NSLog("Deferring daily report until the current window closes.")
+                shouldShowDailySummaryOnClose = true
+            }
             return
         }
         switch (contents) {
@@ -114,6 +119,17 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
             schedulePopup()
         }
         shouldSchedulePopupOnClose = false
+        
+        if shouldShowDailySummaryOnClose {
+            shouldShowDailySummaryOnClose = false
+            NSLog("Showing deferred daily report")
+            RunLoop.current.perform(inModes: [RunLoop.Mode.common], block: { self.show(.dailyEnd) })
+            perform(#selector(showDailyReport), with: nil, afterDelay: TimeInterval.zero, inModes: [RunLoop.Mode.common])
+        }
+    }
+    
+    @objc private func showDailyReport() {
+        show(.dailyEnd)
     }
 
     func schedulePopup() {
