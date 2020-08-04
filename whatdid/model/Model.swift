@@ -4,10 +4,10 @@ import Cocoa
 
 class Model {
     
-    private static let BUILTIN_PROJECT = "\0__built_in"
+    private static let BREAK_PROJECT = "break"
     private static let BREAK_TASK = "break"
     private static let BREAK_TASK_NOTES = ""
-    private static let NO_BUILTINS = NSPredicate(format: "project != %@", BUILTIN_PROJECT)
+    private static let NO_BUILTINS = NSPredicate(format: "project != %@", BREAK_PROJECT)
     
     @Atomic private var lastEntryDate : Date
     
@@ -38,7 +38,7 @@ class Model {
                 request.predicate = Model.NO_BUILTINS
                 result = try request.execute()
             } catch {
-                print("couldn't load projects: \(error)")
+                NSLog("couldn't load projects: %@", error as NSError)
                 result = []
             }
         }
@@ -62,7 +62,7 @@ class Model {
                 request.fetchLimit = 10
                 projects = try request.execute()
             } catch {
-                print("couldn't load projects: \(error)")
+                NSLog("couldn't load projects: %@", error as NSError)
                 projects = []
             }
             results = projects.map({$0.project})
@@ -92,7 +92,7 @@ class Model {
                 request.fetchLimit = 10
                 tasks = try request.execute()
             } catch {
-                print("couldn't load projects: \(error)")
+                NSLog("couldn't load projects: %@", error as NSError)
                 tasks = []
             }
             results = tasks.map({$0.task})
@@ -101,30 +101,32 @@ class Model {
         return results
     }
     
-    func printAll() {
+    func listEntries(since: Date) -> [FlatEntry] {
+        var results : [FlatEntry] = []
         container.viewContext.performAndWait {
             do {
-                let projectsRequest = NSFetchRequest<Project>(entityName: "Project")
-                let projects = try projectsRequest.execute()
-                for project in projects {
-                    print("\(project.project) (\(project.lastUsed))")
-                    for task in project.tasks {
-                        print("    \(task.task) (\(task.lastUsed))")
-                        for entry in task.entries {
-                            print("        \(entry.notes ?? "<no notes>"): from \(entry.timeApproximatelyStarted) to \(entry.timeEntered)")
-                        }
-                    }
-                }
-                print("")
+                let request = NSFetchRequest<Entry>(entityName: "Entry")
+                request.predicate = NSPredicate(format: "timeApproximatelyStarted >= %@", since as NSDate)
+                let entries = try request.execute()
+                results = entries.map({entry in
+                    FlatEntry(
+                        from: entry.timeApproximatelyStarted,
+                        to: entry.timeEntered,
+                        project: entry.task.project.project.trimmingCharacters(in: .controlCharacters),
+                        task: entry.task.task,
+                        notes: entry.notes
+                    )
+                })
             } catch {
-                print("couldn't list everything: \(error)")
+                NSLog("couldn't load projects: %@", error as NSError)
+                results = []
             }
-            
         }
+        return results
     }
     
     func addBreakEntry(callback: @escaping () -> ()) {
-        addEntryNow(project: Model.BUILTIN_PROJECT, task: Model.BREAK_TASK, notes: Model.BREAK_TASK_NOTES, callback: callback)
+        addEntryNow(project: Model.BREAK_PROJECT, task: Model.BREAK_TASK, notes: Model.BREAK_TASK_NOTES, callback: callback)
     }
     
     func addEntryNow(project: String, task: String, notes: String, callback: @escaping ()->()) {
@@ -150,12 +152,113 @@ class Model {
             entry.timeEntered = now
             
             do {
-                NSLog("Saving project(%@), task(%@), notes(%@)", project, task, notes)
+                NSLog(
+                    "Saving project(%@), task(%@), notes(%@): %@ (%@ to %@)",
+                    project,
+                    task,
+                    notes,
+                    TimeUtil.daysHoursMinutes(for: now.timeIntervalSince1970 - lastUpdate.timeIntervalSince1970),
+                    lastUpdate.debugDescription,
+                    now.debugDescription)
                 try context.save()
             } catch {
-                print("Error saving entry: %@", error)
+                NSLog("Error saving entry: %@", error as NSError)
             }
             callback()
         })
+    }
+    
+    class GroupedProjects {
+        var groupedProjects = [String: GroupedProject]()
+        
+        init(from entries: [FlatEntry]) {
+            entries.forEach {entry in add(flatEntry: entry) }
+        }
+        
+        final func add(flatEntry entry: FlatEntry) {
+            var project = groupedProjects[entry.project]
+            if project == nil {
+                project = GroupedProject(name: entry.project)
+                groupedProjects[entry.project] = project
+            }
+            project?.add(flatEntry: entry)
+        }
+        
+        func forEach(_ block: (GroupedProject) -> Void) {
+            groupedProjects.values.map { ($0.totalTime, $0) }.sorted(by: { $0.0 > $1.0 }).map { $0.1 }.forEach(block)
+        }
+        
+        var totalTime: TimeInterval {
+            get {
+                return groupedProjects.values.compactMap { $0.totalTime }.reduce(0, +)
+            }
+        }
+    }
+    
+    class GroupedProject {
+        let name: String;
+        private var groupedTasks = [String: GroupedTask]()
+        
+        init(name: String) {
+            self.name = name
+        }
+        
+        func add(flatEntry entry: FlatEntry) {
+            var task = groupedTasks[entry.task]
+            if task == nil {
+                task = GroupedTask(name: entry.task)
+                groupedTasks[entry.task] = task
+            }
+            task!.add(flatEntry: entry)
+        }
+        
+        func forEach(_ block: (GroupedTask) -> Void) {
+            // first sort in descending totalTime order
+            groupedTasks.values.map { ($0.totalTime, $0) } . sorted(by: { $0.0 > $1.0 }) . map { $0.1 } . forEach(block)
+        }
+        
+        var totalTime: TimeInterval {
+            get {
+                return groupedTasks.values.compactMap { $0.totalTime }.reduce(0, +)
+            }
+        }
+    }
+    
+    class GroupedTask {
+        let name: String
+        private var entries = [FlatEntry]()
+        
+        init(name: String) {
+            self.name = name
+        }
+        
+        func add(flatEntry entry: FlatEntry) {
+            entries.append(entry)
+        }
+        
+        func forEach(_ block: (FlatEntry) -> Void) {
+            entries.sorted(by: {$0.from < $1.from}).forEach(block)
+        }
+        
+        var totalTime: TimeInterval {
+            get {
+                return entries.compactMap { $0.duration }.reduce(0, +)
+            }
+        }
+    }
+    
+    struct FlatEntry {
+        
+        let from : Date
+        let to : Date
+        let project : String
+        let task : String
+        let notes : String?
+        
+        var duration: TimeInterval {
+            get {
+                return (to.timeIntervalSince1970 - from.timeIntervalSince1970)
+            }
+        }
     }
 }

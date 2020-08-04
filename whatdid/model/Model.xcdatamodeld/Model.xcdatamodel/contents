@@ -5,6 +5,9 @@
         <attribute name="timeApproximatelyStarted" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="timeEntered" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="task" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Task" inverseName="entries" inverseEntity="Task"/>
+        <fetchIndex name="byTimeEntered">
+            <fetchIndexElement property="timeApproximatelyStarted" type="Binary" order="descending"/>
+        </fetchIndex>
     </entity>
     <entity name="Project" representedClassName="Project" versionHashModifier="1" syncable="YES">
         <attribute name="lastUsed" attributeType="Date" usesScalarValueType="NO"/>
