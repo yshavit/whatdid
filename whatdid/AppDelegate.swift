@@ -31,12 +31,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func scheduleEndOfDaySummary() {
-        let scheduleEndOfDay = TimeUtil.dateForTime(.next, hh: 18, mm: 30)
+        let plusOrMinus : TimeInterval = 30
+        let scheduleEndOfDay = TimeUtil.dateForTime(.next, hh: 18, mm: 30).addingTimeInterval(-plusOrMinus)
         let timer = Timer(fire: scheduleEndOfDay, interval: 0, repeats: false, block: {_ in
             self.mainMenu.show(.dailyEnd)
             self.scheduleEndOfDaySummary()
         })
-        NSLog("Scheduling summary at %@", scheduleEndOfDay.debugDescription)
+        timer.tolerance = plusOrMinus * 2
+        NSLog("Scheduling summary at %@, +/- %.0fs", scheduleEndOfDay.debugDescription, plusOrMinus)
         RunLoop.current.add(timer, forMode: .default)
     }
     
