@@ -8,10 +8,6 @@ class DayEndReportController: NSViewController {
         super.viewDidLoad()
         // Do view setup here.
     }
-    /// I don't know how to programatically make a nice disclosure button, so I'll just let the xib do it for me :-)
-    @IBOutlet var disclosurePrototype: ButtonWithClosure!
-    // The serialized version of `disclosurePrototype`
-    private static var disclosureArchive : Data!
     
     @IBOutlet weak var maxViewHeight: NSLayoutConstraint!
     @IBOutlet weak var projectsScroll: NSScrollView!
@@ -25,26 +21,16 @@ class DayEndReportController: NSViewController {
         if #available(OSX 10.15.4, *) {
             entryStartDatePicker.presentsCalendarOverlay = true
         }
-        do {
-            DayEndReportController.disclosureArchive = try NSKeyedArchiver.archivedData(withRootObject: disclosurePrototype!, requiringSecureCoding: false)
-            disclosurePrototype = nil // free it up
-        } catch {
-            NSLog("Couldn't archive disclosure button: %@", error as NSError)
-        }
         versionLabel.stringValue = Version.pretty
     }
     
     private static func createDisclosure(state: NSButton.StateValue)  -> ButtonWithClosure {
-        do {
-            // TODO eventually I should look at the xib xml and just figure out what it's doing
-            let new = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(disclosureArchive)
-            let button = new as! ButtonWithClosure
-            button.state = state
-            return button
-        } catch {
-            NSLog("error: %@", error as NSError) // TODO return default?
-            fatalError("error: \(error)")
-        }
+        let result = ButtonWithClosure()
+        result.state = state
+        result.setButtonType(.pushOnPushOff)
+        result.bezelStyle = .disclosure
+        result.imagePosition = .imageOnly
+        return result
     }
     
     override func viewWillAppear() {
