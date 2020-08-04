@@ -31,7 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func scheduleEndOfDaySummary() {
-        let scheduleEndOfDay = TimeUtil.dateForTime(.next, hh: 19, mm: 00)
+        let scheduleEndOfDay = TimeUtil.dateForTime(.next, hh: 18, mm: 30)
         let timer = Timer(fire: scheduleEndOfDay, interval: 0, repeats: false, block: {_ in
             self.mainMenu.show(.dailyEnd)
             self.scheduleEndOfDaySummary()
