@@ -20,6 +20,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        #if UI_TEST
+        if CommandLine.arguments.compactMap({DebugMode(fromStringIfWithPrefix: $0)}).contains(.buttonWithClosure) {
+            print("Found debug mode")
+        }
+        #endif
+        
         NSLog("Starting whatdid with build %@", Version.pretty)
         AppDelegate.DEBUG_DATE_FORMATTER.timeZone = TimeZone.autoupdatingCurrent
         // Our Info.plist starts us off as background. Now that we're started, become an accessory app.
