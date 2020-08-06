@@ -23,25 +23,13 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "UI Test"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
             skipped = "NO"
-            parallelizable = "YES"
-            testExecutionOrdering = "random">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7E8C04E923714F0800A0C3A6"
-               BuildableName = "whatdidTests.xctest"
-               BlueprintName = "whatdidTests"
-               ReferencedContainer = "container:whatdid.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "YES"
             testExecutionOrdering = "random">
             <BuildableReference
                BuildableIdentifier = "primary"
@@ -54,7 +42,7 @@
       </Testables>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "UI Test"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
