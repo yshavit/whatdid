@@ -12,6 +12,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var mainMenu: MainMenu!
     let focusHotKey = HotKey(key: .x, modifiers: [.command, .shift])
     private var deactivationHooks : Atomic<[() -> Void]> = Atomic(wrappedValue: [])
+    #if UI_TEST
+    private var uiTestWindow : UiTestWindow!
+    #endif
     
     func onDeactivation(_ block: @escaping () -> Void) {
         deactivationHooks.modifyInPlace {arr in
@@ -28,6 +31,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         focusHotKey.keyDownHandler = { self.mainMenu.focus() }
         mainMenu.schedulePopup()
         scheduleEndOfDaySummary()
+        #if UI_TEST
+        if CommandLine.arguments.compactMap({DebugMode(fromStringIfWithPrefix: $0)}).contains(.buttonWithClosure) {
+            uiTestWindow = UiTestWindow()
+            uiTestWindow.show(DebugMode.buttonWithClosure)
+        }
+        #endif
     }
     
     func scheduleEndOfDaySummary() {

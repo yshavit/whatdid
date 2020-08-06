@@ -28,6 +28,29 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7E8C04E923714F0800A0C3A6"
+               BuildableName = "whatdidTests.xctest"
+               BlueprintName = "whatdidTests"
+               ReferencedContainer = "container:whatdid.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "YES"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7E8C04F423714F0800A0C3A6"
+               BuildableName = "whatdidUITests.xctest"
+               BlueprintName = "whatdidUITests"
+               ReferencedContainer = "container:whatdid.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

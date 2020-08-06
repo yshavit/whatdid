@@ -32,6 +32,7 @@ import Cocoa
         return mapUnsafe {_ in newValue}
     }
 
+    /// Modifies the current value, and returns it
     mutating func modifyInPlace(_ block: (inout T) -> Void) {
         mapUnsafe {curr in
             block(&curr)
@@ -39,12 +40,14 @@ import Cocoa
         }
     }
     
+    /// Maps the old value to a new one, and returns the old one
     @discardableResult mutating func map(_ map: (T) -> T) -> T {
         return mapUnsafe {curr in
             map(curr) // "map" can't modify curr, so we know the mapUnsafe return value is the unchanged old value
         }
     }
 
+    /// Performs a map, and returns the old value
     @discardableResult private mutating func mapUnsafe(_ map: (inout T) -> T) -> T {
         lock.lock()
         let oldValue = value
