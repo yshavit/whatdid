@@ -30,18 +30,6 @@
       <Testables>
          <TestableReference
             skipped = "NO"
-            parallelizable = "YES"
-            testExecutionOrdering = "random">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7E8C04E923714F0800A0C3A6"
-               BuildableName = "whatdidTests.xctest"
-               BlueprintName = "whatdidTests"
-               ReferencedContainer = "container:whatdid.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
             testExecutionOrdering = "random">
             <BuildableReference
                BuildableIdentifier = "primary"

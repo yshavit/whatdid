@@ -40,17 +40,6 @@
                ReferencedContainer = "container:whatdid.xcodeproj">
             </BuildableReference>
          </TestableReference>
-         <TestableReference
-            skipped = "YES"
-            testExecutionOrdering = "random">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7E8C04F423714F0800A0C3A6"
-               BuildableName = "whatdidUITests.xctest"
-               BlueprintName = "whatdidUITests"
-               ReferencedContainer = "container:whatdid.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
