@@ -15,24 +15,28 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
         let viewToAdd : NSView
         switch mode {
         case .buttonWithClosure:
-            let button = ButtonWithClosure()
-            button.setAccessibilityLabel("button_with_closure")
-            var counter = Atomic(wrappedValue: 1)
-            button.onPress {button in
-                let currentCount = counter.map { $0 + 1}
-                let labelString = "count=\(currentCount), pressed on self=\(true)"
-                let label = NSTextField(labelWithString: labelString)
-                label.setAccessibilityEnabled(true)
-                label.setAccessibilityLabel(labelString)
-                label.setAccessibilityIdentifier("dynamiclabel_\(currentCount)")
-                self.mainStack.addArrangedSubview(label)
-            }
-            viewToAdd = button
+            viewToAdd = buttonWithClosure()
         }
         mainStack.subviews.forEach {$0.removeFromSuperview()}
         mainStack.addArrangedSubview(viewToAdd)
         showWindow(self)
         NSApp.activate(ignoringOtherApps: true)
+    }
+    
+    func buttonWithClosure() -> NSView {
+        let button = ButtonWithClosure()
+        button.setAccessibilityLabel("button_with_closure")
+        var counter = Atomic(wrappedValue: 1)
+        button.onPress {button in
+            let currentCount = counter.map { $0 + 1}
+            let labelString = "count=\(currentCount), pressed on self=\(true)"
+            let label = NSTextField(labelWithString: labelString)
+            label.setAccessibilityEnabled(true)
+            label.setAccessibilityLabel(labelString)
+            label.setAccessibilityIdentifier("dynamiclabel_\(currentCount)")
+            self.mainStack.addArrangedSubview(label)
+        }
+        return button
     }
 
 }
