@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: list test schemes
+      run: xcodebuild test -list
     - name: Build
       run: xcodebuild build -scheme whatdid -configuration 'UI Test'
     - name: Run unit tests
