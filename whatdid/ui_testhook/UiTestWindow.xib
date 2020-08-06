@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="UiTestWindow" customModule="whatdid" customModuleProvider="target">
+            <connections>
+                <outlet property="mainStack" destination="ves-sa-wmN" id="SG3-b0-hKy"/>
+                <outlet property="window" destination="QvC-M9-y7g" id="yih-Lp-0Bp"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window identifier="uitestwindow" title="UI Test Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="196" y="240" width="272" height="158"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <view key="contentView" identifier="uitestwindowcontentview" wantsLayer="YES" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EiT-Mj-1SZ">
+                <rect key="frame" x="0.0" y="0.0" width="303" height="16"/>
+                <subviews>
+                    <stackView identifier="MainStack" distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ves-sa-wmN">
+                        <rect key="frame" x="0.0" y="0.0" width="303" height="16"/>
+                        <subviews>
+                            <textField identifier="uitest_placeholder" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fEa-WP-i2Z">
+                                <rect key="frame" x="-2" y="0.0" width="307" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Window for testing single UI components or views" id="qzU-bu-pNR">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <visibilityPriorities>
+                            <integer value="1000"/>
+                        </visibilityPriorities>
+                        <customSpacing>
+                            <real value="3.4028234663852886e+38"/>
+                        </customSpacing>
+                    </stackView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="ves-sa-wmN" firstAttribute="height" secondItem="EiT-Mj-1SZ" secondAttribute="height" id="9xY-DC-nrI"/>
+                    <constraint firstItem="ves-sa-wmN" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="Mfo-rP-TLi"/>
+                    <constraint firstItem="ves-sa-wmN" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="SVM-tD-LKV"/>
+                    <constraint firstItem="ves-sa-wmN" firstAttribute="width" secondItem="EiT-Mj-1SZ" secondAttribute="width" id="u6o-xd-cSd"/>
+                </constraints>
+            </view>
+            <point key="canvasLocation" x="34.5" y="91"/>
+        </window>
+    </objects>
+</document>

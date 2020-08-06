@@ -18,18 +18,26 @@ class whatdidUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() {
-        // UI tests must launch the application that they test.
-        
+    func testButtonWithClosure() {
         let app = XCUIApplication()
         app.launchArguments = [DebugMode.buttonWithClosure.toLaunchArgument()]
         app.launch()
         
-//        app.menuBars.statusItems["✐"].click()
-//        app.windows["What are you working on?"]/*@START_MENU_TOKEN@*/.comboBoxes["project"]/*[[".groups.comboBoxes[\"project\"]",".comboBoxes[\"project\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.typeText("hello world\r")
-//        
+        let window = XCUIApplication().windows["UI Test Window"]
+        let button = window.buttons["Button"]
+        let createdLabels = window.staticTexts.matching(NSPredicate(format: "label CONTAINS 'pressed on self'"))
+        XCTAssertEqual(createdLabels.count, 0)
         
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        button.click()
+        XCTAssertEqual(createdLabels.count, 1)
+        XCTAssertEqual(
+            ["count=1, pressed on self=true"],
+            createdLabels.allElementsBoundByIndex.map({$0.label}))
+        
+        button.click()
+        XCTAssertEqual(createdLabels.count, 2)
+        XCTAssertEqual(
+            ["count=1, pressed on self=true", "count=2, pressed on self=true"],
+            createdLabels.allElementsBoundByIndex.map({$0.label}))
     }
 }
