@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="TaskAdditionViewController" customModule="whatdid" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner" customClass="PtnViewController" customModule="whatdid" customModuleProvider="target">
             <connections>
                 <outlet property="breakButton" destination="2EZ-2e-8Xo" id="n7F-l7-UP1"/>
                 <outlet property="noteField" destination="Zy9-oh-6fD" id="nfd-Ms-aMS"/>
@@ -203,6 +202,6 @@
             </constraints>
             <point key="canvasLocation" x="-126.5" y="-152.5"/>
         </view>
-        <viewController title="Task Addition View Controller" nibName="TaskAdditionViewController" id="bP9-Bw-QYO" customClass="TaskAdditionViewController" customModule="whatdid" customModuleProvider="target"/>
+        <viewController title="Task Addition View Controller" nibName="TaskAdditionViewController" id="bP9-Bw-QYO" customClass="PtnViewController" customModule="whatdid" customModuleProvider="target"/>
     </objects>
 </document>

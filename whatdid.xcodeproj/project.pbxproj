@@ -28,7 +28,7 @@
 		7E970D6B24DA850D00F634AB /* UiTestWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E970D6A24DA850D00F634AB /* UiTestWindow.swift */; };
 		7EA1DFC024CA99BF003AD2BC /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */; };
 		7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04E123714F0800A0C3A6 /* MainMenu.xib */; };
-		7EA6E22824BD6C5F004B9297 /* TaskAdditionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA6E22724BD6C5F004B9297 /* TaskAdditionViewController.xib */; };
+		7EA6E22824BD6C5F004B9297 /* PtnViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */; };
 		7EAB5ECD24DA366600E18097 /* TimeUtilTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */; };
 		7EBE61E724DBED5A000B2CB3 /* DebugModeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBFC7C124DA71B6007D5CAE /* DebugModeTest.swift */; };
 		7EBFC7C024DA4CB4007D5CAE /* DebugMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBFC7BF24DA4CB4007D5CAE /* DebugMode.swift */; };
@@ -36,7 +36,7 @@
 		7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA369224D60FCD00F5E368 /* ButtonWithClosure.swift */; };
 		7EDA369524D6A95B00F5E368 /* TimeUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA369424D6A95B00F5E368 /* TimeUtil.swift */; };
 		7EE427AB24C42EBD002C51F3 /* AutoCompletingComboBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE427AA24C42EBD002C51F3 /* AutoCompletingComboBox.swift */; };
-		7EFEE80223B16EA6002928A2 /* TaskAdditionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFEE80123B16EA6002928A2 /* TaskAdditionViewController.swift */; };
+		7EFEE80223B16EA6002928A2 /* PtnViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFEE80123B16EA6002928A2 /* PtnViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,7 +83,7 @@
 		7E970D6824DA84AF00F634AB /* UiTestWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UiTestWindow.xib; sourceTree = "<group>"; };
 		7E970D6A24DA850D00F634AB /* UiTestWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UiTestWindow.swift; sourceTree = "<group>"; };
 		7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
-		7EA6E22724BD6C5F004B9297 /* TaskAdditionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskAdditionViewController.xib; sourceTree = "<group>"; };
+		7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PtnViewController.xib; sourceTree = "<group>"; };
 		7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TimeUtilTest.swift; path = whatdidTests/util/TimeUtilTest.swift; sourceTree = SOURCE_ROOT; };
 		7EBFC7BF24DA4CB4007D5CAE /* DebugMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugMode.swift; sourceTree = "<group>"; };
 		7EBFC7C124DA71B6007D5CAE /* DebugModeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugModeTest.swift; sourceTree = "<group>"; };
@@ -91,7 +91,7 @@
 		7EDA369224D60FCD00F5E368 /* ButtonWithClosure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithClosure.swift; sourceTree = "<group>"; };
 		7EDA369424D6A95B00F5E368 /* TimeUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeUtil.swift; sourceTree = "<group>"; };
 		7EE427AA24C42EBD002C51F3 /* AutoCompletingComboBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletingComboBox.swift; sourceTree = "<group>"; };
-		7EFEE80123B16EA6002928A2 /* TaskAdditionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskAdditionViewController.swift; sourceTree = "<group>"; };
+		7EFEE80123B16EA6002928A2 /* PtnViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PtnViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,8 +172,8 @@
 				7E07C3B724D121770007FD23 /* DayEndReportController.xib */,
 				7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */,
 				7E8C04E123714F0800A0C3A6 /* MainMenu.xib */,
-				7EFEE80123B16EA6002928A2 /* TaskAdditionViewController.swift */,
-				7EA6E22724BD6C5F004B9297 /* TaskAdditionViewController.xib */,
+				7EFEE80123B16EA6002928A2 /* PtnViewController.swift */,
+				7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */,
 				7EAC528A24CFC94700A13B72 /* boilerplate */,
 				7E37A27524BFF73E005BA1DF /* model */,
 				7E970D6424DA817B00F634AB /* ui_testhook */,
@@ -370,7 +370,7 @@
 			files = (
 				7E07C3B924D121770007FD23 /* DayEndReportController.xib in Resources */,
 				7E8C04E023714F0800A0C3A6 /* Assets.xcassets in Resources */,
-				7EA6E22824BD6C5F004B9297 /* TaskAdditionViewController.xib in Resources */,
+				7EA6E22824BD6C5F004B9297 /* PtnViewController.xib in Resources */,
 				7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */,
 				7E970D6924DA84AF00F634AB /* UiTestWindow.xib in Resources */,
 			);
@@ -422,7 +422,7 @@
 				7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */,
 				7EDA368F24D54EA300F5E368 /* FlippedView.swift in Sources */,
 				7EBFC7C024DA4CB4007D5CAE /* DebugMode.swift in Sources */,
-				7EFEE80223B16EA6002928A2 /* TaskAdditionViewController.swift in Sources */,
+				7EFEE80223B16EA6002928A2 /* PtnViewController.swift in Sources */,
 				7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */,
 				7E37A29B24C0293E005BA1DF /* Entry+CoreDataProperties.swift in Sources */,
 				7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */,

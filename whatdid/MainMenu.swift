@@ -9,7 +9,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
-    private var taskAdditionsPane : TaskAdditionViewController!
+    private var taskAdditionsPane : PtnViewController!
     private var windowContents = WindowContents.scheduledPtn
     private var shouldSchedulePopupOnClose = false
     private var shouldShowDailySummaryOnClose = false
@@ -27,7 +27,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         window?.level = .floating
-        taskAdditionsPane = TaskAdditionViewController()
+        taskAdditionsPane = PtnViewController()
         taskAdditionsPane.closeAction = {
             DispatchQueue.main.async {
                 self.window?.close()

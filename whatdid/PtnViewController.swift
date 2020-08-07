@@ -2,7 +2,7 @@
 
 import Cocoa
 
-class TaskAdditionViewController: NSViewController {
+class PtnViewController: NSViewController {
     
     @IBOutlet weak var projectField: AutoCompletingComboBox!
     @IBOutlet weak var taskField: AutoCompletingComboBox!
