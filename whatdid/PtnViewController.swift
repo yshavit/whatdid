@@ -2,11 +2,11 @@
 
 import Cocoa
 
-class TaskAdditionViewController: NSViewController {
+class PtnViewController: NSViewController {
     
     @IBOutlet weak var projectField: AutoCompletingComboBox!
     @IBOutlet weak var taskField: AutoCompletingComboBox!
-    @IBOutlet weak var noteField: NSComboBox!
+    @IBOutlet weak var noteField: NSTextField!
     @IBOutlet weak var breakButton: NSButton!
     
     @IBOutlet weak var snoozeButton: NSButton!
@@ -133,9 +133,5 @@ class TaskAdditionViewController: NSViewController {
                 callback: closeAction
             )
         }
-    }
-    
-    @IBAction func projectOrTaskEnter(_ sender: NSTextField) {
-        sender.nextKeyView?.becomeFirstResponder()
     }
 }
