@@ -1,0 +1,17 @@
+name: Build as release
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build release
+      run: xcodebuild build -scheme whatdid-release
