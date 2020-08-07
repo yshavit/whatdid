@@ -28,10 +28,11 @@ class AutoCompletingComboBox: NSComboBox, NSComboBoxDelegate {
 
     override func textDidEndEditing(_ notification: Notification) {
         super.textDidEndEditing(notification)
-        let isBacktab = notification.userInfo?["NSTextMovement"] as? Int == NSTextMovement.backtab.rawValue
-        if !isBacktab {
+        let textMovement = notification.userInfo?["NSTextMovement"] as? Int
+        let isEitherTab = textMovement == NSTextMovement.tab.rawValue || textMovement == NSTextMovement.backtab.rawValue
+        if !isEitherTab {
             cell?.setAccessibilityExpanded(false)
-            nextKeyView?.becomeFirstResponder()
+            nextValidKeyView?.becomeFirstResponder()
         }
     }
     

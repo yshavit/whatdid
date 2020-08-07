@@ -31,6 +31,8 @@
 		7EA6E22824BD6C5F004B9297 /* PtnViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */; };
 		7EAB5ECD24DA366600E18097 /* TimeUtilTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */; };
 		7EBE61E724DBED5A000B2CB3 /* DebugModeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBFC7C124DA71B6007D5CAE /* DebugModeTest.swift */; };
+		7EBE61F124DD2739000B2CB3 /* PtnViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */; };
+		7EBE61F324DD28F2000B2CB3 /* XCUIElement+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */; };
 		7EBFC7C024DA4CB4007D5CAE /* DebugMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBFC7BF24DA4CB4007D5CAE /* DebugMode.swift */; };
 		7EDA368F24D54EA300F5E368 /* FlippedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA368E24D54EA300F5E368 /* FlippedView.swift */; };
 		7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA369224D60FCD00F5E368 /* ButtonWithClosure.swift */; };
@@ -85,6 +87,8 @@
 		7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PtnViewController.xib; sourceTree = "<group>"; };
 		7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TimeUtilTest.swift; path = whatdidTests/util/TimeUtilTest.swift; sourceTree = SOURCE_ROOT; };
+		7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PtnViewControllerTest.swift; sourceTree = "<group>"; };
+		7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIElement+Helpers.swift"; sourceTree = "<group>"; };
 		7EBFC7BF24DA4CB4007D5CAE /* DebugMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugMode.swift; sourceTree = "<group>"; };
 		7EBFC7C124DA71B6007D5CAE /* DebugModeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugModeTest.swift; sourceTree = "<group>"; };
 		7EDA368E24D54EA300F5E368 /* FlippedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlippedView.swift; sourceTree = "<group>"; };
@@ -198,6 +202,8 @@
 				7EBE61E624DBECD8000B2CB3 /* util */,
 				7E8C04F923714F0800A0C3A6 /* whatdidUITests.swift */,
 				7E8C04FB23714F0800A0C3A6 /* Info.plist */,
+				7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */,
+				7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */,
 			);
 			path = whatdidUITests;
 			sourceTree = "<group>";
@@ -455,7 +461,9 @@
 			files = (
 				7EBE61E724DBED5A000B2CB3 /* DebugModeTest.swift in Sources */,
 				7E970D6324DA7C6B00F634AB /* DebugMode.swift in Sources */,
+				7EBE61F324DD28F2000B2CB3 /* XCUIElement+Helpers.swift in Sources */,
 				7E8C04FA23714F0800A0C3A6 /* whatdidUITests.swift in Sources */,
+				7EBE61F124DD2739000B2CB3 /* PtnViewControllerTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
