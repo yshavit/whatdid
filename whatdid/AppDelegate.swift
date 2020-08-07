@@ -25,9 +25,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         NSLog("Starting whatdid with build %@", Version.pretty)
         AppDelegate.DEBUG_DATE_FORMATTER.timeZone = TimeZone.autoupdatingCurrent
-        // Our Info.plist starts us off as background. Now that we're started, become an accessory app.
-        // This approach lets us start the app deactivated.
-        NSApp.setActivationPolicy(.accessory)
         focusHotKey.keyDownHandler = { self.mainMenu.focus() }
         mainMenu.schedulePopup()
         scheduleEndOfDaySummary()
@@ -36,6 +33,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             uiTestWindow = UiTestWindow()
             uiTestWindow.show(DebugMode.buttonWithClosure)
         }
+        NSApp.setActivationPolicy(.regular) // UI tests can time out on launch() without this
+        #else
+        // Our Info.plist starts us off as background. Now that we're started, become an accessory app.
+        // This approach lets us start the app deactivated.
+        NSApp.setActivationPolicy(.accessory)
         #endif
     }
     

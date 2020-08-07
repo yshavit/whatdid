@@ -17,7 +17,9 @@ jobs:
       run: xcodebuild build-for-testing -scheme whatdid-debug
     - name: Run unit tests
       run: xcodebuild test-without-building -scheme whatdid-debug
+    - name: Build UI tests
+      run: xcodebuild build-for-testing -scheme whatdid-ui-test
     - name: Run UI tests
-      run: xcodebuild test -scheme whatdid-ui-test
+      run: xcodebuild test-without-building -scheme whatdid-ui-test
     - name: Build release
       run: xcodebuild build -scheme whatdid-release
