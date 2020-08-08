@@ -1,0 +1,31 @@
+name: Swift
+
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-release:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build release
+      run: xcodebuild build -scheme whatdid-release
+  ui-tests:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build UI tests
+      run: xcodebuild build-for-testing -scheme whatdid-ui-test
+    - name: Run UI tests
+      run: xcodebuild test-without-building -scheme whatdid-ui-test
+  unit-tests:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build for unit tests
+      run: xcodebuild build-for-testing -scheme whatdid-debug
+    - name: Run unit tests
+      run: xcodebuild test-without-building -scheme whatdid-debug
