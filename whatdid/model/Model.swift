@@ -171,7 +171,7 @@ class Model {
             
             let entry = Entry.init(context: context)
             entry.task = taskData
-            entry.notes = entry.notes?.trimmingCharacters(in: .whitespacesAndNewlines)
+            entry.notes = flatEntry.notes?.trimmingCharacters(in: .whitespacesAndNewlines)
             entry.timeApproximatelyStarted = flatEntry.from
             entry.timeEntered = flatEntry.to
             
@@ -187,6 +187,12 @@ class Model {
             callback()
         })
     }
+    
+    #if UI_TEST
+    func getContainer() -> NSPersistentContainer {
+        return container
+    }
+    #endif
     
     class GroupedProjects {
         var groupedProjects = [String: GroupedProject]()

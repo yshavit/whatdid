@@ -8,12 +8,12 @@ class FlatEntry_SerdeTests: XCTestCase {
     func testSerde() {
         let toDate = Date()
         let fromDate = toDate.addingTimeInterval( -12345)
-        let orig = FlatEntry(from: fromDate, to: toDate, project: "p1", task: "t1", notes: "my notes")
+        let orig = [FlatEntry(from: fromDate, to: toDate, project: "p1", task: "t1", notes: "my notes")]
         
-        let serialized = orig.serialize()
+        let serialized = FlatEntry.serialize(orig)
         XCTAssertNotNil(serialized)
         
-        let fromJson = FlatEntry(fromSerialized: serialized!)
+        let fromJson = FlatEntry.deserialize(from: serialized)
         XCTAssertEqual(fromJson, orig)
     }
 
@@ -21,12 +21,12 @@ class FlatEntry_SerdeTests: XCTestCase {
     func testSerdeHasNoWhitespace() {
         let toDate = Date()
         let fromDate = toDate.addingTimeInterval( -12345)
-        let orig = FlatEntry(from: fromDate, to: toDate, project: "p1", task: "t1", notes: "notes")
+        let orig = [FlatEntry(from: fromDate, to: toDate, project: "p1", task: "t1", notes: "notes")]
         
-        let json = orig.serialize()
+        let json = FlatEntry.serialize(orig)
         XCTAssertNotNil(json)
         
-        let whiteSpace = json?.firstIndex(where: {$0.isWhitespace})
+        let whiteSpace = json.firstIndex(where: {$0.isWhitespace})
         XCTAssertNil(whiteSpace)
     }
 
