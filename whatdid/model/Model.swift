@@ -17,11 +17,31 @@ class Model {
     
     private lazy var container: NSPersistentContainer = {
         let localContainer = NSPersistentContainer(name: "Model")
+        
+        #if UI_TEST
+        localContainer.persistentStoreDescriptions.removeAll()
+        let inMemory = NSPersistentStoreDescription()
+        inMemory.type = NSInMemoryStoreType
+        localContainer.persistentStoreDescriptions.append(inMemory)
+        #endif
+        
         localContainer.loadPersistentStores { description, error in
             if let error = error {
                 fatalError("Unable to load persistent stores: \(error)")
             }
         }
+        
+        #if UI_TEST
+        if localContainer.persistentStoreCoordinator.persistentStores.count != 1 {
+            fatalError("Expected just one store. Found: \(localContainer.persistentStoreCoordinator.persistentStores)")
+        }
+        if localContainer.persistentStoreCoordinator.persistentStores[0].type != NSInMemoryStoreType {
+            fatalError("Expected an in-memory store. Found: \(localContainer.persistentStoreCoordinator.persistentStores[0])")
+            
+        }
+        // TODO: deserialize FlatEntries and write them
+        #endif
+        
         localContainer.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return localContainer
     }()
