@@ -236,7 +236,7 @@ class DayEndReportController: NSViewController {
         }
     }
     
-    private func getEntries() -> [Model.FlatEntry] {
+    private func getEntries() -> [FlatEntry] {
         func d(_ hh: Int, _ mm: Int) -> Date {
             let dateFormatter = DateFormatter()
             dateFormatter.locale = Locale(identifier: "en_US_POSIX")
@@ -244,15 +244,15 @@ class DayEndReportController: NSViewController {
             return dateFormatter.date(from: String(format: "2020-07-31T%02d:%02d:00-4:00", hh, mm))!
         }
         var fakeEntries = [
-            Model.FlatEntry(from: d(10, 00), to: d(10, 15), project: "Project1", task: "Task 1", notes: "entry 1"),
-            Model.FlatEntry(from: d(10, 15), to: d(10, 30), project: "Project1", task: "Task 1", notes: "entry 2"),
-            Model.FlatEntry(from: d(10, 30), to: d(10, 45), project: "Project1", task: "Task 2", notes: "entry 3"),
-            Model.FlatEntry(from: d(10, 45), to: d(11, 00), project: "Project2", task: "Task 1", notes: "entry 4"),
-            Model.FlatEntry(from: d(10, 45), to: d(10, 55), project: String(repeating: "long project ", count: 30), task: String(repeating: "long task", count: 20), notes: String(repeating: "long entry", count: 20)),
+            FlatEntry(from: d(10, 00), to: d(10, 15), project: "Project1", task: "Task 1", notes: "entry 1"),
+            FlatEntry(from: d(10, 15), to: d(10, 30), project: "Project1", task: "Task 1", notes: "entry 2"),
+            FlatEntry(from: d(10, 30), to: d(10, 45), project: "Project1", task: "Task 2", notes: "entry 3"),
+            FlatEntry(from: d(10, 45), to: d(11, 00), project: "Project2", task: "Task 1", notes: "entry 4"),
+            FlatEntry(from: d(10, 45), to: d(10, 55), project: String(repeating: "long project ", count: 30), task: String(repeating: "long task", count: 20), notes: String(repeating: "long entry", count: 20)),
         ]
         (0..<10).forEach {hh in
             (0..<4).forEach {qh in // quarter hour
-                fakeEntries.append(Model.FlatEntry(
+                fakeEntries.append(FlatEntry(
                     from: d(12 + hh, qh * 15),
                     to: d(12 + hh, qh * 15 + 14),
                     project: "Marathon project",

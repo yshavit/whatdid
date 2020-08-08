@@ -20,6 +20,8 @@
 		7E37A29B24C0293E005BA1DF /* Entry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29724C0293E005BA1DF /* Entry+CoreDataProperties.swift */; };
 		7E37A29C24C0293E005BA1DF /* Task+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29824C0293E005BA1DF /* Task+CoreDataClass.swift */; };
 		7E37A29D24C0293E005BA1DF /* Task+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */; };
+		7E7C384B24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */; };
+		7E7C384C24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */; };
 		7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */; };
 		7E8C04E023714F0800A0C3A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04DF23714F0800A0C3A6 /* Assets.xcassets */; };
 		7E8C04FA23714F0800A0C3A6 /* whatdidUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04F923714F0800A0C3A6 /* whatdidUITests.swift */; };
@@ -71,6 +73,7 @@
 		7E37A29724C0293E005BA1DF /* Entry+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Entry+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7E37A29824C0293E005BA1DF /* Task+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatEntry.swift; sourceTree = "<group>"; };
 		7E8C04DA23714F0700A0C3A6 /* whatdid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = whatdid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7E8C04DF23714F0800A0C3A6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -142,6 +145,7 @@
 				7E37A29724C0293E005BA1DF /* Entry+CoreDataProperties.swift */,
 				7E37A27224BFF676005BA1DF /* Model.xcdatamodeld */,
 				7E37A29424C00266005BA1DF /* Model.swift */,
+				7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -436,6 +440,7 @@
 				7EE427AB24C42EBD002C51F3 /* AutoCompletingComboBox.swift in Sources */,
 				7E30B46124C38D91003F3679 /* Atomic.swift in Sources */,
 				7E37A27424BFF676005BA1DF /* Model.xcdatamodeld in Sources */,
+				7E7C384B24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */,
 				7E37A29124BFFFCB005BA1DF /* Project+CoreDataProperties.swift in Sources */,
 				7E37A29024BFFFCB005BA1DF /* Project+CoreDataClass.swift in Sources */,
 				7E37A29A24C0293E005BA1DF /* Entry+CoreDataClass.swift in Sources */,
@@ -462,6 +467,7 @@
 				7EBE61E724DBED5A000B2CB3 /* DebugModeTest.swift in Sources */,
 				7E970D6324DA7C6B00F634AB /* DebugMode.swift in Sources */,
 				7EBE61F324DD28F2000B2CB3 /* XCUIElement+Helpers.swift in Sources */,
+				7E7C384C24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */,
 				7E8C04FA23714F0800A0C3A6 /* whatdidUITests.swift in Sources */,
 				7EBE61F124DD2739000B2CB3 /* PtnViewControllerTest.swift in Sources */,
 			);
