@@ -12,25 +12,41 @@ class PtnViewControllerTest: XCTestCase {
         app.launch()
     }
     
-    func openPtn() -> XCUIElement {
-        let ptn = app.windows["What are you working on?"]
-        if !ptn.isVisible {
-            app.menuBars.statusItems["✐"].click()
+    func openPtn(andThen afterAction: (XCUIElement) -> () = {_ in }) -> XCUIElement {
+        return XCTContext.runActivity(named: "open PTN") {_ in
+            let ptn = app.windows["What are you working on?"]
+            if !ptn.isVisible {
+                app.menuBars.statusItems["✐"].click()
+            }
+            XCTAssertTrue(ptn.isVisible)
+            afterAction(ptn)
+            return ptn
         }
-        XCTAssertTrue(ptn.isVisible)
-        return ptn
     }
 
     override func tearDownWithError() throws {
         XCUIApplication().terminate()
     }
     
-    func testKeyboardNavigation() {
-        let ptn: XCUIElement = XCTContext.runActivity(named: "open PTN") {_ in
-            let res = self.openPtn()
-            XCTAssertFalse(res.comboBoxes["tcombo"].hasFocus()) // Sanity check that hasFocus() doesn't always return true :)
-            return res
+    func testAutoComplete() {
+        let ptn = openPtn()
+        XCTContext.runActivity(named: "initalize the data") {_ in
+            let entriesTextField  = ptn.textFields["uihook_flatentryjson"]
+            let entriesSerialized = FlatEntry.serialize(
+                FlatEntry(
+                    from: Date().addingTimeInterval(-120),
+                    to: Date(),
+                    project: "my project",
+                    task: "my task",
+                    notes: "some notes"))
+            entriesTextField.replaceTextFieldContents(with: entriesSerialized + "\r")
+            
         }
+    }
+    
+    func testKeyboardNavigation() {
+        // Get the PTN, and do a sanity check that hasFocus() doesn't always return true :)
+        let ptn = openPtn(andThen: {XCTAssertFalse($0.comboBoxes["tcombo"].hasFocus())})
         XCTContext.runActivity(named: "forward tabbing") {_ in
             XCTAssertTrue(ptn.comboBoxes["pcombo"].hasFocus()) // Sanity check
             // Tab from Project -> Task

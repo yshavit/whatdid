@@ -22,6 +22,10 @@ extension FlatEntry {
         }
     }
     
+    static func serialize(_ entries: FlatEntry...) -> String {
+        return serialize(entries)
+    }
+    
     static func serialize(_ entries: [FlatEntry]) -> String {
         do {
             let encoder = JSONEncoder()

@@ -17,6 +17,18 @@ extension XCUIElement {
         }
     }
     
+    func clearTextField() {
+        click()
+        typeKey(.upArrow)
+        typeKey(.downArrow, modifierFlags: .shift)
+        typeKey(.delete)
+    }
+    
+    func replaceTextFieldContents(with newContents: String) {
+        clearTextField()
+        typeText(newContents)
+    }
+    
     func backtab() {
         typeKey(.tab, modifierFlags: .shift)
     }
