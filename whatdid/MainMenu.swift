@@ -37,6 +37,9 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         window?.delegate = self
         window?.standardWindowButton(.closeButton)?.isHidden = true
         window?.isMovable = false
+        window?.standardWindowButton(.closeButton)?.isHidden = true
+        window?.standardWindowButton(.miniaturizeButton)?.isHidden = true
+        window?.standardWindowButton(.zoomButton)?.isHidden = true
         
         statusItem.button?.title = "✐"
         statusItem.button?.target = self

@@ -4,61 +4,63 @@ import XCTest
 @testable import whatdid
 
 class PtnViewControllerTest: XCTestCase {
+    private var app : XCUIApplication!
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
+    override func setUp() {
         continueAfterFailure = false
-
-        // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
-        XCUIApplication().launch()
-
-        // In UI tests it’s important to set the initial state required for your tests before they run. The setUp method is a good place to do this.
+        app = XCUIApplication()
+        app.launch()
+    }
+    
+    func openPtn() -> XCUIElement {
+        let ptn = app.windows["What are you working on?"]
+        if !ptn.isVisible {
+            app.menuBars.statusItems["✐"].click()
+        }
+        XCTAssertTrue(ptn.isVisible)
+        return ptn
     }
 
     override func tearDownWithError() throws {
         XCUIApplication().terminate()
     }
     
-    func testTabAndEnterBehavior() throws {
-        let app = XCUIApplication()
-        app.menuBars.statusItems["✐"].click()
-        
-        let ptn = app.windows["What are you working on?"]
-        
-        // Let's start with tabs.
-        //---------------------------------------------------------------------
-        
-        // Hitting "enter" in the project should take us to the task
-        ptn/*@START_MENU_TOKEN@*/.comboBoxes["pcombo"]/*[[".comboBoxes[\"project\"]",".comboBoxes[\"pcombo\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.typeText("one\t")
-        XCTAssertTrue(ptn.comboBoxes["tcombo"].hasFocus())
-        
-        // Hitting "enter" in the task field should take us to the notes
-        ptn.comboBoxes["tcombo"].typeText("two\t")
-        XCTAssertTrue(ptn.textFields["nfield"].hasFocus())
-        
-        
-        // Now backtab back to the project combo
-        //---------------------------------------------------------------------
-        
-        // Now let's hit the backtab and see if we get back to the tasks
-        ptn.textFields["nfield"].backtab()
-        XCTAssertTrue(ptn.comboBoxes["tcombo"].hasFocus())
-        
-        // Backtab again to get to the project
-        ptn.comboBoxes["tcombo"].backtab()
-        XCTAssertTrue(ptn.comboBoxes["pcombo"].hasFocus())
-        
-        // And now go forward again, this time with the enter key.
-        //---------------------------------------------------------------------
-        
-        // Hitting "enter" in the project should take us to the task
-        ptn/*@START_MENU_TOKEN@*/.comboBoxes["pcombo"]/*[[".comboBoxes[\"project\"]",".comboBoxes[\"pcombo\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.typeText("one\r")
-        XCTAssertTrue(ptn.comboBoxes["tcombo"].hasFocus())
-        
-        // Hitting "enter" in the task field should take us to the notes
-        ptn.comboBoxes["tcombo"].typeText("two\r")
-        XCTAssertTrue(ptn.textFields["nfield"].hasFocus())
+    func testKeyboardNavigation() {
+        let ptn: XCUIElement = XCTContext.runActivity(named: "open PTN") {_ in
+            let res = self.openPtn()
+            XCTAssertFalse(res.comboBoxes["tcombo"].hasFocus()) // Sanity check that hasFocus() doesn't always return true :)
+            return res
+        }
+        XCTContext.runActivity(named: "forward tabbing") {_ in
+            XCTAssertTrue(ptn.comboBoxes["pcombo"].hasFocus()) // Sanity check
+            // Tab from Project -> Task
+            ptn.focusedChild.typeKey(.tab)
+            XCTAssertTrue(ptn.comboBoxes["tcombo"].hasFocus())
+            // Tab from Task -> Notes
+            ptn.focusedChild.typeKey(.tab)
+            XCTAssertTrue(ptn.textFields["nfield"].hasFocus())
+        }
+        XCTContext.runActivity(named: "backward tabbing") {_ in
+            XCTAssertTrue(ptn.textFields["nfield"].hasFocus()) // Sanity check
+            // Backtab from Notes to Task
+            ptn.focusedChild.typeKey(.tab, modifierFlags: .shift)
+            XCTAssertTrue(ptn.comboBoxes["tcombo"].hasFocus())
+            // Backtab from Task to Project
+            ptn.focusedChild.typeKey(.tab, modifierFlags: .shift)
+            XCTAssertTrue(ptn.comboBoxes["pcombo"].hasFocus())
+        }
+        XCTContext.runActivity(named: "enter key") {_ in
+            XCTAssertTrue(ptn.comboBoxes["pcombo"].hasFocus()) // Sanity check
+            // Enter from Project to Task
+            ptn.comboBoxes["pcombo"].typeKey(.enter)
+            XCTAssertTrue(ptn.comboBoxes["tcombo"].hasFocus())
+            // Enter from Task to Notes
+            ptn.comboBoxes["pcombo"].typeKey(.enter)
+            XCTAssertTrue(ptn.textFields["nfield"].hasFocus())
+        }
+        XCTContext.runActivity(named: "escape key") {_ in
+            ptn.typeKey(.escape, modifierFlags: [])
+            XCTAssertFalse(ptn.isVisible)
+        }
     }
 }
