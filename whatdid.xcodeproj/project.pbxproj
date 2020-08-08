@@ -22,6 +22,9 @@
 		7E37A29D24C0293E005BA1DF /* Task+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */; };
 		7E7C384B24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */; };
 		7E7C384C24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */; };
+		7E7C384E24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */; };
+		7E7C384F24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */; };
+		7E7C385224DF36D000CFF3E7 /* FlatEntry+SerdeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C385124DF36D000CFF3E7 /* FlatEntry+SerdeTests.swift */; };
 		7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */; };
 		7E8C04E023714F0800A0C3A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04DF23714F0800A0C3A6 /* Assets.xcassets */; };
 		7E8C04FA23714F0800A0C3A6 /* whatdidUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04F923714F0800A0C3A6 /* whatdidUITests.swift */; };
@@ -74,6 +77,8 @@
 		7E37A29824C0293E005BA1DF /* Task+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatEntry.swift; sourceTree = "<group>"; };
+		7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlatEntry+Serde.swift"; sourceTree = "<group>"; };
+		7E7C385124DF36D000CFF3E7 /* FlatEntry+SerdeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlatEntry+SerdeTests.swift"; sourceTree = "<group>"; };
 		7E8C04DA23714F0700A0C3A6 /* whatdid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = whatdid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7E8C04DF23714F0800A0C3A6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -146,6 +151,15 @@
 				7E37A27224BFF676005BA1DF /* Model.xcdatamodeld */,
 				7E37A29424C00266005BA1DF /* Model.swift */,
 				7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */,
+				7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		7E7C385024DF36B300CFF3E7 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				7E7C385124DF36D000CFF3E7 /* FlatEntry+SerdeTests.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -203,6 +217,7 @@
 		7E8C04F823714F0800A0C3A6 /* whatdidUITests */ = {
 			isa = PBXGroup;
 			children = (
+				7E7C385024DF36B300CFF3E7 /* model */,
 				7EBE61E624DBECD8000B2CB3 /* util */,
 				7E8C04F923714F0800A0C3A6 /* whatdidUITests.swift */,
 				7E8C04FB23714F0800A0C3A6 /* Info.plist */,
@@ -431,6 +446,7 @@
 				7E37A29524C00266005BA1DF /* Model.swift in Sources */,
 				7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */,
 				7EDA368F24D54EA300F5E368 /* FlippedView.swift in Sources */,
+				7E7C384E24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */,
 				7EBFC7C024DA4CB4007D5CAE /* DebugMode.swift in Sources */,
 				7EFEE80223B16EA6002928A2 /* PtnViewController.swift in Sources */,
 				7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */,
@@ -465,11 +481,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				7EBE61E724DBED5A000B2CB3 /* DebugModeTest.swift in Sources */,
+				7E7C384F24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */,
 				7E970D6324DA7C6B00F634AB /* DebugMode.swift in Sources */,
 				7EBE61F324DD28F2000B2CB3 /* XCUIElement+Helpers.swift in Sources */,
 				7E7C384C24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */,
 				7E8C04FA23714F0800A0C3A6 /* whatdidUITests.swift in Sources */,
 				7EBE61F124DD2739000B2CB3 /* PtnViewControllerTest.swift in Sources */,
+				7E7C385224DF36D000CFF3E7 /* FlatEntry+SerdeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

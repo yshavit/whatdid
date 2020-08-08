@@ -150,36 +150,36 @@ class Model {
     }
     
     func addEntryNow(project: String, task: String, notes: String, callback: @escaping ()->()) {
+        let lastUpdate = self.lastEntryDate
+        let now = Date()
+        lastEntryDate = now
+        add(FlatEntry(from: lastUpdate, to: now, project: project, task: task, notes: notes), andThen: callback)
+    }
+    
+    func add(_ flatEntry: FlatEntry, andThen callback: @escaping () -> ()) {
         container.performBackgroundTask({context in
-            let lastUpdate = self.lastEntryDate
-            let now = Date()
-            self.lastEntryDate = now
             context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
             
             let projectData = Project.init(context: context)
-            projectData.project = project.trimmingCharacters(in: .whitespacesAndNewlines)
-            projectData.lastUsed = lastUpdate
+            projectData.project = flatEntry.project.trimmingCharacters(in: .whitespacesAndNewlines)
+            projectData.lastUsed = flatEntry.to
             
             let taskData = Task.init(context: context)
             taskData.project = projectData
-            taskData.task = task.trimmingCharacters(in: .whitespacesAndNewlines)
-            taskData.lastUsed = now
+            taskData.task = flatEntry.task.trimmingCharacters(in: .whitespacesAndNewlines)
+            taskData.lastUsed = flatEntry.to
             
             let entry = Entry.init(context: context)
             entry.task = taskData
-            entry.notes = notes.trimmingCharacters(in: .whitespacesAndNewlines)
-            entry.timeApproximatelyStarted = lastUpdate
-            entry.timeEntered = now
+            entry.notes = entry.notes?.trimmingCharacters(in: .whitespacesAndNewlines)
+            entry.timeApproximatelyStarted = flatEntry.from
+            entry.timeEntered = flatEntry.to
             
             do {
                 NSLog(
-                    "Saving project(%@), task(%@), notes(%@): %@ (%@ to %@)",
-                    project,
-                    task,
-                    notes,
-                    TimeUtil.daysHoursMinutes(for: now.timeIntervalSince1970 - lastUpdate.timeIntervalSince1970),
-                    lastUpdate.debugDescription,
-                    now.debugDescription)
+                    "Saving %@ (@)",
+                    flatEntry.description,
+                    TimeUtil.daysHoursMinutes(for: flatEntry.to.timeIntervalSince1970 - flatEntry.from.timeIntervalSince1970))
                 try context.save()
             } catch {
                 NSLog("Error saving entry: %@", error as NSError)

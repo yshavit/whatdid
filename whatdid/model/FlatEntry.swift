@@ -1,7 +1,7 @@
 // whatdid?
 import Cocoa
 
-struct FlatEntry {
+struct FlatEntry: CustomStringConvertible, Codable, Equatable {
     
     let from : Date
     let to : Date
@@ -13,5 +13,16 @@ struct FlatEntry {
         get {
             return (to.timeIntervalSince1970 - from.timeIntervalSince1970)
         }
+    }
+    
+    var description: String {
+        return String(
+            format: "project(%@), task(%@), notes(%@) from %@ to %@",
+            project,
+            task,
+            notes ?? "",
+            from.debugDescription,
+            to.debugDescription
+        )
     }
 }
