@@ -20,6 +20,13 @@
 		7E37A29B24C0293E005BA1DF /* Entry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29724C0293E005BA1DF /* Entry+CoreDataProperties.swift */; };
 		7E37A29C24C0293E005BA1DF /* Task+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29824C0293E005BA1DF /* Task+CoreDataClass.swift */; };
 		7E37A29D24C0293E005BA1DF /* Task+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */; };
+		7E7C384B24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */; };
+		7E7C384C24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */; };
+		7E7C384E24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */; };
+		7E7C384F24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */; };
+		7E7C385224DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C385124DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift */; };
+		7E7C385424DF3A0300CFF3E7 /* PtnViewController+UIHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C385324DF3A0300CFF3E7 /* PtnViewController+UIHook.swift */; };
+		7E7C385624DF3D2600CFF3E7 /* Model+UIHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C385524DF3D2600CFF3E7 /* Model+UIHook.swift */; };
 		7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */; };
 		7E8C04E023714F0800A0C3A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04DF23714F0800A0C3A6 /* Assets.xcassets */; };
 		7E8C04FA23714F0800A0C3A6 /* whatdidUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04F923714F0800A0C3A6 /* whatdidUITests.swift */; };
@@ -71,6 +78,11 @@
 		7E37A29724C0293E005BA1DF /* Entry+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Entry+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7E37A29824C0293E005BA1DF /* Task+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatEntry.swift; sourceTree = "<group>"; };
+		7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlatEntry+Serde.swift"; sourceTree = "<group>"; };
+		7E7C385124DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlatEntry+SerdeTest.swift"; sourceTree = "<group>"; };
+		7E7C385324DF3A0300CFF3E7 /* PtnViewController+UIHook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PtnViewController+UIHook.swift"; sourceTree = "<group>"; };
+		7E7C385524DF3D2600CFF3E7 /* Model+UIHook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Model+UIHook.swift"; sourceTree = "<group>"; };
 		7E8C04DA23714F0700A0C3A6 /* whatdid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = whatdid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7E8C04DF23714F0800A0C3A6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -142,6 +154,17 @@
 				7E37A29724C0293E005BA1DF /* Entry+CoreDataProperties.swift */,
 				7E37A27224BFF676005BA1DF /* Model.xcdatamodeld */,
 				7E37A29424C00266005BA1DF /* Model.swift */,
+				7E7C385524DF3D2600CFF3E7 /* Model+UIHook.swift */,
+				7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */,
+				7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		7E7C385024DF36B300CFF3E7 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				7E7C385124DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -178,6 +201,7 @@
 				7E8C04E123714F0800A0C3A6 /* MainMenu.xib */,
 				7EFEE80123B16EA6002928A2 /* PtnViewController.swift */,
 				7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */,
+				7E7C385324DF3A0300CFF3E7 /* PtnViewController+UIHook.swift */,
 				7EAC528A24CFC94700A13B72 /* boilerplate */,
 				7E37A27524BFF73E005BA1DF /* model */,
 				7E970D6424DA817B00F634AB /* ui_testhook */,
@@ -199,6 +223,7 @@
 		7E8C04F823714F0800A0C3A6 /* whatdidUITests */ = {
 			isa = PBXGroup;
 			children = (
+				7E7C385024DF36B300CFF3E7 /* model */,
 				7EBE61E624DBECD8000B2CB3 /* util */,
 				7E8C04F923714F0800A0C3A6 /* whatdidUITests.swift */,
 				7E8C04FB23714F0800A0C3A6 /* Info.plist */,
@@ -424,18 +449,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E7C385624DF3D2600CFF3E7 /* Model+UIHook.swift in Sources */,
 				7E37A29524C00266005BA1DF /* Model.swift in Sources */,
 				7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */,
 				7EDA368F24D54EA300F5E368 /* FlippedView.swift in Sources */,
+				7E7C384E24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */,
 				7EBFC7C024DA4CB4007D5CAE /* DebugMode.swift in Sources */,
 				7EFEE80223B16EA6002928A2 /* PtnViewController.swift in Sources */,
 				7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */,
+				7E7C385424DF3A0300CFF3E7 /* PtnViewController+UIHook.swift in Sources */,
 				7E37A29B24C0293E005BA1DF /* Entry+CoreDataProperties.swift in Sources */,
 				7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */,
 				7E07C3B824D121770007FD23 /* DayEndReportController.swift in Sources */,
 				7EE427AB24C42EBD002C51F3 /* AutoCompletingComboBox.swift in Sources */,
 				7E30B46124C38D91003F3679 /* Atomic.swift in Sources */,
 				7E37A27424BFF676005BA1DF /* Model.xcdatamodeld in Sources */,
+				7E7C384B24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */,
 				7E37A29124BFFFCB005BA1DF /* Project+CoreDataProperties.swift in Sources */,
 				7E37A29024BFFFCB005BA1DF /* Project+CoreDataClass.swift in Sources */,
 				7E37A29A24C0293E005BA1DF /* Entry+CoreDataClass.swift in Sources */,
@@ -460,10 +489,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				7EBE61E724DBED5A000B2CB3 /* DebugModeTest.swift in Sources */,
+				7E7C384F24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */,
 				7E970D6324DA7C6B00F634AB /* DebugMode.swift in Sources */,
 				7EBE61F324DD28F2000B2CB3 /* XCUIElement+Helpers.swift in Sources */,
+				7E7C384C24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */,
 				7E8C04FA23714F0800A0C3A6 /* whatdidUITests.swift in Sources */,
 				7EBE61F124DD2739000B2CB3 /* PtnViewControllerTest.swift in Sources */,
+				7E7C385224DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -3,6 +3,7 @@
 import Cocoa
 
 class PtnViewController: NSViewController {
+    @IBOutlet var topStack: NSStackView!
     
     @IBOutlet weak var projectField: AutoCompletingComboBox!
     @IBOutlet weak var taskField: AutoCompletingComboBox!
@@ -29,6 +30,10 @@ class PtnViewController: NSViewController {
         projectField.setAutoCompleteLookups({prefix in AppDelegate.instance.model.listProjects(prefix: prefix)})
         taskField.setAutoCompleteLookups({prefix in AppDelegate.instance.model.listTasks(project: self.self.projectField.stringValue, prefix: prefix)})
         setBreakButtonTitle()
+        
+        #if UI_TEST
+        addJsonFlatEntryField()
+        #endif
     }
     
     func setBreakButtonTitle() {
@@ -68,6 +73,10 @@ class PtnViewController: NSViewController {
             menuItem.title = formatter.string(from: snoozeUntil)
             menuItem.representedObject = Date(timeIntervalSince1970: snoozeUntil.timeIntervalSince1970)
         })
+        
+        #if UI_TEST
+        populateJsonFlatEntryField()
+        #endif
     }
     
     @IBAction private func snoozeButtonPressed(_ sender: NSControl) {

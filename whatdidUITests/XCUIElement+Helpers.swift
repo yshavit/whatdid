@@ -3,10 +3,15 @@
 import XCTest
 
 extension XCUIElement {
-    func hasFocus() -> Bool {
-        
-        let hasKeyboardFocus = (self.value(forKey: "hasKeyboardFocus") as? Bool) ?? false
-        return hasKeyboardFocus
+    
+    func grabFocus() {
+        if !hasFocus {
+            click()
+        }
+    }
+    
+    var hasFocus: Bool {
+        return (self.value(forKey: "hasKeyboardFocus") as? Bool) ?? false
     }
     
     var focusedChild: XCUIElement {
@@ -15,6 +20,10 @@ extension XCUIElement {
             XCTAssertEqual(focusedElems.count, 1)
             return focusedElems[0]
         }
+    }
+    
+    var stringValue: String {
+        return value as! String
     }
     
     func backtab() {

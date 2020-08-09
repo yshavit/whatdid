@@ -14,6 +14,7 @@
                 <outlet property="snoozeButton" destination="yjZ-yA-5CH" id="kMR-QE-XYq"/>
                 <outlet property="snoozeExtraOptions" destination="2d3-tf-ady" id="sU1-Fq-fTJ"/>
                 <outlet property="taskField" destination="sxc-2C-mp9" id="Pro-Vo-fL6"/>
+                <outlet property="topStack" destination="HWg-YQ-y10" id="uHE-m7-vJd"/>
                 <outlet property="view" destination="HWg-YQ-y10" id="KfA-3s-tIh"/>
             </connections>
         </customObject>
