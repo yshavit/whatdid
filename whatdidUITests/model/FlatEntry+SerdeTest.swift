@@ -2,7 +2,7 @@
 
 import XCTest
 
-class FlatEntry_SerdeTests: XCTestCase {
+class FlatEntry_SerdeTest: XCTestCase {
 
     /// There and back
     func testSerde() {

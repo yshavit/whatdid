@@ -3,10 +3,15 @@
 import XCTest
 
 extension XCUIElement {
-    func hasFocus() -> Bool {
-        
-        let hasKeyboardFocus = (self.value(forKey: "hasKeyboardFocus") as? Bool) ?? false
-        return hasKeyboardFocus
+    
+    func grabFocus() {
+        if !hasFocus {
+            click()
+        }
+    }
+    
+    var hasFocus: Bool {
+        return (self.value(forKey: "hasKeyboardFocus") as? Bool) ?? false
     }
     
     var focusedChild: XCUIElement {
@@ -17,16 +22,8 @@ extension XCUIElement {
         }
     }
     
-    func clearTextField() {
-        click()
-        typeKey(.upArrow)
-        typeKey(.downArrow, modifierFlags: .shift)
-        typeKey(.delete)
-    }
-    
-    func replaceTextFieldContents(with newContents: String) {
-        clearTextField()
-        typeText(newContents)
+    var stringValue: String {
+        return value as! String
     }
     
     func backtab() {

@@ -27,6 +27,9 @@ extension FlatEntry {
     }
     
     static func serialize(_ entries: [FlatEntry]) -> String {
+        if entries.isEmpty {
+            return ""
+        }
         do {
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .millisecondsSince1970
