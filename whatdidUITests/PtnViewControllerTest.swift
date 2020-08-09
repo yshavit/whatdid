@@ -54,12 +54,10 @@ class PtnViewControllerTest: XCTestCase {
                 entry("whodid", "something else", "notes 2", from: t(-60), to: t(-50)))
             entriesTextField.click()
             entriesTextField.typeText(entriesSerialized + "\r")
-            ptn.focusedChild.typeKey(.escape)
         }
         XCTContext.runActivity(named: "autocomplete wh*") {_ in
-            _ = openPtnNotInActivity()
             let pcombo = ptn.comboBoxes["pcombo"]
-            
+            pcombo.click()
             pcombo.typeKey(.downArrow)
             pcombo.typeText("\r")
             XCTAssertEqual("whodid", pcombo.stringValue)
