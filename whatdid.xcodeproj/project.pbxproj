@@ -45,6 +45,9 @@
 		7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA369224D60FCD00F5E368 /* ButtonWithClosure.swift */; };
 		7EDA369524D6A95B00F5E368 /* TimeUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA369424D6A95B00F5E368 /* TimeUtil.swift */; };
 		7EE427AB24C42EBD002C51F3 /* AutoCompletingComboBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE427AA24C42EBD002C51F3 /* AutoCompletingComboBox.swift */; };
+		7EF8579324E094D100867832 /* OpenCloseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579224E094D100867832 /* OpenCloseHelper.swift */; };
+		7EF8579524E0961E00867832 /* OpenCloseHelperTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */; };
+		7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579A24E220EA00867832 /* OpenReason.swift */; };
 		7EFEE80223B16EA6002928A2 /* PtnViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFEE80123B16EA6002928A2 /* PtnViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -107,6 +110,9 @@
 		7EDA369224D60FCD00F5E368 /* ButtonWithClosure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithClosure.swift; sourceTree = "<group>"; };
 		7EDA369424D6A95B00F5E368 /* TimeUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeUtil.swift; sourceTree = "<group>"; };
 		7EE427AA24C42EBD002C51F3 /* AutoCompletingComboBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletingComboBox.swift; sourceTree = "<group>"; };
+		7EF8579224E094D100867832 /* OpenCloseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCloseHelper.swift; sourceTree = "<group>"; };
+		7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCloseHelperTest.swift; sourceTree = "<group>"; };
+		7EF8579A24E220EA00867832 /* OpenReason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenReason.swift; sourceTree = "<group>"; };
 		7EFEE80123B16EA6002928A2 /* PtnViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PtnViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -258,6 +264,8 @@
 				7EDA368E24D54EA300F5E368 /* FlippedView.swift */,
 				7EDA369224D60FCD00F5E368 /* ButtonWithClosure.swift */,
 				7EDA369424D6A95B00F5E368 /* TimeUtil.swift */,
+				7EF8579224E094D100867832 /* OpenCloseHelper.swift */,
+				7EF8579A24E220EA00867832 /* OpenReason.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -284,6 +292,7 @@
 			isa = PBXGroup;
 			children = (
 				7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */,
+				7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -459,6 +468,7 @@
 				7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */,
 				7E7C385424DF3A0300CFF3E7 /* PtnViewController+UIHook.swift in Sources */,
 				7E37A29B24C0293E005BA1DF /* Entry+CoreDataProperties.swift in Sources */,
+				7EF8579324E094D100867832 /* OpenCloseHelper.swift in Sources */,
 				7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */,
 				7E07C3B824D121770007FD23 /* DayEndReportController.swift in Sources */,
 				7EE427AB24C42EBD002C51F3 /* AutoCompletingComboBox.swift in Sources */,
@@ -467,6 +477,7 @@
 				7E7C384B24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */,
 				7E37A29124BFFFCB005BA1DF /* Project+CoreDataProperties.swift in Sources */,
 				7E37A29024BFFFCB005BA1DF /* Project+CoreDataClass.swift in Sources */,
+				7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */,
 				7E37A29A24C0293E005BA1DF /* Entry+CoreDataClass.swift in Sources */,
 				7E970D6B24DA850D00F634AB /* UiTestWindow.swift in Sources */,
 				7EDA369524D6A95B00F5E368 /* TimeUtil.swift in Sources */,
@@ -480,6 +491,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7EF8579524E0961E00867832 /* OpenCloseHelperTest.swift in Sources */,
 				7EAB5ECD24DA366600E18097 /* TimeUtilTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
