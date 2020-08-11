@@ -48,7 +48,7 @@ class OpenCloseHelper<T: Hashable & Comparable> {
         isSnoozed = false
         pullFromPending()
     }
-    
+
     func didClose() {
         guard openItem != nil else {
             return

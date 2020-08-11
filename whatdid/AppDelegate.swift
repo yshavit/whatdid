@@ -26,7 +26,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSLog("Starting whatdid with build %@", Version.pretty)
         AppDelegate.DEBUG_DATE_FORMATTER.timeZone = TimeZone.autoupdatingCurrent
         focusHotKey.keyDownHandler = { self.mainMenu.focus() }
-        mainMenu.schedulePopup()
+        mainMenu.schedule(.ptn)
         scheduleEndOfDaySummary()
         #if UI_TEST
         if CommandLine.arguments.compactMap({DebugMode(fromStringIfWithPrefix: $0)}).contains(.buttonWithClosure) {
@@ -45,8 +45,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let plusOrMinus : TimeInterval = 30
         let scheduleEndOfDay = TimeUtil.dateForTime(.next, hh: 18, mm: 30).addingTimeInterval(-plusOrMinus)
         let timer = Timer(fire: scheduleEndOfDay, interval: 0, repeats: false, block: {_ in
-            self.mainMenu.show(.dailyEnd)
-            self.scheduleEndOfDaySummary()
+            self.mainMenu.open(.dailyEnd, reason: .scheduled)
         })
         timer.tolerance = plusOrMinus * 2
         NSLog("Scheduling summary at %@, +/- %.0fs", scheduleEndOfDay.debugDescription, plusOrMinus)
