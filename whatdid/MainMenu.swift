@@ -132,17 +132,16 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         switch contents {
         case .ptn:
             let jitterMinutes = Int.random(in: -POPUP_INTERVAL_JITTER_MINUTES...POPUP_INTERVAL_JITTER_MINUTES)
-            let minutes = POPUP_INTERVAL_MINUTES + jitterMinutes
-            NSLog("Scheduling a popup in %d minutes", minutes)
-            let when = DispatchWallTime.now() + .seconds(minutes * 60)
-            DispatchQueue.main.asyncAfter(wallDeadline: when, execute: {
+            let minutes = Double(POPUP_INTERVAL_MINUTES + jitterMinutes)
+            NSLog("Scheduling a popup in %.0f minutes", minutes)
+            DefaultScheduler.instance.schedule(after: minutes * 60.0) {
                 if self.snoozing {
                     NSLog("Ignoring a popup request due to snooze.")
                 } else {
                     NSLog("Showing a scheduled popup.")
                     self.opener.open(.ptn, reason: .scheduled)
                 }
-            })
+            }
         case .dailyEnd:
             AppDelegate.instance.scheduleEndOfDaySummary()
 //            self.scheduleEndOfDaySummary()

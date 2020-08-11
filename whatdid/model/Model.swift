@@ -12,7 +12,7 @@ class Model {
     @Atomic private var lastEntryDate : Date
     
     init() {
-        lastEntryDate = Date()
+        lastEntryDate = DefaultScheduler.instance.now
     }
     
     private lazy var container: NSPersistentContainer = {
@@ -47,7 +47,7 @@ class Model {
     }()
     
     func setLastEntryDateToNow() {
-        lastEntryDate = Date()
+        lastEntryDate = DefaultScheduler.instance.now
     }
     
     func listProjects() -> [Project] {
@@ -151,7 +151,7 @@ class Model {
     
     func addEntryNow(project: String, task: String, notes: String, callback: @escaping ()->()) {
         let lastUpdate = self.lastEntryDate
-        let now = Date()
+        let now = DefaultScheduler.instance.now
         lastEntryDate = now
         add(FlatEntry(from: lastUpdate, to: now, project: project, task: task, notes: notes), andThen: callback)
     }
@@ -177,7 +177,7 @@ class Model {
             
             do {
                 NSLog(
-                    "Saving %@ (@)",
+                    "Saving %@ (%@)",
                     flatEntry.description,
                     TimeUtil.daysHoursMinutes(for: flatEntry.to.timeIntervalSince1970 - flatEntry.from.timeIntervalSince1970))
                 try context.save()

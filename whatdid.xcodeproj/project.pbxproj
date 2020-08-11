@@ -45,9 +45,15 @@
 		7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA369224D60FCD00F5E368 /* ButtonWithClosure.swift */; };
 		7EDA369524D6A95B00F5E368 /* TimeUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA369424D6A95B00F5E368 /* TimeUtil.swift */; };
 		7EE427AB24C42EBD002C51F3 /* AutoCompletingComboBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE427AA24C42EBD002C51F3 /* AutoCompletingComboBox.swift */; };
+		7EE4E39624E24A3F00552AAF /* ManualTickSchedulerWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39524E24A3F00552AAF /* ManualTickSchedulerWindow.swift */; };
+		7EE4E39824E2523F00552AAF /* SystemClockScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39724E2523F00552AAF /* SystemClockScheduler.swift */; };
+		7EE4E39A24E25C0200552AAF /* DefaultScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */; };
 		7EF8579324E094D100867832 /* OpenCloseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579224E094D100867832 /* OpenCloseHelper.swift */; };
 		7EF8579524E0961E00867832 /* OpenCloseHelperTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */; };
 		7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579A24E220EA00867832 /* OpenReason.swift */; };
+		7EF857A124E2420C00867832 /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF857A024E2420C00867832 /* Scheduler.swift */; };
+		7EF857A324E242AB00867832 /* ManualTickScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF857A224E242AB00867832 /* ManualTickScheduler.swift */; };
+		7EF857A424E242AB00867832 /* ManualTickScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF857A224E242AB00867832 /* ManualTickScheduler.swift */; };
 		7EFEE80223B16EA6002928A2 /* PtnViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFEE80123B16EA6002928A2 /* PtnViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -110,9 +116,14 @@
 		7EDA369224D60FCD00F5E368 /* ButtonWithClosure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithClosure.swift; sourceTree = "<group>"; };
 		7EDA369424D6A95B00F5E368 /* TimeUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeUtil.swift; sourceTree = "<group>"; };
 		7EE427AA24C42EBD002C51F3 /* AutoCompletingComboBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletingComboBox.swift; sourceTree = "<group>"; };
+		7EE4E39524E24A3F00552AAF /* ManualTickSchedulerWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualTickSchedulerWindow.swift; sourceTree = "<group>"; };
+		7EE4E39724E2523F00552AAF /* SystemClockScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockScheduler.swift; sourceTree = "<group>"; };
+		7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultScheduler.swift; sourceTree = "<group>"; };
 		7EF8579224E094D100867832 /* OpenCloseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCloseHelper.swift; sourceTree = "<group>"; };
 		7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCloseHelperTest.swift; sourceTree = "<group>"; };
 		7EF8579A24E220EA00867832 /* OpenReason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenReason.swift; sourceTree = "<group>"; };
+		7EF857A024E2420C00867832 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
+		7EF857A224E242AB00867832 /* ManualTickScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualTickScheduler.swift; sourceTree = "<group>"; };
 		7EFEE80123B16EA6002928A2 /* PtnViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PtnViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -210,6 +221,7 @@
 				7E7C385324DF3A0300CFF3E7 /* PtnViewController+UIHook.swift */,
 				7EAC528A24CFC94700A13B72 /* boilerplate */,
 				7E37A27524BFF73E005BA1DF /* model */,
+				7EF8579F24E241E800867832 /* scheduling */,
 				7E970D6424DA817B00F634AB /* ui_testhook */,
 				7EAC528924CFC90800A13B72 /* util */,
 			);
@@ -295,6 +307,18 @@
 				7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */,
 			);
 			path = util;
+			sourceTree = "<group>";
+		};
+		7EF8579F24E241E800867832 /* scheduling */ = {
+			isa = PBXGroup;
+			children = (
+				7EF857A024E2420C00867832 /* Scheduler.swift */,
+				7EF857A224E242AB00867832 /* ManualTickScheduler.swift */,
+				7EE4E39524E24A3F00552AAF /* ManualTickSchedulerWindow.swift */,
+				7EE4E39724E2523F00552AAF /* SystemClockScheduler.swift */,
+				7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */,
+			);
+			path = scheduling;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -462,12 +486,15 @@
 				7E37A29524C00266005BA1DF /* Model.swift in Sources */,
 				7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */,
 				7EDA368F24D54EA300F5E368 /* FlippedView.swift in Sources */,
+				7EF857A324E242AB00867832 /* ManualTickScheduler.swift in Sources */,
 				7E7C384E24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */,
 				7EBFC7C024DA4CB4007D5CAE /* DebugMode.swift in Sources */,
+				7EE4E39824E2523F00552AAF /* SystemClockScheduler.swift in Sources */,
 				7EFEE80223B16EA6002928A2 /* PtnViewController.swift in Sources */,
 				7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */,
 				7E7C385424DF3A0300CFF3E7 /* PtnViewController+UIHook.swift in Sources */,
 				7E37A29B24C0293E005BA1DF /* Entry+CoreDataProperties.swift in Sources */,
+				7EE4E39624E24A3F00552AAF /* ManualTickSchedulerWindow.swift in Sources */,
 				7EF8579324E094D100867832 /* OpenCloseHelper.swift in Sources */,
 				7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */,
 				7E07C3B824D121770007FD23 /* DayEndReportController.swift in Sources */,
@@ -475,7 +502,9 @@
 				7E30B46124C38D91003F3679 /* Atomic.swift in Sources */,
 				7E37A27424BFF676005BA1DF /* Model.xcdatamodeld in Sources */,
 				7E7C384B24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */,
+				7EE4E39A24E25C0200552AAF /* DefaultScheduler.swift in Sources */,
 				7E37A29124BFFFCB005BA1DF /* Project+CoreDataProperties.swift in Sources */,
+				7EF857A124E2420C00867832 /* Scheduler.swift in Sources */,
 				7E37A29024BFFFCB005BA1DF /* Project+CoreDataClass.swift in Sources */,
 				7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */,
 				7E37A29A24C0293E005BA1DF /* Entry+CoreDataClass.swift in Sources */,
@@ -502,6 +531,7 @@
 			files = (
 				7EBE61E724DBED5A000B2CB3 /* DebugModeTest.swift in Sources */,
 				7E7C384F24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */,
+				7EF857A424E242AB00867832 /* ManualTickScheduler.swift in Sources */,
 				7E970D6324DA7C6B00F634AB /* DebugMode.swift in Sources */,
 				7EBE61F324DD28F2000B2CB3 /* XCUIElement+Helpers.swift in Sources */,
 				7E7C384C24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */,
