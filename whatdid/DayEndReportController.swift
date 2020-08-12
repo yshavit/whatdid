@@ -105,7 +105,7 @@ class DayEndReportController: NSViewController {
             let timeFormatter = DateFormatter()
             timeFormatter.locale = Locale(identifier: "en_US_POSIX")
             timeFormatter.dateFormat = "h:mma"
-            timeFormatter.timeZone = .autoupdatingCurrent
+            timeFormatter.timeZone = DefaultScheduler.instance.timeZone
             timeFormatter.amSymbol = "am"
             timeFormatter.pmSymbol = "pm"
             

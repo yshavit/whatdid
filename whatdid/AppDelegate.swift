@@ -15,6 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     #if UI_TEST
     private var uiTestWindow : UiTestWindow!
+    private var manualTickSchedulerWindow: ManualTickSchedulerWindow!
     #endif
     
     func onDeactivation(_ block: @escaping () -> Void) {
@@ -27,6 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSLog("Starting whatdid with build %@", Version.pretty)
         #if UI_TEST
         NSLog("initializing UI test hooks")
+        manualTickSchedulerWindow = ManualTickSchedulerWindow(with: DefaultScheduler.instance)
         if CommandLine.arguments.compactMap({DebugMode(fromStringIfWithPrefix: $0)}).contains(.buttonWithClosure) {
             uiTestWindow = UiTestWindow()
             uiTestWindow.show(DebugMode.buttonWithClosure)
@@ -38,7 +40,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(.accessory)
         #endif
         
-        AppDelegate.DEBUG_DATE_FORMATTER.timeZone = TimeZone.autoupdatingCurrent
+        AppDelegate.DEBUG_DATE_FORMATTER.timeZone = DefaultScheduler.instance.timeZone
         focusHotKey.keyDownHandler = { self.mainMenu.focus() }
         
         mainMenu.schedule(.ptn)

@@ -45,7 +45,8 @@ class TimeUtil {
     
     static func dateForTime(_ direction: TimeDirection, hh: Int, mm: Int, assumingNow: Date? = nil) -> Date {
         let now = assumingNow ?? DefaultScheduler.instance.now
-        let cal = Calendar.current
+        var cal = Calendar.current
+        cal.timeZone = DefaultScheduler.instance.timeZone
         var result = cal.date(bySettingHour: hh, minute: mm, second: 00, of: now)
         NSLog("Finding %@ time at %02d:%02d. Now=%@, initial result = %@", direction.rawValue, hh, mm, now.debugDescription, result.debugDescription)
         switch direction {

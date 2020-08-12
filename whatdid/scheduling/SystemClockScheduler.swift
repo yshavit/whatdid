@@ -9,6 +9,10 @@ class SystemClockScheduler: Scheduler {
         return Date()
     }
     
+    var timeZone: TimeZone {
+        return TimeZone.autoupdatingCurrent
+    }
+    
     func schedule(at date: Date, _ block: @escaping () -> Void) {
         let tolerence = SystemClockScheduler.TOLERANCE_SECONDS * 2
         let adjustedDate = date.addingTimeInterval(-tolerence)
@@ -21,6 +25,5 @@ class SystemClockScheduler: Scheduler {
         let wakeupTime = DispatchWallTime.now() + .seconds(Int(after))
         DispatchQueue.main.asyncAfter(wallDeadline: wakeupTime, execute: block)
     }
-    
     
 }

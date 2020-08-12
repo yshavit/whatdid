@@ -4,13 +4,14 @@ import Cocoa
 
 class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
     
-    let scheduler = ManualTickScheduler()
+    let scheduler: ManualTickScheduler
     private let setter: NSTextField
     private let printUtc: NSTextField
     private let printLocal: NSTextField
     private let window: NSPanel
     
-    override init() {
+    init(with scheduler: ManualTickScheduler) {
+        self.scheduler = scheduler
         window = NSPanel(
             contentRect: NSRect(x: 0, y: 50, width: 100, height: 50),
             styleMask: [.titled, .utilityWindow],
@@ -57,7 +58,7 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
             timeFormatter.timeZone = TimeZone(identifier: "UTC")!
             printUtc.stringValue = timeFormatter.string(from: date)
             
-            timeFormatter.timeZone = .autoupdatingCurrent
+            timeFormatter.timeZone = DefaultScheduler.instance.timeZone
             printLocal.stringValue = timeFormatter.string(from: date)
             
             scheduler.now = date

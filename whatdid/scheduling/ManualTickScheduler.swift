@@ -32,6 +32,14 @@ class ManualTickScheduler: Scheduler {
         }
     }
     
+    var timeZone: TimeZone {
+        get {
+            // Some time zone that isn't UTC or mine (America/New_York).
+            // I'm picking +UTC so epoch isn't slightly-awkwardly right before midnight.
+            return TimeZone(identifier: "Europe/Athens")!
+        }
+    }
+    
     private func enqueueAction(_ block: @escaping () -> Void) {
         DispatchQueue.main.async(execute: block)
     }
