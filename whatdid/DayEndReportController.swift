@@ -40,7 +40,7 @@ class DayEndReportController: NSViewController {
             NSLog("set max height to %.1f (screen height is %.1f)", maxViewHeight.constant, screenHeight)
         }
         // Set up the date picker
-        let now = Date()
+        let now = DefaultScheduler.instance.now
         entryStartDatePicker.maxDate = now
         entryStartDatePicker.dateValue = thisMorning(assumingNow: now)
         
@@ -76,7 +76,7 @@ class DayEndReportController: NSViewController {
         
         let projects = Model.GroupedProjects(from: AppDelegate.instance.model.listEntries(since: since))
         let allProjectsTotalTime = projects.totalTime
-        let todayStart = thisMorning(assumingNow: Date())
+        let todayStart = thisMorning(assumingNow: DefaultScheduler.instance.now)
         projects.forEach {project in
             // The vstack group for the whole project
             let projectVStack = NSStackView()
@@ -105,7 +105,7 @@ class DayEndReportController: NSViewController {
             let timeFormatter = DateFormatter()
             timeFormatter.locale = Locale(identifier: "en_US_POSIX")
             timeFormatter.dateFormat = "h:mma"
-            timeFormatter.timeZone = .autoupdatingCurrent
+            timeFormatter.timeZone = DefaultScheduler.instance.timeZone
             timeFormatter.amSymbol = "am"
             timeFormatter.pmSymbol = "pm"
             

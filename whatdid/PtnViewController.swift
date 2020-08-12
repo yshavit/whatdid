@@ -57,11 +57,12 @@ class PtnViewController: NSViewController {
         let bufferMinutes = 10
         let formatter = DateFormatter()
         let snoozeIntervalMinutes = 30.0
+        formatter.timeZone = DefaultScheduler.instance.timeZone
         formatter.dateFormat = "h:mm a"
         formatter.amSymbol = "am"
         formatter.pmSymbol = "pm"
         
-        var snoozeUntil = Date().addingTimeInterval(TimeInterval(bufferMinutes * 60))
+        var snoozeUntil = DefaultScheduler.instance.now.addingTimeInterval(TimeInterval(bufferMinutes * 60))
         // Round it up (always up) to the nearest half-hour
         let incrementInterval = Double(snoozeIntervalMinutes * 60.0)
         snoozeUntil = Date(timeIntervalSince1970: (snoozeUntil.timeIntervalSince1970 / incrementInterval).rounded(.up) * incrementInterval)

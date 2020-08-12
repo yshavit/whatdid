@@ -10,18 +10,22 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
     private var taskAdditionsPane : PtnViewController!
-    private var windowContents = WindowContents.scheduledPtn
-    private var shouldSchedulePopupOnClose = false
-    private var shouldShowDailySummaryOnClose = false
-    private var snoozing = false
+    private var windowContents = WindowContents.ptn
+    private var opener : OpenCloseHelper<WindowContents>!
     
-    enum WindowContents {
-        /// The PTN window, when it pops up automatically
-        case scheduledPtn
-        /// The PTN window, when the user pops it up manually
-        case manualPtn
+    enum WindowContents: Int, Comparable {
+        /// The Project/Task/Notes window
+        case ptn
         /// The end-of-day report
         case dailyEnd
+        
+        static func < (lhs: MainMenu.WindowContents, rhs: MainMenu.WindowContents) -> Bool {
+            return lhs.rawValue < rhs.rawValue
+        }
+    }
+    
+    func open(_ item: WindowContents, reason: OpenReason) {
+        opener.open(item, reason: reason)
     }
 
     override func awakeFromNib() {
@@ -44,6 +48,19 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         statusItem.button?.title = "✐"
         statusItem.button?.target = self
         statusItem.button?.action = #selector(handleStatusItemPress)
+        
+
+        AppDelegate.instance.onDeactivation {
+            self.window?.close()
+        }
+        
+        opener = OpenCloseHelper<WindowContents>(
+            onOpen: {contents in
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()) {
+                    self.open(contents)
+                }
+            },
+            onSchedule: self.schedule)
     }
     
     @objc private func handleStatusItemPress() {
@@ -52,33 +69,20 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         } else {
             let showWhat = NSEvent.modifierFlags.contains(.option)
                 ? WindowContents.dailyEnd
-                : WindowContents.manualPtn
-            show(showWhat)
-            AppDelegate.instance.onDeactivation {
-                self.window?.close()
-            }
+                : WindowContents.ptn
+            opener.open(showWhat, reason: .manual)
             focus()
         }
     }
     
-    func show(_ contents: WindowContents) {
-        // Always schedule on close if this request was for a scheduled popup, even if the window is already open.
-        // Otherwise, the thread of scheduled popups would die.
-        if contents == .scheduledPtn {
-            shouldSchedulePopupOnClose = true
-        }
-        if window?.isVisible ?? false {
-            if contents == .dailyEnd {
-                NSLog("Deferring daily report until the current window closes.")
-                shouldShowDailySummaryOnClose = true
-            }
-            return
-        }
+    private func open(_ contents: WindowContents) {
         switch (contents) {
         case .dailyEnd:
             window?.contentViewController = DayEndReportController()
-        case .manualPtn, .scheduledPtn:
+            window?.title = "Here's what you've been doing"
+        case .ptn:
             window?.contentViewController = taskAdditionsPane
+            window?.title = "What are you working on?"
         }
         
         window?.layoutIfNeeded()
@@ -98,7 +102,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
             }
         }
         showWindow(self)
-        DispatchQueue.main.async {
+        RunLoop.current.perform {
             self.statusItem.button?.isHighlighted = true
         }
     }
@@ -118,46 +122,31 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     func windowWillClose(_ notification: Notification) {
         NSApp.hide(self)
         statusItem.button?.isHighlighted = false
-        if shouldSchedulePopupOnClose && !snoozing { // If we're snoozing, the snooze scheduled the next popup
-            schedulePopup()
-        }
-        shouldSchedulePopupOnClose = false
-        
-        if shouldShowDailySummaryOnClose {
-            shouldShowDailySummaryOnClose = false
-            NSLog("Showing deferred daily report")
-            RunLoop.current.perform(inModes: [RunLoop.Mode.common], block: { self.show(.dailyEnd) })
-            perform(#selector(showDailyReport), with: nil, afterDelay: TimeInterval.zero, inModes: [RunLoop.Mode.common])
-        }
+        opener.didClose()
     }
     
     @objc private func showDailyReport() {
-        show(.dailyEnd)
+        open(.dailyEnd)
     }
 
-    func schedulePopup() {
-        let jitterMinutes = Int.random(in: -POPUP_INTERVAL_JITTER_MINUTES...POPUP_INTERVAL_JITTER_MINUTES)
-        let minutes = POPUP_INTERVAL_MINUTES + jitterMinutes
-        NSLog("Scheduling a popup in %d minutes", minutes)
-        let when = DispatchWallTime.now() + .seconds(minutes * 60)
-        DispatchQueue.main.asyncAfter(wallDeadline: when, execute: {
-            if self.snoozing {
-                NSLog("Ignoring a popup request due to snooze.")
-            } else {
-                NSLog("Showing a scheduled popup.")
-                self.show(.scheduledPtn)
+    func schedule(_ contents: WindowContents) {
+        switch contents {
+        case .ptn:
+            let jitterMinutes = Int.random(in: -POPUP_INTERVAL_JITTER_MINUTES...POPUP_INTERVAL_JITTER_MINUTES)
+            let minutes = Double(POPUP_INTERVAL_MINUTES + jitterMinutes)
+            NSLog("Scheduling a popup in %.0f minutes", minutes)
+            DefaultScheduler.instance.schedule(after: minutes * 60.0) {
+                self.opener.open(.ptn, reason: .scheduled)
             }
-        })
+        case .dailyEnd:
+            AppDelegate.instance.scheduleEndOfDaySummary()
+        }
     }
     
     func snooze(until date: Date) {
         NSLog("Snoozing until %@", AppDelegate.DEBUG_DATE_FORMATTER.string(from: date))
-        snoozing = true
+        opener.snooze()
         window?.close()
-        let wakeupTime = DispatchWallTime.now() + .seconds(Int(date.timeIntervalSinceNow))
-        DispatchQueue.main.asyncAfter(wallDeadline: wakeupTime, execute: {
-            self.snoozing = false
-            self.show(.scheduledPtn)
-        })
+        DefaultScheduler.instance.schedule(after: date.timeIntervalSinceWhatdidNow, self.opener.unSnooze)
     }
 }

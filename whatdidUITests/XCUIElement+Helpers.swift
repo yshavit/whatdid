@@ -37,6 +37,16 @@ extension XCUIElement {
         }
     }
     
+    func deleteText(andReplaceWith replacement: String? = nil) {
+        click()
+        typeKey(.downArrow)
+        typeKey(.upArrow, modifierFlags:[.shift, .function])
+        typeKey(.delete, modifierFlags:[])
+        if replacement != nil {
+            typeText(replacement!)
+        }
+    }
+    
     func typeKey(_ key: XCUIKeyboardKey) {
         typeKey(key, modifierFlags: [])
     }

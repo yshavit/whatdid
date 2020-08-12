@@ -12,8 +12,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var mainMenu: MainMenu!
     let focusHotKey = HotKey(key: .x, modifiers: [.command, .shift])
     private var deactivationHooks : Atomic<[() -> Void]> = Atomic(wrappedValue: [])
+    
     #if UI_TEST
     private var uiTestWindow : UiTestWindow!
+    private var manualTickSchedulerWindow: ManualTickSchedulerWindow!
     #endif
     
     func onDeactivation(_ block: @escaping () -> Void) {
@@ -24,11 +26,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         NSLog("Starting whatdid with build %@", Version.pretty)
-        AppDelegate.DEBUG_DATE_FORMATTER.timeZone = TimeZone.autoupdatingCurrent
-        focusHotKey.keyDownHandler = { self.mainMenu.focus() }
-        mainMenu.schedulePopup()
-        scheduleEndOfDaySummary()
         #if UI_TEST
+        NSLog("initializing UI test hooks")
+        manualTickSchedulerWindow = ManualTickSchedulerWindow(with: DefaultScheduler.instance)
         if CommandLine.arguments.compactMap({DebugMode(fromStringIfWithPrefix: $0)}).contains(.buttonWithClosure) {
             uiTestWindow = UiTestWindow()
             uiTestWindow.show(DebugMode.buttonWithClosure)
@@ -39,18 +39,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // This approach lets us start the app deactivated.
         NSApp.setActivationPolicy(.accessory)
         #endif
+        
+        AppDelegate.DEBUG_DATE_FORMATTER.timeZone = DefaultScheduler.instance.timeZone
+        focusHotKey.keyDownHandler = { self.mainMenu.focus() }
+        
+        mainMenu.schedule(.ptn)
+        scheduleEndOfDaySummary()
     }
     
     func scheduleEndOfDaySummary() {
-        let plusOrMinus : TimeInterval = 30
-        let scheduleEndOfDay = TimeUtil.dateForTime(.next, hh: 18, mm: 30).addingTimeInterval(-plusOrMinus)
-        let timer = Timer(fire: scheduleEndOfDay, interval: 0, repeats: false, block: {_ in
-            self.mainMenu.show(.dailyEnd)
-            self.scheduleEndOfDaySummary()
-        })
-        timer.tolerance = plusOrMinus * 2
-        NSLog("Scheduling summary at %@, +/- %.0fs", scheduleEndOfDay.debugDescription, plusOrMinus)
-        RunLoop.current.add(timer, forMode: .default)
+        let scheduleEndOfDay = TimeUtil.dateForTime(.next, hh: 18, mm: 30)
+        NSLog("Scheduling summary at %@", scheduleEndOfDay.debugDescription)
+        DefaultScheduler.instance.schedule(at: scheduleEndOfDay) {
+            self.mainMenu.open(.dailyEnd, reason: .scheduled)
+        }
     }
     
     func applicationDidResignActive(_ notification: Notification) {
