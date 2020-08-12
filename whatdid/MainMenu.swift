@@ -11,7 +11,6 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     
     private var taskAdditionsPane : PtnViewController!
     private var windowContents = WindowContents.ptn
-    private var snoozing = false
     private var opener : OpenCloseHelper<WindowContents>!
     
     enum WindowContents: Int, Comparable {
@@ -135,31 +134,17 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
             let minutes = Double(POPUP_INTERVAL_MINUTES + jitterMinutes)
             NSLog("Scheduling a popup in %.0f minutes", minutes)
             DefaultScheduler.instance.schedule(after: minutes * 60.0) {
-                if self.snoozing {
-                    NSLog("Ignoring a popup request due to snooze.")
-                } else {
-                    NSLog("Showing a scheduled popup.")
-                    self.opener.open(.ptn, reason: .scheduled)
-                }
+                self.opener.open(.ptn, reason: .scheduled)
             }
         case .dailyEnd:
             AppDelegate.instance.scheduleEndOfDaySummary()
-//            self.scheduleEndOfDaySummary()
-//            RunLoop.current.perform(inModes: [RunLoop.Mode.common], block: { self.open(.dailyEnd) })
-//            perform(#selector(showDailyReport), with: nil, afterDelay: TimeInterval.zero, inModes: [RunLoop.Mode.common])
-            
         }
     }
     
     func snooze(until date: Date) {
-        NSLog("Snooze disabled")
-//        NSLog("Snoozing until %@", AppDelegate.DEBUG_DATE_FORMATTER.string(from: date))
-//        snoozing = true
-//        window?.close()
-//        let wakeupTime = DispatchWallTime.now() + .seconds(Int(date.timeIntervalSinceNow))
-//        DispatchQueue.main.asyncAfter(wallDeadline: wakeupTime, execute: {
-//            self.snoozing = false
-//            self.open(.ptn)
-//        })
+        NSLog("Snoozing until %@", AppDelegate.DEBUG_DATE_FORMATTER.string(from: date))
+        let wakeupTime = DispatchWallTime.now() + .seconds(Int(date.timeIntervalSinceNow))
+        opener.snooze()
+        DispatchQueue.main.asyncAfter(wallDeadline: wakeupTime, execute: self.opener.unSnooze)
     }
 }
