@@ -53,7 +53,6 @@
 		7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579A24E220EA00867832 /* OpenReason.swift */; };
 		7EF857A124E2420C00867832 /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF857A024E2420C00867832 /* Scheduler.swift */; };
 		7EF857A324E242AB00867832 /* ManualTickScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF857A224E242AB00867832 /* ManualTickScheduler.swift */; };
-		7EF857A424E242AB00867832 /* ManualTickScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF857A224E242AB00867832 /* ManualTickScheduler.swift */; };
 		7EFEE80223B16EA6002928A2 /* PtnViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFEE80123B16EA6002928A2 /* PtnViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -531,7 +530,6 @@
 			files = (
 				7EBE61E724DBED5A000B2CB3 /* DebugModeTest.swift in Sources */,
 				7E7C384F24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */,
-				7EF857A424E242AB00867832 /* ManualTickScheduler.swift in Sources */,
 				7E970D6324DA7C6B00F634AB /* DebugMode.swift in Sources */,
 				7EBE61F324DD28F2000B2CB3 /* XCUIElement+Helpers.swift in Sources */,
 				7E7C384C24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */,

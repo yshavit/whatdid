@@ -57,6 +57,7 @@ class PtnViewController: NSViewController {
         let bufferMinutes = 10
         let formatter = DateFormatter()
         let snoozeIntervalMinutes = 30.0
+        formatter.timeZone = DefaultScheduler.instance.timeZone
         formatter.dateFormat = "h:mm a"
         formatter.amSymbol = "am"
         formatter.pmSymbol = "pm"

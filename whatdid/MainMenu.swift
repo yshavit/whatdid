@@ -79,8 +79,10 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         switch (contents) {
         case .dailyEnd:
             window?.contentViewController = DayEndReportController()
+            window?.title = "Here's what you've been doing"
         case .ptn:
             window?.contentViewController = taskAdditionsPane
+            window?.title = "What are you working on?"
         }
         
         window?.layoutIfNeeded()
@@ -143,8 +145,8 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     
     func snooze(until date: Date) {
         NSLog("Snoozing until %@", AppDelegate.DEBUG_DATE_FORMATTER.string(from: date))
-        let wakeupTime = DispatchWallTime.now() + .seconds(Int(date.timeIntervalSinceNow))
         opener.snooze()
-        DispatchQueue.main.asyncAfter(wallDeadline: wakeupTime, execute: self.opener.unSnooze)
+        window?.close()
+        DefaultScheduler.instance.schedule(after: date.timeIntervalSinceWhatdidNow, self.opener.unSnooze)
     }
 }

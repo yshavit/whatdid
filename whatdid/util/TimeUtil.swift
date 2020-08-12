@@ -52,13 +52,13 @@ class TimeUtil {
         switch direction {
         case .previous:
             // We want a result < now, so if result > now, decrement it by a day
-            if let actualResult = result, actualResult > now {
+            if let actualResult = result, actualResult >= now {
                 result = cal.date(byAdding: .day, value: -1, to: actualResult)
                 NSLog("adjusting -1 day: %@", result.debugDescription)
             }
         case .next:
             // We want a result > now, so if result < now, increment it by a day
-            if let actualResult = result, actualResult < now {
+            if let actualResult = result, actualResult <= now {
                 result = cal.date(byAdding: .day, value: 1, to: actualResult)
                 NSLog("adjusting +1 day: %@", result.debugDescription)
             }
