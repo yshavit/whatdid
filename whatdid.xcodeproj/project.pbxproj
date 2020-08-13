@@ -44,10 +44,14 @@
 		7EDA368F24D54EA300F5E368 /* FlippedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA368E24D54EA300F5E368 /* FlippedView.swift */; };
 		7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA369224D60FCD00F5E368 /* ButtonWithClosure.swift */; };
 		7EDA369524D6A95B00F5E368 /* TimeUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA369424D6A95B00F5E368 /* TimeUtil.swift */; };
+		7EE0E74024E4DF4A002D03F8 /* SubsequenceMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E73F24E4DF4A002D03F8 /* SubsequenceMatcher.swift */; };
+		7EE0E74224E4DF8A002D03F8 /* SubsequenceMatcherTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74124E4DF8A002D03F8 /* SubsequenceMatcherTest.swift */; };
 		7EE427AB24C42EBD002C51F3 /* AutoCompletingComboBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE427AA24C42EBD002C51F3 /* AutoCompletingComboBox.swift */; };
 		7EE4E39624E24A3F00552AAF /* ManualTickSchedulerWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39524E24A3F00552AAF /* ManualTickSchedulerWindow.swift */; };
 		7EE4E39824E2523F00552AAF /* SystemClockScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39724E2523F00552AAF /* SystemClockScheduler.swift */; };
 		7EE4E39A24E25C0200552AAF /* DefaultScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */; };
+		7EEF324624EA542D002E217A /* NSRange+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEF324524EA542D002E217A /* NSRange+Helpers.swift */; };
+		7EEF324824EA54AD002E217A /* NSRange+HelpersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEF324724EA54AD002E217A /* NSRange+HelpersTest.swift */; };
 		7EF8579324E094D100867832 /* OpenCloseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579224E094D100867832 /* OpenCloseHelper.swift */; };
 		7EF8579524E0961E00867832 /* OpenCloseHelperTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */; };
 		7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579A24E220EA00867832 /* OpenReason.swift */; };
@@ -114,10 +118,14 @@
 		7EDA368E24D54EA300F5E368 /* FlippedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlippedView.swift; sourceTree = "<group>"; };
 		7EDA369224D60FCD00F5E368 /* ButtonWithClosure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithClosure.swift; sourceTree = "<group>"; };
 		7EDA369424D6A95B00F5E368 /* TimeUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeUtil.swift; sourceTree = "<group>"; };
+		7EE0E73F24E4DF4A002D03F8 /* SubsequenceMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubsequenceMatcher.swift; sourceTree = "<group>"; };
+		7EE0E74124E4DF8A002D03F8 /* SubsequenceMatcherTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubsequenceMatcherTest.swift; sourceTree = "<group>"; };
 		7EE427AA24C42EBD002C51F3 /* AutoCompletingComboBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletingComboBox.swift; sourceTree = "<group>"; };
 		7EE4E39524E24A3F00552AAF /* ManualTickSchedulerWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualTickSchedulerWindow.swift; sourceTree = "<group>"; };
 		7EE4E39724E2523F00552AAF /* SystemClockScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockScheduler.swift; sourceTree = "<group>"; };
 		7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultScheduler.swift; sourceTree = "<group>"; };
+		7EEF324524EA542D002E217A /* NSRange+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRange+Helpers.swift"; sourceTree = "<group>"; };
+		7EEF324724EA54AD002E217A /* NSRange+HelpersTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRange+HelpersTest.swift"; sourceTree = "<group>"; };
 		7EF8579224E094D100867832 /* OpenCloseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCloseHelper.swift; sourceTree = "<group>"; };
 		7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCloseHelperTest.swift; sourceTree = "<group>"; };
 		7EF8579A24E220EA00867832 /* OpenReason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenReason.swift; sourceTree = "<group>"; };
@@ -277,6 +285,10 @@
 				7EDA369424D6A95B00F5E368 /* TimeUtil.swift */,
 				7EF8579224E094D100867832 /* OpenCloseHelper.swift */,
 				7EF8579A24E220EA00867832 /* OpenReason.swift */,
+				7EE0E73F24E4DF4A002D03F8 /* SubsequenceMatcher.swift */,
+				7EE0E74724EA1ECD002D03F8 /* String+Helpers.swift */,
+				7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */,
+				7EEF324524EA542D002E217A /* NSRange+Helpers.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -304,6 +316,8 @@
 			children = (
 				7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */,
 				7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */,
+				7EE0E74124E4DF8A002D03F8 /* SubsequenceMatcherTest.swift */,
+				7EEF324724EA54AD002E217A /* NSRange+HelpersTest.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -489,6 +503,7 @@
 				7E7C384E24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */,
 				7EBFC7C024DA4CB4007D5CAE /* DebugMode.swift in Sources */,
 				7EE4E39824E2523F00552AAF /* SystemClockScheduler.swift in Sources */,
+				7EEF324624EA542D002E217A /* NSRange+Helpers.swift in Sources */,
 				7EFEE80223B16EA6002928A2 /* PtnViewController.swift in Sources */,
 				7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */,
 				7E7C385424DF3A0300CFF3E7 /* PtnViewController+UIHook.swift in Sources */,
@@ -507,6 +522,7 @@
 				7E37A29024BFFFCB005BA1DF /* Project+CoreDataClass.swift in Sources */,
 				7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */,
 				7E37A29A24C0293E005BA1DF /* Entry+CoreDataClass.swift in Sources */,
+				7EE0E74024E4DF4A002D03F8 /* SubsequenceMatcher.swift in Sources */,
 				7E970D6B24DA850D00F634AB /* UiTestWindow.swift in Sources */,
 				7EDA369524D6A95B00F5E368 /* TimeUtil.swift in Sources */,
 				7E37A29D24C0293E005BA1DF /* Task+CoreDataProperties.swift in Sources */,
@@ -519,6 +535,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7EEF324824EA54AD002E217A /* NSRange+HelpersTest.swift in Sources */,
+				7EE0E74224E4DF8A002D03F8 /* SubsequenceMatcherTest.swift in Sources */,
 				7EF8579524E0961E00867832 /* OpenCloseHelperTest.swift in Sources */,
 				7EAB5ECD24DA366600E18097 /* TimeUtilTest.swift in Sources */,
 			);
