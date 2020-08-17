@@ -29,9 +29,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         #if UI_TEST
         NSLog("initializing UI test hooks")
         manualTickSchedulerWindow = ManualTickSchedulerWindow(with: DefaultScheduler.instance)
-        if CommandLine.arguments.compactMap({DebugMode(fromStringIfWithPrefix: $0)}).contains(.buttonWithClosure) {
+        if let showView = CommandLine.arguments.compactMap({DebugMode(fromStringIfWithPrefix: $0)}).first {
             uiTestWindow = UiTestWindow()
-            uiTestWindow.show(DebugMode.buttonWithClosure)
+            uiTestWindow.show(showView)
         }
         NSApp.setActivationPolicy(.regular) // UI tests can time out on launch() without this
         #else

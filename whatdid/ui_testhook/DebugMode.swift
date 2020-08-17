@@ -5,6 +5,7 @@ import Foundation
 
 enum DebugMode : String {
     case buttonWithClosure
+    case autoCompleter
     
     static let DEBUG_MODE_ARG_PREFIX = "debug:"
     

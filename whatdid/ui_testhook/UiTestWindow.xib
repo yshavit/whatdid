@@ -20,13 +20,13 @@
             <rect key="contentRect" x="196" y="240" width="272" height="158"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" identifier="uitestwindowcontentview" wantsLayer="YES" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="303" height="16"/>
+                <rect key="frame" x="0.0" y="0.0" width="383" height="96"/>
                 <subviews>
                     <stackView identifier="MainStack" distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ves-sa-wmN">
-                        <rect key="frame" x="0.0" y="0.0" width="303" height="16"/>
+                        <rect key="frame" x="0.0" y="0.0" width="383" height="96"/>
                         <subviews>
                             <textField identifier="uitest_placeholder" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fEa-WP-i2Z">
-                                <rect key="frame" x="-2" y="0.0" width="307" height="16"/>
+                                <rect key="frame" x="38" y="40" width="307" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Window for testing single UI components or views" id="qzU-bu-pNR">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -34,6 +34,7 @@
                                 </textFieldCell>
                             </textField>
                         </subviews>
+                        <edgeInsets key="edgeInsets" left="40" right="40" top="40" bottom="40"/>
                         <visibilityPriorities>
                             <integer value="1000"/>
                         </visibilityPriorities>

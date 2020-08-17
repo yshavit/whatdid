@@ -46,6 +46,9 @@
 		7EDA369524D6A95B00F5E368 /* TimeUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA369424D6A95B00F5E368 /* TimeUtil.swift */; };
 		7EE0E74024E4DF4A002D03F8 /* SubsequenceMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E73F24E4DF4A002D03F8 /* SubsequenceMatcher.swift */; };
 		7EE0E74224E4DF8A002D03F8 /* SubsequenceMatcherTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74124E4DF8A002D03F8 /* SubsequenceMatcherTest.swift */; };
+		7EE0E74624E8899E002D03F8 /* AutoCompletingField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74524E8899E002D03F8 /* AutoCompletingField.swift */; };
+		7EE0E74824EA1ECD002D03F8 /* String+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74724EA1ECD002D03F8 /* String+Helpers.swift */; };
+		7EE0E74A24EA22E7002D03F8 /* NSView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */; };
 		7EE427AB24C42EBD002C51F3 /* AutoCompletingComboBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE427AA24C42EBD002C51F3 /* AutoCompletingComboBox.swift */; };
 		7EE4E39624E24A3F00552AAF /* ManualTickSchedulerWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39524E24A3F00552AAF /* ManualTickSchedulerWindow.swift */; };
 		7EE4E39824E2523F00552AAF /* SystemClockScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39724E2523F00552AAF /* SystemClockScheduler.swift */; };
@@ -120,6 +123,9 @@
 		7EDA369424D6A95B00F5E368 /* TimeUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeUtil.swift; sourceTree = "<group>"; };
 		7EE0E73F24E4DF4A002D03F8 /* SubsequenceMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubsequenceMatcher.swift; sourceTree = "<group>"; };
 		7EE0E74124E4DF8A002D03F8 /* SubsequenceMatcherTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubsequenceMatcherTest.swift; sourceTree = "<group>"; };
+		7EE0E74524E8899E002D03F8 /* AutoCompletingField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletingField.swift; sourceTree = "<group>"; };
+		7EE0E74724EA1ECD002D03F8 /* String+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Helpers.swift"; sourceTree = "<group>"; };
+		7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSView+Helpers.swift"; sourceTree = "<group>"; };
 		7EE427AA24C42EBD002C51F3 /* AutoCompletingComboBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletingComboBox.swift; sourceTree = "<group>"; };
 		7EE4E39524E24A3F00552AAF /* ManualTickSchedulerWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualTickSchedulerWindow.swift; sourceTree = "<group>"; };
 		7EE4E39724E2523F00552AAF /* SystemClockScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockScheduler.swift; sourceTree = "<group>"; };
@@ -219,6 +225,7 @@
 			children = (
 				7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */,
 				7EE427AA24C42EBD002C51F3 /* AutoCompletingComboBox.swift */,
+				7EE0E74524E8899E002D03F8 /* AutoCompletingField.swift */,
 				7E07C3B624D121770007FD23 /* DayEndReportController.swift */,
 				7E07C3B724D121770007FD23 /* DayEndReportController.xib */,
 				7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */,
@@ -505,16 +512,19 @@
 				7EE4E39824E2523F00552AAF /* SystemClockScheduler.swift in Sources */,
 				7EEF324624EA542D002E217A /* NSRange+Helpers.swift in Sources */,
 				7EFEE80223B16EA6002928A2 /* PtnViewController.swift in Sources */,
+				7EE0E74A24EA22E7002D03F8 /* NSView+Helpers.swift in Sources */,
 				7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */,
 				7E7C385424DF3A0300CFF3E7 /* PtnViewController+UIHook.swift in Sources */,
 				7E37A29B24C0293E005BA1DF /* Entry+CoreDataProperties.swift in Sources */,
 				7EE4E39624E24A3F00552AAF /* ManualTickSchedulerWindow.swift in Sources */,
+				7EE0E74624E8899E002D03F8 /* AutoCompletingField.swift in Sources */,
 				7EF8579324E094D100867832 /* OpenCloseHelper.swift in Sources */,
 				7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */,
 				7E07C3B824D121770007FD23 /* DayEndReportController.swift in Sources */,
 				7EE427AB24C42EBD002C51F3 /* AutoCompletingComboBox.swift in Sources */,
 				7E30B46124C38D91003F3679 /* Atomic.swift in Sources */,
 				7E37A27424BFF676005BA1DF /* Model.xcdatamodeld in Sources */,
+				7EE0E74824EA1ECD002D03F8 /* String+Helpers.swift in Sources */,
 				7E7C384B24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */,
 				7EE4E39A24E25C0200552AAF /* DefaultScheduler.swift in Sources */,
 				7E37A29124BFFFCB005BA1DF /* Project+CoreDataProperties.swift in Sources */,

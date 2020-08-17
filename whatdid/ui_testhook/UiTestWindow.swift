@@ -12,19 +12,23 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
     
     func show(_ mode: DebugMode) {
         _ = window?.title // force the window nib to load
-        let viewToAdd : NSView
+        mainStack.subviews.forEach {$0.removeFromSuperview()}
+        let adder: ((NSView) -> Void) = { self.mainStack.addArrangedSubview($0) }
+        let viewToAdd: NSView
         switch mode {
         case .buttonWithClosure:
-            viewToAdd = buttonWithClosure()
+            viewToAdd = buttonWithClosure(adder: adder)
+        case .autoCompleter:
+            viewToAdd = autocompleter(adder: adder)
         }
-        mainStack.subviews.forEach {$0.removeFromSuperview()}
         mainStack.addArrangedSubview(viewToAdd)
         showWindow(self)
         NSApp.activate(ignoringOtherApps: true)
     }
     
-    func buttonWithClosure() -> NSView {
+    func buttonWithClosure(adder: (NSView) -> Void) -> NSView {
         let button = ButtonWithClosure()
+        adder(button)
         button.setAccessibilityLabel("button_with_closure")
         var counter = Atomic(wrappedValue: 1)
         button.onPress {button in
@@ -37,6 +41,12 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
             self.mainStack.addArrangedSubview(label)
         }
         return button
+    }
+    
+    func autocompleter(adder: (NSView) -> Void) -> NSView {
+        let field = AutoCompletingField()
+        adder(field)
+        return field
     }
 
 }
