@@ -5,6 +5,7 @@ import Cocoa
 
 class UiTestWindow: NSWindowController, NSWindowDelegate {
     @IBOutlet var mainStack: NSStackView!
+    private var strongReferences = [Any]()
     
     convenience init() {
         self.init(windowNibName: "UiTestWindow")
@@ -14,19 +15,21 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
         _ = window?.title // force the window nib to load
         mainStack.subviews.forEach {$0.removeFromSuperview()}
         let adder: ((NSView) -> Void) = { self.mainStack.addArrangedSubview($0) }
-        let viewToAdd: NSView
         switch mode {
         case .buttonWithClosure:
-            viewToAdd = buttonWithClosure(adder: adder)
+            buttonWithClosure(adder: adder)
         case .autoCompleter:
-            viewToAdd = autocompleter(adder: adder)
+            autocompleter(adder: adder)
         }
-        mainStack.addArrangedSubview(viewToAdd)
         showWindow(self)
         NSApp.activate(ignoringOtherApps: true)
     }
     
-    func buttonWithClosure(adder: (NSView) -> Void) -> NSView {
+    func windowWillClose(_ notification: Notification) {
+        strongReferences.removeAll()
+    }
+    
+    func buttonWithClosure(adder: (NSView) -> Void) {
         let button = ButtonWithClosure()
         adder(button)
         button.setAccessibilityLabel("button_with_closure")
@@ -40,13 +43,24 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
             label.setAccessibilityIdentifier("dynamiclabel_\(currentCount)")
             self.mainStack.addArrangedSubview(label)
         }
-        return button
     }
     
-    func autocompleter(adder: (NSView) -> Void) -> NSView {
-        let field = AutoCompletingField()
-        adder(field)
-        return field
+    func autocompleter(adder: (NSView) -> Void) {
+        let options = NSTextField(string: "one,two,three,four,five,six,seven")
+        options.target = self
+        options.action = #selector(setAutocompleterOptions(_:))
+        adder(options)
+        
+        adder(AutoCompletingField())
+        setAutocompleterOptions(options)
+    }
+    
+    @objc private func setAutocompleterOptions(_ sender: NSTextField) {
+        let options = sender.stringValue.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces)}
+        mainStack.arrangedSubviews.compactMap { $0 as? AutoCompletingField} . forEach{autocompleter in
+            autocompleter.options = options
+        }
+        
     }
 
 }

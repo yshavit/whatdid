@@ -4,6 +4,8 @@ import Cocoa
 
 class AutoCompletingField: NSTextField {
     
+    private static let PINNED_OPTIONS_COUNT = 5
+    
     private var pulldownButton: NSButton!
     
     override init(frame frameRect: NSRect) {
@@ -59,6 +61,8 @@ class AutoCompletingField: NSTextField {
             options: [.inVisibleRect, .mouseMoved, .activeAlways],
             owner: self)
         addTrackingArea(pulldownButtonTracker)
+        
+        options = []
     }
     
     override func mouseMoved(with event: NSEvent) {
@@ -69,38 +73,64 @@ class AutoCompletingField: NSTextField {
         }
     }
     
-    @objc private func buttonClicked() {
-        let menu = NSMenu()
-        
-        self.menu = menu
-        for title in ["foo", "bar", "", "fizz", "buzz"] {
-            let item: NSMenuItem
-            if title == "" {
-                item = NSMenuItem.separator()
-            } else {
-                let itemView = MenuItemView()
-                itemView.labelString = title
-                itemView.onSelect = self.optionClicked
-                item = itemView.menuItem
-                
-                if title == "foo" {
-                    let s = NSMutableAttributedString(string: "recent")
-                    s.applyFontTraits(.italicFontMask, range: s.string.fullNsRange())
-                    let recentsLabel = NSTextField(labelWithAttributedString: s)
-                    recentsLabel.useAutoLayout()
-                    item.view?.addSubview(recentsLabel)
-                    recentsLabel.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
-                    recentsLabel.textColor = NSColor.controlLightHighlightColor
-                    recentsLabel.topAnchor.constraint(equalTo: itemView.topAnchor).isActive = true
-                    recentsLabel.trailingAnchor.constraint(equalTo: itemView.trailingAnchor, constant: -4).isActive = true
-                    
-                }
-            }
-            menu.addItem(item)
+    var options: [String] {
+        get {
+            return menu?.items.compactMap { ($0.view as? MenuItemView)?.labelString } ?? []
         }
-        menu.minimumWidth = frame.width
-        menu.popUp(positioning: nil, at: NSPoint(x: 0, y: frame.height + 4), in: self)
-        print("popup done")
+        set(values) {
+            let menu: NSMenu
+            if let existingMenu = self.menu {
+                menu = existingMenu
+                menu.removeAllItems()
+            } else {
+                menu = NSMenu()
+                self.menu = menu
+            }
+            buildItems(options: values, on: menu)
+        }
+    }
+    
+    private func buildItems(options: [String], on menu: NSMenu) {
+        for option in options {
+            let itemView = MenuItemView()
+            itemView.labelString = option
+            itemView.onSelect = self.optionClicked
+            let menuItem = itemView.asMenuItem
+            menu.addItem(menuItem)
+            
+            switch menu.numberOfItems {
+            case 1:
+                // First item; put in the "recents" label
+                attachLabelToOption("recent", to: menuItem)
+            case AutoCompletingField.PINNED_OPTIONS_COUNT:
+                menu.addItem(NSMenuItem.separator())
+            case AutoCompletingField.PINNED_OPTIONS_COUNT + 2:
+                // This is the first non-pinned option; remember that PINNED_OPTIONS_COUNT + 1 is the separator.
+                attachLabelToOption("matched", to: menuItem)
+            default:
+                break
+            }
+        }
+    }
+    
+    private func attachLabelToOption(_ label: String, to item: NSMenuItem) {
+        if let itemView = item.view {
+            let attributedLabel = NSMutableAttributedString(string: label)
+            attributedLabel.applyFontTraits(.italicFontMask, range: attributedLabel.string.fullNsRange())
+            let recentsLabel = NSTextField(labelWithAttributedString: attributedLabel)
+            recentsLabel.useAutoLayout()
+            
+            itemView.addSubview(recentsLabel)
+            recentsLabel.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
+            recentsLabel.textColor = NSColor.controlLightHighlightColor
+            recentsLabel.topAnchor.constraint(equalTo: itemView.topAnchor).isActive = true
+            recentsLabel.trailingAnchor.constraint(equalTo: itemView.trailingAnchor, constant: -4).isActive = true
+        }
+    }
+    
+    @objc private func buttonClicked() {
+        menu!.minimumWidth = frame.width
+        menu!.popUp(positioning: nil, at: NSPoint(x: 0, y: frame.height + 4), in: self)
     }
     
     private func optionClicked(value: String) {
@@ -123,7 +153,7 @@ class AutoCompletingField: NSTextField {
             commonInit()
         }
         
-        var menuItem: NSMenuItem {
+        var asMenuItem: NSMenuItem {
             get {
                 let item = NSMenuItem()
                 item.target = self
