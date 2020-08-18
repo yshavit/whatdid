@@ -101,30 +101,15 @@ class AutoCompletingField: NSTextField {
             switch menu.numberOfItems {
             case 1:
                 // First item; put in the "recents" label
-                attachLabelToOption("recent", to: menuItem)
+                itemView.decorationLabel = "recent"
             case AutoCompletingField.PINNED_OPTIONS_COUNT:
                 menu.addItem(NSMenuItem.separator())
             case AutoCompletingField.PINNED_OPTIONS_COUNT + 2:
                 // This is the first non-pinned option; remember that PINNED_OPTIONS_COUNT + 1 is the separator.
-                attachLabelToOption("matched", to: menuItem)
+                itemView.decorationLabel = "matched"
             default:
                 break
             }
-        }
-    }
-    
-    private func attachLabelToOption(_ label: String, to item: NSMenuItem) {
-        if let itemView = item.view {
-            let attributedLabel = NSMutableAttributedString(string: label)
-            attributedLabel.applyFontTraits(.italicFontMask, range: attributedLabel.string.fullNsRange())
-            let recentsLabel = NSTextField(labelWithAttributedString: attributedLabel)
-            recentsLabel.useAutoLayout()
-            
-            itemView.addSubview(recentsLabel)
-            recentsLabel.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
-            recentsLabel.textColor = NSColor.controlLightHighlightColor
-            recentsLabel.topAnchor.constraint(equalTo: itemView.topAnchor).isActive = true
-            recentsLabel.trailingAnchor.constraint(equalTo: itemView.trailingAnchor, constant: -4).isActive = true
         }
     }
     
@@ -139,6 +124,7 @@ class AutoCompletingField: NSTextField {
     }
     
     private class MenuItemView: NSView {
+        private var decoratedLabelView: NSTextField?
         private var effectView: NSVisualEffectView!
         private var textView: NSTextField!
         fileprivate var onSelect: (String) -> Void = {_ in return}
@@ -151,6 +137,33 @@ class AutoCompletingField: NSTextField {
         override init(frame: NSRect) {
             super.init(frame: frame)
             commonInit()
+        }
+        
+        var decorationLabel: String? {
+            get {
+                return decoratedLabelView?.stringValue
+            }
+            set(maybeValue) {
+                if let value = maybeValue {
+                    if decoratedLabelView == nil {
+                        let decoratedLabelView = NSTextField(labelWithString: "")
+                        self.decoratedLabelView = decoratedLabelView
+                        decoratedLabelView.useAutoLayout()
+                        
+                        addSubview(decoratedLabelView)
+                        decoratedLabelView.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
+                        decoratedLabelView.textColor = NSColor.controlLightHighlightColor
+                        decoratedLabelView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+                        decoratedLabelView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4).isActive = true
+                    }
+                    let attributedValue = NSMutableAttributedString(string: value)
+                    attributedValue.applyFontTraits(.italicFontMask, range: attributedValue.string.fullNsRange())
+                    decoratedLabelView!.attributedStringValue = attributedValue
+                } else if decoratedLabelView != nil {
+                    decoratedLabelView!.removeFromSuperview()
+                    decoratedLabelView = nil
+                }
+            }
         }
         
         var asMenuItem: NSMenuItem {
