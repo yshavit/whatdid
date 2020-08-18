@@ -75,7 +75,7 @@ class AutoCompletingField: NSTextField {
     
     var options: [String] {
         get {
-            return menu?.items.compactMap { ($0.view as? MenuItemView)?.labelString } ?? []
+            return menuItems.map { $0.labelString }
         }
         set(values) {
             let menu: NSMenu
@@ -113,6 +113,52 @@ class AutoCompletingField: NSTextField {
         }
     }
     
+    private var menuItems: [MenuItemView] {
+        return menu?.items.compactMap {$0.view as? MenuItemView} ?? []
+    }
+    
+    override func textDidChange(_ notification: Notification) {
+        super.textDidChange(notification)
+        if let event = NSApp.currentEvent {
+            if event.type == .keyDown {
+                if let specialKey = event.specialKey {
+                    if specialKey == .delete {
+                        // TODO handle delete. Need to worry about (1) deleting the selected range to clear it,
+                        // (2) deleting at the end of the string (thus allowing more matches), (3) deleting at
+                        // the middle (thus having no matches, maybe?)
+                        print("delete")
+                    } else {
+                        print("unknown special key: \(specialKey)")
+                    }
+                } else {
+//                    print("chars=\(event.characters): range=\(editor.selectedRange), string=\(editor.string)")
+                    let editor = currentEditor()!
+                    let currentString = editor.string
+                    if editor.selectedRange.location + editor.selectedRange.length == currentString.count {
+//                        print("at end")
+                    }
+                    // TODO let's worry about auto-complete later, and for now just do the filtering
+                    let menuItems = self.menuItems
+                    for i in 0..<menuItems.count {
+                        let menuItem = menuItems[i]
+                        let matched = SubsequenceMatcher.matches(lookFor: currentString, inString: menuItem.labelString)
+                        if matched.isEmpty {
+                            if i < AutoCompletingField.PINNED_OPTIONS_COUNT {
+                                menuItem.setMatched(matched: [])
+                            } else {
+                                menuItem.isHidden = true
+                            }
+                        } else {
+                            menuItem.setMatched(matched: matched)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    
     @objc private func buttonClicked() {
         menu!.minimumWidth = frame.width
         menu!.popUp(positioning: nil, at: NSPoint(x: 0, y: frame.height + 4), in: self)
@@ -137,6 +183,21 @@ class AutoCompletingField: NSTextField {
         override init(frame: NSRect) {
             super.init(frame: frame)
             commonInit()
+        }
+        
+        func setMatched(matched: [NSRange]) {
+            let attributedLabel = NSMutableAttributedString(string: labelString)
+            matched.forEach {range in
+                attributedLabel.addAttributes(
+                    [
+                        .foregroundColor: NSColor.findHighlightColor,
+                        .backgroundColor: NSColor.selectedControlColor,
+                        .underlineColor: NSColor.findHighlightColor,
+                        .underlineStyle: NSUnderlineStyle.single.rawValue,
+                    ],
+                    range: range)
+            }
+            textView.attributedStringValue = attributedLabel
         }
         
         var decorationLabel: String? {
@@ -196,7 +257,7 @@ class AutoCompletingField: NSTextField {
             textView.anchorAllSides(to: self)
         }
         
-        var labelString: String {
+        var labelString: String { // TODO rename to "value"?
             get {
                 return textView.stringValue
             }
