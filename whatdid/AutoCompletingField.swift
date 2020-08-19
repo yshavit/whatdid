@@ -178,6 +178,7 @@ class AutoCompletingField: NSTextField {
             }
             set (values) {
                 mainStack.views.forEach { $0.removeFromSuperview() }
+                mainStack.subviews.forEach { $0.removeFromSuperview() }
                 matchedSectionSeparators.removeAll()
                 for (i, option) in values.enumerated() {
                     if i == AutoCompletingField.PINNED_OPTIONS_COUNT {
@@ -185,7 +186,6 @@ class AutoCompletingField: NSTextField {
                         mainStack.addArrangedSubview(separator)
                         separator.widthAnchor.constraint(equalTo: mainStack.widthAnchor).isActive = true
                         separator.boxType = .separator
-                        mainStack.insertArrangedSubview(separator, at: i)
                         matchedSectionSeparators.append(separator)
                         matchedSectionSeparators.append(addGroupingLabel(text: "matched", under: separator.topAnchor))
                     }
