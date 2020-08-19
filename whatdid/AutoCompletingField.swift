@@ -154,6 +154,7 @@ class AutoCompletingField: NSTextField {
         private let optionsPopup: NSPanel
         private let onSelect: (String) -> Void
         private let closeButton: NSView
+        private var matchedSectionSeparators = [NSView]()
         
         init(closeButton: NSView, onSelect: @escaping (String) -> Void) {
             self.closeButton = closeButton
@@ -167,6 +168,7 @@ class AutoCompletingField: NSTextField {
             super.init()
             optionsPopup.delegate = self
             mainStack.useAutoLayout()
+            mainStack.edgeInsets.bottom = 4
             mainStack.orientation = .vertical
         }
         
@@ -176,16 +178,26 @@ class AutoCompletingField: NSTextField {
             }
             set (values) {
                 mainStack.views.forEach { $0.removeFromSuperview() }
-                for option in values {
+                matchedSectionSeparators.removeAll()
+                for (i, option) in values.enumerated() {
+                    if i == AutoCompletingField.PINNED_OPTIONS_COUNT {
+                        let separator = NSBox()
+                        mainStack.addArrangedSubview(separator)
+                        separator.widthAnchor.constraint(equalTo: mainStack.widthAnchor).isActive = true
+                        separator.boxType = .separator
+                        mainStack.insertArrangedSubview(separator, at: i)
+                        matchedSectionSeparators.append(separator)
+                        matchedSectionSeparators.append(addGroupingLabel(text: "matched", under: separator.topAnchor))
+                    }
                     let itemView = MenuItemView()
                     itemView.labelString = option
                     itemView.onSelect = onSelect
                     mainStack.addArrangedSubview(itemView)
                 }
-                
-                if values.count > AutoCompletingField.PINNED_OPTIONS_COUNT {
-                    // TODO add separator
+                if !values.isEmpty {
+                    _ = addGroupingLabel(text: "recent", under: mainStack.topAnchor)
                 }
+                
             }
         }
         
@@ -204,6 +216,7 @@ class AutoCompletingField: NSTextField {
         func match(_ lookFor: String) -> String? {
             let menuItems = self.menuItems
             var topResult: String?
+            var greatestMatchedIndex = -1
             for i in 0..<menuItems.count {
                 let menuItem = menuItems[i]
                 let matched = SubsequenceMatcher.matches(lookFor: lookFor, inString: menuItem.labelString)
@@ -217,10 +230,13 @@ class AutoCompletingField: NSTextField {
                     if topResult == nil {
                         topResult = menuItem.labelString
                     }
+                    greatestMatchedIndex = max(greatestMatchedIndex, i)
                     menuItem.isHidden = false
                     menuItem.setMatched(matched: matched)
                 }
             }
+            let showMatchedSectionSeparators = greatestMatchedIndex >= AutoCompletingField.PINNED_OPTIONS_COUNT
+            matchedSectionSeparators.forEach { $0.isHidden = !showMatchedSectionSeparators }
             optionsPopup.setContentSize(mainStack.fittingSize)
             return topResult
         }
@@ -259,6 +275,22 @@ class AutoCompletingField: NSTextField {
             return optionsPopup.contentView! as! NSStackView
         }
         
+        private func addGroupingLabel(text: String, under topAnchor: NSLayoutAnchor<NSLayoutYAxisAnchor>) -> NSView {
+            let label = NSTextField(labelWithString: "")
+            label.useAutoLayout()
+            
+            mainStack.addSubview(label)
+            label.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
+            label.textColor = NSColor.controlLightHighlightColor
+            label.topAnchor.constraint(equalTo: topAnchor).isActive = true
+            label.trailingAnchor.constraint(equalTo: mainStack.trailingAnchor, constant: -4).isActive = true
+            
+            let attributedValue = NSMutableAttributedString(string: text)
+            attributedValue.applyFontTraits(.italicFontMask, range: attributedValue.string.fullNsRange())
+            label.attributedStringValue = attributedValue
+            return label
+        }
+        
         private func trackClick(event: NSEvent) -> Bool {
             close()
             // If the click was on the button that opens this popup, we want to suppress the event. Otherwise,
@@ -277,7 +309,11 @@ class AutoCompletingField: NSTextField {
         print("clicked: \(value)")
     }
     
+    
     private class MenuItemView: NSView {
+        // Do we even need this class? Now that we don't have an NSMenuItem, can we just have each guy be
+        // an NSTextField, and have the popup window control (and move around) a single effectView, and
+        // also handle the mouse clicks?
         private var decoratedLabelView: NSTextField?
         private var effectView: NSVisualEffectView!
         private var textView: NSTextField!
