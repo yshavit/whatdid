@@ -102,11 +102,15 @@ class AutoCompletingField: NSTextField {
                         // (2) deleting at the end of the string (thus allowing more matches), (3) deleting at
                         // the middle (thus having no matches, maybe?)
                         print("delete")
+                        // TODO unify with the matching code below
+                        let topMatch = popupManager.match(currentEditor()!.string)
+                        print("top match: \(topMatch ?? "<none>")")
                     } else {
                         print("unknown special key: \(specialKey)")
                     }
                 } else {
 //                    print("chars=\(event.characters): range=\(editor.selectedRange), string=\(editor.string)")
+                    // TODO unify with the matching code above
                     let editor = currentEditor()!
                     let currentString = editor.string
                     if editor.selectedRange.location + editor.selectedRange.length == currentString.count {
@@ -155,7 +159,7 @@ class AutoCompletingField: NSTextField {
             self.closeButton = closeButton
             self.onSelect = onSelect
             optionsPopup = NSPanel(
-                contentRect: NSRect(x: 0, y: 0, width: 200, height: 100),
+                contentRect: NSRect(x: 0, y: 0, width: 200, height: 90),
                 styleMask: [.fullSizeContentView],
                 backing: .buffered,
                 defer: false)
@@ -217,6 +221,7 @@ class AutoCompletingField: NSTextField {
                     menuItem.setMatched(matched: matched)
                 }
             }
+            optionsPopup.setContentSize(mainStack.fittingSize)
             return topResult
         }
         
