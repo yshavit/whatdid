@@ -7,10 +7,6 @@ class SubsequenceMatcher {
         // nothing
     }
     
-    static func match(lookFor needle: String, inStrings haystacks: [String]) -> [Match] {
-        return haystacks.compactMap { Match(string: $0, matchedRanges: matches(lookFor: needle, inString: $0)) }
-    }
-    
     static func matches(lookFor needle: String, inString haystack: String) -> [NSRange] {
         var needleChars = needle.unicodeScalars.makeIterator()
         let haystackUnicodeScalars = haystack.lowercased().unicodeScalars
