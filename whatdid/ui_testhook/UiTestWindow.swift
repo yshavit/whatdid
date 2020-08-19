@@ -57,10 +57,7 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
     
     @objc private func setAutocompleterOptions(_ sender: NSTextField) {
         let options = sender.stringValue.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces)}
-        mainStack.arrangedSubviews.compactMap { $0 as? AutoCompletingField} . forEach{autocompleter in
-            autocompleter.options = options
-        }
-        
+        mainStack.arrangedSubviews.compactMap { $0 as? AutoCompletingField } .forEach { $0.options = options }
     }
 
 }

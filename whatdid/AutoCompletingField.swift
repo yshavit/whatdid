@@ -4,9 +4,10 @@ import Cocoa
 
 class AutoCompletingField: NSTextField {
     
-    private static let PINNED_OPTIONS_COUNT = 5
+    private static let PINNED_OPTIONS_COUNT = 3
     
     private var pulldownButton: NSButton!
+    private var popupManager: PopupManager!
     
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -62,9 +63,19 @@ class AutoCompletingField: NSTextField {
             owner: self)
         addTrackingArea(pulldownButtonTracker)
         
-        options = []
+        popupManager = PopupManager(closeButton: pulldownButton, onSelect: self.optionClicked(value:))
     }
     
+    var options: [String] {
+        get {
+            return popupManager.options
+        }
+        set (values) {
+            popupManager.options = values
+        }
+    }
+    
+    /// Set the cursor to the arrow (instead of NSTextField's default I-beam) when hovering over the button
     override func mouseMoved(with event: NSEvent) {
         if pulldownButton.frame.contains(convert(event.locationInWindow, from: nil)) {
             NSCursor.arrow.set()
@@ -73,48 +84,12 @@ class AutoCompletingField: NSTextField {
         }
     }
     
-    var options: [String] {
-        get {
-            return menuItems.map { $0.labelString }
+    override func becomeFirstResponder() -> Bool {
+        let succeeded = super.becomeFirstResponder()
+        if succeeded {
+            showOptions()
         }
-        set(values) {
-            let menu: NSMenu
-            if let existingMenu = self.menu {
-                menu = existingMenu
-                menu.removeAllItems()
-            } else {
-                menu = NSMenu()
-                self.menu = menu
-            }
-            buildItems(options: values, on: menu)
-        }
-    }
-    
-    private func buildItems(options: [String], on menu: NSMenu) {
-        for option in options {
-            let itemView = MenuItemView()
-            itemView.labelString = option
-            itemView.onSelect = self.optionClicked
-            let menuItem = itemView.asMenuItem
-            menu.addItem(menuItem)
-            
-            switch menu.numberOfItems {
-            case 1:
-                // First item; put in the "recents" label
-                itemView.decorationLabel = "recent"
-            case AutoCompletingField.PINNED_OPTIONS_COUNT:
-                menu.addItem(NSMenuItem.separator())
-            case AutoCompletingField.PINNED_OPTIONS_COUNT + 2:
-                // This is the first non-pinned option; remember that PINNED_OPTIONS_COUNT + 1 is the separator.
-                itemView.decorationLabel = "matched"
-            default:
-                break
-            }
-        }
-    }
-    
-    private var menuItems: [MenuItemView] {
-        return menu?.items.compactMap {$0.view as? MenuItemView} ?? []
+        return succeeded
     }
     
     override func textDidChange(_ notification: Notification) {
@@ -138,34 +113,162 @@ class AutoCompletingField: NSTextField {
 //                        print("at end")
                     }
                     // TODO let's worry about auto-complete later, and for now just do the filtering
-                    let menuItems = self.menuItems
-                    for i in 0..<menuItems.count {
-                        let menuItem = menuItems[i]
-                        let matched = SubsequenceMatcher.matches(lookFor: currentString, inString: menuItem.labelString)
-                        if matched.isEmpty {
-                            if i < AutoCompletingField.PINNED_OPTIONS_COUNT {
-                                menuItem.setMatched(matched: [])
-                            } else {
-                                menuItem.isHidden = true
-                            }
-                        } else {
-                            menuItem.setMatched(matched: matched)
-                        }
-                    }
+                    let topMatch = popupManager.match(currentString)
+                    print("top match: \(topMatch ?? "<none>")")
                 }
             }
         }
     }
     
-    
-    
     @objc private func buttonClicked() {
-        menu!.minimumWidth = frame.width
-        menu!.popUp(positioning: nil, at: NSPoint(x: 0, y: frame.height + 4), in: self)
+        if popupManager.windowIsVisible {
+            // Note: we shouldn't ever actually get here, but I'm putting it just in case.
+            // If the popup is open, any click outside of it (including to this button) will close it.
+            NSLog("Unexpectedly saw button press while options popup was open on \(idForLogging)")
+            popupManager.close()
+        } else {
+            if !(window?.makeFirstResponder(self) ?? false) {
+                NSLog("Couldn't make first responder: \(idForLogging)")
+            }
+            showOptions()
+        }
+    }
+    
+    private var idForLogging: String {
+        return accessibilityLabel() ?? "unidentifed field at \(frame.debugDescription)"
+    }
+    
+    private func showOptions() {
+        popupManager.show(
+            minWidth: frame.width,
+            matching: stringValue,
+            atTopLeft: window!.convertPoint(toScreen: frame.origin))
+    }
+    
+    private class PopupManager: NSObject, NSWindowDelegate {
+        private var activeEventMonitors = [Any?]()
+        private let optionsPopup: NSPanel
+        private let onSelect: (String) -> Void
+        private let closeButton: NSView
+        
+        init(closeButton: NSView, onSelect: @escaping (String) -> Void) {
+            self.closeButton = closeButton
+            self.onSelect = onSelect
+            optionsPopup = NSPanel(
+                contentRect: NSRect(x: 0, y: 0, width: 200, height: 100),
+                styleMask: [.fullSizeContentView],
+                backing: .buffered,
+                defer: false)
+            optionsPopup.contentView = NSStackView()
+            super.init()
+            optionsPopup.delegate = self
+            mainStack.useAutoLayout()
+            mainStack.orientation = .vertical
+        }
+        
+        var options: [String] {
+            get {
+                return menuItems.map { $0.labelString }
+            }
+            set (values) {
+                mainStack.views.forEach { $0.removeFromSuperview() }
+                for option in values {
+                    let itemView = MenuItemView()
+                    itemView.labelString = option
+                    itemView.onSelect = onSelect
+                    mainStack.addArrangedSubview(itemView)
+                }
+                
+                if values.count > AutoCompletingField.PINNED_OPTIONS_COUNT {
+                    // TODO add separator
+                }
+            }
+        }
+        
+        private var menuItems: [MenuItemView] {
+            return mainStack.arrangedSubviews.compactMap { $0 as? MenuItemView }
+        }
+        
+        var windowIsVisible: Bool {
+            return optionsPopup.isVisible
+        }
+        
+        func close() {
+            optionsPopup.close()
+        }
+        
+        func match(_ lookFor: String) -> String? {
+            let menuItems = self.menuItems
+            var topResult: String?
+            for i in 0..<menuItems.count {
+                let menuItem = menuItems[i]
+                let matched = SubsequenceMatcher.matches(lookFor: lookFor, inString: menuItem.labelString)
+                if matched.isEmpty && (!lookFor.isEmpty) {
+                    if i < AutoCompletingField.PINNED_OPTIONS_COUNT {
+                        menuItem.setMatched(matched: [])
+                    } else {
+                        menuItem.isHidden = true
+                    }
+                } else {
+                    if topResult == nil {
+                        topResult = menuItem.labelString
+                    }
+                    menuItem.isHidden = false
+                    menuItem.setMatched(matched: matched)
+                }
+            }
+            return topResult
+        }
+        
+        func show(minWidth: CGFloat, matching lookFor: String, atTopLeft: CGPoint) {
+            guard !windowIsVisible else {
+                return
+            }
+            mainStack.widthAnchor.constraint(greaterThanOrEqualToConstant: minWidth).isActive = true
+            mainStack.layoutSubtreeIfNeeded()
+            var popupOrigin = atTopLeft
+            popupOrigin.y -= (optionsPopup.frame.height + 4)
+            optionsPopup.setFrameOrigin(popupOrigin)
+            _ = match(lookFor)
+            optionsPopup.display()
+            optionsPopup.setIsVisible(true)
+            
+            let eventMask: NSEvent.EventTypeMask = [.leftMouseDown, .rightMouseDown, .otherMouseDown]
+            activeEventMonitors.append(
+                NSEvent.addLocalMonitorForEvents(matching: eventMask) {event in
+                    return self.trackClick(event: event) ? event : nil
+                })
+            activeEventMonitors.append(
+                NSEvent.addGlobalMonitorForEvents(matching: eventMask) {event in
+                    _ = self.trackClick(event: event)
+                })
+        }
+        
+        func windowWillClose(_ notification: Notification) {
+            activeEventMonitors.compactMap{$0}.forEach { NSEvent.removeMonitor($0) }
+            activeEventMonitors.removeAll()
+        }
+        
+        /// Convenience getter
+        private var mainStack: NSStackView {
+            return optionsPopup.contentView! as! NSStackView
+        }
+        
+        private func trackClick(event: NSEvent) -> Bool {
+            close()
+            // If the click was on the button that opens this popup, we want to suppress the event. Otherwise,
+            // the button will just open the popup back up.
+            if let eventWindow = event.window, eventWindow == closeButton.window {
+                let eventLocationInButtonSuperview = closeButton.superview!.convert(event.locationInWindow, from: nil)
+                if closeButton.frame.contains(eventLocationInButtonSuperview) {
+                    return false
+                }
+            }
+            return true
+        }
     }
     
     private func optionClicked(value: String) {
-        menu?.cancelTrackingWithoutAnimation()
         print("clicked: \(value)")
     }
     
@@ -191,7 +294,7 @@ class AutoCompletingField: NSTextField {
                 attributedLabel.addAttributes(
                     [
                         .foregroundColor: NSColor.findHighlightColor,
-                        .backgroundColor: NSColor.selectedControlColor,
+                        .backgroundColor: NSColor.windowBackgroundColor,
                         .underlineColor: NSColor.findHighlightColor,
                         .underlineStyle: NSUnderlineStyle.single.rawValue,
                     ],
