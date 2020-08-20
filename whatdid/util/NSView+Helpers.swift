@@ -5,6 +5,7 @@ import Cocoa
 extension NSView {
     
     func anchorAllSides(to other: NSView) {
+        useAutoLayout()
         topAnchor.constraint(equalTo: other.topAnchor).isActive = true
         leadingAnchor.constraint(equalTo: other.leadingAnchor).isActive = true
         bottomAnchor.constraint(equalTo: other.bottomAnchor).isActive = true

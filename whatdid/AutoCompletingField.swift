@@ -150,9 +150,6 @@ class AutoCompletingField: NSTextField {
     }
     
     private class PopupManager: NSObject, NSWindowDelegate {
-        /// A tag that marks an `NSTextField` as one that specifically holds an option
-        private static let optionFieldTag = 1
-        
         private var activeEventMonitors = [Any?]()
         private let optionsPopup: NSPanel
         private let onSelect: (String) -> Void
@@ -168,11 +165,14 @@ class AutoCompletingField: NSTextField {
                 backing: .buffered,
                 defer: false)
             optionsPopup.contentView = NSStackView()
+            
             super.init()
             optionsPopup.delegate = self
             mainStack.useAutoLayout()
             mainStack.edgeInsets.bottom = 4
             mainStack.orientation = .vertical
+            mainStack.alignment = .leading
+            mainStack.spacing = 0
         }
         
         var options: [String] {
@@ -183,7 +183,7 @@ class AutoCompletingField: NSTextField {
                 mainStack.views.forEach { $0.removeFromSuperview() }
                 mainStack.subviews.forEach { $0.removeFromSuperview() }
                 matchedSectionSeparators.removeAll()
-                for (i, option) in values.enumerated() {
+                for (i, optionText) in values.enumerated() {
                     if i == AutoCompletingField.PINNED_OPTIONS_COUNT {
                         let separator = NSBox()
                         mainStack.addArrangedSubview(separator)
@@ -192,9 +192,10 @@ class AutoCompletingField: NSTextField {
                         matchedSectionSeparators.append(separator)
                         matchedSectionSeparators.append(addGroupingLabel(text: "matched", under: separator.topAnchor))
                     }
-                    let itemView = NSTextField(labelWithString: option)
-                    itemView.tag = PopupManager.optionFieldTag
-                    mainStack.addArrangedSubview(itemView)
+                    let option = Option()
+                    option.stringValue = optionText
+                    mainStack.addArrangedSubview(option)
+                    option.widthAnchor.constraint(equalTo: mainStack.widthAnchor).isActive = true
                 }
                 if !values.isEmpty {
                     _ = addGroupingLabel(text: "recent", under: mainStack.topAnchor)
@@ -202,8 +203,8 @@ class AutoCompletingField: NSTextField {
             }
         }
         
-        private var optionFields: [NSTextField] {
-            return mainStack.arrangedSubviews.compactMap { $0 as? NSTextField } . filter { $0.tag == PopupManager.optionFieldTag}
+        private var optionFields: [Option] {
+            return mainStack.arrangedSubviews.compactMap { $0 as? Option }
         }
         
         var windowIsVisible: Bool {
@@ -212,21 +213,6 @@ class AutoCompletingField: NSTextField {
         
         func close() {
             optionsPopup.close()
-        }
-        
-        private func setMatches(on field: NSTextField, to matched: [NSRange]) {
-            let attributedLabel = NSMutableAttributedString(string: field.stringValue)
-            matched.forEach {range in
-                attributedLabel.addAttributes(
-                    [
-                        .foregroundColor: NSColor.findHighlightColor,
-                        .backgroundColor: NSColor.windowBackgroundColor,
-                        .underlineColor: NSColor.findHighlightColor,
-                        .underlineStyle: NSUnderlineStyle.single.rawValue,
-                    ],
-                    range: range)
-            }
-            field.attributedStringValue = attributedLabel
         }
         
         func match(_ lookFor: String) -> String? {
@@ -238,7 +224,7 @@ class AutoCompletingField: NSTextField {
                 let matched = SubsequenceMatcher.matches(lookFor: lookFor, inString: item.stringValue)
                 if matched.isEmpty && (!lookFor.isEmpty) {
                     if i < AutoCompletingField.PINNED_OPTIONS_COUNT {
-                        setMatches(on: item, to: [])
+                        item.setMatches([])
                     } else {
                         item.isHidden = true
                     }
@@ -248,7 +234,7 @@ class AutoCompletingField: NSTextField {
                     }
                     greatestMatchedIndex = max(greatestMatchedIndex, i)
                     item.isHidden = false
-                    setMatches(on: item, to: matched)
+                    item.setMatches(matched)
                 }
             }
             let showMatchedSectionSeparators = greatestMatchedIndex >= AutoCompletingField.PINNED_OPTIONS_COUNT
@@ -294,7 +280,6 @@ class AutoCompletingField: NSTextField {
         private func addGroupingLabel(text: String, under topAnchor: NSLayoutAnchor<NSLayoutYAxisAnchor>) -> NSView {
             let label = NSTextField(labelWithString: "")
             label.useAutoLayout()
-            
             mainStack.addSubview(label)
             label.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
             label.textColor = NSColor.controlLightHighlightColor
@@ -319,129 +304,89 @@ class AutoCompletingField: NSTextField {
             }
             return true
         }
+        
+        class Option: NSView {
+            static let paddingH: CGFloat = 2.0
+            static let paddingV: CGFloat = 2.0
+            private var label: NSTextField!
+            private var highlightOverlay: NSVisualEffectView!
+            
+            override init(frame frameRect: NSRect) {
+                super.init(frame: frameRect)
+                commonInit()
+            }
+            
+            required init?(coder: NSCoder) {
+                super.init(coder: coder)
+                commonInit()
+            }
+            
+            private func commonInit() {
+                highlightOverlay = NSVisualEffectView()
+                highlightOverlay.useAutoLayout()
+                highlightOverlay.state = .active
+                highlightOverlay.material = .selection
+                highlightOverlay.isEmphasized = true
+                highlightOverlay.blendingMode = .behindWindow
+                highlightOverlay.isHidden = true
+                addSubview(highlightOverlay)
+                highlightOverlay.anchorAllSides(to: self)
+                
+                let labelPadding = NSView()
+                addSubview(labelPadding)
+                labelPadding.anchorAllSides(to: self)
+                
+                label = NSTextField(labelWithString: "")
+                label.useAutoLayout()
+                labelPadding.addSubview(label)
+                labelPadding.leadingAnchor.constraint(equalTo: label.leadingAnchor, constant: -Option.paddingH).isActive = true
+                labelPadding.trailingAnchor.constraint(equalTo: label.trailingAnchor, constant: Option.paddingH).isActive = true
+                labelPadding.topAnchor.constraint(equalTo: label.topAnchor, constant: -Option.paddingV).isActive = true
+                labelPadding.bottomAnchor.constraint(equalTo: label.bottomAnchor, constant: Option.paddingV).isActive = true
+                
+                let pulldownButtonTracker = NSTrackingArea(
+                    rect: frame,
+                    options: [.inVisibleRect, .mouseEnteredAndExited, .activeAlways],
+                    owner: self)
+                addTrackingArea(pulldownButtonTracker)
+            }
+            
+            var stringValue: String {
+                get {
+                    return label.stringValue
+                }
+                set(value) {
+                    label.stringValue = value
+                }
+            }
+            
+            func setMatches(_ matched: [NSRange]) {
+                let attributedLabel = NSMutableAttributedString(string: stringValue)
+                matched.forEach {range in
+                    attributedLabel.addAttributes(
+                        [
+                            .foregroundColor: NSColor.findHighlightColor,
+                            .underlineColor: NSColor.findHighlightColor,
+                            .underlineStyle: NSUnderlineStyle.single.rawValue,
+                        ],
+                        range: range)
+                }
+                label.attributedStringValue = attributedLabel
+            }
+            
+            override func mouseEntered(with event: NSEvent) {
+                highlightOverlay.isHidden = false
+            }
+            
+            override func mouseExited(with event: NSEvent) {
+                highlightOverlay.isHidden = true
+            }
+        }
     }
     
     private func optionClicked(value: String) {
         print("clicked: \(value)")
     }
-    
-    
-//    private class MenuItemView: NSView {
-//        // Do we even need this class? Now that we don't have an NSMenuItem, can we just have each guy be
-//        // an NSTextField, and have the popup window control (and move around) a single effectView, and
-//        // also handle the mouse clicks?
-//        private var decoratedLabelView: NSTextField?
-//        private var effectView: NSVisualEffectView!
-//        private var textView: NSTextField!
-//        fileprivate var onSelect: (String) -> Void = {_ in return}
-//
-//        required init?(coder: NSCoder) {
-//            super.init(coder: coder)
-//            commonInit()
-//        }
-//
-//        override init(frame: NSRect) {
-//            super.init(frame: frame)
-//            commonInit()
-//        }
-//
-//        func setMatched(matched: [NSRange]) {
-//            let attributedLabel = NSMutableAttributedString(string: labelString)
-//            matched.forEach {range in
-//                attributedLabel.addAttributes(
-//                    [
-//                        .foregroundColor: NSColor.findHighlightColor,
-//                        .backgroundColor: NSColor.windowBackgroundColor,
-//                        .underlineColor: NSColor.findHighlightColor,
-//                        .underlineStyle: NSUnderlineStyle.single.rawValue,
-//                    ],
-//                    range: range)
-//            }
-//            textView.attributedStringValue = attributedLabel
-//        }
-//
-//        var decorationLabel: String? {
-//            get {
-//                return decoratedLabelView?.stringValue
-//            }
-//            set(maybeValue) {
-//                if let value = maybeValue {
-//                    if decoratedLabelView == nil {
-//                        let decoratedLabelView = NSTextField(labelWithString: "")
-//                        self.decoratedLabelView = decoratedLabelView
-//                        decoratedLabelView.useAutoLayout()
-//
-//                        addSubview(decoratedLabelView)
-//                        decoratedLabelView.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
-//                        decoratedLabelView.textColor = NSColor.controlLightHighlightColor
-//                        decoratedLabelView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-//                        decoratedLabelView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4).isActive = true
-//                    }
-//                    let attributedValue = NSMutableAttributedString(string: value)
-//                    attributedValue.applyFontTraits(.italicFontMask, range: attributedValue.string.fullNsRange())
-//                    decoratedLabelView!.attributedStringValue = attributedValue
-//                } else if decoratedLabelView != nil {
-//                    decoratedLabelView!.removeFromSuperview()
-//                    decoratedLabelView = nil
-//                }
-//            }
-//        }
-//
-//        var asMenuItem: NSMenuItem {
-//            get {
-//                let item = NSMenuItem()
-//                item.target = self
-//                item.action = #selector(ignoreThis(_:))
-//                item.view = self
-//                return item
-//            }
-//        }
-//
-//        private func commonInit() {
-//            useAutoLayout()
-//
-//            // Highlight when hover
-//            effectView = NSVisualEffectView()
-//            effectView.useAutoLayout()
-//            effectView.state = .active
-//            effectView.material = .selection
-//            effectView.isEmphasized = true
-//            effectView.blendingMode = .behindWindow
-//            addSubview(effectView)
-//            effectView.anchorAllSides(to: self)
-//
-//            // The actual label (its value is set by labelString)
-//            textView = NSTextField(labelWithString: "")
-//            textView.useAutoLayout()
-//            addSubview(textView)
-//            textView.anchorAllSides(to: self)
-//        }
-//
-//        var labelString: String { // TODO rename to "value"?
-//            get {
-//                return textView.stringValue
-//            }
-//            set (value) {
-//                textView.stringValue = value
-//            }
-//        }
-//
-//        override func mouseUp(with event: NSEvent) {
-//            onSelect(labelString)
-//        }
-//
-//        override func draw(_ dirtyRect: NSRect) {
-//            let isHighlighted = enclosingMenuItem?.isHighlighted ?? false
-//            effectView.isHidden = !isHighlighted
-//            super.draw(dirtyRect)
-//        }
-//
-//        @objc private func ignoreThis(_ option: NSMenuItem) {
-//            // Don't do anything. We need an action on the NSMenuItem in order for the isHighlighted to update;
-//            // but I can't get the click to ever actually *do* anything, so instead I have the onAction handler
-//            // to mimic the same. This is probably a wrong approach, but whatever, it works.
-//        }
-//    }
     
     /// An NSTextFieldCell with a smaller frame, to accommodate the popup button.
     private class ShrunkenTextFieldCell: NSTextFieldCell {
