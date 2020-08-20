@@ -63,7 +63,7 @@ class AutoCompletingField: NSTextField {
             owner: self)
         addTrackingArea(pulldownButtonTracker)
         
-        popupManager = PopupManager(closeButton: pulldownButton, onSelect: self.optionClicked(value:))
+        popupManager = PopupManager(closeButton: pulldownButton, onSelect: { self.stringValue = $0 })
     }
     
     var options: [String] {
@@ -258,7 +258,7 @@ class AutoCompletingField: NSTextField {
             
             let eventMask: NSEvent.EventTypeMask = [.leftMouseDown, .rightMouseDown, .otherMouseDown]
             activeEventMonitors.append(
-                NSEvent.addLocalMonitorForEvents(matching: eventMask) {event in
+                NSEvent.addLocalMonitorForEvents(matching: eventMask.union(.leftMouseUp)) {event in
                     return self.trackClick(event: event) ? event : nil
                 })
             activeEventMonitors.append(
@@ -293,6 +293,34 @@ class AutoCompletingField: NSTextField {
         }
         
         private func trackClick(event: NSEvent) -> Bool {
+            if let eventWindow = event.window, eventWindow == optionsPopup {
+                // If the event is a mouse event within the popup, then it's either a mouseup to finish a click
+                // (including a long click, and even including one that's actually a drag under the hood) or it's
+                // an event to start the click. If we start the click, ignore the event. If it's the end of the
+                // click, we'll handle the select.
+                if event.type != .leftMouseUp {
+                    return false
+                }
+                // We can't just let the Option handle this. If the user holds down on one element and then
+                // "drags" to another, the mouseup belongs to the first element; we really want it to belong
+                // to where the cursor ended up. So, we'll get the location and find the view there, and then
+                // walk up the superview chain until we get to an Option (whose stringValue we then get) or
+                // see that there's nothing there
+                let locationInSuperview = mainStack.superview!.convert(event.locationInWindow, from: nil)
+                if let hitItem = mainStack.hitTest(locationInSuperview) {
+                    var viewSearch: NSView? = hitItem
+                    while viewSearch != nil {
+                        if let option = viewSearch as? Option {
+                            onSelect(option.stringValue)
+                            break
+                        }
+                        viewSearch = viewSearch?.superview
+                    }
+                }
+                close()
+                return false
+                
+            }
             close()
             // If the click was on the button that opens this popup, we want to suppress the event. Otherwise,
             // the button will just open the popup back up.
@@ -346,7 +374,7 @@ class AutoCompletingField: NSTextField {
                 
                 let pulldownButtonTracker = NSTrackingArea(
                     rect: frame,
-                    options: [.inVisibleRect, .mouseEnteredAndExited, .activeAlways],
+                    options: [.inVisibleRect, .mouseEnteredAndExited, .activeAlways, .enabledDuringMouseDrag],
                     owner: self)
                 addTrackingArea(pulldownButtonTracker)
             }
@@ -382,10 +410,6 @@ class AutoCompletingField: NSTextField {
                 highlightOverlay.isHidden = true
             }
         }
-    }
-    
-    private func optionClicked(value: String) {
-        print("clicked: \(value)")
     }
     
     /// An NSTextFieldCell with a smaller frame, to accommodate the popup button.
