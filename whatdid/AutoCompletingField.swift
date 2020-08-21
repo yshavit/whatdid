@@ -63,7 +63,7 @@ class AutoCompletingField: NSTextField {
             owner: self)
         addTrackingArea(pulldownButtonTracker)
         
-        popupManager = PopupManager(closeButton: pulldownButton, onSelect: { self.stringValue = $0 })
+        popupManager = PopupManager(parent: self)
     }
     
     var options: [String] {
@@ -96,7 +96,11 @@ class AutoCompletingField: NSTextField {
         super.textDidChange(notification)
         if let event = NSApp.currentEvent {
             if event.type == .keyDown {
-                if event.specialKey == nil {
+                if let specialKey = event.specialKey {
+                    if specialKey == .delete {
+                        _ = popupManager.match(stringValue)
+                    }
+                } else {
                     let editor = currentEditor()!
                     let maybeAutocomplete = popupManager.match(stringValue)
                     // Selection is the tail of the string
@@ -142,19 +146,18 @@ class AutoCompletingField: NSTextField {
     private class PopupManager: NSObject, NSWindowDelegate {
         private var activeEventMonitors = [Any?]()
         private let optionsPopup: NSPanel
-        private let onSelect: (String) -> Void
-        private let closeButton: NSView
+        private let parent: AutoCompletingField
         private var matchedSectionSeparators = [NSView]()
         
-        init(closeButton: NSView, onSelect: @escaping (String) -> Void) {
-            self.closeButton = closeButton
-            self.onSelect = onSelect
+        init(parent: AutoCompletingField) {
+            self.parent = parent
             optionsPopup = NSPanel(
                 contentRect: NSRect(x: 0, y: 0, width: 200, height: 90),
                 styleMask: [.fullSizeContentView],
                 backing: .buffered,
                 defer: false)
             optionsPopup.contentView = NSStackView()
+            optionsPopup.level = .popUpMenu
             
             super.init()
             optionsPopup.delegate = self
@@ -310,7 +313,7 @@ class AutoCompletingField: NSTextField {
                     var viewSearch: NSView? = hitItem
                     while viewSearch != nil {
                         if let option = viewSearch as? Option {
-                            onSelect(option.stringValue)
+                            parent.stringValue = option.stringValue
                             break
                         }
                         viewSearch = viewSearch?.superview
@@ -320,16 +323,24 @@ class AutoCompletingField: NSTextField {
                 return false
                 
             }
-            close()
-            // If the click was on the button that opens this popup, we want to suppress the event. Otherwise,
-            // the button will just open the popup back up.
+
+            var shouldClose = true // Most clicks close the popups; the only exception is clicking in the text field
+            var continueProcessingEvent = true // See below for the one exception.
+            let closeButton = parent.pulldownButton!
             if let eventWindow = event.window, eventWindow == closeButton.window {
-                let eventLocationInButtonSuperview = closeButton.superview!.convert(event.locationInWindow, from: nil)
-                if closeButton.frame.contains(eventLocationInButtonSuperview) {
-                    return false
+                // If the click was on the button that opens this popup, we want to suppress the event. Otherwise,
+                // the button will just open the popup back up.
+                if closeButton.contains(pointInWindowCoordinates: event.locationInWindow) {
+                    parent.window?.makeFirstResponder(nil)
+                    continueProcessingEvent = false
+                } else if parent.contains(pointInWindowCoordinates: event.locationInWindow) {
+                    shouldClose = false
                 }
             }
-            return true
+            if shouldClose {
+                close()
+            }
+            return continueProcessingEvent
         }
         
         class Option: NSView {

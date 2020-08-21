@@ -15,4 +15,9 @@ extension NSView {
     func useAutoLayout() {
         translatesAutoresizingMaskIntoConstraints = false
     }
+    
+    func contains(pointInWindowCoordinates: NSPoint) -> Bool {
+        let pointInSuperviewCoordinates = superview!.convert(pointInWindowCoordinates, from: nil)
+        return frame.contains(pointInSuperviewCoordinates)
+    }
 }
