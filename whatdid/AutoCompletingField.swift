@@ -96,29 +96,19 @@ class AutoCompletingField: NSTextField {
         super.textDidChange(notification)
         if let event = NSApp.currentEvent {
             if event.type == .keyDown {
-                if let specialKey = event.specialKey {
-                    if specialKey == .delete {
-                        // TODO handle delete. Need to worry about (1) deleting the selected range to clear it,
-                        // (2) deleting at the end of the string (thus allowing more matches), (3) deleting at
-                        // the middle (thus having no matches, maybe?)
-                        print("delete")
-                        // TODO unify with the matching code below
-                        let topMatch = popupManager.match(currentEditor()!.string)
-                        print("top match: \(topMatch ?? "<none>")")
-                    } else {
-                        print("unknown special key: \(specialKey)")
-                    }
-                } else {
-//                    print("chars=\(event.characters): range=\(editor.selectedRange), string=\(editor.string)")
-                    // TODO unify with the matching code above
+                if event.specialKey == nil {
                     let editor = currentEditor()!
-                    let currentString = editor.string
-                    if editor.selectedRange.location + editor.selectedRange.length == currentString.count {
-//                        print("at end")
+                    let maybeAutocomplete = popupManager.match(stringValue)
+                    // Selection is the tail of the string
+                    if let autoComplete = maybeAutocomplete, editor.selectedRange.location + editor.selectedRange.length == stringValue.count {
+                        let charsToAutocomplete = autoComplete.count - stringValue.count
+                        if charsToAutocomplete > 0 {
+                            let autocompleTail = String(autoComplete.dropFirst(stringValue.count))
+                            let stringCountBeforeAutocomplete = stringValue.count
+                            stringValue += autocompleTail
+                            editor.selectedRange = NSRange(location: stringCountBeforeAutocomplete, length: charsToAutocomplete)
+                        }
                     }
-                    // TODO let's worry about auto-complete later, and for now just do the filtering
-                    let topMatch = popupManager.match(currentString)
-                    print("top match: \(topMatch ?? "<none>")")
                 }
             }
         }
@@ -217,7 +207,7 @@ class AutoCompletingField: NSTextField {
         
         func match(_ lookFor: String) -> String? {
             let optionFields = self.optionFields
-            var topResult: String?
+            var shortestPrefixMatch: String?
             var greatestMatchedIndex = -1
             for i in 0..<optionFields.count {
                 let item = optionFields[i]
@@ -229,8 +219,17 @@ class AutoCompletingField: NSTextField {
                         item.isHidden = true
                     }
                 } else {
-                    if topResult == nil {
-                        topResult = item.stringValue
+                    let itemValue = item.stringValue
+                    if itemValue.starts(with: lookFor) {
+                        let useItemValueAsShortestPrefixMatch: Bool
+                        if let existing = shortestPrefixMatch {
+                            useItemValueAsShortestPrefixMatch = itemValue.count < existing.count
+                        } else {
+                            useItemValueAsShortestPrefixMatch = true
+                        }
+                        if useItemValueAsShortestPrefixMatch {
+                            shortestPrefixMatch = itemValue
+                        }
                     }
                     greatestMatchedIndex = max(greatestMatchedIndex, i)
                     item.isHidden = false
@@ -240,7 +239,7 @@ class AutoCompletingField: NSTextField {
             let showMatchedSectionSeparators = greatestMatchedIndex >= AutoCompletingField.PINNED_OPTIONS_COUNT
             matchedSectionSeparators.forEach { $0.isHidden = !showMatchedSectionSeparators }
             optionsPopup.setContentSize(mainStack.fittingSize)
-            return topResult
+            return shortestPrefixMatch
         }
         
         func show(minWidth: CGFloat, matching lookFor: String, atTopLeft: CGPoint) {
