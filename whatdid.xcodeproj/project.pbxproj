@@ -41,6 +41,7 @@
 		7EBE61F124DD2739000B2CB3 /* PtnViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */; };
 		7EBE61F324DD28F2000B2CB3 /* XCUIElement+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */; };
 		7EBFC7C024DA4CB4007D5CAE /* DebugMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBFC7BF24DA4CB4007D5CAE /* DebugMode.swift */; };
+		7ECF97A724F1D50100DBF1BF /* NSControl+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECF97A624F1D50100DBF1BF /* NSControl+Helper.swift */; };
 		7EDA368F24D54EA300F5E368 /* FlippedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA368E24D54EA300F5E368 /* FlippedView.swift */; };
 		7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA369224D60FCD00F5E368 /* ButtonWithClosure.swift */; };
 		7EDA369524D6A95B00F5E368 /* TimeUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA369424D6A95B00F5E368 /* TimeUtil.swift */; };
@@ -118,6 +119,7 @@
 		7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIElement+Helpers.swift"; sourceTree = "<group>"; };
 		7EBFC7BF24DA4CB4007D5CAE /* DebugMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugMode.swift; sourceTree = "<group>"; };
 		7EBFC7C124DA71B6007D5CAE /* DebugModeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugModeTest.swift; sourceTree = "<group>"; };
+		7ECF97A624F1D50100DBF1BF /* NSControl+Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSControl+Helper.swift"; sourceTree = "<group>"; };
 		7EDA368E24D54EA300F5E368 /* FlippedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlippedView.swift; sourceTree = "<group>"; };
 		7EDA369224D60FCD00F5E368 /* ButtonWithClosure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithClosure.swift; sourceTree = "<group>"; };
 		7EDA369424D6A95B00F5E368 /* TimeUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeUtil.swift; sourceTree = "<group>"; };
@@ -296,6 +298,7 @@
 				7EE0E74724EA1ECD002D03F8 /* String+Helpers.swift */,
 				7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */,
 				7EEF324524EA542D002E217A /* NSRange+Helpers.swift */,
+				7ECF97A624F1D50100DBF1BF /* NSControl+Helper.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -517,6 +520,7 @@
 				7E7C385424DF3A0300CFF3E7 /* PtnViewController+UIHook.swift in Sources */,
 				7E37A29B24C0293E005BA1DF /* Entry+CoreDataProperties.swift in Sources */,
 				7EE4E39624E24A3F00552AAF /* ManualTickSchedulerWindow.swift in Sources */,
+				7ECF97A724F1D50100DBF1BF /* NSControl+Helper.swift in Sources */,
 				7EE0E74624E8899E002D03F8 /* AutoCompletingField.swift in Sources */,
 				7EF8579324E094D100867832 /* OpenCloseHelper.swift in Sources */,
 				7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */,
