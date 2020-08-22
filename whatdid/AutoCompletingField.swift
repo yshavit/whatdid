@@ -2,9 +2,11 @@
 
 import Cocoa
 
-class AutoCompletingField: NSTextField {
+class AutoCompletingField: NSTextField, NSTextViewDelegate {
     
     private static let PINNED_OPTIONS_COUNT = 3
+    var previousAutocompleteHeadLength = 0
+    var shouldAutocompleteOnTextChange = false
     
     private var pulldownButton: NSButton!
     private var popupManager: PopupManager!
@@ -92,28 +94,30 @@ class AutoCompletingField: NSTextField {
         return succeeded
     }
     
+    func textViewDidChangeSelection(_ notification: Notification) {
+        let selectedRange = currentEditor()!.selectedRange
+        let currentSelectionIsTail = selectedRange.location + selectedRange.length == stringValue.count
+        if currentSelectionIsTail {
+            let currentAutocompleteHeadLength = selectedRange.location
+            shouldAutocompleteOnTextChange = currentAutocompleteHeadLength > previousAutocompleteHeadLength
+            previousAutocompleteHeadLength = currentAutocompleteHeadLength
+        } else {
+            previousAutocompleteHeadLength = 0
+            shouldAutocompleteOnTextChange = false
+        }
+    }
+    
     override func textDidChange(_ notification: Notification) {
         super.textDidChange(notification)
-        if let event = NSApp.currentEvent {
-            if event.type == .keyDown {
-                if let specialKey = event.specialKey {
-                    if specialKey == .delete {
-                        _ = popupManager.match(stringValue)
-                    }
-                } else {
-                    let editor = currentEditor()!
-                    let maybeAutocomplete = popupManager.match(stringValue)
-                    // Selection is the tail of the string
-                    if let autoComplete = maybeAutocomplete, editor.selectedRange.location + editor.selectedRange.length == stringValue.count {
-                        let charsToAutocomplete = autoComplete.count - stringValue.count
-                        if charsToAutocomplete > 0 {
-                            let autocompleTail = String(autoComplete.dropFirst(stringValue.count))
-                            let stringCountBeforeAutocomplete = stringValue.count
-                            stringValue += autocompleTail
-                            editor.selectedRange = NSRange(location: stringCountBeforeAutocomplete, length: charsToAutocomplete)
-                        }
-                    }
-                }
+        let maybeAutocomplete = popupManager.match(stringValue)
+        // If the selection is at the tail of the string, fill in the autocomplete.
+        if shouldAutocompleteOnTextChange, let autoComplete = maybeAutocomplete {
+            let charsToAutocomplete = autoComplete.count - stringValue.count
+            if charsToAutocomplete > 0 {
+                let autocompleTail = String(autoComplete.dropFirst(stringValue.count))
+                let stringCountBeforeAutocomplete = stringValue.count
+                stringValue += autocompleTail
+                currentEditor()!.selectedRange = NSRange(location: stringCountBeforeAutocomplete, length: charsToAutocomplete)
             }
         }
     }
