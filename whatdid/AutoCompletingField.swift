@@ -348,7 +348,7 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
         }
         
         class Option: NSView {
-            static let paddingH: CGFloat = 2.0
+            static let paddingH: CGFloat = 4.0
             static let paddingV: CGFloat = 2.0
             private var label: NSTextField!
             private var highlightOverlay: NSVisualEffectView!
