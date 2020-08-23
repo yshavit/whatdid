@@ -152,6 +152,8 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
         private let optionsPopup: NSPanel
         private let parent: AutoCompletingField
         private var matchedSectionSeparators = [NSView]()
+        private let mainStack: NSStackView
+        private var setWidth: ((CGFloat) -> Void)!
         
         init(parent: AutoCompletingField) {
             self.parent = parent
@@ -160,8 +162,8 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
                 styleMask: [.fullSizeContentView],
                 backing: .buffered,
                 defer: false)
-            optionsPopup.contentView = NSStackView()
-            optionsPopup.level = .popUpMenu
+            mainStack = NSStackView()
+            mainStack.orientation = .vertical
             
             super.init()
             optionsPopup.delegate = self
@@ -170,6 +172,32 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
             mainStack.orientation = .vertical
             mainStack.alignment = .leading
             mainStack.spacing = 0
+            
+            // Put the main stack inside a scroll
+            let scroll = NSScrollView()
+            scroll.useAutoLayout()
+            scroll.contentView.anchorAllSides(to: scroll)
+            scroll.drawsBackground = false
+            scroll.hasVerticalScroller = true
+            scroll.hasHorizontalScroller = true
+
+            let flipped = FlippedView()
+            flipped.useAutoLayout()
+            flipped.addSubview(mainStack)
+            mainStack.anchorAllSides(to: flipped)
+            scroll.documentView = flipped
+
+            // Try to have the scroll's content view be as big as the mainstack; but cap it at 150.
+            // Also create a constraint for the width, which we'll set as we open the popup.
+            scroll.contentView.heightAnchor.constraint(lessThanOrEqualTo: mainStack.heightAnchor).isActive = true
+            scroll.heightAnchor.constraint(lessThanOrEqualToConstant: 150).isActive = true
+            let widthConstraint = scroll.contentView.widthAnchor.constraint(equalToConstant: 100) // any ol' value will do
+            widthConstraint.isActive = true
+            setWidth = { widthConstraint.constant = $0 } // ha, a mutable constant!
+
+            scroll.contentView.widthAnchor.constraint(lessThanOrEqualTo: mainStack.widthAnchor).isActive = true
+            optionsPopup.contentView = scroll
+            optionsPopup.level = .popUpMenu
         }
         
         var options: [String] {
@@ -253,8 +281,7 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
             guard !windowIsVisible else {
                 return
             }
-            mainStack.widthAnchor.constraint(greaterThanOrEqualToConstant: minWidth).isActive = true
-            mainStack.layoutSubtreeIfNeeded()
+            setWidth(minWidth)
             var popupOrigin = atTopLeft
             popupOrigin.y -= (optionsPopup.frame.height + 4)
             optionsPopup.setFrameOrigin(popupOrigin)
@@ -276,11 +303,6 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
         func windowWillClose(_ notification: Notification) {
             activeEventMonitors.compactMap{$0}.forEach { NSEvent.removeMonitor($0) }
             activeEventMonitors.removeAll()
-        }
-        
-        /// Convenience getter
-        private var mainStack: NSStackView {
-            return optionsPopup.contentView! as! NSStackView
         }
         
         private func addGroupingLabel(text: String, under topAnchor: NSLayoutAnchor<NSLayoutYAxisAnchor>) -> NSView {
