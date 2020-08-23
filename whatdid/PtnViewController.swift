@@ -5,8 +5,8 @@ import Cocoa
 class PtnViewController: NSViewController {
     @IBOutlet var topStack: NSStackView!
     
-    @IBOutlet weak var projectField: AutoCompletingComboBox!
-    @IBOutlet weak var taskField: AutoCompletingComboBox!
+    @IBOutlet weak var projectField: AutoCompletingField!
+    @IBOutlet weak var taskField: AutoCompletingField!
     @IBOutlet weak var noteField: NSTextField!
     @IBOutlet weak var breakButton: NSButton!
     
@@ -27,8 +27,12 @@ class PtnViewController: NSViewController {
                     attributes: [.foregroundColor: NSColor.secondarySelectedControlColor])
             }
         }
-        projectField.setAutoCompleteLookups({prefix in AppDelegate.instance.model.listProjects(prefix: prefix)})
-        taskField.setAutoCompleteLookups({prefix in AppDelegate.instance.model.listTasks(project: self.self.projectField.stringValue, prefix: prefix)})
+        projectField.optionsLookupOnFocus = {
+            AppDelegate.instance.model.listProjects(prefix: "")
+        }
+        taskField.optionsLookupOnFocus = {
+            AppDelegate.instance.model.listTasks(project: self.self.projectField.stringValue, prefix: "")
+        }
         setBreakButtonTitle()
         
         #if UI_TEST
@@ -123,6 +127,13 @@ class PtnViewController: NSViewController {
             firstResponder = taskField
         }
         firstResponder?.becomeFirstResponder()
+    }
+    
+    
+    @IBAction func projectOrTaskAction(_ sender: AutoCompletingField) {
+        if let nextView = sender.nextValidKeyView {
+            view.window?.makeFirstResponder(nextView)
+        }
     }
     
     @IBAction func notesFieldAction(_ sender: NSTextField) {

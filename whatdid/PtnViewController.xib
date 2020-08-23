@@ -9,7 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="PtnViewController" customModule="whatdid" customModuleProvider="target">
             <connections>
                 <outlet property="breakButton" destination="iu6-dS-Gze" id="8TU-SP-RC9"/>
-                <outlet property="noteField" destination="6A0-cK-Vnh" id="DTG-0c-CNw"/>
+                <outlet property="noteField" destination="6A0-cK-Vnh" id="DMw-Er-dNX"/>
                 <outlet property="projectField" destination="4Lo-U3-YED" id="7SV-al-VYn"/>
                 <outlet property="snoozeButton" destination="yjZ-yA-5CH" id="kMR-QE-XYq"/>
                 <outlet property="snoozeExtraOptions" destination="2d3-tf-ady" id="sU1-Fq-fTJ"/>
@@ -25,22 +25,21 @@
                 <stackView identifier="ptnstack" distribution="fill" orientation="horizontal" alignment="top" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BPo-6t-Flu" userLabel="PTN Stack">
                     <rect key="frame" x="0.0" y="25" width="544" height="21"/>
                     <subviews>
-                        <comboBox identifier="pcombo" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4Lo-U3-YED" userLabel="Project combo" customClass="AutoCompletingComboBox" customModule="whatdid" customModuleProvider="target">
-                            <rect key="frame" x="5" y="-4" width="123" height="27"/>
+                        <textField identifier="pcombo" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4Lo-U3-YED" userLabel="Project combo" customClass="AutoCompletingField" customModule="whatdid" customModuleProvider="target">
+                            <rect key="frame" x="5" y="0.0" width="120" height="21"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="120" id="pXy-Lw-dxJ"/>
                             </constraints>
-                            <comboBoxCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="project" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="P91-QB-4SQ">
+                            <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="project" drawsBackground="YES" id="P91-QB-4SQ">
                                 <font key="font" metaFont="system"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                <objectValues>
-                                    <string>Item 1</string>
-                                    <string>Item 2</string>
-                                    <string>Item 3</string>
-                                </objectValues>
-                            </comboBoxCell>
-                        </comboBox>
+                            </textFieldCell>
+                            <connections>
+                                <action selector="projectOrTaskAction:" target="-2" id="esc-vc-CL1"/>
+                                <outlet property="nextKeyView" destination="sxc-2C-mp9" id="2Xs-S2-QNa"/>
+                            </connections>
+                        </textField>
                         <textField identifier="ptdiv" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xr6-Zi-WMW" userLabel="PT divider">
                             <rect key="frame" x="124" y="3" width="11" height="16"/>
                             <constraints>
@@ -52,19 +51,18 @@
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>
-                        <comboBox identifier="tcombo" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sxc-2C-mp9" userLabel="Task combo" customClass="AutoCompletingComboBox" customModule="whatdid" customModuleProvider="target">
-                            <rect key="frame" x="134" y="-3" width="159" height="25"/>
-                            <comboBoxCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="task" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="mhN-qF-rQ8">
+                        <textField identifier="tcombo" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sxc-2C-mp9" userLabel="Task combo" customClass="AutoCompletingField" customModule="whatdid" customModuleProvider="target">
+                            <rect key="frame" x="134" y="0.0" width="156" height="21"/>
+                            <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="task" drawsBackground="YES" id="mhN-qF-rQ8">
                                 <font key="font" metaFont="system"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                <objectValues>
-                                    <string>Item 1</string>
-                                    <string>Item 2</string>
-                                    <string>Item 3</string>
-                                </objectValues>
-                            </comboBoxCell>
-                        </comboBox>
+                            </textFieldCell>
+                            <connections>
+                                <action selector="projectOrTaskAction:" target="-2" id="Zfs-CX-Exj"/>
+                                <outlet property="nextKeyView" destination="6A0-cK-Vnh" id="h5a-3v-bgp"/>
+                            </connections>
+                        </textField>
                         <textField identifier="tndiv" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CYa-f2-vpT" userLabel="TN divider">
                             <rect key="frame" x="289" y="3" width="11" height="16"/>
                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title=":" id="Udq-Yr-mqt">
@@ -82,6 +80,7 @@
                             </textFieldCell>
                             <connections>
                                 <action selector="notesFieldAction:" target="-2" id="J4M-HK-h4h"/>
+                                <outlet property="nextKeyView" destination="4Lo-U3-YED" id="aiq-dT-s1h"/>
                             </connections>
                         </textField>
                     </subviews>

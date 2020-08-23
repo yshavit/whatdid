@@ -10,6 +10,7 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
     
     private var pulldownButton: NSButton!
     private var popupManager: PopupManager!
+    var optionsLookupOnFocus: (() -> [String])?
     
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -35,7 +36,7 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
         self.isSelectable = true
         self.placeholderString = "placeholder"
         
-        pulldownButton = NSButton()
+        pulldownButton = NoKeyButton()
         pulldownButton.useAutoLayout()
         addSubview(pulldownButton)
         // button styling
@@ -88,6 +89,9 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
     
     override func becomeFirstResponder() -> Bool {
         let succeeded = super.becomeFirstResponder()
+        if let optionsLookup = optionsLookupOnFocus {
+            options = optionsLookup()
+        }
         if succeeded {
             showOptions()
         }
@@ -122,6 +126,11 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
         }
     }
     
+    override func textDidEndEditing(_ notification: Notification) {
+        super.textDidEndEditing(notification)
+        popupManager.close()
+    }
+    
     @objc private func buttonClicked() {
         if popupManager.windowIsVisible {
             // Note: we shouldn't ever actually get here, but I'm putting it just in case.
@@ -141,10 +150,12 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
     }
     
     private func showOptions() {
+        let originWithinWindow = superview!.convert(frame.origin, to: nil)
+        let originWithinScreen = window!.convertPoint(toScreen: originWithinWindow)
         popupManager.show(
             minWidth: frame.width,
             matching: stringValue,
-            atTopLeft: window!.convertPoint(toScreen: frame.origin))
+            atTopLeft: originWithinScreen) // window!.convertPoint(toScreen: frame.origin))
     }
     
     private class PopupManager: NSObject, NSWindowDelegate {
@@ -162,6 +173,7 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
                 styleMask: [.fullSizeContentView],
                 backing: .buffered,
                 defer: false)
+            optionsPopup.hasShadow = true
             mainStack = NSStackView()
             mainStack.orientation = .vertical
             
@@ -208,6 +220,24 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
                 mainStack.views.forEach { $0.removeFromSuperview() }
                 mainStack.subviews.forEach { $0.removeFromSuperview() }
                 matchedSectionSeparators.removeAll()
+                if values.isEmpty {
+                    /*
+
+                     .foregroundColor: NSColor.selectedTextColor,
+                     .backgroundColor: NSColor.selectedTextBackgroundColor,
+                     .underlineColor: NSColor.findHighlightColor,
+                     .underlineStyle: NSUnderlineStyle.single.rawValue,
+                     */
+                    let labelString = NSAttributedString(string: "(no previous entries)", attributes: [
+                        NSAttributedString.Key.foregroundColor: NSColor.systemGray,
+                    ])
+                    let noneLabel = NSTextField(labelWithAttributedString: labelString)
+                    noneLabel.useAutoLayout()
+                    noneLabel.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
+                    mainStack.addArrangedSubview(noneLabel)
+                    noneLabel.widthAnchor.constraint(equalTo: mainStack.widthAnchor).isActive = true
+                    return
+                }
                 for (i, optionText) in values.enumerated() {
                     if i == AutoCompletingField.PINNED_OPTIONS_COUNT {
                         let separator = NSBox()
@@ -283,7 +313,7 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
             }
             setWidth(minWidth)
             var popupOrigin = atTopLeft
-            popupOrigin.y -= (optionsPopup.frame.height + 4)
+            popupOrigin.y -= (optionsPopup.frame.height + 2)
             optionsPopup.setFrameOrigin(popupOrigin)
             _ = match(lookFor)
             optionsPopup.display()
@@ -310,7 +340,7 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
             label.useAutoLayout()
             mainStack.addSubview(label)
             label.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
-            label.textColor = NSColor.controlLightHighlightColor
+            label.textColor = NSColor.systemGray
             label.topAnchor.constraint(equalTo: topAnchor).isActive = true
             label.trailingAnchor.constraint(equalTo: mainStack.trailingAnchor, constant: -4).isActive = true
             
@@ -340,6 +370,11 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
                     while viewSearch != nil {
                         if let option = viewSearch as? Option {
                             parent.stringValue = option.stringValue
+                            if let editor = parent.currentEditor() {
+                                editor.insertNewline(nil)
+                            } else {
+                                NSLog("Couldn't find editor")
+                            }
                             break
                         }
                         viewSearch = viewSearch?.superview
@@ -347,7 +382,6 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
                 }
                 close()
                 return false
-                
             }
 
             var shouldClose = true // Most clicks close the popups; the only exception is clicking in the text field
@@ -429,7 +463,8 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
                 matched.forEach {range in
                     attributedLabel.addAttributes(
                         [
-                            .foregroundColor: NSColor.findHighlightColor,
+                            .foregroundColor: NSColor.selectedTextColor,
+                            .backgroundColor: NSColor.selectedTextBackgroundColor,
                             .underlineColor: NSColor.findHighlightColor,
                             .underlineStyle: NSUnderlineStyle.single.rawValue,
                         ],
@@ -445,6 +480,12 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
             override func mouseExited(with event: NSEvent) {
                 highlightOverlay.isHidden = true
             }
+        }
+    }
+    
+    private class NoKeyButton: NSButton {
+        override var canBecomeKeyView: Bool {
+            return false
         }
     }
     

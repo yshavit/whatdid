@@ -20,6 +20,7 @@
 		7E37A29B24C0293E005BA1DF /* Entry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29724C0293E005BA1DF /* Entry+CoreDataProperties.swift */; };
 		7E37A29C24C0293E005BA1DF /* Task+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29824C0293E005BA1DF /* Task+CoreDataClass.swift */; };
 		7E37A29D24C0293E005BA1DF /* Task+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */; };
+		7E7B7E6124F2F84000460BC3 /* NSStackView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7B7E6024F2F84000460BC3 /* NSStackView+Helpers.swift */; };
 		7E7C384B24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */; };
 		7E7C384C24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */; };
 		7E7C384E24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */; };
@@ -94,6 +95,7 @@
 		7E37A29724C0293E005BA1DF /* Entry+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Entry+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7E37A29824C0293E005BA1DF /* Task+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		7E7B7E6024F2F84000460BC3 /* NSStackView+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSStackView+Helpers.swift"; sourceTree = "<group>"; };
 		7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatEntry.swift; sourceTree = "<group>"; };
 		7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlatEntry+Serde.swift"; sourceTree = "<group>"; };
 		7E7C385124DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlatEntry+SerdeTest.swift"; sourceTree = "<group>"; };
@@ -299,6 +301,7 @@
 				7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */,
 				7EEF324524EA542D002E217A /* NSRange+Helpers.swift */,
 				7ECF97A624F1D50100DBF1BF /* NSControl+Helper.swift */,
+				7E7B7E6024F2F84000460BC3 /* NSStackView+Helpers.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -527,6 +530,7 @@
 				7E07C3B824D121770007FD23 /* DayEndReportController.swift in Sources */,
 				7EE427AB24C42EBD002C51F3 /* AutoCompletingComboBox.swift in Sources */,
 				7E30B46124C38D91003F3679 /* Atomic.swift in Sources */,
+				7E7B7E6124F2F84000460BC3 /* NSStackView+Helpers.swift in Sources */,
 				7E37A27424BFF676005BA1DF /* Model.xcdatamodeld in Sources */,
 				7EE0E74824EA1ECD002D03F8 /* String+Helpers.swift in Sources */,
 				7E7C384B24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */,
