@@ -14,7 +14,7 @@ class PtnViewControllerTest: XCTestCase {
     }
     
     func openPtn(andThen afterAction: (XCUIElement) -> () = {_ in }) -> XCUIElement {
-        return XCTContext.runActivity(named: "open PTN") {_ in
+        return group("open PTN") {
             let ptn = openPtnNotInActivity()
             afterAction(ptn)
             return ptn
@@ -42,13 +42,13 @@ class PtnViewControllerTest: XCTestCase {
         let ptn = app.windows[WindowType.ptn.windowTitle]
         
         // Note: Time starts at 02:00:00 local
-        XCTContext.runActivity(named: "basic PTN scheduling") {_ in
+        group("basic PTN scheduling") {
             setTimeUtc(h: 0, m: 5) // 02:05; too soon for the popup
             XCTAssertFalse(ptn.isVisible)
             setTimeUtc(h: 0, m: 55) // 02:55; enough time for the popup
             assertThat(window: .ptn, isVisible: true)
         }
-        XCTContext.runActivity(named: "snooze button: standard press") {_ in
+        group("snooze button: standard press") {
             // Note: PTN is still up at this point.
             let button = ptn.buttons["snoozebutton"]
             // It's 02:55 now, so we add 15 minutes and then round to the next highest half-hour. That means
@@ -66,7 +66,7 @@ class PtnViewControllerTest: XCTestCase {
             setTimeUtc(h: 1, m: 31)
             assertThat(window: .ptn, isVisible: true)
         }
-        XCTContext.runActivity(named: "snooze button: extra options") {_ in
+        group("snooze button: extra options") {
             // Note: PTN is still up at this point. It's currently 03:31+0200, so the default snooze is at 04:00,
             // and the options start at 04:30
             ptn.menuButtons["snoozeopts"].click()
@@ -85,7 +85,7 @@ class PtnViewControllerTest: XCTestCase {
             assertThat(window: .ptn, isVisible: true)
         }
         
-        XCTContext.runActivity(named: "daily report (no contention with PTN)") {_ in
+        group("daily report (no contention with PTN)") {
             // Note: PTN is still up at this point. It's currently 05:31+0200.
             // We'll bring it to 18:29, and then dismiss it.
             // Then the next minute, there should be the daily report
@@ -100,7 +100,7 @@ class PtnViewControllerTest: XCTestCase {
             clickStatusMenu() // close the report
             assertThat(window: .dailyEnd, isVisible: false)
         }
-        XCTContext.runActivity(named: "daily report (with contention with PTN)") {_ in
+        group("daily report (with contention with PTN)") {
             // Fast-forward a day. At 18:29 local, we should get a PTN.
             // Wait two minutes (so that the daily report is due) and then type in an entry.
             // We should get the daily report next, which we should then be able to dismiss.
@@ -126,7 +126,7 @@ class PtnViewControllerTest: XCTestCase {
     // TODO: also test with just typing (not downarrow)
     func testAutoComplete() {
         let ptn = openPtn()
-        XCTContext.runActivity(named: "initalize the data") {_ in
+        group("initalize the data") {
             let entriesTextField  = ptn.textFields["uihook_flatentryjson"]
             // Three entries, in shuffled alphabetical order (neither fully ascending or descending)
             // We want both the lowest and highest values (alphanumerically) to be in the middle.
@@ -140,7 +140,7 @@ class PtnViewControllerTest: XCTestCase {
             entriesTextField.click()
             entriesTextField.typeText(entriesSerialized + "\r")
         }
-        XCTContext.runActivity(named: "autocomplete wh*") {_ in
+        group("autocomplete wh*") {
             let pcombo = ptn.comboBoxes["pcombo"]
             pcombo.click()
             pcombo.typeKey(.downArrow)
@@ -152,7 +152,7 @@ class PtnViewControllerTest: XCTestCase {
     func testKeyboardNavigation() {
         // Get the PTN, and do a sanity check that hasFocus() doesn't always return true :)
         let ptn = openPtn(andThen: {XCTAssertFalse($0.comboBoxes["tcombo"].hasFocus)})
-        XCTContext.runActivity(named: "forward tabbing") {_ in
+        group("forward tabbing") {
             XCTAssertTrue(ptn.comboBoxes["pcombo"].hasFocus) // Sanity check
             // Tab from Project -> Task
             ptn.focusedChild.typeKey(.tab)
@@ -161,7 +161,7 @@ class PtnViewControllerTest: XCTestCase {
             ptn.focusedChild.typeKey(.tab)
             XCTAssertTrue(ptn.textFields["nfield"].hasFocus)
         }
-        XCTContext.runActivity(named: "backward tabbing") {_ in
+        group("backward tabbing") {
             XCTAssertTrue(ptn.textFields["nfield"].hasFocus) // Sanity check
             // Backtab from Notes to Task
             ptn.focusedChild.typeKey(.tab, modifierFlags: .shift)
@@ -170,7 +170,7 @@ class PtnViewControllerTest: XCTestCase {
             ptn.focusedChild.typeKey(.tab, modifierFlags: .shift)
             XCTAssertTrue(ptn.comboBoxes["pcombo"].hasFocus)
         }
-        XCTContext.runActivity(named: "enter key") {_ in
+        group("enter key") {
             XCTAssertTrue(ptn.comboBoxes["pcombo"].hasFocus) // Sanity check
             // Enter from Project to Task
             ptn.comboBoxes["pcombo"].typeKey(.enter)
@@ -179,7 +179,7 @@ class PtnViewControllerTest: XCTestCase {
             ptn.comboBoxes["pcombo"].typeKey(.enter)
             XCTAssertTrue(ptn.textFields["nfield"].hasFocus)
         }
-        XCTContext.runActivity(named: "escape key") {_ in
+        group("escape key") {
             ptn.typeKey(.escape, modifierFlags: [])
             XCTAssertFalse(ptn.isVisible)
         }
