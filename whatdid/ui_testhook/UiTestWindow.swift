@@ -5,32 +5,57 @@ import Cocoa
 
 class UiTestWindow: NSWindowController, NSWindowDelegate {
     @IBOutlet var mainStack: NSStackView!
-    private var strongReferences = [Any]()
+    @IBOutlet var componentSelector: NSPopUpButton!
     
     convenience init() {
         self.init(windowNibName: "UiTestWindow")
     }
     
-    func show(_ mode: DebugMode) {
-        _ = window?.title // force the window nib to load
-        mainStack.subviews.forEach {$0.removeFromSuperview()}
-        let adder: ((NSView) -> Void) = { self.mainStack.addArrangedSubview($0) }
-        switch mode {
-        case .buttonWithClosure:
-            buttonWithClosure(adder: adder)
-        case .autoCompleter:
-            autocompleter(adder: adder)
+    override func awakeFromNib() {
+        add(AutocompleteComponent())
+        add(ButtonWithClosureComponent())
+    }
+    
+    private func add(_ use: TestComponent) {
+        var className = String(describing: type(of: use))
+        let suffix = "Component"
+        if className.hasSuffix(suffix) {
+            className = String(className.dropLast(suffix.count))
         }
+        componentSelector.addItem(withTitle: className)
+        let item = componentSelector.itemArray[componentSelector.itemArray.count - 1]
+        item.representedObject = use
+    }
+    
+    func show() {
+        _ = window?.title // force the window nib to load
+        componentSelector.selectItem(at: 0) // the zeroith item
         showWindow(self)
         NSApp.activate(ignoringOtherApps: true)
     }
     
-    func windowWillClose(_ notification: Notification) {
-        strongReferences.removeAll()
+    @IBAction func selectComponentToTest(_ sender: NSPopUpButton) {
+        mainStack.views.forEach { $0.removeFromSuperview() }
+        fitToSize()
+        if let use = sender.selectedItem?.representedObject as? TestComponent {
+            use.build {
+                self.mainStack.addArrangedSubview($0)
+                self.fitToSize()
+            }
+        }
     }
     
-    func buttonWithClosure(adder: (NSView) -> Void) {
+    private func fitToSize() {
+        if let actualWindow = window, let contentView = window?.contentView {
+            actualWindow.setContentSize(contentView.fittingSize)
+        }
+    }
+}
+
+fileprivate class ButtonWithClosureComponent: TestComponent {
+    func build(adder: @escaping (NSView) -> Void) {
         let button = ButtonWithClosure()
+        button.useAutoLayout()
         adder(button)
         button.setAccessibilityLabel("button_with_closure")
         var counter = Atomic(wrappedValue: 1)
@@ -41,25 +66,18 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
             label.setAccessibilityEnabled(true)
             label.setAccessibilityLabel(labelString)
             label.setAccessibilityIdentifier("dynamiclabel_\(currentCount)")
-            self.mainStack.addArrangedSubview(label)
+            adder(label)
         }
     }
-    
-    func autocompleter(adder: (NSView) -> Void) {
-        let builder = AutocompleteFieldBuilder()
-        strongReferences.append(builder)
-        builder.build(adder: adder)
-    }
-    
 }
 
-fileprivate class AutocompleteFieldBuilder: TestComponent {
+fileprivate class AutocompleteComponent: TestComponent {
     
     private let resultField = NSTextField(labelWithString: "")
     private let autocompleField = AutoCompletingField()
     
     func build(adder: (NSView) -> Void) {
-        let options = NSTextField(string: "one,two,three,four,five,six,seven")
+        let options = NSTextField(string: "")
         options.target = self
         options.action = #selector(setAutocompleterOptions(_:))
         
@@ -96,12 +114,10 @@ fileprivate class AutocompleteFieldBuilder: TestComponent {
         let options = sender.stringValue.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces)}
         autocompleField.options = options
     }
-    
-    
 }
 
 fileprivate protocol TestComponent {
-    func build(adder: (NSView) -> Void)
+    func build(adder: @escaping (NSView) -> Void)
 }
 
 #endif

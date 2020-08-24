@@ -21,15 +21,13 @@ class ComponentUITests: XCTestCase {
         return app.windows["uitestwindow"]
     }
     
-    private func component(_ name: String) {
+    private func use(_ name: String) {
         window.popUpButtons["componentselector"].click()
         window.menuItems[name].click()
     }
 
     func testButtonWithClosure() {
-        
-        
-        component("ButtonWithClosure")
+        use("ButtonWithClosure")
         let button = window.buttons["Button"]
         let createdLabels = window.staticTexts.matching(NSPredicate(format: "label CONTAINS 'pressed on self'"))
         XCTAssertEqual(createdLabels.count, 0)
@@ -45,5 +43,9 @@ class ComponentUITests: XCTestCase {
         XCTAssertEqual(
             ["count=1, pressed on self=true", "count=2, pressed on self=true"],
             createdLabels.allElementsBoundByIndex.map({$0.label}))
+    }
+    
+    func testAutocomplete() {
+        use("Autocomplete")
     }
 }

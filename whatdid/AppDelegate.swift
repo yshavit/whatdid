@@ -29,10 +29,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         #if UI_TEST
         NSLog("initializing UI test hooks")
         manualTickSchedulerWindow = ManualTickSchedulerWindow(with: DefaultScheduler.instance)
-        if let showView = CommandLine.arguments.compactMap({DebugMode(fromStringIfWithPrefix: $0)}).first {
-            uiTestWindow = UiTestWindow()
-            uiTestWindow.show(showView)
-        }
+        uiTestWindow = UiTestWindow()
+        uiTestWindow.show()
         NSApp.setActivationPolicy(.regular) // UI tests can time out on launch() without this
         #else
         // Our Info.plist starts us off as background. Now that we're started, become an accessory app.
