@@ -271,6 +271,7 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
         }
         
         func match(_ lookFor: String) -> String? {
+            let originalFrame = optionsPopup.frame
             let optionFields = self.optionFields
             var shortestPrefixMatch: String?
             var greatestMatchedIndex = -1
@@ -304,6 +305,8 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
             let showMatchedSectionSeparators = greatestMatchedIndex >= AutoCompletingField.PINNED_OPTIONS_COUNT
             matchedSectionSeparators.forEach { $0.isHidden = !showMatchedSectionSeparators }
             optionsPopup.setContentSize(mainStack.fittingSize)
+            let newFrame = optionsPopup.frame
+            optionsPopup.setFrameOrigin(originalFrame.offsetBy(dx: 0, dy: originalFrame.height - newFrame.height).origin)
             return shortestPrefixMatch
         }
         
