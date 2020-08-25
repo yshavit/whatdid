@@ -2,7 +2,7 @@
 
 import Cocoa
 
-class AutoCompletingField: NSTextField, NSTextViewDelegate {
+class AutoCompletingField: NSTextField, NSTextViewDelegate, NSTextFieldDelegate {
     
     private static let PINNED_OPTIONS_COUNT = 3
     var previousAutocompleteHeadLength = 0
@@ -66,6 +66,7 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
             owner: self)
         addTrackingArea(pulldownButtonTracker)
         
+        delegate = self
         popupManager = PopupManager(parent: self)
     }
     
@@ -87,6 +88,19 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
         }
     }
     
+    func control(_ control: NSControl, textView: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
+        switch commandSelector {
+        case #selector(moveDown(_:)):
+            popupManager.moveSelection(down: true)
+            return true
+        case #selector(moveUp(_:)):
+            popupManager.moveSelection(down: false)
+            return true
+        default:
+            return false
+        }
+    }
+
     override func becomeFirstResponder() -> Bool {
         let succeeded = super.becomeFirstResponder()
         if let optionsLookup = optionsLookupOnFocus {
@@ -221,13 +235,6 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
                 mainStack.subviews.forEach { $0.removeFromSuperview() }
                 matchedSectionSeparators.removeAll()
                 if values.isEmpty {
-                    /*
-
-                     .foregroundColor: NSColor.selectedTextColor,
-                     .backgroundColor: NSColor.selectedTextBackgroundColor,
-                     .underlineColor: NSColor.findHighlightColor,
-                     .underlineStyle: NSUnderlineStyle.single.rawValue,
-                     */
                     let labelString = NSAttributedString(string: "(no previous entries)", attributes: [
                         NSAttributedString.Key.foregroundColor: NSColor.systemGray,
                     ])
@@ -268,6 +275,46 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
         
         func close() {
             optionsPopup.close()
+            optionFields.forEach { $0.isSelected = false }
+        }
+        
+        func moveSelection(down moveDown: Bool) {
+            let visibleFields = self.optionFields.filter { !$0.isHidden }
+            guard !visibleFields.isEmpty else {
+                return
+            }
+            func lastOption() -> Option {
+                return visibleFields[visibleFields.count - 1]
+            }
+            func firstOption(matchedIfPossible: Bool) -> Option {
+                let idx = matchedIfPossible
+                    ? visibleFields.firstIndex(where: {!SubsequenceMatcher.matches(lookFor: parent.stringValue, inString: $0.stringValue).isEmpty})
+                    : 0
+                return visibleFields[idx ?? 0]
+            }
+            
+            let selected: Option
+            if let alreadySelectedIdx = visibleFields.firstIndex(where: {$0.isSelected}) {
+                visibleFields[alreadySelectedIdx].isSelected = false
+                if moveDown {
+                    selected = (alreadySelectedIdx + 1 >= visibleFields.count)
+                        ? firstOption(matchedIfPossible: false)
+                        : visibleFields[alreadySelectedIdx + 1]
+                } else {
+                    selected = (alreadySelectedIdx == 0)
+                        ? lastOption()
+                        : visibleFields[alreadySelectedIdx - 1]
+                }
+            } else if moveDown {
+                selected = firstOption(matchedIfPossible: true)
+            } else {
+                selected = lastOption()
+            }
+            selected.isSelected = true
+            parent.stringValue = selected.stringValue
+            if let editor = parent.currentEditor() {
+                editor.selectedRange = NSRange(location: 0, length: selected.stringValue.count)
+            }
         }
         
         func match(_ lookFor: String) -> String? {
@@ -283,6 +330,7 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
                         item.setMatches([])
                     } else {
                         item.isHidden = true
+                        item.isSelected = false
                     }
                 } else {
                     let itemValue = item.stringValue
@@ -409,6 +457,8 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
         class Option: NSView {
             static let paddingH: CGFloat = 4.0
             static let paddingV: CGFloat = 2.0
+            private var _isSelected = false
+            private var isMouseOver = false
             private var label: NSTextField!
             private var highlightOverlay: NSVisualEffectView!
             
@@ -427,7 +477,6 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
                 highlightOverlay.useAutoLayout()
                 highlightOverlay.state = .active
                 highlightOverlay.material = .selection
-                highlightOverlay.isEmphasized = true
                 highlightOverlay.blendingMode = .behindWindow
                 highlightOverlay.isHidden = true
                 addSubview(highlightOverlay)
@@ -476,12 +525,32 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate {
                 label.attributedStringValue = attributedLabel
             }
             
+            var isSelected: Bool {
+                get {
+                    return _isSelected
+                } set(value) {
+                    _isSelected = value
+                    updateHighlight()
+                }
+            }
+            
             override func mouseEntered(with event: NSEvent) {
-                highlightOverlay.isHidden = false
+                isMouseOver = true
+                updateHighlight()
             }
             
             override func mouseExited(with event: NSEvent) {
-                highlightOverlay.isHidden = true
+                isMouseOver = false
+                updateHighlight()
+            }
+            
+            private func updateHighlight() {
+                if isMouseOver || _isSelected {
+                    highlightOverlay.isEmphasized = _isSelected
+                    highlightOverlay.isHidden = false
+                } else {
+                    highlightOverlay.isHidden = true
+                }
             }
         }
     }
