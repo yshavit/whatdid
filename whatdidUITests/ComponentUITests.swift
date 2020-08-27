@@ -48,16 +48,17 @@ class ComponentUITests: XCTestCase {
     func testAutocomplete() {
         use("Autocomplete")
         
+//        testWindow.printAccessibilityTree()
         
 //        printAccessibilityTree(testWindow)
         let optionsDefinition = testWindow.textFields["test_defineoptions"]
-        let autocompleteField = testWindow.textFields["test_autocomplete"]
+        let autocompleteField = testWindow.comboBoxes["test_autocomplete"]
         let autocompletePopupButton = autocompleteField.children(matching: .popUpButton).element
         let scrollView = autocompleteField.descendants(matching: .scrollView).element
         
-        
-        
         group("empty options without clicking in field first") {
+            optionsDefinition.click()
+            optionsDefinition.typeText("one,two,three\r")
 //            XCTAssertEqual("", optionsDefinition.stringValue) // sanity check
 //            XCTAssertEqual("", autocompleteField.stringValue)
 //            XCTAssertEqual(0, autocompleteField.children(matching: .scrollView).count)

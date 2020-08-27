@@ -20,7 +20,7 @@ class PtnViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        for field in [projectField, taskField, noteField] {
+        for field in [projectField.textField, taskField.textField, noteField] {
             if let plainString = field?.placeholderString {
                 field?.placeholderAttributedString = NSAttributedString(
                     string: plainString,
@@ -31,7 +31,7 @@ class PtnViewController: NSViewController {
             AppDelegate.instance.model.listProjects(prefix: "")
         }
         taskField.optionsLookupOnFocus = {
-            AppDelegate.instance.model.listTasks(project: self.self.projectField.stringValue, prefix: "")
+            AppDelegate.instance.model.listTasks(project: self.projectField.textField.stringValue, prefix: "")
         }
         setBreakButtonTitle()
         
@@ -49,8 +49,8 @@ class PtnViewController: NSViewController {
     
     func reset() {
         noteField.stringValue = ""
-        if projectField.stringValue.isEmpty {
-            taskField.stringValue = ""
+        if projectField.textField.stringValue.isEmpty {
+            taskField.textField.stringValue = ""
         }
     }
     
@@ -121,16 +121,15 @@ class PtnViewController: NSViewController {
     
     @objc private func grabFocusNow() {
         var firstResponder = noteField
-        if projectField.stringValue.isEmpty {
-            firstResponder = projectField
-        } else if taskField.stringValue.isEmpty {
-            firstResponder = taskField
+        if projectField.textField.stringValue.isEmpty {
+            firstResponder = projectField.textField
+        } else if taskField.textField.stringValue.isEmpty {
+            firstResponder = taskField.textField
         }
         firstResponder?.becomeFirstResponder()
     }
     
-    
-    @IBAction func projectOrTaskAction(_ sender: AutoCompletingField) {
+    @IBAction func projectOrTaskAction(_ sender: AutoCompletingField) { // TODO hook this back up
         if let nextView = sender.nextValidKeyView {
             view.window?.makeFirstResponder(nextView)
         }
@@ -138,8 +137,8 @@ class PtnViewController: NSViewController {
     
     @IBAction func notesFieldAction(_ sender: NSTextField) {
         AppDelegate.instance.model.addEntryNow(
-            project: projectField.stringValue,
-            task: taskField.stringValue,
+            project: projectField.textField.stringValue,
+            task: taskField.textField.stringValue,
             notes: noteField.stringValue,
             callback: closeAction
         )

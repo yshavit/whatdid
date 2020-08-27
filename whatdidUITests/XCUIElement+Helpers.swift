@@ -60,15 +60,26 @@ extension XCUIElement {
         if !title.isEmpty {
             result += ", title=\"\(title)\""
         }
-        func addBool(title: String, if set: Bool) {
+        var firstProperty = true
+        func add(_ text: String, if set: Bool = true) {
             if set {
-                result += ", \(title)"
+                if firstProperty {
+                    firstProperty = false
+                } else {
+                    result += ", "
+                }
+                result += "\(text)"
             }
         }
-        result += "["
-        addBool(title: "exists", if: exists)
-        addBool(title: "hittable", if: isHittable)   <-- causes infinite loop when looking up the ScrollView
+        result += " ["
+        add("exists", if: exists)
+        add("hittable", if: isHittable) // <-- causes infinite loop when looking up the ScrollView
+        let children = self.children(matching: .any)
+        add(children.count == 1 ? "1 child" : "\(children.count) children", if: children.count > 0)
         result += "]"
+        if let theValue = value {
+            result += " ==> \"\(theValue)\""
+        }
         return result
     }
     
@@ -78,10 +89,8 @@ extension XCUIElement {
             if depth > 5 {
                 resultLines.append("\(indent)...")
             } else {
-                let children = curr.children(matching: .any)
-                let childrenDescription = children.count == 1 ? "1 child" : "\(children.count) children"
-                resultLines.append("\(indent)\(curr.simpleDescription): \(childrenDescription)")
-                children.allElementsBoundByIndex.forEach { buildTree($0, to: &resultLines, depth: depth + 1) }
+                resultLines.append("\(indent)\(curr.simpleDescription)")
+                curr.children(matching: .any).allElementsBoundByIndex.forEach { buildTree($0, to: &resultLines, depth: depth + 1) }
             }
         }
         let header = String(repeating: "=", count: 72)

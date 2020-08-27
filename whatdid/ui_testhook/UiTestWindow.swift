@@ -82,8 +82,7 @@ fileprivate class AutocompleteComponent: TestComponent {
         options.action = #selector(setAutocompleterOptions(_:))
         options.setAccessibilityIdentifier("test_defineoptions")
         
-        autocompleField.target = self
-        autocompleField.action = #selector(autocompleteAction(_:))
+        autocompleField.action = { self.resultField.stringValue = $0 }
         autocompleField.setAccessibilityIdentifier("test_autocomplete")
         
         let optionsStack = NSStackView(orientation: .horizontal)
@@ -107,10 +106,6 @@ fileprivate class AutocompleteComponent: TestComponent {
         autocompleField.nextKeyView = options
         
         setAutocompleterOptions(options)
-    }
-    
-    @objc private func autocompleteAction(_ sender: NSTextField) {
-        resultField.stringValue = autocompleField.stringValue
     }
     
     @objc private func setAutocompleterOptions(_ sender: NSTextField) {
