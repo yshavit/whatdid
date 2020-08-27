@@ -49,15 +49,10 @@ class AutoCompletingField: NSView, NSAccessibilityGroup {
         return window?.makeFirstResponder(textField) ?? false
     }
     
-    override func resignFirstResponder() -> Bool {
-        print("resigning")
-        return super.resignFirstResponder()
-    }
-    
     override func accessibilityChildren() -> [Any]? {
         var result = [Any]()
-        result.append(textFieldView!)
-        result.append(textFieldView.pulldownButton!)
+        result.append(contentsOf: textFieldView.accessibilityChildren()!)
+        result.append(contentsOf: textFieldView.pulldownButton.accessibilityChildren()!)
         if popupManager.window?.isVisible ?? false {
             result.append(popupManager.scrollView!)
         }

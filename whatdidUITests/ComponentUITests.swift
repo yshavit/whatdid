@@ -64,6 +64,17 @@ class ComponentUITests: XCTestCase {
 //            XCTAssertEqual(0, autocompleteField.children(matching: .scrollView).count)
             autocompleteField.printAccessibilityTree()
 //            XCTAssertFalse(scrollView.isVisible)
+            
+            /*
+
+             uitestwindowWindow2.comboBoxes["test_autocomplete"].popUpButtons["Toggle options"].click()
+             uitestwindowWindow2.comboBoxes["test_autocomplete"].scrollViews.children(matching: .textField).element.click()
+             uitestwindowWindow2.comboBoxes["test_autocomplete"].textFields["placeholder"].typeText("\r")
+             
+             
+             yasssss
+             */
+            
             autocompletePopupButton.click()
             autocompleteField.printAccessibilityTree()
             XCTAssertTrue(scrollView.isVisible)
@@ -92,8 +103,6 @@ class ComponentUITests: XCTestCase {
          [2]: https://developer.apple.com/documentation/appkit/nsaccessibilityprotocol
          [3]: https://developer.apple.com/documentation/appkit/nsaccessibilityelement/1533717-accessibilityaddchildelement
          */
-        
-        
         
         
         

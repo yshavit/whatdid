@@ -58,8 +58,18 @@ class PtnViewController: NSViewController {
         }
     }
     
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        
+        projectField.nextKeyView = taskField
+        taskField.nextKeyView = noteField
+        noteField.nextKeyView = projectField
+    }
+    
     override func viewWillAppear() {
         super.viewWillAppear()
+        
+        
         // Set up the snooze button. We'll have 4 options at half-hour increments, starting 10 minutes from now.
         // The 10 minutes is so that if it's currently 2:29:59, you won't be annoyed with a "snooze until 2:30" button.
         let bufferMinutes = 10
@@ -135,7 +145,6 @@ class PtnViewController: NSViewController {
     
     func projectOrTaskAction(_ sender: AutoCompletingField) {
         if let nextView = sender.nextValidKeyView {
-            This has a nil placeholder, what gives?
             view.window?.makeFirstResponder(nextView)
         }
     }
