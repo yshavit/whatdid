@@ -20,6 +20,8 @@ class PtnViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        projectField.textField.placeholderString = "project"
+        taskField.textField.placeholderString = "task"
         for field in [projectField.textField, taskField.textField, noteField] {
             if let plainString = field?.placeholderString {
                 field?.placeholderAttributedString = NSAttributedString(
@@ -33,6 +35,8 @@ class PtnViewController: NSViewController {
         taskField.optionsLookupOnFocus = {
             AppDelegate.instance.model.listTasks(project: self.projectField.textField.stringValue, prefix: "")
         }
+        projectField.action = self.projectOrTaskAction
+        taskField.action = self.projectOrTaskAction
         setBreakButtonTitle()
         
         #if UI_TEST
@@ -129,8 +133,9 @@ class PtnViewController: NSViewController {
         firstResponder?.becomeFirstResponder()
     }
     
-    @IBAction func projectOrTaskAction(_ sender: AutoCompletingField) { // TODO hook this back up
+    func projectOrTaskAction(_ sender: AutoCompletingField) {
         if let nextView = sender.nextValidKeyView {
+            This has a nil placeholder, what gives?
             view.window?.makeFirstResponder(nextView)
         }
     }

@@ -8,7 +8,7 @@ class AutoCompletingField: NSView, NSAccessibilityGroup {
     
     fileprivate var textFieldView: AutoCompletingFieldView!
     fileprivate var popupManager: PopupManager!
-    var action: (String) -> Void = {_ in}
+    var action: (AutoCompletingField) -> Void = {_ in}
     var optionsLookupOnFocus: (() -> [String])?
     
     override init(frame frameRect: NSRect) {
@@ -30,9 +30,28 @@ class AutoCompletingField: NSView, NSAccessibilityGroup {
         setAccessibilityChildren(nil) // we'll be adding textFieldView in our overload of accessibilityChildren()
         textFieldView.anchorAllSides(to: self)
         textFieldView.parent = self
+        textFieldView.target = self
+        textFieldView.action = #selector(textFieldViewAction(_:))
 
         setAccessibilityEnabled(true)
         setAccessibilityRole(.comboBox)
+    }
+    
+    @objc private func textFieldViewAction(_ sender: NSTextField) {
+        action(self)
+    }
+    
+    override var acceptsFirstResponder: Bool {
+        return true
+    }
+    
+    override func becomeFirstResponder() -> Bool {
+        return window?.makeFirstResponder(textField) ?? false
+    }
+    
+    override func resignFirstResponder() -> Bool {
+        print("resigning")
+        return super.resignFirstResponder()
     }
     
     override func accessibilityChildren() -> [Any]? {
@@ -309,16 +328,7 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
         optionsPopup.contentView = scroll
         optionsPopup.level = .popUpMenu
         optionsPopup.setAccessibilityChildren(nil)
-        print("------------------------------------")
-        print(optionsPopup.accessibilityRole())
         optionsPopup.setAccessibilityRole(.none)
-        print("------------------------------------")
-        print(scroll.accessibilityRole())
-        print(scroll.accessibilityTopLevelUIElement())
-        print(scroll.accessibilityParent())
-        print(scroll.accessibilityWindow())
-        print(scroll.accessibilityMainWindow())
-        print(scroll.accessibilityFocusedWindow())
         
         scroll.setAccessibilityParent(parent)
         scroll.setAccessibilityWindow(parent.window)
