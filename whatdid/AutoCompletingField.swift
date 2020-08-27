@@ -70,15 +70,20 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate, NSTextFieldDelegate 
         
         delegate = self
         popupManager = PopupManager(parent: self)
+        
+        setAccessibilityChildren((super.accessibilityChildren() ?? []) + [
+            pulldownButton!,
+            popupManager.scrollView!,
+        ])
+        pulldownButton.setAccessibilityParent(self)
+        popupManager.window?.setAccessibilityParent(self)
     }
     
-    fileprivate func updateAccessibilityChildren(optionsScroll: NSScrollView?) {
-        var children: [Any] = [cell!]
-        children.append(contentsOf: pulldownButton.accessibilityChildren()!)
-        if let visiblePopupScroll = optionsScroll {
-            children.append(visiblePopupScroll)
-        }
-        setAccessibilityChildren(children)
+    override func setAccessibilityIdentifier(_ id: String?) {
+        super.setAccessibilityIdentifier(id)
+        cell?.setAccessibilityIdentifier(id.map({ "\($0)__cell"}))
+        pulldownButton.setAccessibilityIdentifier(id.map({ "\($0)__pulldown"}))
+        popupManager.accessibilityIdentifierChanged()
     }
     
     var options: [String] {
@@ -190,7 +195,7 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate, NSTextFieldDelegate 
         private var matchedSectionSeparators = [NSView]()
         private let mainStack: NSStackView
         private var setWidth: ((CGFloat) -> Void)!
-        private var scrollView: NSScrollView!
+        var scrollView: NSScrollView!
         
         init(parent: AutoCompletingField) {
             self.parent = parent
@@ -202,6 +207,7 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate, NSTextFieldDelegate 
             optionsPopup.hasShadow = true
             mainStack = NSStackView()
             mainStack.orientation = .vertical
+            mainStack.detachesHiddenViews = true
             
             super.init()
             optionsPopup.delegate = self
@@ -214,8 +220,7 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate, NSTextFieldDelegate 
             // Put the main stack inside a scroll
             let scroll = NSScrollView()
             scrollView = scroll
-            scroll.setAccessibilityEnabled(true)
-            scroll.setAccessibilityRole(.scrollArea)
+            scroll.setAccessibilityHidden(true)
             scroll.useAutoLayout()
             scroll.contentView.anchorAllSides(to: scroll)
             scroll.drawsBackground = false
@@ -239,6 +244,32 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate, NSTextFieldDelegate 
             scroll.contentView.widthAnchor.constraint(lessThanOrEqualTo: mainStack.widthAnchor).isActive = true
             optionsPopup.contentView = scroll
             optionsPopup.level = .popUpMenu
+            optionsPopup.setAccessibilityChildren(nil)
+            print("------------------------------------")
+            print(optionsPopup.accessibilityRole())
+            optionsPopup.setAccessibilityRole(.none)
+            print("------------------------------------")
+            print(scroll.accessibilityRole())
+            print(scroll.accessibilityTopLevelUIElement())
+            print(scroll.accessibilityParent())
+            print(scroll.accessibilityWindow())
+            print(scroll.accessibilityMainWindow())
+            print(scroll.accessibilityFocusedWindow())
+            
+            scroll.setAccessibilityParent(parent)
+            scroll.setAccessibilityWindow(parent.window)
+            scroll.setAccessibilityTopLevelUIElement(parent)
+        }
+        
+        func accessibilityIdentifierChanged() {
+            let baseId = parent.accessibilityIdentifier()
+            if baseId.isEmpty {
+                scrollView.setAccessibilityIdentifier(nil)
+                optionFields.forEach { $0.setAccessibilityIdentifier(nil) }
+            } else {
+                scrollView.setAccessibilityIdentifier("\(baseId)__scrollarea")
+                optionFields.enumerated().forEach { $1.setAccessibilityIdentifier("\(baseId)__option\($0)")}
+            }
         }
         
         var options: [String] {
@@ -246,6 +277,7 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate, NSTextFieldDelegate 
                 return optionFields.map { $0.stringValue }
             }
             set (values) {
+                
                 mainStack.views.forEach { $0.removeFromSuperview() }
                 mainStack.subviews.forEach { $0.removeFromSuperview() }
                 matchedSectionSeparators.removeAll()
@@ -258,6 +290,8 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate, NSTextFieldDelegate 
                     noneLabel.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
                     mainStack.addArrangedSubview(noneLabel)
                     noneLabel.widthAnchor.constraint(equalTo: mainStack.widthAnchor).isActive = true
+                    noneLabel.setAccessibilityIdentifier("blahone")
+                    noneLabel.cell?.setAccessibilityIdentifier("blahtwo")
                     return
                 }
                 for (i, optionText) in values.enumerated() {
@@ -287,13 +321,9 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate, NSTextFieldDelegate 
         var windowIsVisible: Bool {
             return optionsPopup.isVisible
         }
-        
-        var visibleScrollView: NSScrollView? {
-            return windowIsVisible ? scrollView : nil
-        }
 
         var window: NSWindow? {
-            return windowIsVisible ? optionsPopup : nil
+            return optionsPopup
         }
         
         func close() {
@@ -345,7 +375,6 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate, NSTextFieldDelegate 
             let optionFields = self.optionFields
             var shortestPrefixMatch: String?
             var greatestMatchedIndex = -1
-            var accessibilityItems = [Any]()
             for i in 0..<optionFields.count {
                 let item = optionFields[i]
                 let matched = SubsequenceMatcher.matches(lookFor: lookFor, inString: item.stringValue)
@@ -373,11 +402,7 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate, NSTextFieldDelegate 
                     item.isHidden = false
                     item.setMatches(matched)
                 }
-                if !item.isHidden {
-                    accessibilityItems.append(contentsOf: item.label.accessibilityChildren()!)
-                }
             }
-            scrollView.setAccessibilityChildren(accessibilityItems)
             let showMatchedSectionSeparators = greatestMatchedIndex >= AutoCompletingField.PINNED_OPTIONS_COUNT
             matchedSectionSeparators.forEach { $0.isHidden = !showMatchedSectionSeparators }
             optionsPopup.setContentSize(mainStack.fittingSize)
@@ -397,7 +422,7 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate, NSTextFieldDelegate 
             _ = match(lookFor)
             optionsPopup.display()
             optionsPopup.setIsVisible(true)
-            parent.updateAccessibilityChildren(optionsScroll: scrollView)
+            scrollView.setAccessibilityHidden(false)
             
             let eventMask: NSEvent.EventTypeMask = [.leftMouseDown, .rightMouseDown, .otherMouseDown]
             activeEventMonitors.append(
@@ -414,7 +439,7 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate, NSTextFieldDelegate 
             optionFields.forEach { $0.isSelected = false }
             activeEventMonitors.compactMap{$0}.forEach { NSEvent.removeMonitor($0) }
             activeEventMonitors.removeAll()
-            parent.updateAccessibilityChildren(optionsScroll: nil)
+            scrollView.setAccessibilityHidden(true)
         }
         
         private func addGroupingLabel(text: String, under topAnchor: NSLayoutAnchor<NSLayoutYAxisAnchor>) -> NSView {
@@ -518,7 +543,7 @@ class AutoCompletingField: NSTextField, NSTextViewDelegate, NSTextFieldDelegate 
                 labelPadding.anchorAllSides(to: self)
                 
                 label = NSTextField(labelWithString: "")
-                label.cell!.setAccessibilityRole(.menuItem)
+                label.cell!.setAccessibilityRole(.textField)
                 label.useAutoLayout()
                 labelPadding.addSubview(label)
                 labelPadding.leadingAnchor.constraint(equalTo: label.leadingAnchor, constant: -Option.paddingH).isActive = true

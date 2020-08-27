@@ -80,9 +80,11 @@ fileprivate class AutocompleteComponent: TestComponent {
         let options = NSTextField(string: "")
         options.target = self
         options.action = #selector(setAutocompleterOptions(_:))
+        options.setAccessibilityIdentifier("test_defineoptions")
         
         autocompleField.target = self
         autocompleField.action = #selector(autocompleteAction(_:))
+        autocompleField.setAccessibilityIdentifier("test_autocomplete")
         
         let optionsStack = NSStackView(orientation: .horizontal)
         optionsStack.addArrangedSubview(NSTextField(labelWithString: "options: "))
@@ -91,6 +93,7 @@ fileprivate class AutocompleteComponent: TestComponent {
         resultField.isBordered = true
         resultField.isBezeled = true
         resultField.bezelStyle = .roundedBezel
+        resultField.setAccessibilityIdentifier("test_result")
         let resultStack = NSStackView(orientation: .horizontal)
         resultStack.addArrangedSubview(NSTextField(labelWithString: "result: "))
         resultStack.addArrangedSubview(resultField)
