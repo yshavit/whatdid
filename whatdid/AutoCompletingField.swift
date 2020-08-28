@@ -397,7 +397,6 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
         optionsPopup.close()
     }
     
-    
     func moveSelection(down moveDown: Bool) {
         let visibleFields = self.optionFields.filter { !$0.isHidden }
         guard !visibleFields.isEmpty else {
@@ -533,7 +532,9 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
             if event.type != .leftMouseUp {
                 return false
             }
-            // We can't just let the Option handle this. If the user holds down on one element and then
+            
+            // Look for clicks within the Options popup.
+            // We can't just let the Option handle clicks. If the user holds down on one element and then
             // "drags" to another, the mouseup belongs to the first element; we really want it to belong
             // to where the cursor ended up. So, we'll get the location and find the view there, and then
             // walk up the superview chain until we get to an Option (whose stringValue we then get) or
@@ -541,11 +542,12 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
             let locationInSuperview = mainStack.superview!.convert(event.locationInWindow, from: nil)
             if let hitItem = mainStack.hitTest(locationInSuperview) {
                 var viewSearch: NSView? = hitItem
+                // The hit happened in the cell; walk up the parent chain to the Option so we can find its value
                 while viewSearch != nil {
                     if let option = viewSearch as? Option {
                         parent.textField.stringValue = option.stringValue
                         if let editor = parent.textField.currentEditor() {
-                            editor.insertNewline(nil)
+                            editor.insertNewline(nil) // send the action
                         } else {
                             NSLog("Couldn't find editor")
                         }
@@ -562,16 +564,17 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
         var continueProcessingEvent = true // See below for the one exception.
         let closeButton = parent.textFieldView.pulldownButton!
         if let eventWindow = event.window, eventWindow == closeButton.window {
-            // If the click was on the button that opens this popup, we want to suppress the event. Otherwise,
+            // If the click was on the button that opens this popup, we want to suppress the event. If we don't,
             // the button will just open the popup back up.
             if closeButton.contains(pointInWindowCoordinates: event.locationInWindow) {
-                parent.window?.makeFirstResponder(nil)
                 continueProcessingEvent = false
             } else if parent.contains(pointInWindowCoordinates: event.locationInWindow) {
+                // Don't close if they click within the text field
                 shouldClose = false
             }
         }
         if shouldClose {
+            parent.window?.makeFirstResponder(nil)
             close()
         }
         return continueProcessingEvent

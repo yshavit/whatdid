@@ -8,7 +8,7 @@ class SubsequenceMatcher {
     }
     
     static func matches(lookFor needle: String, inString haystack: String) -> [NSRange] {
-        var needleChars = needle.unicodeScalars.makeIterator()
+        var needleChars = needle.lowercased().unicodeScalars.makeIterator()
         let haystackUnicodeScalars = haystack.lowercased().unicodeScalars
         var remainingHaystack = Substring.UnicodeScalarView(haystackUnicodeScalars)
         var foundIndices = [Int]()

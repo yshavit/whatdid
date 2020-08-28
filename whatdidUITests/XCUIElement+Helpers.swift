@@ -37,13 +37,38 @@ extension XCUIElement {
         }
     }
     
-    func deleteText(andReplaceWith replacement: String? = nil) {
-        click()
-        typeKey(.downArrow)
-        typeKey(.upArrow, modifierFlags:[.shift, .function])
-        typeKey(.delete, modifierFlags:[])
-        if replacement != nil {
-            typeText(replacement!)
+    var humanReadableIdentifier: String {
+        var result = elementType.description
+        if !identifier.isEmpty {
+            result += " \(identifier)"
+        } else if !title.isEmpty {
+            result += " \(title)"
+        } else if !stringValue.isEmpty {
+            result += " with stringValue=\"\(stringValue)\""
+        }
+        return result
+    }
+    
+    func deleteText(using selectAllStrategy: SelectAllStrategy = .commandA, andReplaceWith replacement: String? = nil) {
+        let message = replacement == nil
+            ? "Delete text in \(humanReadableIdentifier)"
+            : "Replace text in \(humanReadableIdentifier)"
+        XCTestCase.group(message) {
+            if !hasFocus {
+                click()
+            }
+            switch selectAllStrategy {
+            case .arrows:
+                typeKey(.downArrow)
+                typeKey(.upArrow, modifierFlags:[.shift, .function])
+            case .commandA:
+                typeKey("a", modifierFlags: .command)
+            }
+            if let replacementToType = replacement {
+                typeText(replacementToType)
+            } else {
+                typeKey(.delete, modifierFlags:[])
+            }
         }
     }
     
@@ -99,6 +124,11 @@ extension XCUIElement {
         print(header)
         lines.forEach { print($0) }
         print(header)
+    }
+    
+    enum SelectAllStrategy {
+        case arrows
+        case commandA
     }
 }
 

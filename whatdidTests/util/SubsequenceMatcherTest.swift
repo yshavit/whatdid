@@ -38,8 +38,12 @@ class SubsequenceMatcherTest: XCTestCase {
         checkOne(lookFor: "far", inString: "an f comes further", expect: [])
     }
 
-    func testCaseInsensitivity() {
+    func testCaseInsensitivityWithLowercaseNeedle() {
         checkOne(lookFor: "lower", inString: "THE LOWER", expect: [NSRange(location: 4, length: 5)])
+    }
+    
+    func testCaseInsensitivityWithUppercaseNeedle() {
+        checkOne(lookFor: "UPPER", inString: "the upper", expect: [NSRange(location: 4, length: 5)])
     }
 
     func checkOne(lookFor needle: String, inString haystack: String, expect expected: [NSRange]) {

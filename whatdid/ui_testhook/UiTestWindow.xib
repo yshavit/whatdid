@@ -18,7 +18,7 @@
         <window identifier="uitestwindow" title="UI Test Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="303" height="33"/>
+            <rect key="contentRect" x="196" y="800" width="303" height="33"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" identifier="uitestwindowcontentview" wantsLayer="YES" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="300" height="101"/>
@@ -28,12 +28,12 @@
                         <subviews>
                             <popUpButton identifier="componentselector" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vHz-gK-ADi" userLabel="Component Selector">
                                 <rect key="frame" x="-2" y="77" width="305" height="25"/>
-                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="IYa-0A-J4X" id="j5x-p4-UCR">
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="IYa-0A-J4X" id="j5x-p4-UCR">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                     <menu key="menu" id="Vbv-Zq-9u1">
                                         <items>
-                                            <menuItem id="IYa-0A-J4X"/>
+                                            <menuItem state="on" id="IYa-0A-J4X"/>
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
