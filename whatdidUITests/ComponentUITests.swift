@@ -93,12 +93,36 @@ class ComponentUITests: XCTestCase {
                 fieldHelper.assertOptionsOpenButEmpty()
             }
             group("Type some text") {
-                fieldHelper.textField.typeText("hello world")
+                testWindow.typeText("hello world")
+                XCTAssertEqual("hello world", fieldHelper.textField.stringValue)
                 XCTAssertEqual("", resultField.stringValue) // Make sure we don't fire on every key event
             }
             group("Press enter") {
                 fieldHelper.textField.typeKey(.enter)
                 XCTAssertEqual("hello world", resultField.stringValue)
+            }
+        }
+        // Tabbing options
+        group("Forward-tabbing") {
+            group("Setup") {
+                optionsDefinition.click()
+                XCTAssertTrue(optionsDefinition.hasFocus) // sanity check
+            }
+            group("tab from optionsDefinition to autocomplete") {
+                testWindow.typeKey(.tab)
+                XCTAssertTrue(fieldHelper.hasFocus)
+            }
+            group("tab from autocomplete to optionsDefinition") {
+                testWindow.typeKey(.tab)
+                XCTAssertTrue(optionsDefinition.hasFocus)
+            }
+            group("backtab from optionsDefinition to autocomplete") {
+                testWindow.typeKey(.tab, modifierFlags: .shift)
+                XCTAssertTrue(fieldHelper.hasFocus)
+            }
+            group("backtab from autocomplete to optionsDefinition") {
+                testWindow.typeKey(.tab, modifierFlags: .shift)
+                XCTAssertTrue(optionsDefinition.hasFocus)
             }
         }
     }

@@ -98,6 +98,36 @@ fileprivate class AutoCompletingFieldView: NSTextField, NSTextViewDelegate, NSTe
         commonInit()
     }
     
+    override var nextKeyView: NSView? {
+        get {
+            parent.nextKeyView
+        }
+        set(value) {
+            NSLog("Unexpected mutation of AutoCompletingFieldView.nextKeyView")
+        }
+    }
+    
+    override var nextResponder: NSResponder? {
+        get {
+            parent.nextResponder
+        }
+        set(value) {
+            NSLog("Unexpected mutation of AutoCompletingFieldView.nextResponder")
+        }
+    }
+    
+    override var nextValidKeyView: NSView? {
+        parent.nextValidKeyView
+    }
+    
+    override var previousKeyView: NSView? {
+        parent.previousKeyView
+    }
+    
+    override var previousValidKeyView: NSView? {
+        parent.previousValidKeyView
+    }
+    
     private func commonInit() {
         useAutoLayout()
         
