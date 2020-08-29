@@ -21,6 +21,7 @@
 		7E37A29C24C0293E005BA1DF /* Task+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29824C0293E005BA1DF /* Task+CoreDataClass.swift */; };
 		7E37A29D24C0293E005BA1DF /* Task+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */; };
 		7E4778F024F8F177007BAE8C /* AutocompleteFieldHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4778EF24F8F177007BAE8C /* AutocompleteFieldHelper.swift */; };
+		7E64F02B24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E64F02A24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift */; };
 		7E6F2E6D24F38D9E008874FE /* XCTestCase+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F2E6C24F38D9E008874FE /* XCTestCase+Helpers.swift */; };
 		7E7B7E6124F2F84000460BC3 /* NSStackView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7B7E6024F2F84000460BC3 /* NSStackView+Helpers.swift */; };
 		7E7C384B24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */; };
@@ -94,6 +95,7 @@
 		7E37A29824C0293E005BA1DF /* Task+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7E4778EF24F8F177007BAE8C /* AutocompleteFieldHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteFieldHelper.swift; sourceTree = "<group>"; };
+		7E64F02A24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIElementQuery+Helpers.swift"; sourceTree = "<group>"; };
 		7E6F2E6C24F38D9E008874FE /* XCTestCase+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Helpers.swift"; sourceTree = "<group>"; };
 		7E7B7E6024F2F84000460BC3 /* NSStackView+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSStackView+Helpers.swift"; sourceTree = "<group>"; };
 		7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatEntry.swift; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 				7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */,
 				7E6F2E6C24F38D9E008874FE /* XCTestCase+Helpers.swift */,
 				7E4778EF24F8F177007BAE8C /* AutocompleteFieldHelper.swift */,
+				7E64F02A24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift */,
 			);
 			path = whatdidUITests;
 			sourceTree = "<group>";
@@ -553,6 +556,7 @@
 				7E7C384F24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */,
 				7EBE61F324DD28F2000B2CB3 /* XCUIElement+Helpers.swift in Sources */,
 				7E7C384C24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */,
+				7E64F02B24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift in Sources */,
 				7E8C04FA23714F0800A0C3A6 /* ComponentUITests.swift in Sources */,
 				7EBE61F124DD2739000B2CB3 /* PtnViewControllerTest.swift in Sources */,
 				7E6F2E6D24F38D9E008874FE /* XCTestCase+Helpers.swift in Sources */,

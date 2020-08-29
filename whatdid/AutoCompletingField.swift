@@ -434,6 +434,23 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
         if let editor = parent.textField.currentEditor() {
             editor.selectedRange = NSRange(location: 0, length: selected.stringValue.count)
         }
+        let optionFrameWithinDoc = selected.superview!.convert(selected.frame, to: scrollView.documentView)
+        let scrollVisibleRect = scrollView.contentView.documentVisibleRect
+        var scrollPoint: NSPoint?
+        if optionFrameWithinDoc.maxY > scrollVisibleRect.maxY {
+            // Scroll down. the scroll-to point is the top-left point, which should be the bottom-left point of the
+            // option's rect *minus* the overall height.
+            scrollPoint = NSPoint(
+                x: optionFrameWithinDoc.minX,
+                y: optionFrameWithinDoc.maxY - scrollVisibleRect.height)
+        } else if optionFrameWithinDoc.minY < scrollVisibleRect.minY {
+            // Scroll up; we just need to scroll to the top-left point
+            scrollPoint = NSPoint(x: optionFrameWithinDoc.minX, y: optionFrameWithinDoc.minY)
+        }
+        if scrollPoint != nil {
+            scrollView.contentView.scroll(to: scrollPoint!)
+            scrollView.reflectScrolledClipView(scrollView.contentView)
+        }
     }
     
     func match(_ lookFor: String) -> String? {

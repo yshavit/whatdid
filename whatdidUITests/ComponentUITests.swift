@@ -192,23 +192,22 @@ class ComponentUITests: XCTestCase {
         }
         group("Check the options") {
             fieldHelper.button.click()
-            let optionFields = fieldHelper.optionTextFields
-            XCTAssertEqual(50, optionFields.count)
+            XCTAssertEqual(50, fieldHelper.optionTextFieldsQuery.count)
             // On my computer, it only shows 8. But maybe with other fonts, it'd be more? Let's pad it; what I'm
             // really looking for is just that *some* options are "hidden" within the scroll view
-            XCTAssertLessThan(optionFields.filter({$0.isHittable}).count, 20)
+            XCTAssertTrue(fieldHelper.optionTextFieldsQuery.hasAtLeastOneElement(where: {!$0.isHittable}))
         }
         group("Arrow-up to get to the last element") {
             XCTAssertTrue(fieldHelper.textField.hasFocus) // Sanity check
             fieldHelper.textField.typeKey(.upArrow)
             XCTAssertEqual("option 49", fieldHelper.selectedOptionText)
-            XCTAssertTrue(fieldHelper.optionTextFields[49].isHittable)
+            XCTAssertTrue(fieldHelper.optionTextField(atIndex: 49).isHittable)
         }
         group("Down-up back up to the first element") {
             XCTAssertTrue(fieldHelper.textField.hasFocus) // Sanity check
             fieldHelper.textField.typeKey(.downArrow)
             XCTAssertEqual("option 0", fieldHelper.selectedOptionText)
-            XCTAssertTrue(fieldHelper.optionTextFields[0].isHittable)
+            XCTAssertTrue(fieldHelper.optionTextField(atIndex: 0).isHittable)
         }
     }
     

@@ -36,29 +36,48 @@ struct AutocompleteFieldHelper {
         }
     }
     
-    /// The available options; fails if the options pane is not open
-    var optionTextFields: [XCUIElement] {
-        optionsScroll.children(matching: .textField).allElementsBoundByIndex
+    var optionTextFieldsQuery: XCUIElementQuery {
+        optionsScroll.children(matching: .textField)
     }
     
-    /// The available options' string values; fails if the options pane is not open
+    /// The available options; fails if the options pane is not open
+    ///
+    /// This computed property is slow if there are many options.
+    var optionTextFieldsByIndex: [XCUIElement] {
+        optionTextFieldsQuery.allElementsBoundByIndex
+    }
+    
+    /// A faster variant of `optionTextFields[index]`
+    func optionTextField(atIndex index: Int) -> XCUIElement {
+        return optionsScroll.children(matching: .textField).element(boundBy: index)
+    }
+    
+    /// The available options' string values; fails if the options pane is not open.
+    ///
+    /// This computed property is slow if there are many options.
     var optionTextStrings: [String] {
         return XCTestCase.group("Find option text field strings") {
-            optionTextFields.map { $0.stringValue }
+            optionTextFieldsByIndex.map { $0.stringValue }
         }
+    }
+    
+    private var selectedOptions: [String] {
+        optionTextFieldsQuery.matching(NSPredicate(format: "isSelected = true"))
+            .allElementsBoundByIndex
+            .map{$0.stringValue}
     }
     
     /// The options pane is open, but no field is selected
     func assertNoOptionSelected() {
         return XCTestCase.group("Look for no selected options") {
-            XCTAssertEqual([], optionTextFields.filter { $0.isSelected }.map { $0.stringValue })
+            XCTAssertEqual([], selectedOptions)
         }
     }
     
     /// The selected option's string value; fails if the options pane is not open
     var selectedOptionText: String {
         return XCTestCase.group("Find the selected option") {
-            let selecteds = optionTextFields.filter { $0.isSelected }.map { $0.stringValue }
+            let selecteds = selectedOptions
             XCTAssertEqual(1, selecteds.count, "expected exactly one selected option")
             return selecteds[0]
         }
