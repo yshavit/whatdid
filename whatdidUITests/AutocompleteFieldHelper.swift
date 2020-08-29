@@ -35,7 +35,11 @@ struct AutocompleteFieldHelper {
             XCTAssertEqual("(no previous entries)", optionsScroll.staticTexts.element.stringValue)
         }
     }
-    
+
+    var hasFocus: Bool {
+        return textField.hasFocus
+    }
+
     var optionTextFieldsQuery: XCUIElementQuery {
         optionsScroll.children(matching: .textField)
     }

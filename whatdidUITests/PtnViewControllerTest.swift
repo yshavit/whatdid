@@ -13,11 +13,14 @@ class PtnViewControllerTest: XCTestCase {
         app.launch()
     }
     
-    func openPtn(andThen afterAction: (XCUIElement) -> () = {_ in }) -> XCUIElement {
+    func openPtn(andThen afterAction: (XCUIElement) -> () = {_ in }) -> Ptn {
         return group("open PTN") {
             let ptn = openPtnNotInActivity()
             afterAction(ptn)
-            return ptn
+            return Ptn(
+                window: ptn,
+                pcombo: AutocompleteFieldHelper(element: ptn.comboBoxes["pcombo"]),
+                tcombo: AutocompleteFieldHelper(element: ptn.comboBoxes["tcombo"]))
         }
     }
     
@@ -127,7 +130,7 @@ class PtnViewControllerTest: XCTestCase {
     func testAutoComplete() {
         let ptn = openPtn()
         group("initalize the data") {
-            let entriesTextField  = ptn.textFields["uihook_flatentryjson"]
+            let entriesTextField  = ptn.window.textFields["uihook_flatentryjson"]
             // Three entries, in shuffled alphabetical order (neither fully ascending or descending)
             // We want both the lowest and highest values (alphanumerically) to be in the middle.
             // That means that when we autocomplete "wh*", we can be sure that we're getting date-ordered
@@ -141,7 +144,7 @@ class PtnViewControllerTest: XCTestCase {
             entriesTextField.typeText(entriesSerialized + "\r")
         }
         group("autocomplete wh*") {
-            let pcombo = ptn.comboBoxes["pcombo"]
+            let pcombo = ptn.pcombo.textField
             pcombo.click()
             pcombo.typeKey(.downArrow)
             pcombo.typeText("\r")
@@ -153,35 +156,35 @@ class PtnViewControllerTest: XCTestCase {
         // Get the PTN, and do a sanity check that hasFocus() doesn't always return true :)
         let ptn = openPtn(andThen: {XCTAssertFalse($0.comboBoxes["tcombo"].hasFocus)})
         group("forward tabbing") {
-            XCTAssertTrue(ptn.comboBoxes["pcombo"].hasFocus) // Sanity check
+            XCTAssertTrue(ptn.pcombo.hasFocus) // Sanity check
             // Tab from Project -> Task
-            ptn.focusedChild.typeKey(.tab)
-            XCTAssertTrue(ptn.comboBoxes["tcombo"].hasFocus)
+            ptn.window.typeKey(.tab)
+            XCTAssertTrue(ptn.tcombo.hasFocus)
             // Tab from Task -> Notes
-            ptn.focusedChild.typeKey(.tab)
-            XCTAssertTrue(ptn.textFields["nfield"].hasFocus)
+            ptn.window.typeKey(.tab)
+            XCTAssertTrue(ptn.window.textFields["nfield"].hasFocus)
         }
         group("backward tabbing") {
-            XCTAssertTrue(ptn.textFields["nfield"].hasFocus) // Sanity check
+            XCTAssertTrue(ptn.window.textFields["nfield"].hasFocus) // Sanity check
             // Backtab from Notes to Task
-            ptn.focusedChild.typeKey(.tab, modifierFlags: .shift)
-            XCTAssertTrue(ptn.comboBoxes["tcombo"].hasFocus)
+            ptn.window.typeKey(.tab, modifierFlags: .shift)
+            XCTAssertTrue(ptn.tcombo.hasFocus)
             // Backtab from Task to Project
-            ptn.focusedChild.typeKey(.tab, modifierFlags: .shift)
-            XCTAssertTrue(ptn.comboBoxes["pcombo"].hasFocus)
+            ptn.window.typeKey(.tab, modifierFlags: .shift)
+            XCTAssertTrue(ptn.pcombo.hasFocus)
         }
         group("enter key") {
-            XCTAssertTrue(ptn.comboBoxes["pcombo"].hasFocus) // Sanity check
+            XCTAssertTrue(ptn.pcombo.hasFocus) // Sanity check
             // Enter from Project to Task
-            ptn.comboBoxes["pcombo"].typeKey(.enter)
-            XCTAssertTrue(ptn.comboBoxes["tcombo"].hasFocus)
+            ptn.pcombo.textField.typeKey(.enter)
+            XCTAssertTrue(ptn.tcombo.hasFocus)
             // Enter from Task to Notes
-            ptn.comboBoxes["pcombo"].typeKey(.enter)
-            XCTAssertTrue(ptn.textFields["nfield"].hasFocus)
+            ptn.pcombo.textField.typeKey(.enter)
+            XCTAssertTrue(ptn.window.textFields["nfield"].hasFocus)
         }
         group("escape key") {
-            ptn.typeKey(.escape, modifierFlags: [])
-            XCTAssertFalse(ptn.isVisible)
+            ptn.window.typeKey(.escape, modifierFlags: [])
+            XCTAssertFalse(ptn.window.isVisible)
         }
     }
     
@@ -196,8 +199,8 @@ class PtnViewControllerTest: XCTestCase {
         XCTAssertEqual(expected ? 1 : 0, app.windows.matching(.window, identifier: window.windowTitle).count)
     }
     
-    func type(into ptn: XCUIElement, _ entry: FlatEntry) {
-        ptn.comboBoxes["pcombo"].click()
+    func type(into app: XCUIElement, _ entry: FlatEntry) {
+        app.comboBoxes["pcombo"].children(matching: .textField).firstMatch.click()
         app.typeText("\(entry.project)\r\(entry.task)\r\(entry.notes ?? "")\r")
     }
     
@@ -211,6 +214,12 @@ class PtnViewControllerTest: XCTestCase {
     
     func t(_ timeDelta: TimeInterval) -> Date {
         return PtnViewControllerTest.SOME_TIME.addingTimeInterval(timeDelta)
+    }
+    
+    struct Ptn {
+        let window: XCUIElement
+        let pcombo: AutocompleteFieldHelper
+        let tcombo: AutocompleteFieldHelper
     }
     
     enum WindowType {
