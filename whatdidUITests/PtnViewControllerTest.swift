@@ -169,7 +169,7 @@ class PtnViewControllerTest: XCTestCase {
     }
     
     func testKeyboardNavigation() {
-        let ptn = findPtn()// openPtn(andThen: {XCTAssertFalse($0.comboBoxes["tcombo"].hasFocus)})
+        let ptn = findPtn()
         group("Hot key grabs focus with PTN open") {
             group("Schedule PTN open in background") {
                 setTimeUtc(h: 01, m: 00, deactivate: true)
@@ -237,9 +237,42 @@ class PtnViewControllerTest: XCTestCase {
             ptn.pcombo.textField.typeKey(.enter)
             XCTAssertTrue(ptn.window.textFields["nfield"].hasFocus)
         }
-        group("escape key") {
+        group("escape key within notes") {
             ptn.window.typeKey(.escape, modifierFlags: [])
             XCTAssertFalse(ptn.window.isVisible)
+        }
+    }
+    
+    func testFieldClearingOnPopup() {
+        let ptn = openPtn()
+        group("Type project, then abandon") {
+            XCTAssertTrue(ptn.pcombo.hasFocus)
+            app.typeText("project a\r")
+            clickStatusMenu()
+            XCTAssertFalse(ptn.window.isVisible)
+        }
+        group("Type task, then abandon") {
+            clickStatusMenu()
+            XCTAssertTrue(ptn.tcombo.hasFocus)
+            app.typeText("task b\r")
+            clickStatusMenu()
+            XCTAssertFalse(ptn.window.isVisible)
+        }
+        group("Enter notes") {
+            clickStatusMenu()
+            XCTAssertTrue(ptn.nfield.hasFocus)
+            app.typeText("notes c\r")
+            XCTAssertFalse(ptn.window.isVisible)
+        }
+        group("Reopen PTN") {
+            clickStatusMenu()
+            XCTAssertTrue(ptn.nfield.hasFocus)
+            XCTAssertEqual("", ptn.nfield.stringValue)
+        }
+        group("Change project") {
+            ptn.pcombo.textField.deleteText()
+            XCTAssertEqual("", ptn.pcombo.textField.stringValue) // sanity check
+            XCTAssertEqual("", ptn.tcombo.textField.stringValue) // changing pcombo should change tcombo
         }
     }
     
@@ -302,6 +335,10 @@ class PtnViewControllerTest: XCTestCase {
         let window: XCUIElement
         let pcombo: AutocompleteFieldHelper
         let tcombo: AutocompleteFieldHelper
+        
+        var nfield: XCUIElement {
+            window.textFields["nfield"]
+        }
     }
     
     enum WindowType {
