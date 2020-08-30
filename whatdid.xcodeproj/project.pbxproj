@@ -20,6 +20,10 @@
 		7E37A29B24C0293E005BA1DF /* Entry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29724C0293E005BA1DF /* Entry+CoreDataProperties.swift */; };
 		7E37A29C24C0293E005BA1DF /* Task+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29824C0293E005BA1DF /* Task+CoreDataClass.swift */; };
 		7E37A29D24C0293E005BA1DF /* Task+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */; };
+		7E4778F024F8F177007BAE8C /* AutocompleteFieldHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4778EF24F8F177007BAE8C /* AutocompleteFieldHelper.swift */; };
+		7E64F02B24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E64F02A24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift */; };
+		7E6F2E6D24F38D9E008874FE /* XCTestCase+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F2E6C24F38D9E008874FE /* XCTestCase+Helpers.swift */; };
+		7E7B7E6124F2F84000460BC3 /* NSStackView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7B7E6024F2F84000460BC3 /* NSStackView+Helpers.swift */; };
 		7E7C384B24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */; };
 		7E7C384C24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */; };
 		7E7C384E24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */; };
@@ -29,25 +33,29 @@
 		7E7C385624DF3D2600CFF3E7 /* Model+UIHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C385524DF3D2600CFF3E7 /* Model+UIHook.swift */; };
 		7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */; };
 		7E8C04E023714F0800A0C3A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04DF23714F0800A0C3A6 /* Assets.xcassets */; };
-		7E8C04FA23714F0800A0C3A6 /* whatdidUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04F923714F0800A0C3A6 /* whatdidUITests.swift */; };
-		7E970D6324DA7C6B00F634AB /* DebugMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBFC7BF24DA4CB4007D5CAE /* DebugMode.swift */; };
+		7E8C04FA23714F0800A0C3A6 /* ComponentUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04F923714F0800A0C3A6 /* ComponentUITests.swift */; };
 		7E970D6924DA84AF00F634AB /* UiTestWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E970D6824DA84AF00F634AB /* UiTestWindow.xib */; };
 		7E970D6B24DA850D00F634AB /* UiTestWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E970D6A24DA850D00F634AB /* UiTestWindow.swift */; };
 		7EA1DFC024CA99BF003AD2BC /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */; };
 		7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04E123714F0800A0C3A6 /* MainMenu.xib */; };
 		7EA6E22824BD6C5F004B9297 /* PtnViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */; };
 		7EAB5ECD24DA366600E18097 /* TimeUtilTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */; };
-		7EBE61E724DBED5A000B2CB3 /* DebugModeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBFC7C124DA71B6007D5CAE /* DebugModeTest.swift */; };
 		7EBE61F124DD2739000B2CB3 /* PtnViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */; };
 		7EBE61F324DD28F2000B2CB3 /* XCUIElement+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */; };
-		7EBFC7C024DA4CB4007D5CAE /* DebugMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBFC7BF24DA4CB4007D5CAE /* DebugMode.swift */; };
+		7ECF97A724F1D50100DBF1BF /* NSControl+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECF97A624F1D50100DBF1BF /* NSControl+Helper.swift */; };
 		7EDA368F24D54EA300F5E368 /* FlippedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA368E24D54EA300F5E368 /* FlippedView.swift */; };
 		7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA369224D60FCD00F5E368 /* ButtonWithClosure.swift */; };
 		7EDA369524D6A95B00F5E368 /* TimeUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA369424D6A95B00F5E368 /* TimeUtil.swift */; };
-		7EE427AB24C42EBD002C51F3 /* AutoCompletingComboBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE427AA24C42EBD002C51F3 /* AutoCompletingComboBox.swift */; };
+		7EE0E74024E4DF4A002D03F8 /* SubsequenceMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E73F24E4DF4A002D03F8 /* SubsequenceMatcher.swift */; };
+		7EE0E74224E4DF8A002D03F8 /* SubsequenceMatcherTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74124E4DF8A002D03F8 /* SubsequenceMatcherTest.swift */; };
+		7EE0E74624E8899E002D03F8 /* AutoCompletingField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74524E8899E002D03F8 /* AutoCompletingField.swift */; };
+		7EE0E74824EA1ECD002D03F8 /* String+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74724EA1ECD002D03F8 /* String+Helpers.swift */; };
+		7EE0E74A24EA22E7002D03F8 /* NSView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */; };
 		7EE4E39624E24A3F00552AAF /* ManualTickSchedulerWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39524E24A3F00552AAF /* ManualTickSchedulerWindow.swift */; };
 		7EE4E39824E2523F00552AAF /* SystemClockScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39724E2523F00552AAF /* SystemClockScheduler.swift */; };
 		7EE4E39A24E25C0200552AAF /* DefaultScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */; };
+		7EEF324624EA542D002E217A /* NSRange+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEF324524EA542D002E217A /* NSRange+Helpers.swift */; };
+		7EEF324824EA54AD002E217A /* NSRange+HelpersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEF324724EA54AD002E217A /* NSRange+HelpersTest.swift */; };
 		7EF8579324E094D100867832 /* OpenCloseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579224E094D100867832 /* OpenCloseHelper.swift */; };
 		7EF8579524E0961E00867832 /* OpenCloseHelperTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */; };
 		7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579A24E220EA00867832 /* OpenReason.swift */; };
@@ -86,6 +94,10 @@
 		7E37A29724C0293E005BA1DF /* Entry+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Entry+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7E37A29824C0293E005BA1DF /* Task+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		7E4778EF24F8F177007BAE8C /* AutocompleteFieldHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteFieldHelper.swift; sourceTree = "<group>"; };
+		7E64F02A24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIElementQuery+Helpers.swift"; sourceTree = "<group>"; };
+		7E6F2E6C24F38D9E008874FE /* XCTestCase+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Helpers.swift"; sourceTree = "<group>"; };
+		7E7B7E6024F2F84000460BC3 /* NSStackView+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSStackView+Helpers.swift"; sourceTree = "<group>"; };
 		7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatEntry.swift; sourceTree = "<group>"; };
 		7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlatEntry+Serde.swift"; sourceTree = "<group>"; };
 		7E7C385124DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlatEntry+SerdeTest.swift"; sourceTree = "<group>"; };
@@ -100,7 +112,7 @@
 		7E8C04EA23714F0800A0C3A6 /* whatdidTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = whatdidTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E8C04F023714F0800A0C3A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E8C04F523714F0800A0C3A6 /* whatdidUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = whatdidUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		7E8C04F923714F0800A0C3A6 /* whatdidUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whatdidUITests.swift; sourceTree = "<group>"; };
+		7E8C04F923714F0800A0C3A6 /* ComponentUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentUITests.swift; sourceTree = "<group>"; };
 		7E8C04FB23714F0800A0C3A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E970D6824DA84AF00F634AB /* UiTestWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UiTestWindow.xib; sourceTree = "<group>"; };
 		7E970D6A24DA850D00F634AB /* UiTestWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UiTestWindow.swift; sourceTree = "<group>"; };
@@ -109,15 +121,20 @@
 		7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TimeUtilTest.swift; path = whatdidTests/util/TimeUtilTest.swift; sourceTree = SOURCE_ROOT; };
 		7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PtnViewControllerTest.swift; sourceTree = "<group>"; };
 		7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIElement+Helpers.swift"; sourceTree = "<group>"; };
-		7EBFC7BF24DA4CB4007D5CAE /* DebugMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugMode.swift; sourceTree = "<group>"; };
-		7EBFC7C124DA71B6007D5CAE /* DebugModeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugModeTest.swift; sourceTree = "<group>"; };
+		7ECF97A624F1D50100DBF1BF /* NSControl+Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSControl+Helper.swift"; sourceTree = "<group>"; };
 		7EDA368E24D54EA300F5E368 /* FlippedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlippedView.swift; sourceTree = "<group>"; };
 		7EDA369224D60FCD00F5E368 /* ButtonWithClosure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithClosure.swift; sourceTree = "<group>"; };
 		7EDA369424D6A95B00F5E368 /* TimeUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeUtil.swift; sourceTree = "<group>"; };
-		7EE427AA24C42EBD002C51F3 /* AutoCompletingComboBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletingComboBox.swift; sourceTree = "<group>"; };
+		7EE0E73F24E4DF4A002D03F8 /* SubsequenceMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubsequenceMatcher.swift; sourceTree = "<group>"; };
+		7EE0E74124E4DF8A002D03F8 /* SubsequenceMatcherTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubsequenceMatcherTest.swift; sourceTree = "<group>"; };
+		7EE0E74524E8899E002D03F8 /* AutoCompletingField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletingField.swift; sourceTree = "<group>"; };
+		7EE0E74724EA1ECD002D03F8 /* String+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Helpers.swift"; sourceTree = "<group>"; };
+		7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSView+Helpers.swift"; sourceTree = "<group>"; };
 		7EE4E39524E24A3F00552AAF /* ManualTickSchedulerWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualTickSchedulerWindow.swift; sourceTree = "<group>"; };
 		7EE4E39724E2523F00552AAF /* SystemClockScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockScheduler.swift; sourceTree = "<group>"; };
 		7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultScheduler.swift; sourceTree = "<group>"; };
+		7EEF324524EA542D002E217A /* NSRange+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRange+Helpers.swift"; sourceTree = "<group>"; };
+		7EEF324724EA54AD002E217A /* NSRange+HelpersTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRange+HelpersTest.swift"; sourceTree = "<group>"; };
 		7EF8579224E094D100867832 /* OpenCloseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCloseHelper.swift; sourceTree = "<group>"; };
 		7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCloseHelperTest.swift; sourceTree = "<group>"; };
 		7EF8579A24E220EA00867832 /* OpenReason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenReason.swift; sourceTree = "<group>"; };
@@ -210,7 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */,
-				7EE427AA24C42EBD002C51F3 /* AutoCompletingComboBox.swift */,
+				7EE0E74524E8899E002D03F8 /* AutoCompletingField.swift */,
 				7E07C3B624D121770007FD23 /* DayEndReportController.swift */,
 				7E07C3B724D121770007FD23 /* DayEndReportController.xib */,
 				7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */,
@@ -241,11 +258,13 @@
 			isa = PBXGroup;
 			children = (
 				7E7C385024DF36B300CFF3E7 /* model */,
-				7EBE61E624DBECD8000B2CB3 /* util */,
-				7E8C04F923714F0800A0C3A6 /* whatdidUITests.swift */,
+				7E8C04F923714F0800A0C3A6 /* ComponentUITests.swift */,
 				7E8C04FB23714F0800A0C3A6 /* Info.plist */,
 				7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */,
 				7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */,
+				7E6F2E6C24F38D9E008874FE /* XCTestCase+Helpers.swift */,
+				7E4778EF24F8F177007BAE8C /* AutocompleteFieldHelper.swift */,
+				7E64F02A24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift */,
 			);
 			path = whatdidUITests;
 			sourceTree = "<group>";
@@ -253,7 +272,6 @@
 		7E970D6424DA817B00F634AB /* ui_testhook */ = {
 			isa = PBXGroup;
 			children = (
-				7EBFC7BF24DA4CB4007D5CAE /* DebugMode.swift */,
 				7E970D6A24DA850D00F634AB /* UiTestWindow.swift */,
 				7E970D6824DA84AF00F634AB /* UiTestWindow.xib */,
 			);
@@ -277,6 +295,12 @@
 				7EDA369424D6A95B00F5E368 /* TimeUtil.swift */,
 				7EF8579224E094D100867832 /* OpenCloseHelper.swift */,
 				7EF8579A24E220EA00867832 /* OpenReason.swift */,
+				7EE0E73F24E4DF4A002D03F8 /* SubsequenceMatcher.swift */,
+				7EE0E74724EA1ECD002D03F8 /* String+Helpers.swift */,
+				7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */,
+				7EEF324524EA542D002E217A /* NSRange+Helpers.swift */,
+				7ECF97A624F1D50100DBF1BF /* NSControl+Helper.swift */,
+				7E7B7E6024F2F84000460BC3 /* NSStackView+Helpers.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -291,19 +315,13 @@
 			name = boilerplate;
 			sourceTree = "<group>";
 		};
-		7EBE61E624DBECD8000B2CB3 /* util */ = {
-			isa = PBXGroup;
-			children = (
-				7EBFC7C124DA71B6007D5CAE /* DebugModeTest.swift */,
-			);
-			path = util;
-			sourceTree = "<group>";
-		};
 		7EE9A1C024DA35F200EE0FB1 /* util */ = {
 			isa = PBXGroup;
 			children = (
 				7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */,
 				7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */,
+				7EE0E74124E4DF8A002D03F8 /* SubsequenceMatcherTest.swift */,
+				7EEF324724EA54AD002E217A /* NSRange+HelpersTest.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -487,19 +505,23 @@
 				7EDA368F24D54EA300F5E368 /* FlippedView.swift in Sources */,
 				7EF857A324E242AB00867832 /* ManualTickScheduler.swift in Sources */,
 				7E7C384E24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */,
-				7EBFC7C024DA4CB4007D5CAE /* DebugMode.swift in Sources */,
 				7EE4E39824E2523F00552AAF /* SystemClockScheduler.swift in Sources */,
+				7EEF324624EA542D002E217A /* NSRange+Helpers.swift in Sources */,
 				7EFEE80223B16EA6002928A2 /* PtnViewController.swift in Sources */,
+				7EE0E74A24EA22E7002D03F8 /* NSView+Helpers.swift in Sources */,
 				7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */,
 				7E7C385424DF3A0300CFF3E7 /* PtnViewController+UIHook.swift in Sources */,
 				7E37A29B24C0293E005BA1DF /* Entry+CoreDataProperties.swift in Sources */,
 				7EE4E39624E24A3F00552AAF /* ManualTickSchedulerWindow.swift in Sources */,
+				7ECF97A724F1D50100DBF1BF /* NSControl+Helper.swift in Sources */,
+				7EE0E74624E8899E002D03F8 /* AutoCompletingField.swift in Sources */,
 				7EF8579324E094D100867832 /* OpenCloseHelper.swift in Sources */,
 				7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */,
 				7E07C3B824D121770007FD23 /* DayEndReportController.swift in Sources */,
-				7EE427AB24C42EBD002C51F3 /* AutoCompletingComboBox.swift in Sources */,
 				7E30B46124C38D91003F3679 /* Atomic.swift in Sources */,
+				7E7B7E6124F2F84000460BC3 /* NSStackView+Helpers.swift in Sources */,
 				7E37A27424BFF676005BA1DF /* Model.xcdatamodeld in Sources */,
+				7EE0E74824EA1ECD002D03F8 /* String+Helpers.swift in Sources */,
 				7E7C384B24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */,
 				7EE4E39A24E25C0200552AAF /* DefaultScheduler.swift in Sources */,
 				7E37A29124BFFFCB005BA1DF /* Project+CoreDataProperties.swift in Sources */,
@@ -507,6 +529,7 @@
 				7E37A29024BFFFCB005BA1DF /* Project+CoreDataClass.swift in Sources */,
 				7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */,
 				7E37A29A24C0293E005BA1DF /* Entry+CoreDataClass.swift in Sources */,
+				7EE0E74024E4DF4A002D03F8 /* SubsequenceMatcher.swift in Sources */,
 				7E970D6B24DA850D00F634AB /* UiTestWindow.swift in Sources */,
 				7EDA369524D6A95B00F5E368 /* TimeUtil.swift in Sources */,
 				7E37A29D24C0293E005BA1DF /* Task+CoreDataProperties.swift in Sources */,
@@ -519,6 +542,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7EEF324824EA54AD002E217A /* NSRange+HelpersTest.swift in Sources */,
+				7EE0E74224E4DF8A002D03F8 /* SubsequenceMatcherTest.swift in Sources */,
 				7EF8579524E0961E00867832 /* OpenCloseHelperTest.swift in Sources */,
 				7EAB5ECD24DA366600E18097 /* TimeUtilTest.swift in Sources */,
 			);
@@ -528,13 +553,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7EBE61E724DBED5A000B2CB3 /* DebugModeTest.swift in Sources */,
 				7E7C384F24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */,
-				7E970D6324DA7C6B00F634AB /* DebugMode.swift in Sources */,
 				7EBE61F324DD28F2000B2CB3 /* XCUIElement+Helpers.swift in Sources */,
 				7E7C384C24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */,
-				7E8C04FA23714F0800A0C3A6 /* whatdidUITests.swift in Sources */,
+				7E64F02B24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift in Sources */,
+				7E8C04FA23714F0800A0C3A6 /* ComponentUITests.swift in Sources */,
 				7EBE61F124DD2739000B2CB3 /* PtnViewControllerTest.swift in Sources */,
+				7E6F2E6D24F38D9E008874FE /* XCTestCase+Helpers.swift in Sources */,
+				7E4778F024F8F177007BAE8C /* AutocompleteFieldHelper.swift in Sources */,
 				7E7C385224DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

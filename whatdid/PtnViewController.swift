@@ -5,8 +5,8 @@ import Cocoa
 class PtnViewController: NSViewController {
     @IBOutlet var topStack: NSStackView!
     
-    @IBOutlet weak var projectField: AutoCompletingComboBox!
-    @IBOutlet weak var taskField: AutoCompletingComboBox!
+    @IBOutlet weak var projectField: AutoCompletingField!
+    @IBOutlet weak var taskField: AutoCompletingField!
     @IBOutlet weak var noteField: NSTextField!
     @IBOutlet weak var breakButton: NSButton!
     
@@ -20,15 +20,23 @@ class PtnViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        for field in [projectField, taskField, noteField] {
+        projectField.textField.placeholderString = "project"
+        taskField.textField.placeholderString = "task"
+        for field in [projectField.textField, taskField.textField, noteField] {
             if let plainString = field?.placeholderString {
                 field?.placeholderAttributedString = NSAttributedString(
                     string: plainString,
                     attributes: [.foregroundColor: NSColor.secondarySelectedControlColor])
             }
         }
-        projectField.setAutoCompleteLookups({prefix in AppDelegate.instance.model.listProjects(prefix: prefix)})
-        taskField.setAutoCompleteLookups({prefix in AppDelegate.instance.model.listTasks(project: self.self.projectField.stringValue, prefix: prefix)})
+        projectField.optionsLookupOnFocus = {
+            AppDelegate.instance.model.listProjects(prefix: "")
+        }
+        taskField.optionsLookupOnFocus = {
+            AppDelegate.instance.model.listTasks(project: self.projectField.textField.stringValue, prefix: "")
+        }
+        projectField.action = self.projectOrTaskAction
+        taskField.action = self.projectOrTaskAction
         setBreakButtonTitle()
         
         #if UI_TEST
@@ -45,13 +53,23 @@ class PtnViewController: NSViewController {
     
     func reset() {
         noteField.stringValue = ""
-        if projectField.stringValue.isEmpty {
-            taskField.stringValue = ""
+        if projectField.textField.stringValue.isEmpty {
+            taskField.textField.stringValue = ""
         }
+    }
+    
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        
+        projectField.nextKeyView = taskField
+        taskField.nextKeyView = noteField
+        noteField.nextKeyView = projectField
     }
     
     override func viewWillAppear() {
         super.viewWillAppear()
+        
+        
         // Set up the snooze button. We'll have 4 options at half-hour increments, starting 10 minutes from now.
         // The 10 minutes is so that if it's currently 2:29:59, you won't be annoyed with a "snooze until 2:30" button.
         let bufferMinutes = 10
@@ -117,18 +135,24 @@ class PtnViewController: NSViewController {
     
     @objc private func grabFocusNow() {
         var firstResponder = noteField
-        if projectField.stringValue.isEmpty {
-            firstResponder = projectField
-        } else if taskField.stringValue.isEmpty {
-            firstResponder = taskField
+        if projectField.textField.stringValue.isEmpty {
+            firstResponder = projectField.textField
+        } else if taskField.textField.stringValue.isEmpty {
+            firstResponder = taskField.textField
         }
         firstResponder?.becomeFirstResponder()
     }
     
+    func projectOrTaskAction(_ sender: AutoCompletingField) {
+        if let nextView = sender.nextValidKeyView {
+            view.window?.makeFirstResponder(nextView)
+        }
+    }
+    
     @IBAction func notesFieldAction(_ sender: NSTextField) {
         AppDelegate.instance.model.addEntryNow(
-            project: projectField.stringValue,
-            task: taskField.stringValue,
+            project: projectField.textField.stringValue,
+            task: taskField.textField.stringValue,
             notes: noteField.stringValue,
             callback: closeAction
         )

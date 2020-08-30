@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="UiTestWindow" customModule="whatdid" customModuleProvider="target">
             <connections>
+                <outlet property="componentSelector" destination="vHz-gK-ADi" id="kHb-8h-vXq"/>
                 <outlet property="mainStack" destination="ves-sa-wmN" id="SG3-b0-hKy"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="yih-Lp-0Bp"/>
             </connections>
@@ -17,39 +18,58 @@
         <window identifier="uitestwindow" title="UI Test Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="272" height="158"/>
+            <rect key="contentRect" x="196" y="800" width="303" height="33"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" identifier="uitestwindowcontentview" wantsLayer="YES" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="303" height="16"/>
+                <rect key="frame" x="0.0" y="0.0" width="300" height="101"/>
                 <subviews>
-                    <stackView identifier="MainStack" distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ves-sa-wmN">
-                        <rect key="frame" x="0.0" y="0.0" width="303" height="16"/>
+                    <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gxH-rY-qYn">
+                        <rect key="frame" x="0.0" y="0.0" width="300" height="101"/>
                         <subviews>
-                            <textField identifier="uitest_placeholder" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fEa-WP-i2Z">
-                                <rect key="frame" x="-2" y="0.0" width="307" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Window for testing single UI components or views" id="qzU-bu-pNR">
-                                    <font key="font" usesAppearanceFont="YES"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
+                            <popUpButton identifier="componentselector" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vHz-gK-ADi" userLabel="Component Selector">
+                                <rect key="frame" x="-2" y="77" width="305" height="25"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="IYa-0A-J4X" id="j5x-p4-UCR">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <menu key="menu" id="Vbv-Zq-9u1">
+                                        <items>
+                                            <menuItem state="on" id="IYa-0A-J4X"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <action selector="selectComponentToTest:" target="-2" id="Pie-lH-0wx"/>
+                                </connections>
+                            </popUpButton>
+                            <stackView identifier="MainStack" distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ves-sa-wmN" userLabel="Main Stack">
+                                <rect key="frame" x="0.0" y="0.0" width="300" height="80"/>
+                                <edgeInsets key="edgeInsets" left="40" right="40" top="40" bottom="40"/>
+                            </stackView>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="ves-sa-wmN" firstAttribute="width" secondItem="gxH-rY-qYn" secondAttribute="width" id="2LW-Zw-54F"/>
+                            <constraint firstItem="vHz-gK-ADi" firstAttribute="width" secondItem="gxH-rY-qYn" secondAttribute="width" id="5J2-DO-abO"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="300" id="YZk-1e-rRK"/>
+                        </constraints>
                         <visibilityPriorities>
+                            <integer value="1000"/>
                             <integer value="1000"/>
                         </visibilityPriorities>
                         <customSpacing>
+                            <real value="3.4028234663852886e+38"/>
                             <real value="3.4028234663852886e+38"/>
                         </customSpacing>
                     </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="ves-sa-wmN" firstAttribute="height" secondItem="EiT-Mj-1SZ" secondAttribute="height" id="9xY-DC-nrI"/>
-                    <constraint firstItem="ves-sa-wmN" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="Mfo-rP-TLi"/>
-                    <constraint firstItem="ves-sa-wmN" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="SVM-tD-LKV"/>
-                    <constraint firstItem="ves-sa-wmN" firstAttribute="width" secondItem="EiT-Mj-1SZ" secondAttribute="width" id="u6o-xd-cSd"/>
+                    <constraint firstItem="gxH-rY-qYn" firstAttribute="width" secondItem="EiT-Mj-1SZ" secondAttribute="width" id="2P0-mE-reX"/>
+                    <constraint firstItem="gxH-rY-qYn" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="OrP-lp-g0d"/>
+                    <constraint firstItem="gxH-rY-qYn" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="aJF-w3-gq7"/>
+                    <constraint firstAttribute="bottom" secondItem="gxH-rY-qYn" secondAttribute="bottom" id="kIc-Vx-vjZ"/>
+                    <constraint firstItem="gxH-rY-qYn" firstAttribute="height" secondItem="EiT-Mj-1SZ" secondAttribute="height" id="qlT-Nu-1hC"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="34.5" y="91"/>
+            <point key="canvasLocation" x="59.5" y="167.5"/>
         </window>
     </objects>
 </document>

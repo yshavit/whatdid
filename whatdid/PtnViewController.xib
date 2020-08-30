@@ -9,7 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="PtnViewController" customModule="whatdid" customModuleProvider="target">
             <connections>
                 <outlet property="breakButton" destination="iu6-dS-Gze" id="8TU-SP-RC9"/>
-                <outlet property="noteField" destination="6A0-cK-Vnh" id="DTG-0c-CNw"/>
+                <outlet property="noteField" destination="6A0-cK-Vnh" id="DMw-Er-dNX"/>
                 <outlet property="projectField" destination="4Lo-U3-YED" id="7SV-al-VYn"/>
                 <outlet property="snoozeButton" destination="yjZ-yA-5CH" id="kMR-QE-XYq"/>
                 <outlet property="snoozeExtraOptions" destination="2d3-tf-ady" id="sU1-Fq-fTJ"/>
@@ -20,29 +20,19 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <stackView identifier="topstack" distribution="fill" orientation="vertical" alignment="trailing" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HWg-YQ-y10" userLabel="Top Stack">
-            <rect key="frame" x="0.0" y="0.0" width="544" height="50"/>
+            <rect key="frame" x="0.0" y="0.0" width="544" height="91"/>
             <subviews>
                 <stackView identifier="ptnstack" distribution="fill" orientation="horizontal" alignment="top" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BPo-6t-Flu" userLabel="PTN Stack">
-                    <rect key="frame" x="0.0" y="25" width="544" height="21"/>
+                    <rect key="frame" x="0.0" y="37" width="544" height="50"/>
                     <subviews>
-                        <comboBox identifier="pcombo" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4Lo-U3-YED" userLabel="Project combo" customClass="AutoCompletingComboBox" customModule="whatdid" customModuleProvider="target">
-                            <rect key="frame" x="5" y="-4" width="123" height="27"/>
+                        <customView identifier="pcombo" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4Lo-U3-YED" userLabel="Project combo" customClass="AutoCompletingField" customModule="whatdid" customModuleProvider="target">
+                            <rect key="frame" x="5" y="0.0" width="120" height="50"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="120" id="pXy-Lw-dxJ"/>
                             </constraints>
-                            <comboBoxCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="project" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="P91-QB-4SQ">
-                                <font key="font" metaFont="system"/>
-                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                <objectValues>
-                                    <string>Item 1</string>
-                                    <string>Item 2</string>
-                                    <string>Item 3</string>
-                                </objectValues>
-                            </comboBoxCell>
-                        </comboBox>
+                        </customView>
                         <textField identifier="ptdiv" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xr6-Zi-WMW" userLabel="PT divider">
-                            <rect key="frame" x="124" y="3" width="11" height="16"/>
+                            <rect key="frame" x="124" y="17" width="11" height="16"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="7" id="ziZ-bF-mWC"/>
                             </constraints>
@@ -52,21 +42,11 @@
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>
-                        <comboBox identifier="tcombo" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sxc-2C-mp9" userLabel="Task combo" customClass="AutoCompletingComboBox" customModule="whatdid" customModuleProvider="target">
-                            <rect key="frame" x="134" y="-3" width="159" height="25"/>
-                            <comboBoxCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="task" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="mhN-qF-rQ8">
-                                <font key="font" metaFont="system"/>
-                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                <objectValues>
-                                    <string>Item 1</string>
-                                    <string>Item 2</string>
-                                    <string>Item 3</string>
-                                </objectValues>
-                            </comboBoxCell>
-                        </comboBox>
+                        <customView identifier="tcombo" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sxc-2C-mp9" userLabel="Task combo" customClass="AutoCompletingField" customModule="whatdid" customModuleProvider="target">
+                            <rect key="frame" x="134" y="0.0" width="156" height="50"/>
+                        </customView>
                         <textField identifier="tndiv" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CYa-f2-vpT" userLabel="TN divider">
-                            <rect key="frame" x="289" y="3" width="11" height="16"/>
+                            <rect key="frame" x="289" y="17" width="11" height="16"/>
                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title=":" id="Udq-Yr-mqt">
                                 <font key="font" metaFont="system"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -74,7 +54,7 @@
                             </textFieldCell>
                         </textField>
                         <textField identifier="nfield" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6A0-cK-Vnh" userLabel="Notes text">
-                            <rect key="frame" x="299" y="0.0" width="240" height="21"/>
+                            <rect key="frame" x="299" y="15" width="240" height="21"/>
                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" placeholderString="notes" drawsBackground="YES" id="iON-DT-Jnl">
                                 <font key="font" metaFont="system"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -112,13 +92,13 @@
                     </customSpacing>
                 </stackView>
                 <stackView identifier="optionsstack" distribution="fill" orientation="horizontal" alignment="top" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ers-BA-ciA" userLabel="PTN Options Stack">
-                    <rect key="frame" x="0.0" y="4" width="544" height="21"/>
+                    <rect key="frame" x="0.0" y="4" width="544" height="33"/>
                     <subviews>
                         <button identifier="breakbutton" verticalHuggingPriority="850" translatesAutoresizingMaskIntoConstraints="NO" id="iu6-dS-Gze">
-                            <rect key="frame" x="5" y="1" width="55" height="15"/>
+                            <rect key="frame" x="5" y="13" width="55" height="15"/>
                             <buttonCell key="cell" type="roundRect" title="Break" bezelStyle="roundedRect" alignment="left" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kyc-yB-AnY">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="menu" size="9"/>
+                                <font key="font" metaFont="label" size="9"/>
                                 <string key="keyEquivalent">B</string>
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </buttonCell>
@@ -127,13 +107,13 @@
                             </connections>
                         </button>
                         <customView identifier="spacer" translatesAutoresizingMaskIntoConstraints="NO" id="6Yy-Wb-eC7" userLabel="Spacer">
-                            <rect key="frame" x="60" y="2" width="339" height="14"/>
+                            <rect key="frame" x="60" y="14" width="339" height="14"/>
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="CiB-9s-9gX"/>
                             </constraints>
                         </customView>
                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="HC6-YQ-v0e" userLabel="Snooze buttonopts">
-                            <rect key="frame" x="399" y="2" width="140" height="14"/>
+                            <rect key="frame" x="399" y="14" width="140" height="14"/>
                             <subviews>
                                 <button identifier="snoozebutton" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yjZ-yA-5CH" userLabel="Snooze button">
                                     <rect key="frame" x="0.0" y="-1" width="140" height="15"/>
@@ -142,7 +122,7 @@
                                     </constraints>
                                     <buttonCell key="cell" type="roundRect" title="snooze" bezelStyle="roundedRect" alignment="left" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ojt-yE-tly">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="menu" size="9"/>
+                                        <font key="font" metaFont="label" size="9"/>
                                     </buttonCell>
                                     <connections>
                                         <action selector="snoozeButtonPressed:" target="-2" id="GfF-m3-O9M"/>

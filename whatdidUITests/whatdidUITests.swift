@@ -3,22 +3,33 @@
 import XCTest
 @testable import whatdid
 
-class whatdidUITests: XCTestCase {
+class ComponentUITests: XCTestCase {
 
+    private var app: XCUIApplication!
+    
     override func setUp() {
         continueAfterFailure = false
+        app = XCUIApplication()
+        app.launch()
     }
     
     override func tearDownWithError() throws {
         XCUIApplication().terminate()
     }
+    
+    var window: XCUIElement {
+        return app.windows["uitestwindow"]
+    }
+    
+    private func component(_ name: String) {
+        window.popUpButtons["componentselector"].click()
+        window.menuItems[name].click()
+    }
 
     func testButtonWithClosure() {
-        let app = XCUIApplication()
-        app.launchArguments = [DebugMode.buttonWithClosure.toLaunchArgument()]
-        app.launch()
         
-        let window = XCUIApplication().windows["UI Test Window"]
+        
+        component("ButtonWithClosure")
         let button = window.buttons["Button"]
         let createdLabels = window.staticTexts.matching(NSPredicate(format: "label CONTAINS 'pressed on self'"))
         XCTAssertEqual(createdLabels.count, 0)
