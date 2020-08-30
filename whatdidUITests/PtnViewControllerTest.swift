@@ -15,22 +15,22 @@ class PtnViewControllerTest: XCTestCase {
     
     func openPtn(andThen afterAction: (XCUIElement) -> () = {_ in }) -> Ptn {
         return group("open PTN") {
-            let ptn = openPtnNotInActivity()
-            afterAction(ptn)
-            return Ptn(
-                window: ptn,
-                pcombo: AutocompleteFieldHelper(element: ptn.comboBoxes["pcombo"]),
-                tcombo: AutocompleteFieldHelper(element: ptn.comboBoxes["tcombo"]))
+            let ptn = findPtn()
+            if !ptn.window.isVisible {
+                clickStatusMenu()
+            }
+            assertThat(window: .ptn, isVisible: true)
+            afterAction(ptn.window)
+            return ptn
         }
     }
     
-    func openPtnNotInActivity() -> XCUIElement {
+    func findPtn() -> Ptn {
         let ptn = app.windows[WindowType.ptn.windowTitle]
-        if !ptn.isVisible {
-            clickStatusMenu()
-        }
-        assertThat(window: .ptn, isVisible: true)
-        return ptn
+        return Ptn(
+            window: ptn,
+            pcombo: AutocompleteFieldHelper(element: ptn.comboBoxes["pcombo"]),
+            tcombo: AutocompleteFieldHelper(element: ptn.comboBoxes["tcombo"]))
     }
     
     func clickStatusMenu(){
@@ -153,8 +153,16 @@ class PtnViewControllerTest: XCTestCase {
     }
     
     func testKeyboardNavigation() {
-        // Get the PTN, and do a sanity check that hasFocus() doesn't always return true :)
-        let ptn = openPtn(andThen: {XCTAssertFalse($0.comboBoxes["tcombo"].hasFocus)})
+        let ptn = findPtn()// openPtn(andThen: {XCTAssertFalse($0.comboBoxes["tcombo"].hasFocus)})
+        
+        group("Hot key grabs focus with PTN open") {
+            setTimeUtc(h: 01, m: 00, deactivate: true)
+            waitForCondition { activeAppBundleId != "com.yuvalshavit.whatdid" }
+            app.typeKey("x", modifierFlags: [.command, .shift])
+            waitForCondition { activeAppBundleId == "com.yuvalshavit.whatdid" }
+            app.typeText("hello 1")
+            XCTAssertEqual("hello 1", ptn.pcombo.textField.stringValue)
+        }
         group("forward tabbing") {
             XCTAssertTrue(ptn.pcombo.hasFocus) // Sanity check
             // Tab from Project -> Task
@@ -188,10 +196,13 @@ class PtnViewControllerTest: XCTestCase {
         }
     }
     
-    func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0) {
+    func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0, deactivate: Bool = false) {
         app.activate() // bring the clockTicker back, if needed
         let text = "\(d * 86400 + h * 3600 + m * 60)\r"
         let clockTicker = app.windows["Mocked Clock"].children(matching: .textField).element
+        if deactivate {
+            app.windows["Mocked Clock"].checkBoxes["Deactivate before setting"].click()
+        }
         clockTicker.deleteText(andReplaceWith: text)
     }
     

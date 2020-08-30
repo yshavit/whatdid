@@ -22,6 +22,14 @@ extension XCUIElement {
         }
     }
     
+    var focusedDescendant: XCUIElement {
+        get {
+            let focusedElems = descendants(matching: .any).matching(NSPredicate(format: "hasKeyboardFocus = true")).allElementsBoundByIndex
+            XCTAssertEqual(focusedElems.count, 1)
+            return focusedElems[0]
+        }
+    }
+    
     var stringValue: String {
         return value as! String
     }
