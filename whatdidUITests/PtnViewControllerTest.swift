@@ -6,11 +6,17 @@ import XCTest
 class PtnViewControllerTest: XCTestCase {
     private static let SOME_TIME = Date()
     private var app : XCUIApplication!
+    /// A point within the status menu item. See `clickStatusMenu()`
+    private var statusItemPoint: CGPoint!
 
     override func setUp() {
         continueAfterFailure = false
         app = XCUIApplication()
         app.launch()
+
+        // The 0.5 isn't necessary, but it positions the cursor in the middle of the item. Just looks nicer.
+        app.menuBars.statusItems["✐"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
+        statusItemPoint = CGEvent(source: nil)?.location
     }
     
     func openPtn(andThen afterAction: (XCUIElement) -> () = {_ in }) -> Ptn {
@@ -34,7 +40,17 @@ class PtnViewControllerTest: XCTestCase {
     }
     
     func clickStatusMenu(){
-        app.menuBars.statusItems["✐"].click()
+        // In headless mode (or whatever GH actions uses), I can't just use the XCUIElement's `click()`
+        // when the app is in the background. Instead, I fetched the status item's location during setUp, and
+        // now directly post the click events to it.
+        group("Click status menu") {
+            let src = CGEventSource(stateID: CGEventSourceStateID.hidSystemState)
+            for eventType in [CGEventType.leftMouseDown, CGEventType.leftMouseUp] {
+                let event = CGEvent(mouseEventSource: src, mouseType: eventType, mouseCursorPosition: statusItemPoint, mouseButton: .left)
+                event?.post(tap: CGEventTapLocation.cghidEventTap)
+                usleep(250000)
+            }
+        }
     }
 
     override func tearDownWithError() throws {
@@ -157,14 +173,12 @@ class PtnViewControllerTest: XCTestCase {
         group("Hot key grabs focus with PTN open") {
             group("Schedule PTN open in background") {
                 setTimeUtc(h: 01, m: 00, deactivate: true)
-                waitForCondition { activeAppBundleId != "com.yuvalshavit.whatdid" }
+                activateFinder()
             }
-            group("Press hotkey") {
-                app.typeKey("x", modifierFlags: [.command, .shift])
-                waitForCondition { activeAppBundleId == "com.yuvalshavit.whatdid" }
-            }
+            pressHotkeyShortcut()
+            XCTAssertTrue(app.wait(for: .runningForeground, timeout: 15))
             group("Type text to check focus") {
-                app.typeText("hello 1")
+                ptn.pcombo.textField.typeText("hello 1")
                 XCTAssertEqual("hello 1", ptn.pcombo.textField.stringValue)
                 ptn.pcombo.textField.deleteText()
             }
@@ -172,15 +186,12 @@ class PtnViewControllerTest: XCTestCase {
         group("Hot key opens focus") {
             group("Close PTN") {
                 clickStatusMenu() // close the app
-                XCTAssertFalse(ptn.window.isVisible)
-                waitForCondition { activeAppBundleId != "com.yuvalshavit.whatdid" }
+                activateFinder()
             }
-            group("Press hotkey") {
-                app.typeKey("x", modifierFlags: [.command, .shift])
-                waitForCondition { activeAppBundleId == "com.yuvalshavit.whatdid" }
-            }
+            pressHotkeyShortcut()
+            XCTAssertTrue(app.wait(for: .runningForeground, timeout: 15))
             group("Type text to check focus") {
-                app.typeText("hello 2")
+                ptn.pcombo.textField.typeText("hello 2")
                 XCTAssertEqual("hello 2", ptn.pcombo.textField.stringValue)
                 ptn.pcombo.textField.deleteText()
             }
@@ -189,10 +200,12 @@ class PtnViewControllerTest: XCTestCase {
             group("Close PTN") {
                 clickStatusMenu() // close the app
                 XCTAssertFalse(ptn.window.isVisible)
+                XCTAssertTrue(app.wait(for: .runningBackground, timeout: 15))
             }
             clickStatusMenu() // But do *not* do anything more than that to grab focus!
+            XCTAssertTrue(app.wait(for: .runningForeground, timeout: 15))
             group("Type text to check focus") {
-                app.typeText("hello 3")
+                ptn.pcombo.textField.typeText("hello 3")
                 XCTAssertEqual("hello 3", ptn.pcombo.textField.stringValue)
                 ptn.pcombo.textField.deleteText()
             }
@@ -236,9 +249,31 @@ class PtnViewControllerTest: XCTestCase {
             let text = "\(d * 86400 + h * 3600 + m * 60)\r"
             let clockTicker = app.windows["Mocked Clock"].children(matching: .textField).element
             if deactivate {
-                app.windows["Mocked Clock"].checkBoxes["Deactivate before setting"].click()
+                app.windows["Mocked Clock"].checkBoxes["Defer until deactivation"].click()
             }
             clockTicker.deleteText(andReplaceWith: text)
+        }
+    }
+    
+    func activateFinder() {
+        group("Activate Finder") {
+            let finder = NSWorkspace.shared.runningApplications.first(where: {$0.bundleIdentifier == "com.apple.finder"})
+            XCTAssertNotNil(finder)
+            XCTAssertTrue(finder!.activate(options: .activateIgnoringOtherApps))
+            XCTAssertTrue(app.wait(for: .runningBackground, timeout: 15))
+            print("Pausing to let things settle")
+            sleep(1)
+            print("Okay, continuing.")
+        }
+    }
+
+    func pressHotkeyShortcut() {
+        // 7 == "x"
+        for keyDown in [true, false] {
+            let src = CGEventSource(stateID: CGEventSourceStateID.hidSystemState)
+            let keyEvent = CGEvent(keyboardEventSource: src, virtualKey: 7, keyDown: keyDown)
+            keyEvent!.flags = [.maskCommand, .maskShift]
+            keyEvent?.post(tap: CGEventTapLocation.cghidEventTap)
         }
     }
     

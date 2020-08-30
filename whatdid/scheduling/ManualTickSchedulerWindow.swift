@@ -4,6 +4,8 @@ import Cocoa
 
 class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
     
+    private static let deferCheckboxTitle = "Defer until deactivation"
+    
     let scheduler: ManualTickScheduler
     private let deferButton: NSButton
     private let setter: NSTextField
@@ -30,10 +32,11 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
         setter.isEditable = true
         stack.addArrangedSubview(setter)
         
-        deferButton = NSButton(checkboxWithTitle: "Deactivate before setting", target: nil, action: nil)
+        deferButton = NSButton(checkboxWithTitle: ManualTickSchedulerWindow.deferCheckboxTitle, target: nil, action: nil)
         stack.addArrangedSubview(deferButton)
         
         printUtc = NSTextField(labelWithString: "")
+        printUtc.setAccessibilityLabel("mockclock_status")
         stack.addArrangedSubview(printUtc)
         
         printLocal = NSTextField(labelWithString: "")
@@ -66,16 +69,13 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
             
             switch deferButton.state {
             case .on:
-                deferButton.state = .off
+                deferButton.title = "Deferral pending"
+                deferButton.isEnabled = false
                 AppDelegate.instance.onDeactivation {
+                    self.deferButton.title = ManualTickSchedulerWindow.deferCheckboxTitle
+                    self.deferButton.isEnabled = true
+                    self.deferButton.state = .off
                     self.scheduler.now = date
-                }
-                let finderApps = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.finder")
-                if finderApps.count != 1 {
-                    NSLog("Expected exactly one Finder app. Found \(finderApps.count).")
-                    finderApps.forEach {app in NSLog("  id: \(app.bundleIdentifier ?? "<?>"), name: \(app.localizedName ?? "<?>")")}
-                } else {
-                    finderApps[0].activate(options: [])
                 }
             case .off:
                 scheduler.now = date
