@@ -4,7 +4,10 @@ import Cocoa
 
 class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
     
+    private static let deferCheckboxTitle = "Defer until deactivation"
+    
     let scheduler: ManualTickScheduler
+    private let deferButton: NSButton
     private let setter: NSTextField
     private let printUtc: NSTextField
     private let printLocal: NSTextField
@@ -29,7 +32,11 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
         setter.isEditable = true
         stack.addArrangedSubview(setter)
         
+        deferButton = NSButton(checkboxWithTitle: ManualTickSchedulerWindow.deferCheckboxTitle, target: nil, action: nil)
+        stack.addArrangedSubview(deferButton)
+        
         printUtc = NSTextField(labelWithString: "")
+        printUtc.setAccessibilityLabel("mockclock_status")
         stack.addArrangedSubview(printUtc)
         
         printLocal = NSTextField(labelWithString: "")
@@ -51,7 +58,6 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
     
     private func updateDate() {
         if let dateAsInt = Int(setter.stringValue) {
-            
             let date = Date(timeIntervalSince1970: Double(dateAsInt))
             
             let timeFormatter = ISO8601DateFormatter()
@@ -61,7 +67,22 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
             timeFormatter.timeZone = DefaultScheduler.instance.timeZone
             printLocal.stringValue = timeFormatter.string(from: date)
             
-            scheduler.now = date
+            switch deferButton.state {
+            case .on:
+                deferButton.title = "Deferral pending"
+                deferButton.isEnabled = false
+                AppDelegate.instance.onDeactivation {
+                    self.deferButton.title = ManualTickSchedulerWindow.deferCheckboxTitle
+                    self.deferButton.isEnabled = true
+                    self.deferButton.state = .off
+                    self.scheduler.now = date
+                }
+            case .off:
+                scheduler.now = date
+            case let x:
+                NSLog("Unexpected state: \(x)")
+            }
+            
         } else {
             printUtc.stringValue = "ERROR"
             printLocal.stringValue = "ERROR"

@@ -11,6 +11,7 @@ class ComponentUITests: XCTestCase {
         continueAfterFailure = false
         app = XCUIApplication()
         app.launch()
+        app.activate()
     }
     
     override func tearDownWithError() throws {
