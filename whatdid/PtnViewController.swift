@@ -35,6 +35,9 @@ class PtnViewController: NSViewController {
         taskField.optionsLookupOnFocus = {
             AppDelegate.instance.model.listTasks(project: self.projectField.textField.stringValue, prefix: "")
         }
+        projectField.onTextChange = {
+            self.taskField.textField.stringValue = ""
+        }
         projectField.action = self.projectOrTaskAction
         taskField.action = self.projectOrTaskAction
         setBreakButtonTitle()
@@ -68,7 +71,7 @@ class PtnViewController: NSViewController {
     
     override func viewWillAppear() {
         super.viewWillAppear()
-        
+        noteField.stringValue = ""
         
         // Set up the snooze button. We'll have 4 options at half-hour increments, starting 10 minutes from now.
         // The 10 minutes is so that if it's currently 2:29:59, you won't be annoyed with a "snooze until 2:30" button.

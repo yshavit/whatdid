@@ -10,6 +10,7 @@ class AutoCompletingField: NSView, NSAccessibilityGroup {
     fileprivate var popupManager: PopupManager!
     var action: (AutoCompletingField) -> Void = {_ in}
     var optionsLookupOnFocus: (() -> [String])?
+    var onTextChange: (() -> Void) = {}
     
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -244,6 +245,7 @@ fileprivate class AutoCompletingFieldView: NSTextField, NSTextViewDelegate, NSTe
                 currentEditor()!.selectedRange = NSRange(location: stringCountBeforeAutocomplete, length: charsToAutocomplete)
             }
         }
+        parent.onTextChange()
     }
     
     override func textDidEndEditing(_ notification: Notification) {
