@@ -1,0 +1,22 @@
+name: Build app
+
+on:
+  push: 
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build archive
+      run: xcodebuild -scheme whatdid-release build archive -archivePath build/whatdid
+    - name: Export archive
+      run: xcodebuild -exportArchive -archivePath build/whatdid.xcarchive -exportPath build -exportOptionsPlist buildscripts/archive-export.plist
+    - name: Create zip
+      run: (cd build && zip -r whatdid.zip whatdid.app)
+    - uses: actions/upload-artifact@v2
+      with:
+        name: whatdid.zip
+        path: build/whatdid.zip
+  
