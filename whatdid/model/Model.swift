@@ -7,7 +7,6 @@ class Model {
     private static let BREAK_PROJECT = "break"
     private static let BREAK_TASK = "break"
     private static let BREAK_TASK_NOTES = ""
-    private static let NO_BUILTINS = NSPredicate(format: "project != %@", BREAK_PROJECT)
     
     @Atomic private var lastEntryDate : Date
     
@@ -55,7 +54,6 @@ class Model {
         container.viewContext.performAndWait {
             let request = NSFetchRequest<Project>(entityName: "Project")
             do {
-                request.predicate = Model.NO_BUILTINS
                 result = try request.execute()
             } catch {
                 NSLog("couldn't load projects: %@", error as NSError)
@@ -76,9 +74,9 @@ class Model {
                     .init(key: "lastUsed", ascending: false),
                     .init(key: "project", ascending: true)
                 ]
-                request.predicate = prefix.isEmpty
-                    ? Model.NO_BUILTINS
-                    : NSPredicate(format: "project BEGINSWITH %@", prefix)
+                if !prefix.isEmpty {
+                    request.predicate = NSPredicate(format: "project BEGINSWITH %@", prefix)
+                }
                 request.fetchLimit = 10
                 projects = try request.execute()
             } catch {
