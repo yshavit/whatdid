@@ -204,6 +204,87 @@ class ComponentUITests: XCTestCase {
         }
     }
     
+    func testArrowsWhileOptionsAreClosed() {
+        use("Autocomplete")
+        let optionsDefinition = testWindow.textFields["test_defineoptions"]
+        let resultField = testWindow.staticTexts["test_result"]
+        let fieldHelper = AutocompleteFieldHelper(element: testWindow.comboBoxes["test_autocomplete"])
+        optionsDefinition.deleteText(andReplaceWith: "One,Two a,Two b,Three")
+        
+        group("Set up blank text field") {
+            fieldHelper.textField.click()
+            fieldHelper.textField.typeKey(.enter)
+            
+            XCTAssertTrue(fieldHelper.hasFocus)
+            XCTAssertEqual("", resultField.stringValue)
+            fieldHelper.assertOptionsPaneHidden()
+        }
+        group("Text field is blank") {
+            group("Down-arrow") {
+                testWindow.typeKey(.downArrow)
+                XCTAssertTrue(fieldHelper.hasFocus)
+                XCTAssertEqual("", resultField.stringValue) // unchanged; action didn't run
+                XCTAssertEqual("One", fieldHelper.selectedOptionText)
+                
+                testWindow.typeKey(.enter)
+                XCTAssertTrue(fieldHelper.hasFocus)
+                XCTAssertEqual("One", resultField.stringValue)
+                fieldHelper.assertOptionsPaneHidden()
+            }
+            group("Clear it out and close the options again") {
+                fieldHelper.textField.typeKey(.delete)
+                XCTAssertEqual("", fieldHelper.textField.stringValue)
+                
+                XCTAssertTrue(fieldHelper.hasFocus)
+                XCTAssertEqual("One", resultField.stringValue) // unchanged; action didn't run
+                fieldHelper.assertOptionsPaneHidden()
+            }
+            group("Up-arrow") {
+                testWindow.typeKey(.upArrow)
+                XCTAssertTrue(fieldHelper.hasFocus)
+                XCTAssertEqual("One", resultField.stringValue) // unchanged; action didn't run
+                XCTAssertEqual("Three", fieldHelper.selectedOptionText)
+                
+                testWindow.typeKey(.enter)
+                XCTAssertTrue(fieldHelper.hasFocus)
+                XCTAssertEqual("Three", resultField.stringValue)
+                fieldHelper.assertOptionsPaneHidden()
+            }
+        }
+        group("Text field with \"Two\"") {
+            group("Set up") {
+                testWindow.typeText("Two") // It will have autofilled "Two a", so let's delete the " a"
+                testWindow.typeKey(.delete)
+                testWindow.typeKey(.enter)
+            }
+            group("Down-arrow") {
+                testWindow.typeKey(.downArrow)
+                XCTAssertTrue(fieldHelper.hasFocus)
+                XCTAssertEqual("Two a", fieldHelper.selectedOptionText)
+                
+                testWindow.typeKey(.enter)
+                XCTAssertTrue(fieldHelper.hasFocus)
+                XCTAssertEqual("Two a", resultField.stringValue)
+                fieldHelper.assertOptionsPaneHidden()
+            }
+            group("Clear it out and close the options again") {
+                testWindow.typeText("Two") // It will have autofilled "Two a", so let's delete the " a"
+                testWindow.typeKey(.delete)
+                testWindow.typeKey(.enter)
+            }
+            group("Up-arrow") {
+                testWindow.typeKey(.upArrow)
+                XCTAssertTrue(fieldHelper.hasFocus)
+                XCTAssertEqual("Two b", fieldHelper.selectedOptionText)
+                
+                testWindow.typeKey(.enter)
+                XCTAssertTrue(fieldHelper.hasFocus)
+                XCTAssertEqual("Two b", resultField.stringValue)
+                fieldHelper.assertOptionsPaneHidden()
+            }
+        }
+    }
+    
     /// A test of the scrolling
     func testAutocompleteManyOptions() {
         use("Autocomplete")

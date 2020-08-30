@@ -269,7 +269,7 @@ fileprivate class AutoCompletingFieldView: NSTextField, NSTextViewDelegate, NSTe
         return accessibilityLabel() ?? "unidentifed field at \(frame.debugDescription)"
     }
     
-    private func showOptions() {
+    func showOptions() {
         let originWithinWindow = superview!.convert(frame.origin, to: nil)
         let originWithinScreen = window!.convertPoint(toScreen: originWithinWindow)
         popupManager.show(
@@ -428,17 +428,23 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
     }
     
     func moveSelection(down moveDown: Bool) {
+        if !windowIsVisible {
+            parent.textFieldView.showOptions()
+        }
         let visibleFields = self.optionFields.filter { !$0.isHidden }
         guard !visibleFields.isEmpty else {
             return
         }
-        func lastOption() -> Option {
-            return visibleFields[visibleFields.count - 1]
+        func lastOption(matchedIfPossible: Bool) -> Option {
+            let idx = matchedIfPossible
+                ? visibleFields.lastIndex(where: {!SubsequenceMatcher.matches(lookFor: parent.textField.stringValue, inString: $0.stringValue).isEmpty})
+                : nil
+            return visibleFields[idx ?? visibleFields.count - 1]
         }
         func firstOption(matchedIfPossible: Bool) -> Option {
             let idx = matchedIfPossible
                 ? visibleFields.firstIndex(where: {!SubsequenceMatcher.matches(lookFor: parent.textField.stringValue, inString: $0.stringValue).isEmpty})
-                : 0
+                : nil
             return visibleFields[idx ?? 0]
         }
         
@@ -451,13 +457,13 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
                     : visibleFields[alreadySelectedIdx + 1]
             } else {
                 selected = (alreadySelectedIdx == 0)
-                    ? lastOption()
+                    ? lastOption(matchedIfPossible: false)
                     : visibleFields[alreadySelectedIdx - 1]
             }
         } else if moveDown {
             selected = firstOption(matchedIfPossible: true)
         } else {
-            selected = lastOption()
+            selected = lastOption(matchedIfPossible: true)
         }
         selected.isSelected = true
         parent.textField.stringValue = selected.stringValue

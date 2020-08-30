@@ -49,7 +49,7 @@ extension XCUIElement {
         return result
     }
     
-    func deleteText(using selectAllStrategy: SelectAllStrategy = .commandA, andReplaceWith replacement: String? = nil) {
+    func deleteText(andReplaceWith replacement: String? = nil) {
         let message = replacement == nil
             ? "Delete text in \(humanReadableIdentifier)"
             : "Replace text in \(humanReadableIdentifier)"
@@ -57,13 +57,7 @@ extension XCUIElement {
             if !hasFocus {
                 click()
             }
-            switch selectAllStrategy {
-            case .arrows:
-                typeKey(.downArrow)
-                typeKey(.upArrow, modifierFlags:[.shift, .function])
-            case .commandA:
-                typeKey("a", modifierFlags: .command)
-            }
+            typeKey("a", modifierFlags: .command)
             if let replacementToType = replacement {
                 typeText(replacementToType)
             } else {
@@ -124,11 +118,6 @@ extension XCUIElement {
         print(header)
         lines.forEach { print($0) }
         print(header)
-    }
-    
-    enum SelectAllStrategy {
-        case arrows
-        case commandA
     }
 }
 
