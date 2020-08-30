@@ -108,14 +108,15 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     }
     
     func focus() {
-        if window?.isVisible ?? false {
-            if !NSApp.isActive {
-                NSApp.activate(ignoringOtherApps: true)
-            }
-            window?.makeKeyAndOrderFront(self)
-            if window?.contentView == taskAdditionsPane.view {
-                taskAdditionsPane.grabFocus()
-            }
+        if !NSApp.isActive {
+            NSApp.activate(ignoringOtherApps: true)
+        }
+        if !(window?.isVisible ?? false) {
+            open(.ptn)
+        }
+        window?.makeKeyAndOrderFront(self)
+        if window?.contentView == taskAdditionsPane.view {
+            taskAdditionsPane.grabFocus()
         }
     }
     
