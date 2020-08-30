@@ -32,10 +32,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         uiTestWindow = UiTestWindow()
         uiTestWindow.show()
         NSApp.setActivationPolicy(.regular) // UI tests can time out on launch() without this
-        #else
-        // Our Info.plist starts us off as background. Now that we're started, become an accessory app.
-        // This approach lets us start the app deactivated.
-        NSApp.setActivationPolicy(.accessory)
         #endif
         
         AppDelegate.DEBUG_DATE_FORMATTER.timeZone = DefaultScheduler.instance.timeZone

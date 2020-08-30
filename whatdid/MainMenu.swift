@@ -85,7 +85,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
             window?.title = "What are you working on?"
         }
         
-        window?.layoutIfNeeded()
+        window!.setContentSize(window!.contentViewController!.view.fittingSize)
         if let mainFrame = NSScreen.main?.visibleFrame, let button = statusItem.button {
             let buttonBoundsAbsolute = button.window?.convertToScreen(button.bounds)
             var pos = NSPoint(
