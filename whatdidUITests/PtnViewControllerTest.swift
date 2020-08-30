@@ -171,10 +171,7 @@ class PtnViewControllerTest: XCTestCase {
     func testKeyboardNavigation() {
         let ptn = findPtn()
         group("Hot key grabs focus with PTN open") {
-            group("Schedule PTN open in background") {
-                setTimeUtc(h: 01, m: 00, deactivate: true)
-                activateFinder()
-            }
+            setTimeUtc(h: 01, m: 00, deactivate: true)
             pressHotkeyShortcut()
             XCTAssertTrue(app.wait(for: .runningForeground, timeout: 15))
             group("Type text to check focus") {
@@ -285,6 +282,9 @@ class PtnViewControllerTest: XCTestCase {
                 app.windows["Mocked Clock"].checkBoxes["Defer until deactivation"].click()
             }
             clockTicker.deleteText(andReplaceWith: text)
+            if deactivate {
+                activateFinder()
+            }
         }
     }
     
