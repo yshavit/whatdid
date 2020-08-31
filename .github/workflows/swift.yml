@@ -20,6 +20,12 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build UI tests
       run: xcodebuild build-for-testing -scheme whatdid-ui-test
+    - name: Dismiss upgrade dialog if present
+      run: |
+            update_name=$(softwareupdate -l | grep "Title: " | awk -F[:,] '{print $2}' | awk '{$1=$1};1')
+            if [ ! -z "$update_name" ]; then
+                sudo softwareupdate --ignore "$update_name"
+            fi
     - name: Run UI tests
       run: xcodebuild test-without-building -scheme whatdid-ui-test -resultBundlePath ${{ runner.temp }}/test-results/bundle
     - name: Prepare test artifacts
