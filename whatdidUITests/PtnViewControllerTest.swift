@@ -253,6 +253,7 @@ class PtnViewControllerTest: XCTestCase {
             group("Task 1 stays expanded if project a folds") {
                 projectA.clickDisclosure(until: task1Details, .doesNotExist)
                 XCTAssertFalse(task1Details.isVisible)
+                sleep(1) // 500ms; clicking too quickly in a row can break this test
                 projectA.clickDisclosure(until: task1Details, .isVisible)
                 XCTAssertTrue(task1Details.isVisible)
             }
