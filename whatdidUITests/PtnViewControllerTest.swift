@@ -19,6 +19,11 @@ class PtnViewControllerTest: XCTestCase {
         statusItemPoint = CGEvent(source: nil)?.location
     }
     
+    override func recordFailure(withDescription description: String, inFile filePath: String, atLine lineNumber: Int, expected: Bool) {
+        add(XCTAttachment(screenshot: XCUIScreen.main.screenshot()))
+        super.recordFailure(withDescription: description, inFile: filePath, atLine: lineNumber, expected: expected)
+    }
+    
     func openPtn(andThen afterAction: (XCUIElement) -> () = {_ in }) -> Ptn {
         return group("open PTN") {
             let ptn = findPtn()
@@ -39,7 +44,7 @@ class PtnViewControllerTest: XCTestCase {
             tcombo: AutocompleteFieldHelper(element: ptn.comboBoxes["tcombo"]))
     }
     
-    func clickStatusMenu(){
+    func clickStatusMenu(with flags: CGEventFlags = []){
         // In headless mode (or whatever GH actions uses), I can't just use the XCUIElement's `click()`
         // when the app is in the background. Instead, I fetched the status item's location during setUp, and
         // now directly post the click events to it.
@@ -47,6 +52,7 @@ class PtnViewControllerTest: XCTestCase {
             let src = CGEventSource(stateID: CGEventSourceStateID.hidSystemState)
             for eventType in [CGEventType.leftMouseDown, CGEventType.leftMouseUp] {
                 let event = CGEvent(mouseEventSource: src, mouseType: eventType, mouseCursorPosition: statusItemPoint, mouseButton: .left)
+                event?.flags = flags
                 event?.post(tap: CGEventTapLocation.cghidEventTap)
                 usleep(250000)
             }
@@ -142,7 +148,6 @@ class PtnViewControllerTest: XCTestCase {
         }
     }
     
-    // TODO: also test with just typing (not downarrow)
     func testAutoComplete() {
         let ptn = openPtn()
         group("initalize the data") {
@@ -156,8 +161,7 @@ class PtnViewControllerTest: XCTestCase {
                 entry("whatdid", "autothing", "notes 1", from: t(-80), to: t(-70)),
                 entry("whytdid", "autothing", "notes 1", from: t(-80), to: t(-70)),
                 entry("whodid", "something else", "notes 2", from: t(-60), to: t(-50)))
-            entriesTextField.click()
-            entriesTextField.typeText(entriesSerialized + "\r")
+            entriesTextField.deleteText(andReplaceWith: entriesSerialized + "\r")
         }
         group("autocomplete wh*") {
             let pcombo = ptn.pcombo.textField
@@ -168,13 +172,126 @@ class PtnViewControllerTest: XCTestCase {
         }
     }
     
+    func testDailyReportPopup() {
+        group("Initalize the data") {
+            let ptn = openPtn()
+            let entriesTextField  = ptn.window.textFields["uihook_flatentryjson"]
+            let entries = EntriesBuilder()
+                .add(project: "project a", task: "task 1", notes: "first thing", minutes: 12)
+                .add(project: "project a", task: "task 2", notes: "sidetrack", minutes: 13)
+                .add(project: "project a", task: "task 1", notes: "back to first", minutes: 5)
+                .add(project: "project b", task: "task 1", notes: "fizz", minutes: 5)
+                .add(project: "project c", task: "task 2", notes: "fuzz", minutes: 10)
+                .serialize()
+            entriesTextField.deleteText(andReplaceWith: entries)
+            entriesTextField.typeKey(.enter)
+            clickStatusMenu()
+        }
+        let dailyReport = app.windows["Here's what you've been doing"]
+        group("Open daily report") {
+            clickStatusMenu(with: .maskAlternate)
+            XCTAssertTrue(dailyReport.isVisible)
+        }
+        group("Verify projects exist") {
+            for project in ["project a", "project b", "project c"] {
+                group(project) {
+                    for (description, e) in HierarchicalEntryLevel(ancestor: dailyReport, scope: "Project", label: project).allElements {
+                        XCTAssertTrue(e.exists, "\"\(project)\" \(description) doesn't exist")
+                    }
+                }
+            }
+        }
+        group("Verify projects visible") {
+            for project in ["project a", "project b", "project c"] {
+                group(project) {
+                    for (description, e) in HierarchicalEntryLevel(ancestor: dailyReport, scope: "Project", label: project).allElements {
+                        XCTAssertTrue(e.isHittable, "\"\(project)\" \(description) is not hittable")
+                    }
+                }
+            }
+        }
+        group("Spot check on project a") {
+            let projectA = HierarchicalEntryLevel(ancestor: dailyReport, scope: "Project", label: "project a")
+            let tasksForA = dailyReport.groups["Tasks for \"project a\""]
+            let task1 = HierarchicalEntryLevel(ancestor: tasksForA, scope: "Task", label: "task 1")
+            let task1Details = tasksForA.staticTexts["Details for task 1"]
+            group("Duration label and indicator") {
+                XCTAssertEqual("30m", projectA.durationLabel.stringValue)
+                if let indicatorBarValue = projectA.indicatorBar.value as? Double {
+                    // 30 minutes out of 45 total = 0.6666...
+                    XCTAssertGreaterThan(indicatorBarValue, 0.66)
+                    XCTAssertLessThan(indicatorBarValue, 0.67)
+                }
+            }
+            group("Check tasks for \"project a\"") {
+                XCTAssertFalse(tasksForA.exists)
+                projectA.clickDisclosure(until: tasksForA, .isVisible)
+            }
+            for task in ["task 1", "task 2"] {
+                group("Check \(task)'s visibility") {
+                    for (description, e) in HierarchicalEntryLevel(ancestor: tasksForA, scope: "Task", label: task).allElements {
+                        XCTAssertTrue(e.isVisible, "\(task) \(description)")
+                    }
+                }
+            }
+            group("Spot check on task 1") {
+                group("Duration label and indicator") {
+                    XCTAssertEqual("17m", task1.durationLabel.stringValue)
+                    if let indicatorBarValue = task1.indicatorBar.value as? Double {
+                        // 17 minutes out of 45 total = 0.0.3777...
+                        XCTAssertGreaterThan(indicatorBarValue, 0.37)
+                        XCTAssertLessThan(indicatorBarValue, 0.38)
+                    }
+                }
+                group("Details") {
+                    XCTAssertFalse(task1Details.exists)
+                    task1.clickDisclosure(until: task1Details, .isVisible)
+                    XCTAssertTrue(task1Details.isVisible)
+                    XCTAssertEqual("1:15am - 1:27am (12m): first thing\n1:40am - 1:45am (5m): back to first", task1Details.stringValue)
+                }
+            }
+            group("Task 1 stays expanded if project a folds") {
+                projectA.clickDisclosure(until: task1Details, .doesNotExist)
+                XCTAssertFalse(task1Details.isVisible)
+                projectA.clickDisclosure(until: task1Details, .isVisible)
+                XCTAssertTrue(task1Details.isVisible)
+            }
+        }
+        group("Projects need to scroll") {
+            group("Set new entries") {
+                clickStatusMenu() // Close the daily report
+                let ptn = openPtn()
+                let entriesTextField = ptn.window.textFields["uihook_flatentryjson"]
+                let entriesBuilder = EntriesBuilder()
+                for i in 1...25 {
+                    entriesBuilder.add(project: "project \(i)", task: "only task", notes: "", minutes: Double(i))
+                }
+                entriesTextField.deleteText(andReplaceWith: entriesBuilder.serialize())
+                entriesTextField.typeKey(.enter)
+                clickStatusMenu()
+            }
+            let project1Header = HierarchicalEntryLevel(ancestor: dailyReport, scope: "Project", label: "project 1").headerLabel
+            group("Open daily report") {
+                clickStatusMenu(with: .maskAlternate)
+                wait(pollEvery: 0.5, for: "daily report to open", until: {project1Header.exists})
+            }
+            group("Scroll to project 1") {
+                let project25Header = HierarchicalEntryLevel(ancestor: dailyReport, scope: "Project", label: "project 25").headerLabel
+                
+                XCTAssertTrue(project25Header.isVisible)
+                XCTAssertFalse(project1Header.isVisible)
+                
+                project1Header.hover()
+                XCTAssertFalse(project25Header.isVisible)
+                XCTAssertTrue(project1Header.isVisible)
+            }
+        }
+    }
+    
     func testKeyboardNavigation() {
         let ptn = findPtn()
         group("Hot key grabs focus with PTN open") {
-            group("Schedule PTN open in background") {
-                setTimeUtc(h: 01, m: 00, deactivate: true)
-                activateFinder()
-            }
+            setTimeUtc(h: 01, m: 00, deactivate: true)
             pressHotkeyShortcut()
             XCTAssertTrue(app.wait(for: .runningForeground, timeout: 15))
             group("Type text to check focus") {
@@ -285,6 +402,9 @@ class PtnViewControllerTest: XCTestCase {
                 app.windows["Mocked Clock"].checkBoxes["Defer until deactivation"].click()
             }
             clockTicker.deleteText(andReplaceWith: text)
+            if deactivate {
+                activateFinder()
+            }
         }
     }
     
@@ -327,8 +447,80 @@ class PtnViewControllerTest: XCTestCase {
         return FlatEntry(from: from, to: to, project: project, task: task, notes: notes)
     }
     
-    func t(_ timeDelta: TimeInterval) -> Date {
+    class func t(_ timeDelta: TimeInterval) -> Date {
         return PtnViewControllerTest.SOME_TIME.addingTimeInterval(timeDelta)
+    }
+    
+    func t(_ timeDelta: TimeInterval) -> Date {
+        return PtnViewControllerTest.t(timeDelta)
+    }
+    
+    class EntriesBuilder {
+        private var entries = [(p: String, t: String, n: String, duration: TimeInterval)]()
+        
+        @discardableResult func add(project: String, task: String, notes: String, minutes: Double) -> EntriesBuilder {
+            entries.append((p: project, t: task, n: notes, duration: minutes * 60.0))
+            return self
+        }
+        
+        func serialize() -> String {
+            let totalInterval = entries.map({$0.duration}).reduce(0, +)
+            var startTime = Date(timeIntervalSince1970: -totalInterval)
+            var flatEntries = [FlatEntry]()
+            for e in entries {
+                let from = startTime
+                let to = startTime.addingTimeInterval(e.duration)
+                flatEntries.append(FlatEntry(from: from, to: to, project: e.p, task: e.t, notes: e.n))
+                startTime = to
+            }
+            return FlatEntry.serialize(flatEntries)
+        }
+    }
+    
+    struct HierarchicalEntryLevel {
+        let ancestor: XCUIElement
+        let scope: String
+        let label: String
+        
+        var headerLabel: XCUIElement {
+            ancestor.staticTexts["\(scope) \"\(label)\""].firstMatch
+        }
+        
+        var durationLabel: XCUIElement {
+            ancestor.staticTexts["\(scope) time for \"\(label)\""].firstMatch
+        }
+        
+        var disclosure: XCUIElement {
+            ancestor.disclosureTriangles["\(scope) details toggle for \"\(label)\""]
+        }
+        
+        var indicatorBar: XCUIElement {
+            ancestor.progressIndicators["\(scope) activity indicator for \"\(label)\""]
+        }
+        
+        var allElements: [String: XCUIElement] {
+            return ["headerText": headerLabel, "durationText": durationLabel, "disclosure": disclosure, "indicator": indicatorBar]
+        }
+        
+        func clickDisclosure(until element: XCUIElement, _ existence: Existence) {
+            disclosure.click()
+            wait(for: "element \(String(describing: existence))") {
+                switch existence {
+                case .exists:
+                    return element.exists
+                case .isVisible:
+                    return element.isVisible
+                case .doesNotExist:
+                    return !element.exists
+                }
+            }
+        }
+    }
+    
+    enum Existence {
+        case exists
+        case isVisible
+        case doesNotExist
     }
     
     struct Ptn {

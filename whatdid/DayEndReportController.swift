@@ -86,12 +86,17 @@ class DayEndReportController: NSViewController {
             projectVStack.widthAnchor.constraint(equalTo: projectsContainer.widthAnchor, constant: -2).isActive = true
             projectVStack.leadingAnchor.constraint(equalTo: projectsContainer.leadingAnchor).isActive = true
             
-            let projectHeader = ExpandableProgressBar(addTo: projectVStack, labeled: project.name, withDuration: project.totalTime, outOf: allProjectsTotalTime)
-            
+            let projectHeader = ExpandableProgressBar(
+                addTo: projectVStack,
+                label: project.name,
+                accessibilityLabelScope: "Project",
+                withDuration: project.totalTime,
+                outOf: allProjectsTotalTime)
             // Tasks box
             let tasksBox = NSBox()
             projectVStack.addArrangedSubview(tasksBox)
-            tasksBox.title = "Tasks for \(project.name)"
+            tasksBox.setAccessibilityLabel("Tasks for \"\(project.name)\"")
+            tasksBox.title = tasksBox.accessibilityLabel()!
             tasksBox.titlePosition = .noTitle
             tasksBox.leadingAnchor.constraint(equalTo: projectVStack.leadingAnchor, constant: 3).isActive = true
             tasksBox.trailingAnchor.constraint(equalTo: projectVStack.trailingAnchor, constant: -3).isActive = true
@@ -112,7 +117,12 @@ class DayEndReportController: NSViewController {
             
             var previousDetailsBottomAnchor : NSLayoutYAxisAnchor?
             project.forEach {task in
-                let taskHeader = ExpandableProgressBar(addTo: tasksStack, labeled: task.name, withDuration: task.totalTime, outOf: allProjectsTotalTime)
+                let taskHeader = ExpandableProgressBar(
+                    addTo: tasksStack,
+                    label: task.name,
+                    accessibilityLabelScope: "Task",
+                    withDuration: task.totalTime,
+                    outOf: allProjectsTotalTime)
                 taskHeader.progressBar.leadingAnchor.constraint(equalTo: projectHeader.progressBar.leadingAnchor).isActive = true
                 taskHeader.progressBar.trailingAnchor.constraint(equalTo: projectHeader.progressBar.trailingAnchor).isActive = true
                 previousDetailsBottomAnchor?.constraint(equalTo: taskHeader.topView.topAnchor, constant: -5).isActive = true
@@ -134,6 +144,7 @@ class DayEndReportController: NSViewController {
                 let taskDescriptions = details.trimmingCharacters(in: .newlines)
                 let taskDetailsView = NSTextField(labelWithString: taskDescriptions)
                 tasksStack.addArrangedSubview(taskDetailsView)
+                taskDetailsView.setAccessibilityLabel("Details for \(task.name)")
                 taskDetailsView.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
                 taskDetailsView.leadingAnchor.constraint(equalTo: taskHeader.progressBar.leadingAnchor).isActive = true
                 previousDetailsBottomAnchor = taskDetailsView.bottomAnchor
@@ -198,7 +209,7 @@ class DayEndReportController: NSViewController {
         let disclosure: ButtonWithClosure
         let progressBar: NSProgressIndicator
         
-        init(addTo enclosing: NSStackView, labeled label: String, withDuration duration: TimeInterval, outOf: TimeInterval) {
+        init(addTo enclosing: NSStackView, label: String, accessibilityLabelScope scope: String, withDuration duration: TimeInterval, outOf: TimeInterval) {
             let labelStack = NSStackView()
             enclosing.addArrangedSubview(labelStack)
             labelStack.orientation = .horizontal
@@ -207,9 +218,11 @@ class DayEndReportController: NSViewController {
             let projectLabel = NSTextField(labelWithString: label)
             projectLabel.font = NSFont.systemFont(ofSize: NSFont.systemFontSize)
             labelStack.addView(projectLabel, in: .leading)
+            projectLabel.setAccessibilityLabel("\(scope) \"\(label)\"")
             let durationLabel = NSTextField(labelWithString: TimeUtil.daysHoursMinutes(for: duration))
             durationLabel.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
             labelStack.addView(durationLabel, in: .trailing)
+            durationLabel.setAccessibilityLabel("\(scope) time for \"\(label)\"")
             
             let headerHStack = NSStackView()
             enclosing.addArrangedSubview(headerHStack)
@@ -221,6 +234,7 @@ class DayEndReportController: NSViewController {
             disclosure = createDisclosure(state: .off)
             headerHStack.addArrangedSubview(disclosure)
             disclosure.leadingAnchor.constraint(equalTo: headerHStack.leadingAnchor).isActive = true
+            disclosure.setAccessibilityLabel("\(scope) details toggle for \"\(label)\"")
             
             // progress bar
             progressBar = NSProgressIndicator()
@@ -231,6 +245,7 @@ class DayEndReportController: NSViewController {
             progressBar.doubleValue = duration
             progressBar.trailingAnchor.constraint(lessThanOrEqualTo: headerHStack.trailingAnchor).isActive = true
             progressBar.trailingAnchor.constraint(equalTo: labelStack.trailingAnchor).isActive = true
+            progressBar.setAccessibilityLabel("\(scope) activity indicator for \"\(label)\"")
             
             topView = labelStack
         }
