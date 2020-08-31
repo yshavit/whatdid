@@ -21,7 +21,16 @@ jobs:
     - name: Build UI tests
       run: xcodebuild build-for-testing -scheme whatdid-ui-test
     - name: Run UI tests
-      run: xcodebuild test-without-building -scheme whatdid-ui-test
+      run: xcodebuild test-without-building -scheme whatdid-ui-test -resultBundlePath ${{ runner.temp }}/test-results/bundle
+    - name: Prepare test artifacts
+      if: ${{ failure() }}
+      run: mv "$(readlink ${{ runner.temp }}/test-results/bundle)" "${{ runner.temp }}/test-results/failure-logs.xcresult"
+    - name: Upload test artifacts
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: failure-logs.xcresult
+        path: ${{ runner.temp }}/test-results/failure-logs.xcresult
   unit-tests:
     runs-on: macos-latest
     steps:

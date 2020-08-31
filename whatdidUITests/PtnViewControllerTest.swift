@@ -19,6 +19,11 @@ class PtnViewControllerTest: XCTestCase {
         statusItemPoint = CGEvent(source: nil)?.location
     }
     
+    override func recordFailure(withDescription description: String, inFile filePath: String, atLine lineNumber: Int, expected: Bool) {
+        add(XCTAttachment(screenshot: XCUIScreen.main.screenshot()))
+        super.recordFailure(withDescription: description, inFile: filePath, atLine: lineNumber, expected: expected)
+    }
+    
     func openPtn(andThen afterAction: (XCUIElement) -> () = {_ in }) -> Ptn {
         return group("open PTN") {
             let ptn = findPtn()
