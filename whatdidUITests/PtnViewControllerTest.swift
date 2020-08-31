@@ -39,7 +39,7 @@ class PtnViewControllerTest: XCTestCase {
             tcombo: AutocompleteFieldHelper(element: ptn.comboBoxes["tcombo"]))
     }
     
-    func clickStatusMenu(){
+    func clickStatusMenu(with flags: CGEventFlags = []){
         // In headless mode (or whatever GH actions uses), I can't just use the XCUIElement's `click()`
         // when the app is in the background. Instead, I fetched the status item's location during setUp, and
         // now directly post the click events to it.
@@ -47,6 +47,7 @@ class PtnViewControllerTest: XCTestCase {
             let src = CGEventSource(stateID: CGEventSourceStateID.hidSystemState)
             for eventType in [CGEventType.leftMouseDown, CGEventType.leftMouseUp] {
                 let event = CGEvent(mouseEventSource: src, mouseType: eventType, mouseCursorPosition: statusItemPoint, mouseButton: .left)
+                event?.flags = flags
                 event?.post(tap: CGEventTapLocation.cghidEventTap)
                 usleep(250000)
             }
@@ -142,7 +143,6 @@ class PtnViewControllerTest: XCTestCase {
         }
     }
     
-    // TODO: also test with just typing (not downarrow)
     func testAutoComplete() {
         let ptn = openPtn()
         group("initalize the data") {
@@ -165,6 +165,46 @@ class PtnViewControllerTest: XCTestCase {
             pcombo.typeKey(.downArrow)
             pcombo.typeText("\r")
             XCTAssertEqual("whodid", pcombo.stringValue)
+        }
+    }
+    
+    func testDailyReportPopup() {
+        group("Initalize the data") {
+            let ptn = openPtn()
+            let entriesTextField  = ptn.window.textFields["uihook_flatentryjson"]
+            let entries = EntriesBuilder()
+                .add(project: "project a", task: "task 1", notes: "first thing", minutes: 10)
+                .add(project: "project a", task: "task 2", notes: "sidetrack", minutes: 15)
+                .add(project: "project a", task: "task 1", notes: "back to first", minutes: 5)
+                .add(project: "project b", task: "task same", notes: "fizz", minutes: 5)
+                .add(project: "project c", task: "task same", notes: "fuzz", minutes: 10)
+                .serialize()
+            entriesTextField.deleteText(andReplaceWith: entries)
+            entriesTextField.typeKey(.enter)
+            clickStatusMenu()
+        }
+        let dailyReport = app.windows["Here's what you've been doing"]
+        group("Open daily report") {
+            clickStatusMenu(with: .maskAlternate)
+            XCTAssertTrue(dailyReport.isVisible)
+        }
+        group("Verify projects exist") {
+            for project in ["project a", "project b", "project c"] {
+                group(project) {
+                    for (description, e) in HierarchicalEntryLevel(ancestor: dailyReport, scope: "Project", label: project).allElements {
+                        XCTAssertTrue(e.exists, "\"\(project)\" \(description)")
+                    }
+                }
+            }
+        }
+        group("Verify projects visible") {
+            for project in ["project a", "project b", "project c"] {
+                group(project) {
+                    for (description, e) in HierarchicalEntryLevel(ancestor: dailyReport, scope: "Project", label: project).allElements {
+                        XCTAssertTrue(e.isHittable, "\"\(project)\" \(description)")
+                    }
+                }
+            }
         }
     }
     
@@ -327,8 +367,60 @@ class PtnViewControllerTest: XCTestCase {
         return FlatEntry(from: from, to: to, project: project, task: task, notes: notes)
     }
     
-    func t(_ timeDelta: TimeInterval) -> Date {
+    class func t(_ timeDelta: TimeInterval) -> Date {
         return PtnViewControllerTest.SOME_TIME.addingTimeInterval(timeDelta)
+    }
+    
+    func t(_ timeDelta: TimeInterval) -> Date {
+        return PtnViewControllerTest.t(timeDelta)
+    }
+    
+    class EntriesBuilder {
+        private var entries = [(p: String, t: String, n: String, duration: TimeInterval)]()
+        
+        func add(project: String, task: String, notes: String, minutes: Double) -> EntriesBuilder {
+            entries.append((p: project, t: task, n: notes, duration: minutes * 60.0))
+            return self
+        }
+        
+        func serialize(now: Date? = nil) -> String {
+            let totalInterval = entries.map({$0.duration}).reduce(0, +)
+            var startTime = t(-totalInterval)
+            var flatEntries = [FlatEntry]()
+            for e in entries {
+                let from = startTime
+                let to = startTime.addingTimeInterval(e.duration)
+                flatEntries.append(FlatEntry(from: from, to: to, project: e.p, task: e.t, notes: e.n))
+                startTime = to
+            }
+            return FlatEntry.serialize(flatEntries)
+        }
+    }
+    
+    struct HierarchicalEntryLevel {
+        let ancestor: XCUIElement
+        let scope: String
+        let label: String
+        
+        var headerLabel: XCUIElement {
+            ancestor.staticTexts["\(scope) \"\(label)\""].firstMatch
+        }
+        
+        var durationLabel: XCUIElement {
+            ancestor.staticTexts["\(scope) time for \"\(label)\""].firstMatch
+        }
+        
+        var disclosure: XCUIElement {
+            ancestor.disclosureTriangles["\(scope) details toggle for \"\(label)\""]
+        }
+        
+        var indicatorBar: XCUIElement {
+            ancestor.progressIndicators["\(scope) activity indicator for \"\(label)\""]
+        }
+        
+        var allElements: [String: XCUIElement] {
+            return ["headerText": headerLabel, "durationText": durationLabel, "disclosure": disclosure, "indicator": indicatorBar]
+        }
     }
     
     struct Ptn {
