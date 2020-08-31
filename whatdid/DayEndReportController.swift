@@ -95,7 +95,7 @@ class DayEndReportController: NSViewController {
             // Tasks box
             let tasksBox = NSBox()
             projectVStack.addArrangedSubview(tasksBox)
-            tasksBox.setAccessibilityLabel("Tasks for \(project.name)")
+            tasksBox.setAccessibilityLabel("Tasks for \"\(project.name)\"")
             tasksBox.title = tasksBox.accessibilityLabel()!
             tasksBox.titlePosition = .noTitle
             tasksBox.leadingAnchor.constraint(equalTo: projectVStack.leadingAnchor, constant: 3).isActive = true

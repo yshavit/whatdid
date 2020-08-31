@@ -87,6 +87,9 @@ extension XCUIElement {
         if !title.isEmpty {
             result += ", title=\"\(title)\""
         }
+        if !label.isEmpty {
+            result += ", label=\"\(title)\""
+        }
         var firstProperty = true
         func add(_ text: String, if set: Bool = true) {
             if set {
