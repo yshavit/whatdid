@@ -129,22 +129,27 @@ class PtnViewControllerTest: XCTestCase {
             // Fast-forward a day. At 18:29 local, we should get a PTN.
             // Wait two minutes (so that the daily report is due) and then type in an entry.
             // We should get the daily report next, which we should then be able to dismiss.
-            setTimeUtc(d: 1, h: 16, m: 29)
-            assertThat(window: .ptn, isVisible: true)
-            
-            setTimeUtc(d: 1, h: 16, m: 31)
-            assertThat(window: .dailyEnd, isVisible: false)
-            assertThat(window: .ptn, isVisible: true)
-            
-            type(into: app, entry("my project", "my task", "my notes"))
-            assertThat(window: .ptn, isVisible: false)
-            assertThat(window: .dailyEnd, isVisible: true)
-            
-            clickStatusMenu() // close the daily report
-            assertThat(window: .dailyEnd, isVisible: false)
-            // Also wait a second, so that we can be sure it didn't pop back open (GH #72)
-            Thread.sleep(forTimeInterval: 1)
-            assertThat(window: .dailyEnd, isVisible: false)
+            group("A day later, just before the daily report") {
+                setTimeUtc(d: 1, h: 16, m: 29)
+                assertThat(window: .ptn, isVisible: true)
+            }
+            group("Now at the daily report") {
+                setTimeUtc(d: 1, h: 16, m: 31)
+                assertThat(window: .dailyEnd, isVisible: false)
+                assertThat(window: .ptn, isVisible: true)
+            }
+            group("Enter a PTN entry") {
+                type(into: app, entry("my project", "my task", "my notes"))
+                assertThat(window: .ptn, isVisible: false)
+                wait(for: "daily report", until: {self.countWindow(ofType: .dailyEnd) == 1})
+            }
+            group("Close the daily report") {
+                clickStatusMenu() // close the daily report
+                assertThat(window: .dailyEnd, isVisible: false)
+                // Also wait a second, so that we can be sure it didn't pop back open (GH #72)
+                Thread.sleep(forTimeInterval: 1)
+                assertThat(window: .dailyEnd, isVisible: false)
+            }
         }
     }
     
@@ -432,7 +437,7 @@ class PtnViewControllerTest: XCTestCase {
     }
     
     func assertThat(window: WindowType, isVisible expected: Bool) {
-        XCTAssertEqual(expected ? 1 : 0, app.windows.matching(.window, identifier: window.windowTitle).count)
+        XCTAssertEqual(expected ? 1 : 0, countWindow(ofType: window))
     }
     
     func type(into app: XCUIElement, _ entry: FlatEntry) {
@@ -454,6 +459,10 @@ class PtnViewControllerTest: XCTestCase {
     
     func t(_ timeDelta: TimeInterval) -> Date {
         return PtnViewControllerTest.t(timeDelta)
+    }
+    
+    func countWindow(ofType window: WindowType) -> Int {
+        return app.windows.matching(.window, identifier: window.windowTitle).count
     }
     
     class EntriesBuilder {
