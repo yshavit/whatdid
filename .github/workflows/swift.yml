@@ -24,17 +24,31 @@ jobs:
             if [ ! -z "$update_name" ]; then
                 sudo softwareupdate --ignore "$update_name"
             fi
+    - name: Get current time
+      id: start_time
+      run: 'echo "::set-output name=unixtime::@$(date +%s)"'
     - name: Build and run UI tests
       run: xcodebuild clean test -scheme whatdid-ui-test -resultBundlePath ${{ runner.temp }}/test-results/bundle
-    - name: Prepare test artifacts
+    - name: Gather logs
       if: ${{ failure() }}
-      run: mv "$(readlink ${{ runner.temp }}/test-results/bundle)" "${{ runner.temp }}/test-results/failure-logs.xcresult"
+      run: |
+            mkdir "${{ runner.temp }}/export"
+
+            mkdir "${{ runner.temp }}/log-gather"
+            pushd "${{ runner.temp }}/log-gather"
+            sudo log collect --start ${{ steps.start_time.outputs.unixtime }} --output full.logarchive
+            log show --predicate "process = 'whatdid'" full.logarchive > whatdid-logs.txt
+            zip whatdid-logs.zip whatdid-logs.txt
+            mv whatdid-logs.zip "${{ runner.temp }}/export/"
+            popd
+
+            mv "$(readlink ${{ runner.temp }}/test-results/bundle)" "${{ runner.temp }}/export/failure-logs.xcresult"
     - name: Upload test artifacts
       if: ${{ failure() }}
       uses: actions/upload-artifact@v2
       with:
-        name: failure-logs-${{ github.run_number }}.xcresult
-        path: ${{ runner.temp }}/test-results/failure-logs.xcresult
+        name: failure-logs
+        path: ${{ runner.temp }}/export
   unit-tests:
     runs-on: macos-latest
     steps:
