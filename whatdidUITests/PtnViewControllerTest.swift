@@ -237,6 +237,7 @@ class PtnViewControllerTest: XCTestCase {
             for task in ["task 1", "task 2"] {
                 group("Check \(task)'s visibility") {
                     for (description, e) in HierarchicalEntryLevel(ancestor: tasksForA, scope: "Task", label: task).allElements {
+                        e.hover()
                         XCTAssertTrue(e.isVisible, "\(task) \(description)")
                     }
                 }
