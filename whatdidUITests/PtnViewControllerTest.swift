@@ -143,6 +143,7 @@ class PtnViewControllerTest: XCTestCase {
                 type(into: app, entry("my project", "my task", "my notes"))
                 waitForTransition(of: .ptn, toIsVisible: false)
                 waitForTransition(of: .dailyEnd, toIsVisible: true)
+                add(XCTAttachment(screenshot: XCUIScreen.main.screenshot()))
             }
             group("Close the daily report") {
                 clickStatusMenu() // close the daily report
