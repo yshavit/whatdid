@@ -477,20 +477,14 @@ class PtnViewControllerTest: XCTestCase {
     
     func waitForTransition(of window: WindowType, toIsVisible expected: Bool) {
         wait(
-            for: "\(String(describing: window)) to \(expected ? "appear" : "dismiss")",
+            for: "\(String(describing: window)) to \(expected ? "exist" : "not exist")",
             until: {self.isWindowVisible(window) == expected })
     }
     
     func isWindowVisible(_ window: WindowType) -> Bool {
-        switch app.windows.matching(.window, identifier: window.windowTitle).count {
-        case 0:
-            return false
-        case 1:
-            return true
-        case let count:
-            XCTFail("unexpected count for \(String(describing: window)): \(count)")
-            return false
-        }
+        let exists = app.windows.matching(.window, identifier: window.windowTitle).firstMatch.exists
+        log("↳ \(String(describing: window)) \(exists ? "exists" : "doesn't exist")")
+        return exists
     }
     
     class EntriesBuilder {

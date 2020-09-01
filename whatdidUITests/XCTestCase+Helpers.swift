@@ -19,19 +19,31 @@ extension XCTestCase {
         return XCTestCase.group(name, block)
     }
     
+    class func log(_ message: String) {
+        group(message) {}
+    }
+    
+    func log(_ message: String) {
+        XCTestCase.log(message)
+    }
+    
     func wait(timeout: TimeInterval = 5, pollEvery delay: TimeInterval = 0.25, for description: String, until condition: () -> Bool) {
         XCTestCase.wait(timeout: timeout, pollEvery: delay, for: description, until: condition)
     }
     
     class func wait(timeout: TimeInterval = 5, pollEvery delay: TimeInterval = 0.25, for description: String, until condition: () -> Bool) {
-        let tryUntil = Date().addingTimeInterval(timeout)
-        while true {
-            if condition() {
-                return
+        group("Waiting for \(description)") {
+            let tryUntil = Date().addingTimeInterval(timeout)
+            while true {
+                if condition() {
+                    log("Success")
+                    return
+                }
+                if Date() > tryUntil {
+                    XCTFail("Timed out")
+                }
+                log("Waiting \(delay)s...")
             }
-            XCTAssertLessThan(Date(), tryUntil)
-            print("Waiting \(delay)s for \(description)")
-            usleep(useconds_t(delay * 1000000))
         }
     }
 }
