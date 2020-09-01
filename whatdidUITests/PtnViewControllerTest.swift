@@ -295,23 +295,30 @@ class PtnViewControllerTest: XCTestCase {
         }
     }
     
-    func testKeyboardNavigation() {
+    func testFocus() {
         let ptn = findPtn()
-        group("Hot key grabs focus with PTN open") {
+        group("Scheduled PTN does not activate") {
             setTimeUtc(h: 01, m: 00, deactivate: true)
+            sleep(1) // If it was going to be switch to active, this would be enough time
+            XCTAssertTrue(ptn.window.isVisible)
+            XCTAssertEqual(XCUIApplication.State.runningBackground, app.state)
+        }
+        group("Hot key grabs focus with PTN open") {
+            // Assume from previous that window is visible but app is in background
             pressHotkeyShortcut()
             XCTAssertTrue(app.wait(for: .runningForeground, timeout: 15))
-            group("Type text to check focus") {
+            group("Type text to sanity check focus") {
                 ptn.pcombo.textField.typeText("hello 1")
                 XCTAssertEqual("hello 1", ptn.pcombo.textField.stringValue)
                 ptn.pcombo.textField.deleteText()
             }
         }
-        group("Hot key opens focus") {
-            group("Close PTN") {
-                clickStatusMenu() // close the app
-                activateFinder()
-            }
+        group("Closing the menu resigns active") {
+            clickStatusMenu() // close the app
+            XCTAssertFalse(ptn.window.isVisible)
+            XCTAssertTrue(app.wait(for: .runningBackground, timeout: 15))
+        }
+        group("Hot key opens PTN with active and focus") {
             pressHotkeyShortcut()
             XCTAssertTrue(app.wait(for: .runningForeground, timeout: 15))
             group("Type text to check focus") {
@@ -320,7 +327,7 @@ class PtnViewControllerTest: XCTestCase {
                 ptn.pcombo.textField.deleteText()
             }
         }
-        group("Status menu grabs focus when app is not active") {
+        group("Opening the menu activates") {
             group("Close PTN") {
                 clickStatusMenu() // close the app
                 waitForTransition(of: .ptn, toIsVisible: false)
@@ -334,6 +341,10 @@ class PtnViewControllerTest: XCTestCase {
                 ptn.pcombo.textField.deleteText()
             }
         }
+    }
+    
+    func testKeyboardNavigation() {
+        let ptn = openPtn()
         group("forward tabbing") {
             XCTAssertTrue(ptn.pcombo.hasFocus) // Sanity check
             // Tab from Project -> Task
@@ -410,20 +421,16 @@ class PtnViewControllerTest: XCTestCase {
             }
             clockTicker.deleteText(andReplaceWith: text)
             if deactivate {
-                activateFinder()
+                group("Activate Finder") {
+                    let finder = NSWorkspace.shared.runningApplications.first(where: {$0.bundleIdentifier == "com.apple.finder"})
+                    XCTAssertNotNil(finder)
+                    XCTAssertTrue(finder!.activate(options: .activateIgnoringOtherApps))
+                    XCTAssertTrue(app.wait(for: .runningBackground, timeout: 15))
+                    print("Pausing to let things settle")
+                    sleep(1)
+                    print("Okay, continuing.")
+                }
             }
-        }
-    }
-    
-    func activateFinder() {
-        group("Activate Finder") {
-            let finder = NSWorkspace.shared.runningApplications.first(where: {$0.bundleIdentifier == "com.apple.finder"})
-            XCTAssertNotNil(finder)
-            XCTAssertTrue(finder!.activate(options: .activateIgnoringOtherApps))
-            XCTAssertTrue(app.wait(for: .runningBackground, timeout: 15))
-            print("Pausing to let things settle")
-            sleep(1)
-            print("Okay, continuing.")
         }
     }
 
