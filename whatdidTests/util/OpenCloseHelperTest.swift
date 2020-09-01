@@ -10,7 +10,7 @@ class OpenCloseHelperTest: XCTestCase {
         
         och.open("one", reason: .manual)
         XCTAssertEqual("one", och.openItem)
-        XCTAssertEqual([Message(shouldOpen: "one")], messages.drain())
+        XCTAssertEqual([Message(shouldOpen: "one", reason: .manual)], messages.drain())
         
         och.didClose()
         XCTAssertNil(och.openItem)
@@ -22,7 +22,7 @@ class OpenCloseHelperTest: XCTestCase {
         
         och.open("one", reason: .scheduled)
         XCTAssertEqual("one", och.openItem)
-        XCTAssertEqual([Message(shouldOpen: "one")], messages.drain())
+        XCTAssertEqual([Message(shouldOpen: "one", reason: .scheduled)], messages.drain())
         
         och.didClose()
         XCTAssertNil(och.openItem)
@@ -114,7 +114,7 @@ class OpenCloseHelperTest: XCTestCase {
         
         och.didClose()
         XCTAssertEqual("two", och.openItem)
-        XCTAssertEqual([Message(shouldOpen: "two")], messages.drain())
+        XCTAssertEqual([Message(shouldOpen: "two", reason: .scheduled)], messages.drain())
         
         och.didClose()
         XCTAssertNil(och.openItem)
@@ -130,7 +130,9 @@ class OpenCloseHelperTest: XCTestCase {
         
         och.didClose()
         XCTAssertEqual("two", och.openItem)
-        XCTAssertEqual([Message(shouldSchedule: "one"), Message(shouldOpen: "two")], messages.drain())
+        XCTAssertEqual(
+            [Message(shouldSchedule: "one"), Message(shouldOpen: "two", reason: .scheduled)],
+            messages.drain())
         
         och.didClose()
         XCTAssertNil(och.openItem)
@@ -144,7 +146,7 @@ class OpenCloseHelperTest: XCTestCase {
         
         och.open("one", reason: .manual)
         XCTAssertEqual("one", och.openItem)
-        XCTAssertEqual([Message(shouldOpen: "one")], messages.drain())
+        XCTAssertEqual([Message(shouldOpen: "one", reason: .manual)], messages.drain())
         
         och.unSnooze()
         och.didClose()
@@ -161,7 +163,7 @@ class OpenCloseHelperTest: XCTestCase {
         XCTAssertEqual([], messages.drain())
         
         och.unSnooze()
-        XCTAssertEqual([Message(shouldOpen: "one")], messages.drain())
+        XCTAssertEqual([Message(shouldOpen: "one", reason: .scheduled)], messages.drain())
         XCTAssertEqual("one", och.openItem)
         
         och.didClose()
@@ -187,7 +189,7 @@ class OpenCloseHelperTest: XCTestCase {
         
         och.unSnooze()
         XCTAssertEqual("two", och.openItem)
-        XCTAssertEqual([Message(shouldOpen: "two")], messages.drain())
+        XCTAssertEqual([Message(shouldOpen: "two", reason: .scheduled)], messages.drain())
         
         och.didClose()
         XCTAssertNil(och.openItem)
@@ -200,7 +202,7 @@ class OpenCloseHelperTest: XCTestCase {
         let och = OpenCloseHelper(onOpen: messages.open, onSchedule: messages.schedule)
         if let openAs = alreadyOpened {
             och.open(openAs.0, reason: openAs.1) // the scheduled-ness doesn't actually matter
-            XCTAssertEqual([Message(shouldOpen: openAs.0)], messages.drain())
+            XCTAssertEqual([Message(shouldOpen: openAs.0, reason: openAs.1)], messages.drain())
         }
         return (och, messages)
     }
@@ -208,16 +210,19 @@ class OpenCloseHelperTest: XCTestCase {
 
     struct Message: Equatable {
         let item: String
+        let reason: OpenReason?
         let shouldSchedule: Bool
         
         init(shouldSchedule item: String) {
             self.item = item
             self.shouldSchedule = true
+            self.reason = nil
         }
         
-        init(shouldOpen item: String) {
+        init(shouldOpen item: String, reason: OpenReason) {
             self.item = item
             self.shouldSchedule = false
+            self.reason = reason
         }
     }
     
@@ -226,8 +231,8 @@ class OpenCloseHelperTest: XCTestCase {
         
         private var messages = [Message]()
         
-        func open(_ item: String) {
-            messages.append(Message(shouldOpen: item))
+        func open(_ item: String, _ reason: OpenReason) {
+            messages.append(Message(shouldOpen: item, reason: reason))
         }
         
         func schedule(_ item: String) {
