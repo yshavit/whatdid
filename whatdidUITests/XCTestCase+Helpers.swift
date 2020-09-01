@@ -34,15 +34,20 @@ extension XCTestCase {
     class func wait(timeout: TimeInterval = 5, pollEvery delay: TimeInterval = 0.25, for description: String, until condition: () -> Bool) {
         group("Waiting for \(description)") {
             let tryUntil = Date().addingTimeInterval(timeout)
-            while true {
-                if condition() {
-                    log("Success")
+            for i in 1... {
+                let success = group("Attempt #\(i)") {() -> Bool in
+                    if condition() {
+                        log("Success")
+                        return true
+                    }
+                    if Date() > tryUntil {
+                        XCTFail("Timed out")
+                    }
+                    return false
+                }
+                if success {
                     return
                 }
-                if Date() > tryUntil {
-                    XCTFail("Timed out")
-                }
-                log("Waiting \(delay)s...")
             }
         }
     }
