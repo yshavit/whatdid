@@ -13,21 +13,19 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build release
-      run: xcodebuild build -scheme whatdid-release
+      run: xcodebuild clean build -scheme whatdid-release
   ui-tests:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Build UI tests
-      run: xcodebuild build-for-testing -scheme whatdid-ui-test
     - name: Dismiss upgrade dialog if present
       run: |
             update_name=$(softwareupdate -l | grep "Title: " | awk -F[:,] '{print $2}' | awk '{$1=$1};1')
             if [ ! -z "$update_name" ]; then
                 sudo softwareupdate --ignore "$update_name"
             fi
-    - name: Run UI tests
-      run: xcodebuild test-without-building -scheme whatdid-ui-test -resultBundlePath ${{ runner.temp }}/test-results/bundle
+    - name: Build and run UI tests
+      run: xcodebuild clean test -scheme whatdid-ui-test -resultBundlePath ${{ runner.temp }}/test-results/bundle
     - name: Prepare test artifacts
       if: ${{ failure() }}
       run: mv "$(readlink ${{ runner.temp }}/test-results/bundle)" "${{ runner.temp }}/test-results/failure-logs.xcresult"
@@ -35,13 +33,11 @@ jobs:
       if: ${{ failure() }}
       uses: actions/upload-artifact@v2
       with:
-        name: failure-logs.xcresult
+        name: failure-logs-${{ github.run_number }}.xcresult
         path: ${{ runner.temp }}/test-results/failure-logs.xcresult
   unit-tests:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Build for unit tests
-      run: xcodebuild build-for-testing -scheme whatdid-debug
-    - name: Run unit tests
-      run: xcodebuild test-without-building -scheme whatdid-debug
+    - name: Build and run unit tests
+      run: xcodebuild clean test -scheme whatdid-debug

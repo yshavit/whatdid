@@ -253,16 +253,14 @@ class PtnViewControllerTest: XCTestCase {
                 group("Details") {
                     XCTAssertFalse(task1Details.exists)
                     task1.clickDisclosure(until: task1Details, .isVisible)
-                    XCTAssertTrue(task1Details.isVisible)
                     XCTAssertEqual("1:15am - 1:27am (12m): first thing\n1:40am - 1:45am (5m): back to first", task1Details.stringValue)
                 }
             }
             group("Task 1 stays expanded if project a folds") {
                 projectA.clickDisclosure(until: task1Details, .doesNotExist)
-                XCTAssertFalse(task1Details.isVisible)
-                sleep(1) // 500ms; clicking too quickly in a row can break this test
+                log("Sleeping for a bit to let things stabilize")
+                sleep(2) // Clicking too quickly in a row can break this test
                 projectA.clickDisclosure(until: task1Details, .isVisible)
-                XCTAssertTrue(task1Details.isVisible)
             }
         }
         group("Projects need to scroll") {
@@ -477,20 +475,14 @@ class PtnViewControllerTest: XCTestCase {
     
     func waitForTransition(of window: WindowType, toIsVisible expected: Bool) {
         wait(
-            for: "\(String(describing: window)) to \(expected ? "appear" : "dismiss")",
+            for: "\(String(describing: window)) to \(expected ? "exist" : "not exist")",
             until: {self.isWindowVisible(window) == expected })
     }
     
     func isWindowVisible(_ window: WindowType) -> Bool {
-        switch app.windows.matching(.window, identifier: window.windowTitle).count {
-        case 0:
-            return false
-        case 1:
-            return true
-        case let count:
-            XCTFail("unexpected count for \(String(describing: window)): \(count)")
-            return false
-        }
+        let visible = app.windows.matching(.window, identifier: window.windowTitle).firstMatch.isVisible
+        log("↳ \(String(describing: window)) \(visible ? "is visible" : "is not visible")")
+        return visible
     }
     
     class EntriesBuilder {
@@ -542,7 +534,7 @@ class PtnViewControllerTest: XCTestCase {
         
         func clickDisclosure(until element: XCUIElement, _ existence: Existence) {
             disclosure.click()
-            wait(for: "element \(String(describing: existence))") {
+            wait(for: "element to \(existence.asVerb)") {
                 switch existence {
                 case .exists:
                     return element.exists
@@ -559,6 +551,17 @@ class PtnViewControllerTest: XCTestCase {
         case exists
         case isVisible
         case doesNotExist
+        
+        var asVerb: String {
+            switch self {
+            case .exists:
+                return "exist"
+            case .isVisible:
+                return "be visible"
+            case .doesNotExist:
+                return "not exist"
+            }
+        }
     }
     
     struct Ptn {
