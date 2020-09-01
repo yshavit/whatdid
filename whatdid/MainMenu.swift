@@ -55,9 +55,12 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         }
         
         opener = OpenCloseHelper<WindowContents>(
-            onOpen: {contents in
+            onOpen: {contents, reason in
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()) {
                     self.open(contents)
+                    if reason == .manual {
+                        self.focus()
+                    }
                 }
             },
             onSchedule: self.schedule)
@@ -71,7 +74,6 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
                 ? WindowContents.dailyEnd
                 : WindowContents.ptn
             opener.open(showWhat, reason: .manual)
-            self.focus()
         }
     }
     

@@ -4,7 +4,7 @@ import Cocoa
 
 class OpenCloseHelper<T: Hashable & Comparable> {
     
-    private let opener: (T) -> Void
+    private let opener: (T, OpenReason) -> Void
     private let scheduler: (T) -> Void
     
     var openItem: T? = nil
@@ -12,7 +12,7 @@ class OpenCloseHelper<T: Hashable & Comparable> {
     private var rescheduleOnClose = false
     private var isSnoozed = false
     
-    init(onOpen: @escaping (T) -> Void, onSchedule: @escaping (T) -> Void) {
+    init(onOpen: @escaping (T, OpenReason) -> Void, onSchedule: @escaping (T) -> Void) {
         self.opener = onOpen
         self.scheduler = onSchedule
     }
@@ -23,7 +23,7 @@ class OpenCloseHelper<T: Hashable & Comparable> {
                 pendingOpens[item] = reason
             } else {
                 openItem = item
-                opener(item)
+                opener(item, reason)
                 rescheduleOnClose = reason == .scheduled
             }
         } else if reason == .scheduled {
@@ -71,7 +71,7 @@ class OpenCloseHelper<T: Hashable & Comparable> {
         if let deferredOpenKey = pendingOpens.keys.sorted().first {
             rescheduleOnClose = pendingOpens.removeValue(forKey: deferredOpenKey)! == .scheduled
             openItem = deferredOpenKey
-            opener(deferredOpenKey)
+            opener(deferredOpenKey, .scheduled)
         }
     }
 }
