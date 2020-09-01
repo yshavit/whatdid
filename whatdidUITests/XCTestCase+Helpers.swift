@@ -27,11 +27,13 @@ extension XCTestCase {
         XCTestCase.log(message)
     }
     
-    func wait(timeout: TimeInterval = 5, pollEvery delay: TimeInterval = 0.25, for description: String, until condition: () -> Bool) {
-        XCTestCase.wait(timeout: timeout, pollEvery: delay, for: description, until: condition)
+    func wait(for description: String, until condition: () -> Bool) {
+        XCTestCase.wait(for: description, until: condition)
     }
     
-    class func wait(timeout: TimeInterval = 30, pollEvery delay: TimeInterval = 1, for description: String, until condition: () -> Bool) {
+    class func wait(for description: String, until condition: () -> Bool) {
+        let timeout: TimeInterval = 30
+        let delay: TimeInterval = 1
         group("Waiting for \(description)") {
             let tryUntil = Date().addingTimeInterval(timeout)
             for i in 1... {
@@ -43,6 +45,7 @@ extension XCTestCase {
                     if Date() > tryUntil {
                         XCTFail("Timed out")
                     }
+                    sleepMillis(Int(delay * 1000))
                     return false
                 }
                 if success {

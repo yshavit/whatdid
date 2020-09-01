@@ -280,7 +280,7 @@ class PtnViewControllerTest: XCTestCase {
             let project1Header = HierarchicalEntryLevel(ancestor: dailyReport, scope: "Project", label: "project 1").headerLabel
             group("Open daily report") {
                 clickStatusMenu(with: .maskAlternate)
-                wait(pollEvery: 0.5, for: "daily report to open", until: {project1Header.exists})
+                wait(for: "daily report to open", until: {project1Header.exists})
             }
             group("Scroll to project 1") {
                 let project25Header = HierarchicalEntryLevel(ancestor: dailyReport, scope: "Project", label: "project 25").headerLabel
