@@ -33,7 +33,7 @@ jobs:
       if: ${{ failure() }}
       uses: actions/upload-artifact@v2
       with:
-        name: failure-logs.xcresult
+        name: failure-logs-${{ github.run_number }}.xcresult
         path: ${{ runner.temp }}/test-results/failure-logs.xcresult
   unit-tests:
     runs-on: macos-latest

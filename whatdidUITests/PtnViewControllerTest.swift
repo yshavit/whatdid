@@ -536,7 +536,7 @@ class PtnViewControllerTest: XCTestCase {
         
         func clickDisclosure(until element: XCUIElement, _ existence: Existence) {
             disclosure.click()
-            wait(for: "element \(String(describing: existence))") {
+            wait(for: "element to \(existence.asVerb)") {
                 switch existence {
                 case .exists:
                     return element.exists
@@ -553,6 +553,17 @@ class PtnViewControllerTest: XCTestCase {
         case exists
         case isVisible
         case doesNotExist
+        
+        var asVerb: String {
+            switch self {
+            case .exists:
+                return "exist"
+            case .isVisible:
+                return "be visible"
+            case .doesNotExist:
+                return "not exist"
+            }
+        }
     }
     
     struct Ptn {
