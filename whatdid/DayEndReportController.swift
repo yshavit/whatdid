@@ -164,8 +164,13 @@ class DayEndReportController: NSViewController {
         let originalViewBounds = self.view.bounds
         NSAnimationContext.runAnimationGroup(
             {context in
+                #if UI_TEST
+                context.duration = 0
+                context.allowsImplicitAnimation = false
+                #else
                 context.duration = duration
                 context.allowsImplicitAnimation = true
+                #endif
                 action()
                 self.projectsScrollHeight.constant = self.projectsContainer.fittingSize.height
                 self.view.layoutSubtreeIfNeeded()
