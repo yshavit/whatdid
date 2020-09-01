@@ -92,10 +92,10 @@
                     </customSpacing>
                 </stackView>
                 <stackView identifier="optionsstack" distribution="fill" orientation="horizontal" alignment="top" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ers-BA-ciA" userLabel="PTN Options Stack">
-                    <rect key="frame" x="0.0" y="4" width="544" height="33"/>
+                    <rect key="frame" x="5" y="4" width="539" height="33"/>
                     <subviews>
-                        <button identifier="breakbutton" verticalHuggingPriority="850" translatesAutoresizingMaskIntoConstraints="NO" id="iu6-dS-Gze">
-                            <rect key="frame" x="5" y="13" width="55" height="15"/>
+                        <button identifier="breakbutton" hidden="YES" verticalHuggingPriority="850" translatesAutoresizingMaskIntoConstraints="NO" id="iu6-dS-Gze">
+                            <rect key="frame" x="0.0" y="13" width="40" height="15"/>
                             <buttonCell key="cell" type="roundRect" title="Break" bezelStyle="roundedRect" alignment="left" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kyc-yB-AnY">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="label" size="9"/>
@@ -107,13 +107,13 @@
                             </connections>
                         </button>
                         <customView identifier="spacer" translatesAutoresizingMaskIntoConstraints="NO" id="6Yy-Wb-eC7" userLabel="Spacer">
-                            <rect key="frame" x="60" y="14" width="339" height="14"/>
+                            <rect key="frame" x="5" y="14" width="389" height="14"/>
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="CiB-9s-9gX"/>
                             </constraints>
                         </customView>
                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="HC6-YQ-v0e" userLabel="Snooze buttonopts">
-                            <rect key="frame" x="399" y="14" width="140" height="14"/>
+                            <rect key="frame" x="394" y="14" width="140" height="14"/>
                             <subviews>
                                 <button identifier="snoozebutton" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yjZ-yA-5CH" userLabel="Snooze button">
                                     <rect key="frame" x="0.0" y="-1" width="140" height="15"/>
