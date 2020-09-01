@@ -534,16 +534,20 @@ class PtnViewControllerTest: XCTestCase {
         }
         
         func clickDisclosure(until element: XCUIElement, _ existence: Existence) {
-            disclosure.click()
-            wait(for: "element to \(existence.asVerb)") {
-                switch existence {
-                case .exists:
-                    return element.exists
-                case .isVisible:
-                    return element.isVisible
-                case .doesNotExist:
-                    return !element.exists
+            XCTContext.runActivity(named: "Click \(disclosure.simpleDescription)") {context in
+                context.add(XCTAttachment(screenshot: ancestor.screenshot()))
+                disclosure.click()
+                wait(for: "element to \(existence.asVerb)") {
+                    switch existence {
+                    case .exists:
+                        return element.exists
+                    case .isVisible:
+                        return element.isVisible
+                    case .doesNotExist:
+                        return !element.exists
+                    }
                 }
+                context.add(XCTAttachment(screenshot: ancestor.screenshot()))
             }
         }
     }
