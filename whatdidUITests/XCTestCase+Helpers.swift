@@ -31,7 +31,7 @@ extension XCTestCase {
         XCTestCase.wait(timeout: timeout, pollEvery: delay, for: description, until: condition)
     }
     
-    class func wait(timeout: TimeInterval = 5, pollEvery delay: TimeInterval = 0.25, for description: String, until condition: () -> Bool) {
+    class func wait(timeout: TimeInterval = 30, pollEvery delay: TimeInterval = 1, for description: String, until condition: () -> Bool) {
         group("Waiting for \(description)") {
             let tryUntil = Date().addingTimeInterval(timeout)
             for i in 1... {
