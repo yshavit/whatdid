@@ -7,6 +7,14 @@ extension XCTestCase {
         return XCTContext.runActivity(named: name, block: {_ in return block()})
     }
     
+    class func sleepMillis(_ ms: Int) {
+        usleep(useconds_t(ms * 1000))
+    }
+    
+    func sleepMillis(_ ms: Int) {
+        XCTestCase.sleepMillis(ms)
+    }
+    
     func group<R>(_ name: String, _ block: () -> R) -> R {
         return XCTestCase.group(name, block)
     }

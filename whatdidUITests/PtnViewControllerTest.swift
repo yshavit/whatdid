@@ -54,7 +54,7 @@ class PtnViewControllerTest: XCTestCase {
                 let event = CGEvent(mouseEventSource: src, mouseType: eventType, mouseCursorPosition: statusItemPoint, mouseButton: .left)
                 event?.flags = flags
                 event?.post(tap: CGEventTapLocation.cghidEventTap)
-                usleep(250000)
+                pauseToLetStabilize()
             }
         }
     }
@@ -69,9 +69,10 @@ class PtnViewControllerTest: XCTestCase {
         // Note: Time starts at 02:00:00 local
         group("basic PTN scheduling") {
             setTimeUtc(h: 0, m: 5) // 02:05; too soon for the popup
-            XCTAssertFalse(ptn.isVisible)
+            pauseToLetStabilize()
+            assertThat(window: .ptn, isVisible: false)
             setTimeUtc(h: 0, m: 55) // 02:55; enough time for the popup
-            assertThat(window: .ptn, isVisible: true)
+            waitForTransition(of: .ptn, toIsVisible: true)
         }
         group("snooze button: standard press") {
             // Note: PTN is still up at this point.
@@ -81,7 +82,7 @@ class PtnViewControllerTest: XCTestCase {
             // Trim whitespace, since we put some in so it aligns well with the snoozeopts button
             XCTAssertEqual("Snooze until 3:30 am", button.title.trimmingCharacters(in: .whitespaces))
             button.click()
-            assertThat(window: .ptn, isVisible: false)
+            waitForTransition(of: .ptn, toIsVisible: false)
             
             // To go 03:29+0200, and the PTN should still be hidden
             setTimeUtc(h: 1, m: 29)
@@ -89,7 +90,7 @@ class PtnViewControllerTest: XCTestCase {
 
             // But one more minute, and it is visible again
             setTimeUtc(h: 1, m: 31)
-            assertThat(window: .ptn, isVisible: true)
+            waitForTransition(of: .ptn, toIsVisible: true)
         }
         group("snooze button: extra options") {
             // Note: PTN is still up at this point. It's currently 03:31+0200, so the default snooze is at 04:00,
@@ -103,11 +104,11 @@ class PtnViewControllerTest: XCTestCase {
             // To go 03:29+0200, and the PTN should still be hidden
             
             setTimeUtc(h: 3, m: 29)
-            assertThat(window: .ptn, isVisible: false)
+            waitForTransition(of: .ptn, toIsVisible: false)
 
             // But one more minute, and it is visible again
             setTimeUtc(h: 3, m: 31)
-            assertThat(window: .ptn, isVisible: true)
+            waitForTransition(of: .ptn, toIsVisible: true)
         }
         
         group("daily report (no contention with PTN)") {
@@ -116,35 +117,40 @@ class PtnViewControllerTest: XCTestCase {
             // Then the next minute, there should be the daily report
             setTimeUtc(h: 16, m: 29)
             type(into: app, entry("my project", "my task", "my notes"))
-            assertThat(window: .ptn, isVisible: false)
+            waitForTransition(of: .ptn, toIsVisible: false)
             
             setTimeUtc(h: 16, m: 30)
             assertThat(window: .ptn, isVisible: false)
             app.activate()
-            assertThat(window: .dailyEnd, isVisible: true)
+            waitForTransition(of: .dailyEnd, toIsVisible: true)
             clickStatusMenu() // close the report
-            assertThat(window: .dailyEnd, isVisible: false)
+            waitForTransition(of: .dailyEnd, toIsVisible: false)
         }
         group("daily report (with contention with PTN)") {
             // Fast-forward a day. At 18:29 local, we should get a PTN.
             // Wait two minutes (so that the daily report is due) and then type in an entry.
             // We should get the daily report next, which we should then be able to dismiss.
-            setTimeUtc(d: 1, h: 16, m: 29)
-            assertThat(window: .ptn, isVisible: true)
-            
-            setTimeUtc(d: 1, h: 16, m: 31)
-            assertThat(window: .dailyEnd, isVisible: false)
-            assertThat(window: .ptn, isVisible: true)
-            
-            type(into: app, entry("my project", "my task", "my notes"))
-            assertThat(window: .ptn, isVisible: false)
-            assertThat(window: .dailyEnd, isVisible: true)
-            
-            clickStatusMenu() // close the daily report
-            assertThat(window: .dailyEnd, isVisible: false)
-            // Also wait a second, so that we can be sure it didn't pop back open (GH #72)
-            Thread.sleep(forTimeInterval: 1)
-            assertThat(window: .dailyEnd, isVisible: false)
+            group("A day later, just before the daily report") {
+                setTimeUtc(d: 1, h: 16, m: 29)
+                waitForTransition(of: .ptn, toIsVisible: true)
+            }
+            group("Now at the daily report") {
+                setTimeUtc(d: 1, h: 16, m: 31)
+                assertThat(window: .dailyEnd, isVisible: false)
+                assertThat(window: .ptn, isVisible: true)
+            }
+            group("Enter a PTN entry") {
+                type(into: app, entry("my project", "my task", "my notes"))
+                waitForTransition(of: .ptn, toIsVisible: false)
+                waitForTransition(of: .dailyEnd, toIsVisible: true)
+            }
+            group("Close the daily report") {
+                clickStatusMenu() // close the daily report
+                waitForTransition(of: .dailyEnd, toIsVisible: false)
+                // Also wait a second, so that we can be sure it didn't pop back open (GH #72)
+                Thread.sleep(forTimeInterval: 1)
+                assertThat(window: .dailyEnd, isVisible: false)
+            }
         }
     }
     
@@ -190,7 +196,7 @@ class PtnViewControllerTest: XCTestCase {
         let dailyReport = app.windows["Here's what you've been doing"]
         group("Open daily report") {
             clickStatusMenu(with: .maskAlternate)
-            XCTAssertTrue(dailyReport.isVisible)
+            waitForTransition(of: .dailyEnd, toIsVisible: true)
         }
         group("Verify projects exist") {
             for project in ["project a", "project b", "project c"] {
@@ -317,7 +323,7 @@ class PtnViewControllerTest: XCTestCase {
         group("Status menu grabs focus when app is not active") {
             group("Close PTN") {
                 clickStatusMenu() // close the app
-                XCTAssertFalse(ptn.window.isVisible)
+                waitForTransition(of: .ptn, toIsVisible: false)
                 XCTAssertTrue(app.wait(for: .runningBackground, timeout: 15))
             }
             clickStatusMenu() // But do *not* do anything more than that to grab focus!
@@ -431,8 +437,8 @@ class PtnViewControllerTest: XCTestCase {
         }
     }
     
-    func assertThat(window: WindowType, isVisible expected: Bool) {
-        XCTAssertEqual(expected ? 1 : 0, app.windows.matching(.window, identifier: window.windowTitle).count)
+    func pauseToLetStabilize() {
+        sleepMillis(250)
     }
     
     func type(into app: XCUIElement, _ entry: FlatEntry) {
@@ -454,6 +460,29 @@ class PtnViewControllerTest: XCTestCase {
     
     func t(_ timeDelta: TimeInterval) -> Date {
         return PtnViewControllerTest.t(timeDelta)
+    }
+    
+    // assertThat(window: .ptn, isVisible: true)
+    func assertThat(window: WindowType, isVisible expected: Bool) {
+        XCTAssertEqual(expected, isWindowVisible(window))
+    }
+    
+    func waitForTransition(of window: WindowType, toIsVisible expected: Bool) {
+        wait(
+            for: "\(String(describing: window)) to \(expected ? "appear" : "dismiss")",
+            until: {self.isWindowVisible(window) == expected })
+    }
+    
+    func isWindowVisible(_ window: WindowType) -> Bool {
+        switch app.windows.matching(.window, identifier: window.windowTitle).count {
+        case 0:
+            return false
+        case 1:
+            return true
+        case let count:
+            XCTFail("unexpected count for \(String(describing: window)): \(count)")
+            return false
+        }
     }
     
     class EntriesBuilder {
