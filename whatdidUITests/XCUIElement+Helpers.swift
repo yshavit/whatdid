@@ -61,7 +61,10 @@ extension XCUIElement {
         let message = replacement == nil
             ? "Delete text in \(humanReadableIdentifier)"
             : "Replace text in \(humanReadableIdentifier)"
-        XCTestCase.group(message) {
+        XCTContext.runActivity(named: message) {context in
+            if replacement != nil {
+                context.add(XCTAttachment(string: replacement!))
+            }
             if !hasFocus {
                 click()
             }
