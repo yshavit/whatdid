@@ -280,7 +280,7 @@ class PtnViewControllerTest: XCTestCase {
             let project1Header = HierarchicalEntryLevel(ancestor: dailyReport, scope: "Project", label: "project 1").headerLabel
             group("Open daily report") {
                 clickStatusMenu(with: .maskAlternate)
-                wait(pollEvery: 0.5, for: "daily report to open", until: {project1Header.exists})
+                wait(for: "daily report to open", until: {project1Header.exists})
             }
             group("Scroll to project 1") {
                 let project25Header = HierarchicalEntryLevel(ancestor: dailyReport, scope: "Project", label: "project 25").headerLabel
@@ -534,16 +534,20 @@ class PtnViewControllerTest: XCTestCase {
         }
         
         func clickDisclosure(until element: XCUIElement, _ existence: Existence) {
-            disclosure.click()
-            wait(for: "element to \(existence.asVerb)") {
-                switch existence {
-                case .exists:
-                    return element.exists
-                case .isVisible:
-                    return element.isVisible
-                case .doesNotExist:
-                    return !element.exists
+            XCTContext.runActivity(named: "Click \(disclosure.simpleDescription)") {context in
+                context.add(XCTAttachment(screenshot: ancestor.screenshot()))
+                disclosure.click()
+                wait(for: "element to \(existence.asVerb)") {
+                    switch existence {
+                    case .exists:
+                        return element.exists
+                    case .isVisible:
+                        return element.isVisible
+                    case .doesNotExist:
+                        return !element.exists
+                    }
                 }
+                context.add(XCTAttachment(screenshot: ancestor.screenshot()))
             }
         }
     }
