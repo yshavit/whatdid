@@ -43,7 +43,7 @@ extension XCTestCase {
                         return true
                     }
                     if Date() > tryUntil {
-                        XCTFail("Timed out")
+                        XCTFail("Timed out after \(timeout)s")
                     }
                     sleepMillis(Int(delay * 1000))
                     return false

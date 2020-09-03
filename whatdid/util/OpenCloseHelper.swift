@@ -18,19 +18,24 @@ class OpenCloseHelper<T: Hashable & Comparable> {
     }
     
     func open(_ item: T, reason: OpenReason) {
+        let requestDesc = "request for \(reason) open of \(item) at \(DefaultScheduler.instance.now.utcTimestamp)"
         if openItem == nil {
             if (reason == .scheduled) && isSnoozed {
                 pendingOpens[item] = reason
+                NSLog("Deferring \(requestDesc) because of snooze")
             } else {
                 openItem = item
+                NSLog("Acting on \(requestDesc)")
                 opener(item, reason)
                 rescheduleOnClose = reason == .scheduled
             }
         } else if reason == .scheduled {
             if openItem == item {
                 rescheduleOnClose = true
+                NSLog("Ignoring \(requestDesc) because it is already open. Will reschedule it on close.")
             } else {
                 pendingOpens[item] = reason
+                NSLog("Deferring \(requestDesc) because another item is already open")
             }
         } else {
             // If we're already open, we shouldn't be able to get a manual open; the UI should prevent that.
@@ -59,6 +64,7 @@ class OpenCloseHelper<T: Hashable & Comparable> {
             openItem = nil
             // Schedule even if we're snoozed; if we're still snoozed when the schedule hits, then
             // it'll enqueue itself
+            NSLog("OpenCloseHelper: scheduling the next \(item)")
             scheduler(item)
         }
         openItem = nil
@@ -70,6 +76,7 @@ class OpenCloseHelper<T: Hashable & Comparable> {
     private func pullFromPending() {
         if let deferredOpenKey = pendingOpens.keys.sorted().first {
             rescheduleOnClose = pendingOpens.removeValue(forKey: deferredOpenKey)! == .scheduled
+            NSLog("OpenCloseHelper: opening deferred \(deferredOpenKey), with next rescheduleOnClose = \(rescheduleOnClose)")
             openItem = deferredOpenKey
             opener(deferredOpenKey, .scheduled)
         }

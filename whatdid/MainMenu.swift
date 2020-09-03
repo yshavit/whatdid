@@ -12,6 +12,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     private var taskAdditionsPane : PtnViewController!
     private var windowContents = WindowContents.ptn
     private var opener : OpenCloseHelper<WindowContents>!
+    private var cancelClose = false
     
     enum WindowContents: Int, Comparable {
         /// The Project/Task/Notes window
@@ -27,6 +28,14 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     func open(_ item: WindowContents, reason: OpenReason) {
         opener.open(item, reason: reason)
     }
+    
+    override func close() {
+        cancelClose = false
+        opener.didClose()
+        if !cancelClose {
+            super.close()
+        }
+    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -34,7 +43,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         taskAdditionsPane = PtnViewController()
         taskAdditionsPane.closeAction = {
             DispatchQueue.main.async {
-                self.window?.close()
+                self.close()
             }
         }
         window?.contentViewController = taskAdditionsPane
@@ -51,16 +60,15 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         
 
         AppDelegate.instance.onDeactivation {
-            self.window?.close()
+            self.close()
         }
         
         opener = OpenCloseHelper<WindowContents>(
             onOpen: {contents, reason in
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()) {
-                    self.open(contents)
-                    if reason == .manual {
-                        self.focus()
-                    }
+                NSLog("MainMenu handling \(reason) open request for \(contents)")
+                self.open(contents)
+                if reason == .manual {
+                    self.focus()
                 }
             },
             onSchedule: self.schedule)
@@ -68,7 +76,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     
     @objc private func handleStatusItemPress() {
         if window?.isVisible ?? false {
-            window?.close()
+            close()
         } else {
             let showWhat = NSEvent.modifierFlags.contains(.option)
                 ? WindowContents.dailyEnd
@@ -103,9 +111,18 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
                 window?.setFrameTopLeftPoint(pos)
             }
         }
-        showWindow(self)
+        if window?.isVisible ?? false {
+            cancelClose = true
+        } else {
+            showWindow(self)
+        }
         RunLoop.current.perform {
             self.statusItem.button?.isHighlighted = true
+        }
+        if let theWindow = window, let theScreen = theWindow.screen {
+            NSLog("Opened \(contents) window at \(theWindow.frame) within screen \(theScreen.frame)")
+        } else {
+            NSLog("No window or screen. Window \(window == nil ? "is" : "is not") nil, and screen \(window?.screen == nil ? "is" : "is not") nil")
         }
     }
     
@@ -125,11 +142,6 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     func windowWillClose(_ notification: Notification) {
         NSApp.hide(self)
         statusItem.button?.isHighlighted = false
-        opener.didClose()
-    }
-    
-    @objc private func showDailyReport() {
-        open(.dailyEnd)
     }
 
     func schedule(_ contents: WindowContents) {
@@ -149,7 +161,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     func snooze(until date: Date) {
         NSLog("Snoozing until %@", AppDelegate.DEBUG_DATE_FORMATTER.string(from: date))
         opener.snooze()
-        window?.close()
+        close()
         DefaultScheduler.instance.schedule(after: date.timeIntervalSinceWhatdidNow, self.opener.unSnooze)
     }
 }
