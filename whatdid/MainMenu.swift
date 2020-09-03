@@ -58,11 +58,6 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         statusItem.button?.target = self
         statusItem.button?.action = #selector(handleStatusItemPress)
         
-
-        AppDelegate.instance.onDeactivation {
-            self.close()
-        }
-        
         opener = OpenCloseHelper<WindowContents>(
             onOpen: {contents, reason in
                 NSLog("MainMenu handling \(reason) open request for \(contents)")
