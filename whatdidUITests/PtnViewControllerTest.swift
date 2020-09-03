@@ -17,9 +17,14 @@ class PtnViewControllerTest: XCTestCase {
         // The 0.5 isn't necessary, but it positions the cursor in the middle of the item. Just looks nicer.
         app.menuBars.statusItems["✐"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
         statusItemPoint = CGEvent(source: nil)?.location
+        let now = Date()
+        log("Failed at \(now.utcTimestamp) (\(now.timestamp(at: TimeZone(identifier: "US/Eastern")!)))")
     }
     
     override func recordFailure(withDescription description: String, inFile filePath: String, atLine lineNumber: Int, expected: Bool) {
+        let now = Date()
+        log("Failed at \(now.utcTimestamp) (\(now.timestamp(at: TimeZone(identifier: "US/Eastern")!)))")
+        
         add(XCTAttachment(screenshot: XCUIScreen.main.screenshot()))
         super.recordFailure(withDescription: description, inFile: filePath, atLine: lineNumber, expected: expected)
     }
@@ -414,12 +419,14 @@ class PtnViewControllerTest: XCTestCase {
     func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0, deactivate: Bool = false) {
         group("setting time \(d)d \(h)h \(m)m") {
             app.activate() // bring the clockTicker back, if needed
-            let text = "\(d * 86400 + h * 3600 + m * 60)\r"
+            let epochSeconds = d * 86400 + h * 3600 + m * 60
+            let text = "\(epochSeconds)\r"
             let clockTicker = app.windows["Mocked Clock"].children(matching: .textField).element
             if deactivate {
                 app.windows["Mocked Clock"].checkBoxes["Defer until deactivation"].click()
             }
             clockTicker.deleteText(andReplaceWith: text)
+            log("Setting time to \(Date(timeIntervalSince1970: TimeInterval(epochSeconds)).utcTimestamp)")
             if deactivate {
                 group("Activate Finder") {
                     let finder = NSWorkspace.shared.runningApplications.first(where: {$0.bundleIdentifier == "com.apple.finder"})
