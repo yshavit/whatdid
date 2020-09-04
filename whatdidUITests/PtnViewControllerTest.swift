@@ -380,6 +380,8 @@ class PtnViewControllerTest: XCTestCase {
         group("escape key within notes") {
             ptn.window.typeKey(.escape, modifierFlags: [])
             XCTAssertFalse(ptn.window.isVisible)
+            clickStatusMenu()
+            waitForTransition(of: .ptn, toIsVisible: true)
         }
     }
     

@@ -30,11 +30,15 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     }
     
     override func close() {
-        cancelClose = false
-        opener.didClose()
-        if !cancelClose {
+        if windowShouldClose(window!) {
             super.close()
         }
+    }
+    
+    func windowShouldClose(_ sender: NSWindow) -> Bool {
+        cancelClose = false
+        opener.didClose()
+        return !cancelClose
     }
 
     override func awakeFromNib() {
