@@ -185,17 +185,16 @@ class PtnViewControllerTest: XCTestCase {
     }
     
     func testDailyReportPopup() {
+        let entries = EntriesBuilder()
+            .add(project: "project a", task: "task 1", notes: "first thing", minutes: 12)
+            .add(project: "project a", task: "task 2", notes: "sidetrack", minutes: 13)
+            .add(project: "project a", task: "task 1", notes: "back to first", minutes: 5)
+            .add(project: "project b", task: "task 1", notes: "fizz", minutes: 5)
+            .add(project: "project c", task: "task 2", notes: "fuzz", minutes: 10)
         group("Initalize the data") {
             let ptn = openPtn()
             let entriesTextField  = ptn.window.textFields["uihook_flatentryjson"]
-            let entries = EntriesBuilder()
-                .add(project: "project a", task: "task 1", notes: "first thing", minutes: 12)
-                .add(project: "project a", task: "task 2", notes: "sidetrack", minutes: 13)
-                .add(project: "project a", task: "task 1", notes: "back to first", minutes: 5)
-                .add(project: "project b", task: "task 1", notes: "fizz", minutes: 5)
-                .add(project: "project c", task: "task 2", notes: "fuzz", minutes: 10)
-                .serialize()
-            entriesTextField.deleteText(andReplaceWith: entries)
+            entriesTextField.deleteText(andReplaceWith: FlatEntry.serialize(entries.get()))
             entriesTextField.typeKey(.enter)
             clickStatusMenu()
         }
@@ -204,23 +203,30 @@ class PtnViewControllerTest: XCTestCase {
             clickStatusMenu(with: .maskAlternate)
             waitForTransition(of: .dailyEnd, toIsVisible: true)
         }
-        group("Verify projects exist") {
-            for project in ["project a", "project b", "project c"] {
-                group(project) {
-                    for (description, e) in HierarchicalEntryLevel(ancestor: dailyReport, scope: "Project", label: project).allElements {
-                        XCTAssertTrue(e.exists, "\"\(project)\" \(description) doesn't exist")
+        func verifyProjectsVisibility() {
+            group("Verify projects are visible") {
+                for project in ["project a", "project b", "project c"] {
+                    group(project) {
+                        for (description, e) in HierarchicalEntryLevel(ancestor: dailyReport, scope: "Project", label: project).allElements {
+                            XCTAssertTrue(e.isVisible, "\"\(project)\" \(description) are visible")
+                        }
                     }
                 }
             }
         }
-        group("Verify projects visible") {
-            for project in ["project a", "project b", "project c"] {
-                group(project) {
-                    for (description, e) in HierarchicalEntryLevel(ancestor: dailyReport, scope: "Project", label: project).allElements {
-                        XCTAssertTrue(e.isHittable, "\"\(project)\" \(description) is not hittable")
-                    }
-                }
+        verifyProjectsVisibility()
+        group("Verify projects visible after contention with PTN") {
+            group("Close the report and set up contention") {
+                clickStatusMenu() // close daily report
+                let ptn = openPtn()
+                let entriesTextField = ptn.window.textFields["uihook_flatentryjson"]
+                entriesTextField.deleteText(andReplaceWith: FlatEntry.serialize(entries.get(startingAtSecondsSince1970: 86400)) + "\r")
+                setTimeUtc(d: 1, h: 0, m: 0)
+                clickStatusMenu() // close ptn
+                waitForTransition(of: .ptn, toIsVisible: false)
+                waitForTransition(of: .dailyEnd, toIsVisible: true)
             }
+            verifyProjectsVisibility()
         }
         group("Spot check on project a") {
             let projectA = HierarchicalEntryLevel(ancestor: dailyReport, scope: "Project", label: "project a")
@@ -274,11 +280,11 @@ class PtnViewControllerTest: XCTestCase {
                 clickStatusMenu() // Close the daily report
                 let ptn = openPtn()
                 let entriesTextField = ptn.window.textFields["uihook_flatentryjson"]
-                let entriesBuilder = EntriesBuilder()
+                let manyEntries = EntriesBuilder()
                 for i in 1...25 {
-                    entriesBuilder.add(project: "project \(i)", task: "only task", notes: "", minutes: Double(i))
+                    manyEntries.add(project: "project \(i)", task: "only task", notes: "", minutes: Double(i))
                 }
-                entriesTextField.deleteText(andReplaceWith: entriesBuilder.serialize())
+                entriesTextField.deleteText(andReplaceWith: FlatEntry.serialize(manyEntries.get(startingAtSecondsSince1970: 86400)))
                 entriesTextField.typeKey(.enter)
                 clickStatusMenu()
             }
@@ -496,24 +502,24 @@ class PtnViewControllerTest: XCTestCase {
     }
     
     class EntriesBuilder {
-        private var entries = [(p: String, t: String, n: String, duration: TimeInterval)]()
+        private var _entries = [(p: String, t: String, n: String, duration: TimeInterval)]()
         
         @discardableResult func add(project: String, task: String, notes: String, minutes: Double) -> EntriesBuilder {
-            entries.append((p: project, t: task, n: notes, duration: minutes * 60.0))
+            _entries.append((p: project, t: task, n: notes, duration: minutes * 60.0))
             return self
         }
         
-        func serialize() -> String {
-            let totalInterval = entries.map({$0.duration}).reduce(0, +)
-            var startTime = Date(timeIntervalSince1970: -totalInterval)
+        func get(startingAtSecondsSince1970 start: Int = 0) -> [FlatEntry] {
+            let totalInterval = _entries.map({$0.duration}).reduce(0, +)
+            var startTime = Date(timeIntervalSince1970: Double(start) - totalInterval)
             var flatEntries = [FlatEntry]()
-            for e in entries {
+            for e in _entries {
                 let from = startTime
                 let to = startTime.addingTimeInterval(e.duration)
                 flatEntries.append(FlatEntry(from: from, to: to, project: e.p, task: e.t, notes: e.n))
                 startTime = to
             }
-            return FlatEntry.serialize(flatEntries)
+            return flatEntries
         }
     }
     
