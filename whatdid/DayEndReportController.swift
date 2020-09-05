@@ -33,7 +33,7 @@ class DayEndReportController: NSViewController {
         return result
     }
     
-    override func viewWillAppear() {
+    func prepareForViewing() {
         // Set the window's max height, using the golden ratio.
         if let screenHeight = view.window?.screen?.frame.height {
             maxViewHeight.constant = screenHeight * 0.61802903

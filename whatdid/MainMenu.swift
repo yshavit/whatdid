@@ -87,7 +87,9 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     private func open(_ contents: WindowContents) {
         switch (contents) {
         case .dailyEnd:
-            window?.contentViewController = DayEndReportController()
+            let controller = DayEndReportController()
+            window?.contentViewController = controller
+            controller.prepareForViewing()
             window?.title = "Here's what you've been doing"
         case .ptn:
             window?.contentViewController = taskAdditionsPane
