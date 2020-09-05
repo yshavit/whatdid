@@ -4,20 +4,24 @@ import Foundation
 
 class ManualTickScheduler: Scheduler {
     private var _now = Date(timeIntervalSince1970: 0)
-    private var events = [(Date, () -> Void)]()
+    private var events = [WorkItem]()
     
-    func schedule(at date: Date, _ block: @escaping () -> Void) {
+    @discardableResult func schedule(at date: Date, _ block: @escaping () -> Void) -> ScheduledTask {
         if date == _now {
             enqueueAction(block)
+            return NoopScheduledItem()
         } else if date > _now {
-            events.append((date, block))
+            let uuid = UUID()
+            events.append(WorkItem(id: uuid, fireAt: date, block: block))
+            return ManualScheduledItem(parent: self, id: uuid)
         } else {
             NSLog("ignoring event because it's in the past (\(date))")
+            return NoopScheduledItem()
         }
     }
     
-    func schedule(after time: TimeInterval, _ block: @escaping () -> Void) {
-        schedule(at: _now.addingTimeInterval(time), block)
+    @discardableResult func schedule(after time: TimeInterval, _ block: @escaping () -> Void) -> ScheduledTask {
+        return schedule(at: _now.addingTimeInterval(time), block)
     }
     
     var now: Date {
@@ -27,8 +31,8 @@ class ManualTickScheduler: Scheduler {
         set (value) {
             _now = value
             // I'm going to go for just the easy approach; efficiency isn't a concern here.
-            events.filter { $0.0 <= value } .forEach { self.enqueueAction($0.1) }
-            events.removeAll(where: { $0.0 <= value})
+            events.filter { $0.fireAt <= value } .forEach { self.enqueueAction($0.block) }
+            events.removeAll(where: { $0.fireAt <= value})
         }
     }
     
@@ -43,7 +47,28 @@ class ManualTickScheduler: Scheduler {
     private func enqueueAction(_ block: @escaping () -> Void) {
         DispatchQueue.main.async(execute: block)
     }
+    
+    private struct WorkItem {
+        let id: UUID
+        let fireAt: Date
+        let block: () -> Void
+    }
+    
+    private struct NoopScheduledItem: ScheduledTask {
+        func cancel() {
+            // nothing
+        }
+    }
 
+    private struct ManualScheduledItem: ScheduledTask {
+        let parent: ManualTickScheduler
+        let id: UUID
+        
+        func cancel() {
+            parent.events.removeAll(where: {$0.id == id})
+        }
+    }
 }
+
 
 #endif
