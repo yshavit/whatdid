@@ -115,12 +115,11 @@ class PtnViewControllerTest: XCTestCase {
             setTimeUtc(h: 3, m: 31)
             waitForTransition(of: .ptn, toIsVisible: true)
         }
-        
         group("daily report (no contention with PTN)") {
             // Note: PTN is still up at this point. It's currently 05:31+0200.
             // We'll bring it to 18:29, and then dismiss it.
             // Then the next minute, there should be the daily report
-            setTimeUtc(h: 16, m: 29)
+            setTimeUtc(h: 16, m: 29, onSessionPrompt: .continueWithCurrentSession)
             type(into: app, entry("my project", "my task", "my notes"))
             waitForTransition(of: .ptn, toIsVisible: false)
             
@@ -136,7 +135,7 @@ class PtnViewControllerTest: XCTestCase {
             // Wait two minutes (so that the daily report is due) and then type in an entry.
             // We should get the daily report next, which we should then be able to dismiss.
             group("A day later, just before the daily report") {
-                setTimeUtc(d: 1, h: 16, m: 29)
+                setTimeUtc(d: 1, h: 16, m: 29, onSessionPrompt: .continueWithCurrentSession)
                 waitForTransition(of: .ptn, toIsVisible: true)
             }
             group("Now at the daily report") {
@@ -156,6 +155,103 @@ class PtnViewControllerTest: XCTestCase {
                 // Also wait a second, so that we can be sure it didn't pop back open (GH #72)
                 Thread.sleep(forTimeInterval: 1)
                 assertThat(window: .dailyEnd, isVisible: false)
+                assertThat(window: .ptn, isVisible: false)
+            }
+        }
+    }
+    
+    func testLongSessionPrompt() {
+        group("Long session while PTN is open") {
+            clickStatusMenu()
+            setTimeUtc(d: 0, h: 5, m: 59, onSessionPrompt: .ignorePrompt)
+            checkLongSessionPrompt(exists: false)
+            setTimeUtc(d: 0, h: 6, m: 00, onSessionPrompt: .ignorePrompt)
+            checkLongSessionPrompt(exists: true)
+        }
+        group("New session resets the time") {
+            group("Select option to start new session") {
+                handleLongSessionPrompt(.startNewSession)
+                waitForTransition(of: .ptn, toIsVisible: false)
+            }
+            group("Create an entry") {
+                setTimeUtc(d: 0, h: 6, m: 5)
+                let ptn = openPtn()
+                type(into: ptn.window, entry("p1", "t2", "n3"))
+                waitForTransition(of: .ptn, toIsVisible: false)
+            }
+            group("Verify entry") {
+                let ptn = openPtn()
+                let entries = FlatEntry.deserialize(from: ptn.entriesHook.stringValue)
+                XCTAssertEqual(
+                    [FlatEntry(from: date(h: 6, m: 00), to: date(h: 6, m: 05), project: "p1", task: "t2", notes: "n3")],
+                    entries)
+                ptn.entriesHook.deleteText(andReplaceWith: "\r")
+            }
+        }
+        group("Long session while PTN is closed") {
+            group("Close PTN") {
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: false)
+                waitForTransition(of: .dailyEnd, toIsVisible: false)
+            }
+            group("Go forward 6 more hours") {
+                setTimeUtc(d: 0, h: 12, m: 10, onSessionPrompt: .ignorePrompt)
+                checkLongSessionPrompt(exists: true)
+            }
+        }
+        group("Continuing session keeps the time") {
+            group("Select option to continue session") {
+                handleLongSessionPrompt(.continueWithCurrentSession)
+            }
+            group("Create an entry") {
+                setTimeUtc(d: 0, h: 12, m: 15)
+                let ptn = findPtn()
+                ptn.pcombo.textField.deleteText() // since it'll be pre-populated with the last "p1"
+                type(into: ptn.window, entry("pA", "tB", "nC"))
+                waitForTransition(of: .ptn, toIsVisible: false)
+            }
+            group("Verify entry") {
+                let ptn = openPtn()
+                let entries = FlatEntry.deserialize(from: ptn.entriesHook.stringValue)
+                XCTAssertEqual(
+                    [FlatEntry(from: date(h: 6, m: 05), to: date(h: 12, m: 15), project: "pA", task: "tB", notes: "nC")],
+                    entries)
+            }
+        }
+        group("Long session with contention with daily report") {
+            group("Wait until tomorrow") {
+                assertThat(window: .ptn, isVisible: true)
+                setTimeUtc(d: 1, h: 0, m: 0, onSessionPrompt: .ignorePrompt)
+            }
+            group("Close PTN and check for no sheet") {
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: false)
+                checkLongSessionPrompt(exists: false)
+                waitForTransition(of: .dailyEnd, toIsVisible: true)
+                
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: false)
+                waitForTransition(of: .dailyEnd, toIsVisible: false)
+            }
+            group("Re-open PTN and check for sheet") {
+                // Because we clicked out of the last PTN (and thus didn't either continue the session or start a new one),
+                // re-opening the PTN should cause us to be instantly re-prompted.
+                clickStatusMenu()
+                checkLongSessionPrompt(exists: true)
+                handleLongSessionPrompt(.startNewSession)
+            }
+        }
+        group("Long session prompt after PTN deferred by daily report") {
+            group("Open daily report and fast forward 6 hours") {
+                clickStatusMenu(with: .maskAlternate)
+                setTimeUtc(d: 1, h: 6, m: 1)
+                assertThat(window: .dailyEnd, isVisible: true)
+            }
+            group("Close daily report and confirm prompt in PTN") {
+                clickStatusMenu()
+                waitForTransition(of: .dailyEnd, toIsVisible: false)
+                wait(for: "PTN to exist", until: {app.windows[WindowType.ptn.windowTitle].exists})
+                checkLongSessionPrompt(exists: true)
             }
         }
     }
@@ -163,7 +259,6 @@ class PtnViewControllerTest: XCTestCase {
     func testAutoComplete() {
         let ptn = openPtn()
         group("initalize the data") {
-            let entriesTextField  = ptn.window.textFields["uihook_flatentryjson"]
             // Three entries, in shuffled alphabetical order (neither fully ascending or descending)
             // We want both the lowest and highest values (alphanumerically) to be in the middle.
             // That means that when we autocomplete "wh*", we can be sure that we're getting date-ordered
@@ -173,7 +268,7 @@ class PtnViewControllerTest: XCTestCase {
                 entry("whatdid", "autothing", "notes 1", from: t(-80), to: t(-70)),
                 entry("whytdid", "autothing", "notes 1", from: t(-80), to: t(-70)),
                 entry("whodid", "something else", "notes 2", from: t(-60), to: t(-50)))
-            entriesTextField.deleteText(andReplaceWith: entriesSerialized + "\r")
+            ptn.entriesHook.deleteText(andReplaceWith: entriesSerialized + "\r")
         }
         group("autocomplete wh*") {
             let pcombo = ptn.pcombo.textField
@@ -193,7 +288,7 @@ class PtnViewControllerTest: XCTestCase {
             .add(project: "project c", task: "task 2", notes: "fuzz", minutes: 10)
         group("Initalize the data") {
             let ptn = openPtn()
-            let entriesTextField  = ptn.window.textFields["uihook_flatentryjson"]
+            let entriesTextField  = ptn.entriesHook
             entriesTextField.deleteText(andReplaceWith: FlatEntry.serialize(entries.get()))
             entriesTextField.typeKey(.enter)
             clickStatusMenu()
@@ -219,10 +314,8 @@ class PtnViewControllerTest: XCTestCase {
             group("Close the report and set up contention") {
                 clickStatusMenu() // close daily report
                 let ptn = openPtn()
-                let entriesTextField = ptn.window.textFields["uihook_flatentryjson"]
-                entriesTextField.deleteText(andReplaceWith: FlatEntry.serialize(entries.get(startingAtSecondsSince1970: 86400)) + "\r")
-                setTimeUtc(d: 1, h: 0, m: 0)
-                clickStatusMenu() // close ptn
+                ptn.entriesHook.deleteText(andReplaceWith: FlatEntry.serialize(entries.get(startingAtSecondsSince1970: 86400)) + "\r")
+                setTimeUtc(d: 1, h: 0, m: 0, onSessionPrompt: .startNewSession) // also closes the PTN
                 waitForTransition(of: .ptn, toIsVisible: false)
                 waitForTransition(of: .dailyEnd, toIsVisible: true)
             }
@@ -279,13 +372,12 @@ class PtnViewControllerTest: XCTestCase {
             group("Set new entries") {
                 clickStatusMenu() // Close the daily report
                 let ptn = openPtn()
-                let entriesTextField = ptn.window.textFields["uihook_flatentryjson"]
                 let manyEntries = EntriesBuilder()
                 for i in 1...25 {
                     manyEntries.add(project: "project \(i)", task: "only task", notes: "", minutes: Double(i))
                 }
-                entriesTextField.deleteText(andReplaceWith: FlatEntry.serialize(manyEntries.get(startingAtSecondsSince1970: 86400)))
-                entriesTextField.typeKey(.enter)
+                ptn.entriesHook.deleteText(andReplaceWith: FlatEntry.serialize(manyEntries.get(startingAtSecondsSince1970: 86400)))
+                ptn.entriesHook.typeKey(.enter)
                 clickStatusMenu()
             }
             let project1Header = HierarchicalEntryLevel(ancestor: dailyReport, scope: "Project", label: "project 1").headerLabel
@@ -424,7 +516,9 @@ class PtnViewControllerTest: XCTestCase {
         }
     }
     
-    func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0, deactivate: Bool = false) {
+    /// Sets the mocked clock in UTC. If `deactivate` is true (default false), then this will set the mocked clock to set the time when the app deactivates, and then this method will activate
+    /// the finder. Otherwise, `onSessionPrompt` governs what to do if the "start a new session?" prompt comes up.
+    func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0, deactivate: Bool = false, onSessionPrompt: LongSessionAction = .ignorePrompt) {
         group("setting time \(d)d \(h)h \(m)m") {
             app.activate() // bring the clockTicker back, if needed
             let epochSeconds = d * 86400 + h * 3600 + m * 60
@@ -445,6 +539,33 @@ class PtnViewControllerTest: XCTestCase {
                     sleep(1)
                     print("Okay, continuing.")
                 }
+            } else {
+                handleLongSessionPrompt(onSessionPrompt)
+            }
+        }
+    }
+    
+    func checkLongSessionPrompt(exists: Bool) {
+        if exists {
+            let ptn = findPtn()
+            wait(for: "long session prompt", until: {ptn.window.exists && ptn.window.sheets.count > 0})
+        } else {
+            log("Waiting for a bit, in case a long session prompt is about to come up")
+            sleep(1)
+            XCTAssertEqual(0, ptnOrDailyReportWindow.sheets.count)
+        }
+    }
+    
+    func handleLongSessionPrompt(_ action: LongSessionAction) {
+        let ptn = app.windows[WindowType.ptn.windowTitle]
+        if ptn.exists && ptn.sheets.count > 0 {
+            switch action {
+            case .continueWithCurrentSession:
+                ptn.sheets.buttons["Continue with current session"].click()
+            case .startNewSession:
+                ptn.sheets.buttons["Start new session"].click()
+            case .ignorePrompt:
+                break // nothing
             }
         }
     }
@@ -459,6 +580,17 @@ class PtnViewControllerTest: XCTestCase {
         }
     }
     
+    var ptnOrDailyReportWindow: XCUIElement {
+        for windowType in WindowType.allCases {
+            let maybe = app.windows[windowType.windowTitle]
+            if maybe.exists {
+                return maybe
+            }
+        }
+        XCTFail("Couldn't find PTN or daily report window")
+        return nil!
+    }
+    
     func pauseToLetStabilize() {
         sleepMillis(250)
     }
@@ -466,6 +598,11 @@ class PtnViewControllerTest: XCTestCase {
     func type(into app: XCUIElement, _ entry: FlatEntry) {
         app.comboBoxes["pcombo"].children(matching: .textField).firstMatch.click()
         app.typeText("\(entry.project)\r\(entry.task)\r\(entry.notes ?? "")\r")
+    }
+    
+    func date(d: Int = 0, h: Int, m: Int) -> Date {
+        let epochSeconds = d * 86400 + h * 3600 + m * 60
+        return Date(timeIntervalSince1970: TimeInterval(epochSeconds))
     }
     
     func entry(_ project: String, _ task: String, _ notes: String?) -> FlatEntry {
@@ -584,6 +721,12 @@ class PtnViewControllerTest: XCTestCase {
         }
     }
     
+    enum LongSessionAction {
+        case continueWithCurrentSession
+        case startNewSession
+        case ignorePrompt
+    }
+    
     struct Ptn {
         let window: XCUIElement
         let pcombo: AutocompleteFieldHelper
@@ -592,9 +735,13 @@ class PtnViewControllerTest: XCTestCase {
         var nfield: XCUIElement {
             window.textFields["nfield"]
         }
+        
+        var entriesHook: XCUIElement {
+            window.textFields["uihook_flatentryjson"]
+        }
     }
     
-    enum WindowType {
+    enum WindowType: CaseIterable {
         case ptn
         case dailyEnd
         

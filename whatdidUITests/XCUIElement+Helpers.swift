@@ -69,10 +69,9 @@ extension XCUIElement {
                 click()
             }
             typeKey("a", modifierFlags: .command)
+            typeKey(.delete, modifierFlags:[])
             if let replacementToType = replacement {
                 typeText(replacementToType)
-            } else {
-                typeKey(.delete, modifierFlags:[])
             }
         }
     }

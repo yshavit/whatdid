@@ -49,6 +49,10 @@ class Model {
         lastEntryDate = DefaultScheduler.instance.now
     }
     
+    var timeSinceLastEntry: TimeInterval {
+        return DefaultScheduler.instance.now.timeIntervalSince(lastEntryDate)
+    }
+    
     func listProjects() -> [Project] {
         var result : [Project]!
         container.viewContext.performAndWait {

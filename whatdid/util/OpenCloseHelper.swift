@@ -4,17 +4,20 @@ import Cocoa
 
 class OpenCloseHelper<T: Hashable & Comparable> {
     
-    private let opener: (T, OpenReason) -> Void
+    private let opener: (OpenContext) -> Void
     private let scheduler: (T) -> Void
+    private let underlyingScheduler: Scheduler
     
     var openItem: T? = nil
     private var pendingOpens = [T: OpenReason]()
     private var rescheduleOnClose = false
     private var isSnoozed = false
+    private var delegatingScheduler : DelegatingScheduler?
     
-    init(onOpen: @escaping (T, OpenReason) -> Void, onSchedule: @escaping (T) -> Void) {
+    init(onOpen: @escaping (OpenContext) -> Void, onSchedule: @escaping (T) -> Void, using: Scheduler = DefaultScheduler.instance) {
         self.opener = onOpen
         self.scheduler = onSchedule
+        self.underlyingScheduler = using
     }
     
     func open(_ item: T, reason: OpenReason) {
@@ -24,9 +27,8 @@ class OpenCloseHelper<T: Hashable & Comparable> {
                 pendingOpens[item] = reason
                 NSLog("Deferring \(requestDesc) because of snooze")
             } else {
-                openItem = item
                 NSLog("Acting on \(requestDesc)")
-                opener(item, reason)
+                doOpen(item, reason)
                 rescheduleOnClose = reason == .scheduled
             }
         } else if reason == .scheduled {
@@ -55,6 +57,8 @@ class OpenCloseHelper<T: Hashable & Comparable> {
     }
 
     func didClose() {
+        delegatingScheduler?.close()
+        delegatingScheduler = nil
         guard openItem != nil else {
             return
         }
@@ -73,12 +77,34 @@ class OpenCloseHelper<T: Hashable & Comparable> {
         }
     }
     
+    private func doOpen(_ item: T, _ reason: OpenReason) {
+        openItem = item
+        if delegatingScheduler != nil {
+            NSLog("WARNING found non-nil DelegatingScheduler in OpenCloseHelper. Closing it.")
+            delegatingScheduler?.close()
+        }
+        delegatingScheduler = DelegatingScheduler(delegateTo: underlyingScheduler)
+        opener(OpenContext(item: item, reason: reason, scheduler: delegatingScheduler!))
+    }
+    
     private func pullFromPending() {
         if let deferredOpenKey = pendingOpens.keys.sorted().first {
             rescheduleOnClose = pendingOpens.removeValue(forKey: deferredOpenKey)! == .scheduled
             NSLog("OpenCloseHelper: opening deferred \(deferredOpenKey), with next rescheduleOnClose = \(rescheduleOnClose)")
             openItem = deferredOpenKey
-            opener(deferredOpenKey, .scheduled)
+            doOpen(deferredOpenKey, .scheduled)
+        }
+    }
+    
+    class OpenContext {
+        let item: T
+        let reason: OpenReason
+        let scheduler: Scheduler
+        
+        init(item: T, reason: OpenReason, scheduler: Scheduler) {
+            self.item = item
+            self.reason = reason
+            self.scheduler = scheduler
         }
     }
 }

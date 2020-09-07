@@ -194,12 +194,49 @@ class OpenCloseHelperTest: XCTestCase {
         och.didClose()
         XCTAssertNil(och.openItem)
         XCTAssertEqual([Message(shouldSchedule: "two")], messages.drain())
+    }
+    
+    func test_scheduledTasksGetRunWhileOpen() {
+        let (och, messages) = createTestObjects()
         
+        och.open("one", reason: .manual)
+        XCTAssertEqual("one", och.openItem)
+        XCTAssertEqual([Message(shouldOpen: "one", reason: .manual)], messages.drain())
+        
+        var count = 0
+        messages.contextScheduler.schedule(at: Date.distantFuture) { count += 1}
+        XCTAssertEqual(0, count)
+        
+        messages.underlyingScheduler.runAllScheduled()
+        XCTAssertEqual(1, count)
+    }
+    
+    func test_scheduledTasksGetIgnoredAfterClose() {
+        let (och, messages) = createTestObjects()
+        
+        och.open("one", reason: .manual)
+        XCTAssertEqual("one", och.openItem)
+        XCTAssertEqual([Message(shouldOpen: "one", reason: .manual)], messages.drain())
+        
+        var count = 0
+        messages.contextScheduler.schedule(at: Date()) { count += 1}
+        XCTAssertEqual(0, count)
+        
+        och.didClose()
+        XCTAssertEqual(0, count)
+        
+        messages.underlyingScheduler.runAllScheduled()
+        XCTAssertEqual(0, count)
+        
+        // And then also add a new task, for good measure
+        messages.contextScheduler.schedule(at: Date()) { count += 1}
+        messages.underlyingScheduler.runAllScheduled()
+        XCTAssertEqual(0, count)
     }
     
     func createTestObjects(alreadyOpened: (String, OpenReason)? = nil) -> (OpenCloseHelper<String>, Messages) {
         let messages = Messages()
-        let och = OpenCloseHelper(onOpen: messages.open, onSchedule: messages.schedule)
+        let och = OpenCloseHelper(onOpen: messages.open, onSchedule: messages.schedule, using: messages.underlyingScheduler)
         if let openAs = alreadyOpened {
             och.open(openAs.0, reason: openAs.1) // the scheduled-ness doesn't actually matter
             XCTAssertEqual([Message(shouldOpen: openAs.0, reason: openAs.1)], messages.drain())
@@ -230,9 +267,12 @@ class OpenCloseHelperTest: XCTestCase {
     class Messages {
         
         private var messages = [Message]()
+        private var _contextScheduler: Scheduler?
+        let underlyingScheduler = DummyScheduler()
         
-        func open(_ item: String, _ reason: OpenReason) {
-            messages.append(Message(shouldOpen: item, reason: reason))
+        func open(context: OpenCloseHelper<String>.OpenContext) {
+            messages.append(Message(shouldOpen: context.item, reason: context.reason))
+            _contextScheduler = context.scheduler
         }
         
         func schedule(_ item: String) {
@@ -243,6 +283,11 @@ class OpenCloseHelperTest: XCTestCase {
             let result = messages
             messages.removeAll()
             return result
+        }
+        
+        /// The scheduled passed to an `open` call's OpenContext
+        var contextScheduler: Scheduler {
+            return _contextScheduler!
         }
     }
 }

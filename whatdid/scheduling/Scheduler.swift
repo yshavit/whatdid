@@ -5,8 +5,12 @@ import Foundation
 protocol Scheduler {
     var now: Date { get }
     var timeZone: TimeZone { get }
-    func schedule(at: Date, _ block: @escaping () -> Void)
-    func schedule(after: TimeInterval, _ block: @escaping () -> Void)
+    @discardableResult func schedule(at: Date, _ block: @escaping () -> Void) -> ScheduledTask
+    @discardableResult func schedule(after: TimeInterval, _ block: @escaping () -> Void) -> ScheduledTask
+}
+
+protocol ScheduledTask {
+    func cancel()
 }
 
 extension Date {
