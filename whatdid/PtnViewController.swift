@@ -187,6 +187,15 @@ class PtnViewController: NSViewController {
         }
     }
     
+    override func viewWillDisappear() {
+        if let window = view.window {
+            for sheet in window.sheets {
+                window.endSheet(sheet, returnCode: .abort)
+            }
+        }
+        super.viewWillDisappear()
+    }
+    
     private func showNewSessionPrompt() {
         if let window = view.window {
             
@@ -227,9 +236,12 @@ class PtnViewController: NSViewController {
                 case .continue:
                     NSLog("Continuing with existing session")
                     startNewSession = false
+                case .abort:
+                    NSLog("Aborting window (probably because user closed it via status menu item)")
+                    startNewSession = false
                 default:
                     NSLog("Unexpected response: \(response.rawValue). Will start new session session.")
-                    startNewSession = true
+                    startNewSession = false
                 }
                 if startNewSession {
                     AppDelegate.instance.model.setLastEntryDateToNow()
