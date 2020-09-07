@@ -18,6 +18,8 @@ class PtnViewController: NSViewController {
     
     var closeAction : () -> Void = {}
     
+    var scheduler: Scheduler = DefaultScheduler.instance
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         projectField.textField.placeholderString = "project"
@@ -78,12 +80,12 @@ class PtnViewController: NSViewController {
         let bufferMinutes = 10
         let formatter = DateFormatter()
         let snoozeIntervalMinutes = 30.0
-        formatter.timeZone = DefaultScheduler.instance.timeZone
+        formatter.timeZone = scheduler.timeZone
         formatter.dateFormat = "h:mm a"
         formatter.amSymbol = "am"
         formatter.pmSymbol = "pm"
         
-        var snoozeUntil = DefaultScheduler.instance.now.addingTimeInterval(TimeInterval(bufferMinutes * 60))
+        var snoozeUntil = scheduler.now.addingTimeInterval(TimeInterval(bufferMinutes * 60))
         // Round it up (always up) to the nearest half-hour
         let incrementInterval = Double(snoozeIntervalMinutes * 60.0)
         snoozeUntil = Date(timeIntervalSince1970: (snoozeUntil.timeIntervalSince1970 / incrementInterval).rounded(.up) * incrementInterval)

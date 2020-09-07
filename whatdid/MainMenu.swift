@@ -65,7 +65,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         opener = OpenCloseHelper<WindowContents>(
             onOpen: {ctx in
                 NSLog("MainMenu handling \(ctx.reason) open request for \(ctx.item)")
-                self.open(ctx.item)
+                self.open(ctx.item, scheduler: ctx.scheduler)
                 if ctx.reason == .manual {
                     self.focus()
                 }
@@ -84,14 +84,20 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         }
     }
     
-    private func open(_ contents: WindowContents) {
+    private func open(_ contents: WindowContents, scheduler: Scheduler?) {
         switch (contents) {
         case .dailyEnd:
             let controller = DayEndReportController()
             window?.contentViewController = controller
             controller.prepareForViewing()
+            if let newScheduler = scheduler {
+                controller.scheduler = newScheduler
+            }
             window?.title = "Here's what you've been doing"
         case .ptn:
+            if let newScheduler = scheduler {
+                taskAdditionsPane.scheduler = newScheduler
+            }
             window?.contentViewController = taskAdditionsPane
             window?.title = "What are you working on?"
         }
@@ -132,7 +138,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
             NSApp.activate(ignoringOtherApps: true)
         }
         if !(window?.isVisible ?? false) {
-            open(.ptn)
+            open(.ptn, scheduler: nil)
         }
         window?.makeKeyAndOrderFront(self)
         if window?.contentView == taskAdditionsPane.view {
