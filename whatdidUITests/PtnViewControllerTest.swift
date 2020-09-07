@@ -115,12 +115,11 @@ class PtnViewControllerTest: XCTestCase {
             setTimeUtc(h: 3, m: 31)
             waitForTransition(of: .ptn, toIsVisible: true)
         }
-        
         group("daily report (no contention with PTN)") {
             // Note: PTN is still up at this point. It's currently 05:31+0200.
             // We'll bring it to 18:29, and then dismiss it.
             // Then the next minute, there should be the daily report
-            setTimeUtc(h: 16, m: 29)
+            setTimeUtc(h: 16, m: 29, onSessionPrompt: .continueWithCurrentSession)
             type(into: app, entry("my project", "my task", "my notes"))
             waitForTransition(of: .ptn, toIsVisible: false)
             
@@ -136,7 +135,7 @@ class PtnViewControllerTest: XCTestCase {
             // Wait two minutes (so that the daily report is due) and then type in an entry.
             // We should get the daily report next, which we should then be able to dismiss.
             group("A day later, just before the daily report") {
-                setTimeUtc(d: 1, h: 16, m: 29)
+                setTimeUtc(d: 1, h: 16, m: 29, onSessionPrompt: .continueWithCurrentSession)
                 waitForTransition(of: .ptn, toIsVisible: true)
             }
             group("Now at the daily report") {
@@ -156,6 +155,7 @@ class PtnViewControllerTest: XCTestCase {
                 // Also wait a second, so that we can be sure it didn't pop back open (GH #72)
                 Thread.sleep(forTimeInterval: 1)
                 assertThat(window: .dailyEnd, isVisible: false)
+                assertThat(window: .ptn, isVisible: false)
             }
         }
     }
@@ -221,8 +221,7 @@ class PtnViewControllerTest: XCTestCase {
                 let ptn = openPtn()
                 let entriesTextField = ptn.window.textFields["uihook_flatentryjson"]
                 entriesTextField.deleteText(andReplaceWith: FlatEntry.serialize(entries.get(startingAtSecondsSince1970: 86400)) + "\r")
-                setTimeUtc(d: 1, h: 0, m: 0)
-                clickStatusMenu() // close ptn
+                setTimeUtc(d: 1, h: 0, m: 0, onSessionPrompt: .startNewSession) // also closes the PTN
                 waitForTransition(of: .ptn, toIsVisible: false)
                 waitForTransition(of: .dailyEnd, toIsVisible: true)
             }
@@ -424,7 +423,9 @@ class PtnViewControllerTest: XCTestCase {
         }
     }
     
-    func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0, deactivate: Bool = false) {
+    /// Sets the mocked clock in UTC. If `deactivate` is true (default false), then this will set the mocked clock to set the time when the app deactivates, and then this method will activate
+    /// the finder. Otherwise, `onSessionPrompt` governs what to do if the "start a new session?" prompt comes up.
+    func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0, deactivate: Bool = false, onSessionPrompt: LongSessionAction = .ignorePrompt) {
         group("setting time \(d)d \(h)h \(m)m") {
             app.activate() // bring the clockTicker back, if needed
             let epochSeconds = d * 86400 + h * 3600 + m * 60
@@ -445,7 +446,33 @@ class PtnViewControllerTest: XCTestCase {
                     sleep(1)
                     print("Okay, continuing.")
                 }
+            } else {
+                handleLongSessionPrompt(onSessionPrompt)
             }
+        }
+    }
+    
+    func handleLongSessionPrompt(_ action: LongSessionAction, checkForPrompt: Bool = false) {
+        let ptn = app.windows[WindowType.ptn.windowTitle]
+        let promptExists: Bool
+        if checkForPrompt {
+            wait(for: "long session prompt", until: {ptn.exists && ptn.sheets.count > 0})
+            promptExists = true
+        } else {
+            promptExists = ptn.exists && ptn.sheets.count > 0
+        }
+        if promptExists {
+            switch action {
+            case .continueWithCurrentSession:
+                ptn.sheets.buttons["Continue with current session"].click()
+            case .startNewSession:
+                ptn.sheets.buttons["Start new session"].click()
+            case .ignorePrompt:
+                break // nothing
+            }
+        }
+        if checkForPrompt && !promptExists {
+            XCTFail("Required long session prompt, but it was absent.")
         }
     }
 
@@ -582,6 +609,12 @@ class PtnViewControllerTest: XCTestCase {
                 return "not exist"
             }
         }
+    }
+    
+    enum LongSessionAction {
+        case continueWithCurrentSession
+        case startNewSession
+        case ignorePrompt
     }
     
     struct Ptn {
