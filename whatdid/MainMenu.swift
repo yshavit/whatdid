@@ -63,10 +63,10 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         statusItem.button?.action = #selector(handleStatusItemPress)
         
         opener = OpenCloseHelper<WindowContents>(
-            onOpen: {contents, reason in
-                NSLog("MainMenu handling \(reason) open request for \(contents)")
-                self.open(contents)
-                if reason == .manual {
+            onOpen: {ctx in
+                NSLog("MainMenu handling \(ctx.reason) open request for \(ctx.item)")
+                self.open(ctx.item)
+                if ctx.reason == .manual {
                     self.focus()
                 }
             },
