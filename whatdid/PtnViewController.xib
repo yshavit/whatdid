@@ -20,10 +20,10 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <stackView identifier="topstack" distribution="fill" orientation="vertical" alignment="trailing" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HWg-YQ-y10" userLabel="Top Stack">
-            <rect key="frame" x="0.0" y="0.0" width="544" height="91"/>
+            <rect key="frame" x="0.0" y="0.0" width="558" height="91"/>
             <subviews>
                 <stackView identifier="ptnstack" distribution="fill" orientation="horizontal" alignment="top" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BPo-6t-Flu" userLabel="PTN Stack">
-                    <rect key="frame" x="0.0" y="37" width="544" height="50"/>
+                    <rect key="frame" x="14" y="37" width="544" height="50"/>
                     <subviews>
                         <customView identifier="pcombo" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4Lo-U3-YED" userLabel="Project combo" customClass="AutoCompletingField" customModule="whatdid" customModuleProvider="target">
                             <rect key="frame" x="5" y="0.0" width="120" height="50"/>
@@ -92,22 +92,20 @@
                     </customSpacing>
                 </stackView>
                 <stackView identifier="optionsstack" distribution="fill" orientation="horizontal" alignment="top" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ers-BA-ciA" userLabel="PTN Options Stack">
-                    <rect key="frame" x="0.0" y="4" width="544" height="33"/>
+                    <rect key="frame" x="14" y="4" width="544" height="33"/>
                     <subviews>
                         <button identifier="breakbutton" verticalHuggingPriority="850" translatesAutoresizingMaskIntoConstraints="NO" id="iu6-dS-Gze">
-                            <rect key="frame" x="5" y="13" width="55" height="15"/>
-                            <buttonCell key="cell" type="roundRect" title="Break" bezelStyle="roundedRect" alignment="left" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kyc-yB-AnY">
+                            <rect key="frame" x="5" y="13" width="69" height="15"/>
+                            <buttonCell key="cell" type="roundRect" title="Skip session" bezelStyle="roundedRect" alignment="left" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kyc-yB-AnY">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="label" size="9"/>
-                                <string key="keyEquivalent">B</string>
-                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </buttonCell>
                             <connections>
-                                <action selector="breakButtonPressed:" target="-2" id="fEH-mX-QfS"/>
+                                <action selector="skipButtonPressed:" target="-2" id="Q1F-EG-rGW"/>
                             </connections>
                         </button>
                         <customView identifier="spacer" translatesAutoresizingMaskIntoConstraints="NO" id="6Yy-Wb-eC7" userLabel="Spacer">
-                            <rect key="frame" x="60" y="14" width="339" height="14"/>
+                            <rect key="frame" x="74" y="14" width="325" height="14"/>
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="CiB-9s-9gX"/>
                             </constraints>
