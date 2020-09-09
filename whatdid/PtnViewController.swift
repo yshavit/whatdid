@@ -9,7 +9,7 @@ class PtnViewController: NSViewController {
     @IBOutlet weak var projectField: AutoCompletingField!
     @IBOutlet weak var taskField: AutoCompletingField!
     @IBOutlet weak var noteField: NSTextField!
-    @IBOutlet weak var breakButton: NSButton!
+    @IBOutlet weak var skipButton: NSButton!
     
     @IBOutlet weak var snoozeButton: NSButton!
     private var snoozeUntil : Date?
@@ -43,18 +43,10 @@ class PtnViewController: NSViewController {
         }
         projectField.action = self.projectOrTaskAction
         taskField.action = self.projectOrTaskAction
-        setBreakButtonTitle()
         
         #if UI_TEST
         addJsonFlatEntryField()
         #endif
-    }
-    
-    func setBreakButtonTitle() {
-        let optionsToDisplay = breakButton.keyEquivalentModifierMask.subtracting(.option)
-        let combo = AppDelegate.keyComboString(keyEquivalent: breakButton.keyEquivalent, keyEquivalentMask: optionsToDisplay)
-        let name = optionIsPressed ? "Skip this session" : "Break"
-        breakButton.title = combo.isEmpty ? name : "\(name) (\(combo))"
     }
     
     func reset() {
@@ -126,21 +118,6 @@ class PtnViewController: NSViewController {
         }
     }
     
-    override func flagsChanged(with event: NSEvent) {
-        super.flagsChanged(with: event)
-        let optionIsNowPressed = event.modifierFlags.contains(.option)
-        if optionIsNowPressed != optionIsPressed {
-            optionIsPressed = optionIsNowPressed
-            if optionIsNowPressed {
-                breakButton.keyEquivalentModifierMask.insert(.option)
-            } else {
-                breakButton.keyEquivalentModifierMask.remove(.option)
-            }
-            setBreakButtonTitle()
-        }
-        
-    }
-    
     func grabFocus() {
         if (view.window?.sheets ?? []).isEmpty {
             grabFocusEvenIfHasSheet()
@@ -176,15 +153,9 @@ class PtnViewController: NSViewController {
         )
     }
     
-    @IBAction func breakButtonPressed(_ sender: Any) {
-        if optionIsPressed {
-            AppDelegate.instance.model.setLastEntryDateToNow()
-            closeAction()
-        } else {
-            AppDelegate.instance.model.addBreakEntry(
-                callback: closeAction
-            )
-        }
+    @IBAction func skipButtonPressed(_ sender: Any) {
+        AppDelegate.instance.model.setLastEntryDateToNow()
+        closeAction()
     }
     
     override func viewWillDisappear() {

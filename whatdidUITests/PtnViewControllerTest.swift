@@ -254,6 +254,30 @@ class PtnViewControllerTest: XCTestCase {
                 checkLongSessionPrompt(exists: true)
             }
         }
+        group("Skip session button") {
+            let ptn = findPtn()
+            group("Clear out previous entries") {
+                handleLongSessionPrompt(.continueWithCurrentSession)
+                ptn.entriesHook.deleteText(andReplaceWith: "\r")
+            }
+            group("Skip a session") {
+                setTimeUtc(d: 1, h: 6, m: 10)
+                ptn.window.buttons["Skip session"].click()
+                waitForTransition(of: .ptn, toIsVisible: false)
+            }
+            group("Make an entry") {
+                setTimeUtc(d: 1, h: 6, m: 15)
+                clickStatusMenu() // open the menu
+                ptn.pcombo.textField.deleteText(andReplaceWith: "One\tTwo\tThree\r")
+            }
+            group("Validate") {
+                clickStatusMenu()
+                let entries = FlatEntry.deserialize(from: ptn.entriesHook.stringValue)
+                XCTAssertEqual(
+                    [FlatEntry(from: date(d: 1, h: 6, m: 10), to: date(d: 1, h: 6, m: 15), project: "One", task: "Two", notes: "Three")],
+                    entries)
+            }
+        }
     }
     
     func testAutoComplete() {
