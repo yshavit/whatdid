@@ -66,6 +66,15 @@ class TimeUtil {
         return result!
     }
     
+    static func formatSuccinctly(date: Date, assumingNow: Date? = nil, timeZone: TimeZone? = nil) -> String {
+        let formatter = DateFormatter()
+        formatter.timeZone = timeZone
+        formatter.dateFormat = "h:mm a"
+        formatter.amSymbol = "am"
+        formatter.pmSymbol = "pm"
+        return formatter.string(from: date)
+    }
+    
     enum TimeDirection : String {
         case previous
         case next
