@@ -11,7 +11,7 @@ extension Date {
     
     var utcTimestamp: String {
         get {
-            timestamp(at: TimeZone(identifier: "UTC")!)
+            timestamp(at: TimeZone.utc)
         }
     }
 }

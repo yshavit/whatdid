@@ -21,6 +21,7 @@
 		7E37A29C24C0293E005BA1DF /* Task+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29824C0293E005BA1DF /* Task+CoreDataClass.swift */; };
 		7E37A29D24C0293E005BA1DF /* Task+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */; };
 		7E4778F024F8F177007BAE8C /* AutocompleteFieldHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4778EF24F8F177007BAE8C /* AutocompleteFieldHelper.swift */; };
+		7E51DA09250BF5C60088864F /* TimeZone+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */; };
 		7E579F702503E2920055D9F6 /* SystemClockSchedulerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */; };
 		7E64F02B24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E64F02A24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift */; };
 		7E6C98D22503EF4900A712EB /* DelegatingScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6C98D12503EF4900A712EB /* DelegatingScheduler.swift */; };
@@ -101,6 +102,7 @@
 		7E37A29824C0293E005BA1DF /* Task+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7E4778EF24F8F177007BAE8C /* AutocompleteFieldHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteFieldHelper.swift; sourceTree = "<group>"; };
+		7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeZone+Helpers.swift"; sourceTree = "<group>"; };
 		7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockSchedulerTest.swift; sourceTree = "<group>"; };
 		7E64F02A24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIElementQuery+Helpers.swift"; sourceTree = "<group>"; };
 		7E6C98D12503EF4900A712EB /* DelegatingScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelegatingScheduler.swift; sourceTree = "<group>"; };
@@ -324,6 +326,7 @@
 				7ECF97A624F1D50100DBF1BF /* NSControl+Helper.swift */,
 				7E7B7E6024F2F84000460BC3 /* NSStackView+Helpers.swift */,
 				7EDDFF5D250097B30027E91A /* Date+Helpers.swift */,
+				7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -541,6 +544,7 @@
 				7ECF97A724F1D50100DBF1BF /* NSControl+Helper.swift in Sources */,
 				7EE0E74624E8899E002D03F8 /* AutoCompletingField.swift in Sources */,
 				7EF8579324E094D100867832 /* OpenCloseHelper.swift in Sources */,
+				7E51DA09250BF5C60088864F /* TimeZone+Helpers.swift in Sources */,
 				7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */,
 				7E07C3B824D121770007FD23 /* DayEndReportController.swift in Sources */,
 				7E30B46124C38D91003F3679 /* Atomic.swift in Sources */,
