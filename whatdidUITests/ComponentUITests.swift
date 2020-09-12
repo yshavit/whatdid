@@ -113,6 +113,11 @@ class ComponentUITests: XCTestCase {
                 testWindow.typeKey(.tab)
                 XCTAssertTrue(fieldHelper.hasFocus)
             }
+            group("tabbing selected all") {
+                testWindow.typeText("select-all 1\r")
+                XCTAssertEqual("select-all 1", resultField.stringValue)
+                XCTAssertTrue(fieldHelper.hasFocus) // we still have focus
+            }
             group("tab from autocomplete to optionsDefinition") {
                 testWindow.typeKey(.tab)
                 XCTAssertTrue(optionsDefinition.hasFocus)
@@ -125,6 +130,12 @@ class ComponentUITests: XCTestCase {
                 testWindow.typeKey(.tab, modifierFlags: .shift)
                 XCTAssertTrue(optionsDefinition.hasFocus)
             }
+        }
+        group("Clicking field selects-all") {
+            XCTAssertFalse(fieldHelper.hasFocus) // sanity check
+            fieldHelper.textField.click()
+            testWindow.typeText("select-all 2\r")
+            XCTAssertEqual("select-all 2", resultField.stringValue)
         }
     }
     
