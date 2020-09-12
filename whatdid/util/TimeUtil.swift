@@ -7,12 +7,11 @@ class TimeUtil {
         // utility class
     }
     
-    private static let SEC_IN_MIN = 60
-    private static let SEC_IN_HR = TimeUtil.SEC_IN_MIN * 60
+    private static let SEC_IN_HR = 60 * 60
     private static let SEC_IN_DAY = TimeUtil.SEC_IN_HR * 24 // assume 24h day, since that's how people usually think
     
     static func daysHoursMinutes(for input: TimeInterval) -> String {
-        var interval = Int(input) // TODO be slightly better with rounding, if we care
+        var interval = Int(input)
         
         var result = ""
         
@@ -30,8 +29,8 @@ class TimeUtil {
             result += "\(hrs)h "
             interval -= (hrs * SEC_IN_HR)
         }
-        let mins = interval / SEC_IN_MIN
-        result += "\(mins)m"
+        let minsDouble = Double(interval) / 60
+        result += "\(Int(minsDouble.rounded()))m"
         
         return result
     }
