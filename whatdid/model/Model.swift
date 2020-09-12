@@ -8,10 +8,10 @@ class Model {
     private static let BREAK_TASK = "break"
     private static let BREAK_TASK_NOTES = ""
     
-    @Atomic private var lastEntryDate : Date
+    @Atomic private var _lastEntryDate : Date
     
     init() {
-        lastEntryDate = DefaultScheduler.instance.now
+        _lastEntryDate = DefaultScheduler.instance.now
     }
     
     private lazy var container: NSPersistentContainer = {
@@ -46,11 +46,11 @@ class Model {
     }()
     
     func setLastEntryDateToNow() {
-        lastEntryDate = DefaultScheduler.instance.now
+        _lastEntryDate = DefaultScheduler.instance.now
     }
     
-    var timeSinceLastEntry: TimeInterval {
-        return DefaultScheduler.instance.now.timeIntervalSince(lastEntryDate)
+    var lastEntryDate: Date {
+        return _lastEntryDate
     }
     
     func listProjects() -> [Project] {
@@ -152,9 +152,9 @@ class Model {
     }
     
     func addEntryNow(project: String, task: String, notes: String, callback: @escaping ()->()) {
-        let lastUpdate = self.lastEntryDate
+        let lastUpdate = self._lastEntryDate
         let now = DefaultScheduler.instance.now
-        lastEntryDate = now
+        _lastEntryDate = now
         add(FlatEntry(from: lastUpdate, to: now, project: project, task: task, notes: notes), andThen: callback)
     }
     

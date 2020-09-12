@@ -79,6 +79,15 @@ class PtnViewControllerTest: XCTestCase {
             setTimeUtc(h: 0, m: 55) // 02:55; enough time for the popup
             waitForTransition(of: .ptn, toIsVisible: true)
         }
+        group("Header text") {
+            XCTAssertEqual(
+                "What have you been working on for the last 55m (since 2:00 am)?",
+                ptn.staticTexts["durationheader"].stringValue)
+            setTimeUtc(h: 0, m: 57)
+            XCTAssertEqual(
+                "What have you been working on for the last 57m (since 2:00 am)?",
+                ptn.staticTexts["durationheader"].stringValue)
+        }
         group("snooze button: standard press") {
             // Note: PTN is still up at this point.
             let button = ptn.buttons["snoozebutton"]
