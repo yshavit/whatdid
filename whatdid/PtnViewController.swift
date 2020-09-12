@@ -6,6 +6,8 @@ class PtnViewController: NSViewController {
     private static let TIME_UNTIL_NEW_SESSION_PROMPT = TimeInterval(6 * 60 * 60)
     @IBOutlet var topStack: NSStackView!
     
+    @IBOutlet var headerText: NSTextField!
+    
     @IBOutlet weak var projectField: AutoCompletingField!
     @IBOutlet weak var taskField: AutoCompletingField!
     @IBOutlet weak var noteField: NSTextField!
@@ -44,6 +46,8 @@ class PtnViewController: NSViewController {
         projectField.action = self.projectOrTaskAction
         taskField.action = self.projectOrTaskAction
         
+        headerText.placeholderString = headerText.stringValue
+        
         #if UI_TEST
         addJsonFlatEntryField()
         #endif
@@ -63,17 +67,30 @@ class PtnViewController: NSViewController {
         taskField.nextKeyView = noteField
         noteField.nextKeyView = projectField
         
-        if AppDelegate.instance.model.timeSinceLastEntry > PtnViewController.TIME_UNTIL_NEW_SESSION_PROMPT {
+        if timeInterval(since: AppDelegate.instance.model.lastEntryDate) > PtnViewController.TIME_UNTIL_NEW_SESSION_PROMPT {
             showNewSessionPrompt()
         } else {
             scheduler.schedule(after: PtnViewController.TIME_UNTIL_NEW_SESSION_PROMPT, showNewSessionPrompt)
         }
+
+        func scheduleUpdateHeaderText() {
+            scheduler.schedule(after: 60) {
+                self.updateHeaderText()
+                scheduleUpdateHeaderText()
+            }
+        }
+        scheduleUpdateHeaderText()
+    }
+    
+    private func timeInterval(since date: Date) -> TimeInterval {
+        return scheduler.now.timeIntervalSince(date)
     }
     
     override func viewWillAppear() {
         super.viewWillAppear()
         noteField.stringValue = ""
         setUpSnoozeButton()
+        updateHeaderText()
     }
     
     private func setUpSnoozeButton() {
@@ -115,6 +132,13 @@ class PtnViewController: NSViewController {
         #if UI_TEST
         populateJsonFlatEntryField()
         #endif
+    }
+    
+    private func updateHeaderText() {
+        let lastEntryDate = AppDelegate.instance.model.lastEntryDate
+        headerText.stringValue = headerText.placeholderString!
+            .replacingOccurrences(of: "{TIME}", with: TimeUtil.formatSuccinctly(date: lastEntryDate))
+            .replacingOccurrences(of: "{DURATION}", with: TimeUtil.daysHoursMinutes(for: timeInterval(since: lastEntryDate)))
     }
     
     @IBAction private func snoozeButtonPressed(_ sender: NSControl) {
