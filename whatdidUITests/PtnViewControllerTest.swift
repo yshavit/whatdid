@@ -103,7 +103,7 @@ class PtnViewControllerTest: XCTestCase {
             ptn.menuButtons["snoozeopts"].click()
             let snoozeOptions = ptn.menuButtons["snoozeopts"].descendants(matching: .menuItem)
             let snoozeOptionLabels = snoozeOptions.allElementsBoundByIndex.map { $0.title }
-            XCTAssertEqual(["4:30 am", "5:00 am", "5:30 am"], snoozeOptionLabels)
+            XCTAssertEqual(["4:30 am", "5:00 am", "5:30 am", "", "9:00 am"], snoozeOptionLabels)
             ptn.menuItems["5:30 am"].click()
             
             // To go 03:29+0200, and the PTN should still be hidden
@@ -157,6 +157,16 @@ class PtnViewControllerTest: XCTestCase {
                 assertThat(window: .dailyEnd, isVisible: false)
                 assertThat(window: .ptn, isVisible: false)
             }
+        }
+        group("Check snooze-until-tomorrow option") {
+            // It's currently 6:31 pm on Friday, Jan 2. So "tomorrow" is actually Monday.
+            // The default option is 7:00 pm, and the extra options start at 7:30 pm.
+            clickStatusMenu()
+            waitForTransition(of: .ptn, toIsVisible: true)
+            ptn.menuButtons["snoozeopts"].click()
+            let snoozeOptions = ptn.menuButtons["snoozeopts"].descendants(matching: .menuItem)
+            let snoozeOptionLabels = snoozeOptions.allElementsBoundByIndex.map { $0.title }
+            XCTAssertEqual(["7:30 pm", "8:00 pm", "8:30 pm", "", "Monday at 9:00 am"], snoozeOptionLabels)
         }
     }
     

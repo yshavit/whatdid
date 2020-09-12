@@ -79,18 +79,29 @@ class PtnViewController: NSViewController {
         let bufferMinutes = 10
         let snoozeIntervalMinutes = 30.0
         
-        var snoozeUntil = scheduler.now.addingTimeInterval(TimeInterval(bufferMinutes * 60))
+        let now = scheduler.now
+        var snoozeUntil = now.addingTimeInterval(TimeInterval(bufferMinutes * 60))
         // Round it up (always up) to the nearest half-hour
         let incrementInterval = Double(snoozeIntervalMinutes * 60.0)
         snoozeUntil = Date(timeIntervalSince1970: (snoozeUntil.timeIntervalSince1970 / incrementInterval).rounded(.up) * incrementInterval)
 
         snoozeButton.title = "Snooze until \(TimeUtil.formatSuccinctly(date: snoozeUntil))   " // extra space for the pulldown option
         self.snoozeUntil = Date(timeIntervalSince1970: snoozeUntil.timeIntervalSince1970)
-        snoozeExtraOptions.itemArray[1...].forEach({menuItem in
+        var latestDate = snoozeUntil
+        for menuItem in snoozeExtraOptions.itemArray[1...] {
+            if menuItem.isSeparatorItem {
+                break
+            }
             snoozeUntil.addTimeInterval(incrementInterval)
             menuItem.title = TimeUtil.formatSuccinctly(date: snoozeUntil)
-            menuItem.representedObject = Date(timeIntervalSince1970: snoozeUntil.timeIntervalSince1970)
-        })
+            latestDate = Date(timeIntervalSince1970: snoozeUntil.timeIntervalSince1970)
+            menuItem.representedObject = latestDate
+        }
+        let nextSessionDate = TimeUtil.dateForTime(.next, hh: 9, mm: 00, excludeWeekends: true, assumingNow: latestDate)
+        if let nextSessionItem = snoozeExtraOptions.lastItem {
+            nextSessionItem.title = TimeUtil.formatSuccinctly(date: nextSessionDate)
+            nextSessionItem.representedObject = nextSessionDate
+        }
         
         #if UI_TEST
         populateJsonFlatEntryField()

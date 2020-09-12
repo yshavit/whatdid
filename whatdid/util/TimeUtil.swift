@@ -43,10 +43,10 @@ class TimeUtil {
             && cal.component(.day, from: day1) == cal.component(.day, from: day2)
     }
     
-    static func dateForTime(_ direction: TimeDirection, hh: Int, mm: Int, assumingNow: Date? = nil) -> Date {
+    static func dateForTime(_ direction: TimeDirection, hh: Int, mm: Int, excludeWeekends: Bool = false, assumingNow: Date? = nil, withTimeZone tz: TimeZone? = nil) -> Date {
         let now = assumingNow ?? DefaultScheduler.instance.now
         var cal = Calendar.current
-        cal.timeZone = DefaultScheduler.instance.timeZone
+        cal.timeZone = tz ?? DefaultScheduler.instance.timeZone
         var result = cal.date(bySettingHour: hh, minute: mm, second: 00, of: now)
         NSLog("Finding %@ time at %02d:%02d. Now=%@, initial result = %@", direction.rawValue, hh, mm, now.debugDescription, result.debugDescription)
         switch direction {
@@ -54,14 +54,15 @@ class TimeUtil {
             // We want a result < now, so if result > now, decrement it by a day
             if let actualResult = result, actualResult >= now {
                 result = cal.date(byAdding: .day, value: -1, to: actualResult)
-                NSLog("adjusting -1 day: %@", result.debugDescription)
             }
         case .next:
             // We want a result > now, so if result < now, increment it by a day
             if let actualResult = result, actualResult <= now {
                 result = cal.date(byAdding: .day, value: 1, to: actualResult)
-                NSLog("adjusting +1 day: %@", result.debugDescription)
             }
+        }
+        while excludeWeekends, let actualResult = result, cal.isDateInWeekend(actualResult) {
+            result = cal.date(byAdding: .day, value: direction.dayDelta, to: actualResult)
         }
         return result!
     }
@@ -120,6 +121,15 @@ class TimeUtil {
     enum TimeDirection : String {
         case previous
         case next
+        
+        fileprivate var dayDelta: Int {
+            switch self {
+            case .previous:
+                return -1
+            case .next:
+                return 1
+            }
+        }
     }
     
     private enum FormatSegment {

@@ -11,6 +11,7 @@
 		7E07C3B924D121770007FD23 /* DayEndReportController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E07C3B724D121770007FD23 /* DayEndReportController.xib */; };
 		7E10088B24CB5FE100D0BAE6 /* HotKey in Frameworks */ = {isa = PBXBuildFile; productRef = 7E10088A24CB5FE100D0BAE6 /* HotKey */; };
 		7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1C2F5024CE43C40070D8CD /* Version.swift */; };
+		7E1F9060250C5CC500992B7F /* TimeZone+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */; };
 		7E30B46124C38D91003F3679 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E30B46024C38D91003F3679 /* Atomic.swift */; };
 		7E37A27424BFF676005BA1DF /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A27224BFF676005BA1DF /* Model.xcdatamodeld */; };
 		7E37A29024BFFFCB005BA1DF /* Project+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A28C24BFFFCB005BA1DF /* Project+CoreDataClass.swift */; };
@@ -591,6 +592,7 @@
 				7E7C384C24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */,
 				7E64F02B24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift in Sources */,
 				7E8C04FA23714F0800A0C3A6 /* ComponentUITests.swift in Sources */,
+				7E1F9060250C5CC500992B7F /* TimeZone+Helpers.swift in Sources */,
 				7EBE61F124DD2739000B2CB3 /* PtnViewControllerTest.swift in Sources */,
 				7E6F2E6D24F38D9E008874FE /* XCTestCase+Helpers.swift in Sources */,
 				7E4778F024F8F177007BAE8C /* AutocompleteFieldHelper.swift in Sources */,

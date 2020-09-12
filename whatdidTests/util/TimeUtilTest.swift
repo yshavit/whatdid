@@ -47,6 +47,24 @@ class TimeUtilTest: XCTestCase {
         XCTAssertEqual(TimeUtil.daysHoursMinutes(for: t), "366d 0h 0m")
     }
     
+    func test_next_9amAnyDay() {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withFullDate, .withDashSeparatorInDate, .withFullTime, .withColonSeparatorInTime]
+        formatter.timeZone = DefaultScheduler.instance.timeZone
+        let fri = formatter.date(from: "2020-09-04T10:00:00-04:00")!
+        let sat = formatter.date(from: "2020-09-05T09:00:00-04:00")
+        XCTAssertEqual(sat, TimeUtil.dateForTime(.next, hh: 09, mm: 00, assumingNow: fri, withTimeZone: usEastern))
+    }
+    
+    func test_next_9amWeekday() {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withFullDate, .withDashSeparatorInDate, .withFullTime, .withColonSeparatorInTime]
+        formatter.timeZone = DefaultScheduler.instance.timeZone
+        let fri = formatter.date(from: "2020-09-04T10:00:00-04:00")!
+        let mon = formatter.date(from: "2020-09-07T09:00:00-04:00")
+        XCTAssertEqual(mon, TimeUtil.dateForTime(.next, hh: 09, mm: 00, excludeWeekends: true, assumingNow: fri, withTimeZone: usEastern))
+    }
+    
     func test_formatSuccinct_soonToday() {
         checkFormatSuccinct(
             inUS: "2:30 am",
@@ -128,6 +146,10 @@ class TimeUtilTest: XCTestCase {
             inGB: "02:30 on 27 Feb",
             for: date(forIso8601: "2020-02-27T02:30:00"),
             assumingNow: date(forIso8601: "2020-02-29T22:00:00"))
+    }
+
+    private var usEastern: TimeZone {
+       return TimeZone(identifier: "US/Eastern")!
     }
     
     private func checkFormatSuccinct(inUS: String, inGB: String, for date: Date, assumingNow now: Date) {
