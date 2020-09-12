@@ -13,6 +13,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     private var windowContents = WindowContents.ptn
     private var opener : OpenCloseHelper<WindowContents>!
     private var cancelClose = false
+    private var snoozed: (until: Date, unsnoozeTask: ScheduledTask)?
     
     enum WindowContents: Int, Comparable {
         /// The Project/Task/Notes window
@@ -166,9 +167,25 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     }
     
     func snooze(until date: Date) {
+        if let (until: _, unsnoozeTask: task) = snoozed {
+            task.cancel()
+        }
         NSLog("Snoozing until %@", AppDelegate.DEBUG_DATE_FORMATTER.string(from: date))
         opener.snooze()
         close()
-        DefaultScheduler.instance.schedule(after: date.timeIntervalSinceWhatdidNow, self.opener.unSnooze)
+        let task = DefaultScheduler.instance.schedule(after: date.timeIntervalSinceWhatdidNow, self.unSnooze)
+        snoozed = (until: date, unsnoozeTask: task)
+    }
+    
+    func unSnooze() {
+        if let (until: _, unsnoozeTask: task) = snoozed {
+            task.cancel()
+            snoozed = nil
+            opener.unSnooze()
+        }
+    }
+    
+    var snoozedUntil: Date? {
+        snoozed?.until
     }
 }
