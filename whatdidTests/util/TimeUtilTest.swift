@@ -13,9 +13,8 @@ class TimeUtilTest: XCTestCase {
         XCTAssertEqual(TimeUtil.daysHoursMinutes(for: 10), "0m")
     }
     
-    /// We round down; see gh issue #74
     func test_31s() {
-        XCTAssertEqual(TimeUtil.daysHoursMinutes(for: 31), "0m")
+        XCTAssertEqual(TimeUtil.daysHoursMinutes(for: 31), "1m")
     }
     
     func test_1h23m() {
