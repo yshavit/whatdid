@@ -77,7 +77,7 @@ class AutoCompletingField: NSView, NSAccessibilityGroup {
     }
 }
 
-fileprivate class AutoCompletingFieldView: NSTextField, NSTextViewDelegate, NSTextFieldDelegate {
+fileprivate class AutoCompletingFieldView: WhatdidTextField, NSTextViewDelegate, NSTextFieldDelegate {
     
     var previousAutocompleteHeadLength = 0
     var shouldAutocompleteOnTextChange = false

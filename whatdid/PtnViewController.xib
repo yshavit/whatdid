@@ -83,7 +83,7 @@
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>
-                        <textField identifier="nfield" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6A0-cK-Vnh" userLabel="Notes text">
+                        <textField identifier="nfield" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6A0-cK-Vnh" userLabel="Notes text" customClass="WhatdidTextField" customModule="whatdid" customModuleProvider="target">
                             <rect key="frame" x="299" y="15" width="240" height="21"/>
                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" placeholderString="notes" drawsBackground="YES" id="iON-DT-Jnl">
                                 <font key="font" metaFont="system"/>

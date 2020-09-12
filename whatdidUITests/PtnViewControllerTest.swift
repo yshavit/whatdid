@@ -576,6 +576,30 @@ class PtnViewControllerTest: XCTestCase {
                 ptn.pcombo.textField.deleteText()
             }
         }
+        group("Clicking selects all") {
+            group("Setup") {
+                ptn.pcombo.textField.click()
+                ptn.window.typeText("Project 1\tTask 1\tNotes 1")
+            }
+            group("Click in Task field") {
+                XCTAssertEqual("Task 1", ptn.tcombo.textField.stringValue)
+                ptn.tcombo.textField.click()
+                ptn.window.typeText("Task Two")
+                XCTAssertEqual("Task Two", ptn.tcombo.textField.stringValue)
+            }
+            group("Click in Project field") {
+                XCTAssertEqual("Project 1", ptn.pcombo.textField.stringValue)
+                ptn.pcombo.textField.click()
+                ptn.window.typeText("Project Two")
+                XCTAssertEqual("Project Two", ptn.pcombo.textField.stringValue)
+            }
+            group("Click in Notes field") {
+                XCTAssertEqual("Notes 1", ptn.nfield.stringValue)
+                ptn.nfield.click()
+                ptn.window.typeText("Notes Two")
+                XCTAssertEqual("Notes Two", ptn.nfield.stringValue)
+            }
+        }
     }
     
     func testKeyboardNavigation() {
