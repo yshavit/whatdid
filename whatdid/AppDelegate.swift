@@ -57,7 +57,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func snooze(until date: Date) {
-        self.mainMenu.snooze(until: date)
+        mainMenu.snooze(until: date)
+    }
+    
+    func unSnooze() {
+        mainMenu.unSnooze()
+    }
+    
+    var snoozedUntil: Date? {
+        mainMenu.snoozedUntil
     }
     
     static func keyComboString(keyEquivalent: String, keyEquivalentMask: NSEvent.ModifierFlags) -> String {

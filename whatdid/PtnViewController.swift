@@ -73,34 +73,43 @@ class PtnViewController: NSViewController {
     override func viewWillAppear() {
         super.viewWillAppear()
         noteField.stringValue = ""
-        
-        // Set up the snooze button. We'll have 4 options at half-hour increments, starting 10 minutes from now.
-        // The 10 minutes is so that if it's currently 2:29:59, you won't be annoyed with a "snooze until 2:30" button.
-        let bufferMinutes = 10
-        let snoozeIntervalMinutes = 30.0
-        
-        let now = scheduler.now
-        var snoozeUntil = now.addingTimeInterval(TimeInterval(bufferMinutes * 60))
-        // Round it up (always up) to the nearest half-hour
-        let incrementInterval = Double(snoozeIntervalMinutes * 60.0)
-        snoozeUntil = Date(timeIntervalSince1970: (snoozeUntil.timeIntervalSince1970 / incrementInterval).rounded(.up) * incrementInterval)
+        setUpSnoozeButton()
+    }
+    
+    private func setUpSnoozeButton() {
+        if let alreadySnoozedUntil = AppDelegate.instance.snoozedUntil {
+            snoozeButton.title = "Snoozing until \(TimeUtil.formatSuccinctly(date: alreadySnoozedUntil))..."
+            snoozeExtraOptions.isEnabled = false
+        } else {
+            // Set up the snooze button. We'll have 4 options at half-hour increments, starting 10 minutes from now.
+            // The 10 minutes is so that if it's currently 2:29:59, you won't be annoyed with a "snooze until 2:30" button.
+            let bufferMinutes = 10
+            let snoozeIntervalMinutes = 30.0
+            
+            let now = scheduler.now
+            var snoozeUntil = now.addingTimeInterval(TimeInterval(bufferMinutes * 60))
+            // Round it up (always up) to the nearest half-hour
+            let incrementInterval = Double(snoozeIntervalMinutes * 60.0)
+            snoozeUntil = Date(timeIntervalSince1970: (snoozeUntil.timeIntervalSince1970 / incrementInterval).rounded(.up) * incrementInterval)
 
-        snoozeButton.title = "Snooze until \(TimeUtil.formatSuccinctly(date: snoozeUntil))   " // extra space for the pulldown option
-        self.snoozeUntil = Date(timeIntervalSince1970: snoozeUntil.timeIntervalSince1970)
-        var latestDate = snoozeUntil
-        for menuItem in snoozeExtraOptions.itemArray[1...] {
-            if menuItem.isSeparatorItem {
-                break
+            snoozeButton.title = "Snooze until \(TimeUtil.formatSuccinctly(date: snoozeUntil))   " // extra space for the pulldown option
+            self.snoozeUntil = Date(timeIntervalSince1970: snoozeUntil.timeIntervalSince1970)
+            var latestDate = snoozeUntil
+            snoozeExtraOptions.isEnabled = true
+            for menuItem in snoozeExtraOptions.itemArray[1...] {
+                if menuItem.isSeparatorItem {
+                    break
+                }
+                snoozeUntil.addTimeInterval(incrementInterval)
+                menuItem.title = TimeUtil.formatSuccinctly(date: snoozeUntil)
+                latestDate = Date(timeIntervalSince1970: snoozeUntil.timeIntervalSince1970)
+                menuItem.representedObject = latestDate
             }
-            snoozeUntil.addTimeInterval(incrementInterval)
-            menuItem.title = TimeUtil.formatSuccinctly(date: snoozeUntil)
-            latestDate = Date(timeIntervalSince1970: snoozeUntil.timeIntervalSince1970)
-            menuItem.representedObject = latestDate
-        }
-        let nextSessionDate = TimeUtil.dateForTime(.next, hh: 9, mm: 00, excludeWeekends: true, assumingNow: latestDate)
-        if let nextSessionItem = snoozeExtraOptions.lastItem {
-            nextSessionItem.title = TimeUtil.formatSuccinctly(date: nextSessionDate)
-            nextSessionItem.representedObject = nextSessionDate
+            let nextSessionDate = TimeUtil.dateForTime(.next, hh: 9, mm: 00, excludeWeekends: true, assumingNow: latestDate)
+            if let nextSessionItem = snoozeExtraOptions.lastItem {
+                nextSessionItem.title = TimeUtil.formatSuccinctly(date: nextSessionDate)
+                nextSessionItem.representedObject = nextSessionDate
+            }
         }
         
         #if UI_TEST
@@ -109,8 +118,31 @@ class PtnViewController: NSViewController {
     }
     
     @IBAction private func snoozeButtonPressed(_ sender: NSControl) {
-//        self.snoozeExtraOptions.performClick(self) // TODO only if already snoozing. Some tests: unsnooze before the next scheduled item; after it but before snooze expires; check what happens if snooze expires while PTN is open (do the snooze options get updated?)
-        snooze(until: snoozeUntil)
+        if let _ = AppDelegate.instance.snoozedUntil {
+            let unsnoozePopover = NSPopover()
+            unsnoozePopover.behavior = .transient
+            
+            let unsnoozeViewController = NSViewController()
+            let button = ButtonWithClosure(label: "Unsnooze") {_ in
+                AppDelegate.instance.unSnooze()
+                self.setUpSnoozeButton()
+                unsnoozePopover.close()
+            }
+            button.font = snoozeButton.font
+            button.focusRingType = .none
+            button.bezelStyle = .roundRect
+            button.bezelColor = NSColor.controlAccentColor
+            button.contentTintColor = NSColor.controlAccentColor
+            
+            unsnoozeViewController.view = button
+            let buttonSize = button.intrinsicContentSize
+            unsnoozePopover.contentSize = NSSize(width: buttonSize.width * 1.4, height: buttonSize.height * 1.5)
+            
+            unsnoozePopover.contentViewController = unsnoozeViewController
+            unsnoozePopover.show(relativeTo: snoozeButton.bounds, of: snoozeButton, preferredEdge: .minY)
+        } else {
+            snooze(until: snoozeUntil)
+        }
     }
     
     @IBAction func snoozeExtraOptionsSelected(_ sender: NSPopUpButton) {

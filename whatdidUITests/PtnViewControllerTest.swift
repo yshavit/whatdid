@@ -115,6 +115,95 @@ class PtnViewControllerTest: XCTestCase {
             setTimeUtc(h: 3, m: 31)
             waitForTransition(of: .ptn, toIsVisible: true)
         }
+        group("unsnooze before first scheduled PTN") {
+            // Note: PTN is still up at this point.
+            let button = ptn.buttons["snoozebutton"]
+            group("Start snoozing") {
+                XCTAssertEqual("Snooze until 6:00 am", button.title.trimmingCharacters(in: .whitespaces))
+                button.click()
+                waitForTransition(of: .ptn, toIsVisible: false)
+            }
+            group("Unsnooze a minute later") {
+                setTimeUtc(h: 3, m: 32)
+                assertThat(window: .ptn, isVisible: false) // sanity check that we're still closed
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: true)
+                
+                button.click() // open up the unsnooze
+                button.buttons["Unsnooze"].click()
+                assertThat(window: .ptn, isVisible: true) // unsnoozing doesn't close the window
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: false)
+            }
+            group("Fast-forward to after the PTN will pop up") {
+                setTimeUtc(h: 3, m: 51)
+                waitForTransition(of: .ptn, toIsVisible: true)
+            }
+        }
+        group("unsnooze after scheduled PTN; close without adding entry") {
+            // Note: PTN is still up at this point.
+            let button = ptn.buttons["snoozebutton"]
+            group("Start snoozing until 6:30") {
+                XCTAssertEqual("Snooze until 6:30 am", button.title.trimmingCharacters(in: .whitespaces))
+                button.click()
+                waitForTransition(of: .ptn, toIsVisible: false)
+            }
+            group("Unsnooze at 6:29") {
+                setTimeUtc(h: 4, m: 29)
+                assertThat(window: .ptn, isVisible: false) // still snoozing
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: true)
+                
+                button.click() // open up the unsnooze
+                button.buttons["Unsnooze"].click()
+            }
+            group("Close PTN without adding entry") {
+                assertThat(window: .ptn, isVisible: true)
+                clickStatusMenu() // close the window
+                sleep(1)
+                assertThat(window: .ptn, isVisible: false)
+            }
+            group("Wait another 25 minutes") {
+                setTimeUtc(h: 4, m: 55)
+                waitForTransition(of: .ptn, toIsVisible: true)
+            }
+        }
+        group("unsnooze after scheduled PTN; close by adding an entry") {
+            // Note: PTN is still up at this point.
+            let button = ptn.buttons["snoozebutton"]
+            group("Start snoozing until 7:30") {
+                XCTAssertEqual("Snooze until 7:30 am", button.title.trimmingCharacters(in: .whitespaces))
+                button.click()
+                waitForTransition(of: .ptn, toIsVisible: false)
+            }
+            group("Unsnooze at 7:29") {
+                setTimeUtc(h: 5, m: 29)
+                assertThat(window: .ptn, isVisible: false) // still snoozing
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: true)
+                
+                button.click() // open up the unsnooze
+                button.buttons["Unsnooze"].click()
+            }
+            group("Add an entry") {
+                let ptnStruct = findPtn()
+                XCTAssertTrue(ptnStruct.pcombo.hasFocus)
+                ptnStruct.pcombo.textField.typeText("One\tTwo\tThree\r")
+                waitForTransition(of: .ptn, toIsVisible: false)
+            }
+            group("Wait another 25 minutes") {
+                setTimeUtc(h: 5, m: 55)
+                waitForTransition(of: .ptn, toIsVisible: true)
+            }
+            group("Cleanup") {
+                let ptnStruct = findPtn()
+                ptnStruct.pcombo.textField.deleteText()
+                ptnStruct.entriesHook.deleteText(andReplaceWith: "\r")
+                for textField in [ptnStruct.pcombo.textField, ptnStruct.tcombo.textField, ptnStruct.nfield] {
+                    XCTAssertEqual("", textField.stringValue)
+                }
+            }
+        }
         group("daily report (no contention with PTN)") {
             // Note: PTN is still up at this point. It's currently 05:31+0200.
             // We'll bring it to 18:29, and then dismiss it.
