@@ -61,7 +61,7 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
             let date = Date(timeIntervalSince1970: Double(dateAsInt))
             
             let timeFormatter = ISO8601DateFormatter()
-            timeFormatter.timeZone = TimeZone(identifier: "UTC")!
+            timeFormatter.timeZone = TimeZone.utc
             printUtc.stringValue = timeFormatter.string(from: date)
             
             timeFormatter.timeZone = DefaultScheduler.instance.timeZone

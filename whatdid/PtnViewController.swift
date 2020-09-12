@@ -77,25 +77,31 @@ class PtnViewController: NSViewController {
         // Set up the snooze button. We'll have 4 options at half-hour increments, starting 10 minutes from now.
         // The 10 minutes is so that if it's currently 2:29:59, you won't be annoyed with a "snooze until 2:30" button.
         let bufferMinutes = 10
-        let formatter = DateFormatter()
         let snoozeIntervalMinutes = 30.0
-        formatter.timeZone = scheduler.timeZone
-        formatter.dateFormat = "h:mm a"
-        formatter.amSymbol = "am"
-        formatter.pmSymbol = "pm"
         
-        var snoozeUntil = scheduler.now.addingTimeInterval(TimeInterval(bufferMinutes * 60))
+        let now = scheduler.now
+        var snoozeUntil = now.addingTimeInterval(TimeInterval(bufferMinutes * 60))
         // Round it up (always up) to the nearest half-hour
         let incrementInterval = Double(snoozeIntervalMinutes * 60.0)
         snoozeUntil = Date(timeIntervalSince1970: (snoozeUntil.timeIntervalSince1970 / incrementInterval).rounded(.up) * incrementInterval)
 
-        snoozeButton.title = "Snooze until \(formatter.string(from: snoozeUntil))   " // extra space for the pulldown option
+        snoozeButton.title = "Snooze until \(TimeUtil.formatSuccinctly(date: snoozeUntil))   " // extra space for the pulldown option
         self.snoozeUntil = Date(timeIntervalSince1970: snoozeUntil.timeIntervalSince1970)
-        snoozeExtraOptions.itemArray[1...].forEach({menuItem in
+        var latestDate = snoozeUntil
+        for menuItem in snoozeExtraOptions.itemArray[1...] {
+            if menuItem.isSeparatorItem {
+                break
+            }
             snoozeUntil.addTimeInterval(incrementInterval)
-            menuItem.title = formatter.string(from: snoozeUntil)
-            menuItem.representedObject = Date(timeIntervalSince1970: snoozeUntil.timeIntervalSince1970)
-        })
+            menuItem.title = TimeUtil.formatSuccinctly(date: snoozeUntil)
+            latestDate = Date(timeIntervalSince1970: snoozeUntil.timeIntervalSince1970)
+            menuItem.representedObject = latestDate
+        }
+        let nextSessionDate = TimeUtil.dateForTime(.next, hh: 9, mm: 00, excludeWeekends: true, assumingNow: latestDate)
+        if let nextSessionItem = snoozeExtraOptions.lastItem {
+            nextSessionItem.title = TimeUtil.formatSuccinctly(date: nextSessionDate)
+            nextSessionItem.representedObject = nextSessionDate
+        }
         
         #if UI_TEST
         populateJsonFlatEntryField()
@@ -103,6 +109,7 @@ class PtnViewController: NSViewController {
     }
     
     @IBAction private func snoozeButtonPressed(_ sender: NSControl) {
+//        self.snoozeExtraOptions.performClick(self) // TODO only if already snoozing. Some tests: unsnooze before the next scheduled item; after it but before snooze expires; check what happens if snooze expires while PTN is open (do the snooze options get updated?)
         snooze(until: snoozeUntil)
     }
     

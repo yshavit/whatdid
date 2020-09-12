@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.3"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -98,7 +98,7 @@
                             <rect key="frame" x="5" y="13" width="69" height="15"/>
                             <buttonCell key="cell" type="roundRect" title="Skip session" bezelStyle="roundedRect" alignment="left" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kyc-yB-AnY">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="label" size="9"/>
+                                <font key="font" metaFont="menu" size="9"/>
                             </buttonCell>
                             <connections>
                                 <action selector="skipButtonPressed:" target="-2" id="Q1F-EG-rGW"/>
@@ -120,7 +120,7 @@
                                     </constraints>
                                     <buttonCell key="cell" type="roundRect" title="snooze" bezelStyle="roundedRect" alignment="left" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ojt-yE-tly">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="label" size="9"/>
+                                        <font key="font" metaFont="menu" size="9"/>
                                     </buttonCell>
                                     <connections>
                                         <action selector="snoozeButtonPressed:" target="-2" id="GfF-m3-O9M"/>
@@ -137,9 +137,13 @@
                                         <menu key="menu" id="e29-UZ-3Z2">
                                             <items>
                                                 <menuItem state="on" hidden="YES" id="ntA-xD-jFV" userLabel="snooze"/>
-                                                <menuItem title="Item 2" id="Dfs-KT-zJY" userLabel="+30"/>
-                                                <menuItem title="Item 2" id="S09-6Y-I7d" userLabel="+1h"/>
-                                                <menuItem title="Item 3" id="BbM-Gt-GCN" userLabel="+1h30"/>
+                                                <menuItem title="+30" id="Dfs-KT-zJY" userLabel="+30"/>
+                                                <menuItem title="+1h" id="S09-6Y-I7d" userLabel="+1h"/>
+                                                <menuItem title="+1h30" id="BbM-Gt-GCN" userLabel="+1h30"/>
+                                                <menuItem isSeparatorItem="YES" id="Fju-ZH-G90"/>
+                                                <menuItem title="until tomorrow" id="qvY-Zm-z6P">
+                                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                                </menuItem>
                                             </items>
                                         </menu>
                                     </popUpButtonCell>
