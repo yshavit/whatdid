@@ -181,6 +181,10 @@ class PtnViewController: NSViewController {
         }
     }
     
+    @IBAction func preferenceButtonPressed(_ sender: NSButton) {
+        print("TODO")
+    }
+    
     func grabFocus() {
         if (view.window?.sheets ?? []).isEmpty {
             grabFocusEvenIfHasSheet()

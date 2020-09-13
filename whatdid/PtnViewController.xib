@@ -23,37 +23,56 @@
         <stackView identifier="topstack" distribution="fill" orientation="vertical" alignment="trailing" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HWg-YQ-y10" userLabel="Top Stack">
             <rect key="frame" x="0.0" y="0.0" width="873" height="182"/>
             <subviews>
-                <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xh1-hp-9GB" userLabel="Header stack">
-                    <rect key="frame" x="161" y="78" width="712" height="100"/>
+                <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xh1-hp-9GB" userLabel="Header stack">
+                    <rect key="frame" x="334" y="164" width="534" height="14"/>
                     <subviews>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="v8p-Bz-hcj" userLabel="Header text">
-                            <rect key="frame" x="-2" y="86" width="383" height="14"/>
+                            <rect key="frame" x="-2" y="0.0" width="383" height="14"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="14" id="lDT-uo-0Zh"/>
+                            </constraints>
                             <textFieldCell key="cell" lineBreakMode="clipping" title="What have you been working on for the last {DURATION} (since {TIME})?" id="MHs-V5-IyC">
-                                <font key="font" metaFont="message" size="11"/>
+                                <font key="font" metaFont="controlContent" size="11"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                             <accessibility identifier="durationheader"/>
                         </textField>
                         <customView verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="maZ-n4-VKP" userLabel="Spacer">
-                            <rect key="frame" x="387" y="86" width="325" height="14"/>
+                            <rect key="frame" x="379" y="4" width="144" height="10"/>
                         </customView>
+                        <button verticalHuggingPriority="750" horizontalCompressionResistancePriority="150" verticalCompressionResistancePriority="150" translatesAutoresizingMaskIntoConstraints="NO" id="tkS-gq-Cbs" userLabel="Prefs Button">
+                            <rect key="frame" x="523" y="3" width="11" height="11"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="tkS-gq-Cbs" secondAttribute="height" multiplier="1:1" id="8lS-9s-VYO"/>
+                            </constraints>
+                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAdvanced" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyUpOrDown" inset="2" id="69E-e8-wPO">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="preferenceButtonPressed:" target="-2" id="8XC-SQ-bNP"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <edgeInsets key="edgeInsets" left="0.0" right="0.0" top="0.0" bottom="4"/>
                     <constraints>
-                        <constraint firstItem="maZ-n4-VKP" firstAttribute="height" secondItem="v8p-Bz-hcj" secondAttribute="height" id="E3e-OH-MfQ"/>
+                        <constraint firstItem="tkS-gq-Cbs" firstAttribute="height" secondItem="v8p-Bz-hcj" secondAttribute="height" multiplier="0.8" id="en0-CZ-Kv6"/>
+                        <constraint firstItem="v8p-Bz-hcj" firstAttribute="height" secondItem="Xh1-hp-9GB" secondAttribute="height" id="xjb-0x-0tp"/>
                     </constraints>
                     <visibilityPriorities>
+                        <integer value="1000"/>
                         <integer value="1000"/>
                         <integer value="1000"/>
                     </visibilityPriorities>
                     <customSpacing>
                         <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
                     </customSpacing>
                 </stackView>
                 <stackView identifier="ptnstack" distribution="fill" orientation="horizontal" alignment="top" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BPo-6t-Flu" userLabel="PTN Stack">
-                    <rect key="frame" x="156" y="28" width="544" height="50"/>
+                    <rect key="frame" x="329" y="114" width="544" height="50"/>
                     <subviews>
                         <customView identifier="pcombo" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4Lo-U3-YED" userLabel="Project combo" customClass="AutoCompletingField" customModule="whatdid" customModuleProvider="target">
                             <rect key="frame" x="5" y="0.0" width="120" height="50"/>
@@ -122,10 +141,10 @@
                     </customSpacing>
                 </stackView>
                 <stackView identifier="optionsstack" distribution="fill" orientation="horizontal" alignment="top" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ers-BA-ciA" userLabel="PTN Options Stack">
-                    <rect key="frame" x="156" y="4" width="717" height="24"/>
+                    <rect key="frame" x="329" y="4" width="544" height="110"/>
                     <subviews>
                         <button identifier="breakbutton" verticalHuggingPriority="850" translatesAutoresizingMaskIntoConstraints="NO" id="iu6-dS-Gze">
-                            <rect key="frame" x="5" y="4" width="242" height="15"/>
+                            <rect key="frame" x="5" y="90" width="69" height="15"/>
                             <buttonCell key="cell" type="roundRect" title="Skip session" bezelStyle="roundedRect" alignment="left" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kyc-yB-AnY">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu" size="9"/>
@@ -135,13 +154,13 @@
                             </connections>
                         </button>
                         <customView identifier="spacer" translatesAutoresizingMaskIntoConstraints="NO" id="6Yy-Wb-eC7" userLabel="Spacer">
-                            <rect key="frame" x="247" y="5" width="325" height="14"/>
+                            <rect key="frame" x="74" y="91" width="325" height="14"/>
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="CiB-9s-9gX"/>
                             </constraints>
                         </customView>
                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="HC6-YQ-v0e" userLabel="Snooze buttonopts">
-                            <rect key="frame" x="572" y="5" width="140" height="14"/>
+                            <rect key="frame" x="399" y="91" width="140" height="14"/>
                             <subviews>
                                 <button identifier="snoozebutton" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yjZ-yA-5CH" userLabel="Snooze button">
                                     <rect key="frame" x="0.0" y="-1" width="140" height="15"/>
@@ -214,6 +233,7 @@
             <edgeInsets key="edgeInsets" left="0.0" right="0.0" top="4" bottom="4"/>
             <constraints>
                 <constraint firstItem="v8p-Bz-hcj" firstAttribute="leading" secondItem="4Lo-U3-YED" secondAttribute="leading" id="1nm-Nj-tYM"/>
+                <constraint firstItem="tkS-gq-Cbs" firstAttribute="trailing" secondItem="6A0-cK-Vnh" secondAttribute="trailing" id="e7y-bj-ubu"/>
                 <constraint firstItem="iu6-dS-Gze" firstAttribute="leading" secondItem="4Lo-U3-YED" secondAttribute="leading" id="vRo-Vr-Jsr"/>
             </constraints>
             <visibilityPriorities>
@@ -231,4 +251,7 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <viewController title="Task Addition View Controller" nibName="TaskAdditionViewController" id="bP9-Bw-QYO" customClass="PtnViewController" customModule="whatdid" customModuleProvider="target"/>
     </objects>
+    <resources>
+        <image name="NSAdvanced" width="32" height="32"/>
+    </resources>
 </document>
