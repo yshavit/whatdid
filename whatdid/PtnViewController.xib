@@ -32,7 +32,7 @@
                                 <constraint firstAttribute="height" constant="14" id="lDT-uo-0Zh"/>
                             </constraints>
                             <textFieldCell key="cell" lineBreakMode="clipping" title="What have you been working on for the last {DURATION} (since {TIME})?" id="MHs-V5-IyC">
-                                <font key="font" metaFont="controlContent" size="11"/>
+                                <font key="font" metaFont="menu" size="11"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
@@ -46,7 +46,7 @@
                             <constraints>
                                 <constraint firstAttribute="width" secondItem="tkS-gq-Cbs" secondAttribute="height" multiplier="1:1" id="8lS-9s-VYO"/>
                             </constraints>
-                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAdvanced" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyUpOrDown" inset="2" id="69E-e8-wPO">
+                            <buttonCell key="cell" type="smallSquare" title="Preferences" bezelStyle="smallSquare" image="NSAdvanced" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyUpOrDown" inset="2" id="69E-e8-wPO">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
                             </buttonCell>

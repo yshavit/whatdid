@@ -602,6 +602,23 @@ class PtnViewControllerTest: XCTestCase {
         }
     }
     
+    func testPreferences() {
+        let ptn = openPtn()
+        let prefsButton = ptn.window.buttons["Preferences"]
+        group("Cancel preferences") {
+            prefsButton.click()
+            wait(for: "prefernces sheet", until: {ptn.window.exists && ptn.window.sheets.count > 0})
+            ptn.window.sheets.firstMatch.buttons["Cancel"].click()
+            wait(for: "prefernces sheet", until: {ptn.window.exists && ptn.window.sheets.count == 0})
+        }
+        group("Quit") {
+            prefsButton.click()
+            wait(for: "prefernces sheet", until: {ptn.window.exists && ptn.window.sheets.count > 0})
+            ptn.window.sheets.firstMatch.buttons["Quit"].click()
+            wait(for: "app to exit", until: {app.state == .notRunning})
+       }
+    }
+    
     func testKeyboardNavigation() {
         let ptn = openPtn()
         group("forward tabbing") {
