@@ -3,7 +3,7 @@
 import Cocoa
 
 class SystemClockScheduler: Scheduler {
-    static let TOLERANCE_SECONDS : TimeInterval = 30
+    static let TOLERANCE_SECONDS : TimeInterval = 60
     
     var now: Date {
         return Date()
@@ -14,10 +14,8 @@ class SystemClockScheduler: Scheduler {
     }
     
     func schedule(at date: Date, _ block: @escaping () -> Void) -> ScheduledTask {
-        let tolerence = SystemClockScheduler.TOLERANCE_SECONDS * 2
-        let adjustedDate = date.addingTimeInterval(-tolerence)
-        let timer = Timer(fire: adjustedDate, interval: 0, repeats: false, block: {_ in block()})
-        timer.tolerance = tolerence
+        let timer = Timer(fire: date, interval: 0, repeats: false, block: {_ in block()})
+        timer.tolerance = SystemClockScheduler.TOLERANCE_SECONDS
         RunLoop.current.add(timer, forMode: .default)
         return TimerBasedScheduledTask(timer: timer)
     }

@@ -43,7 +43,8 @@ class TimeUtil {
     }
     
     static func dateForTime(_ direction: TimeDirection, hh: Int, mm: Int, excludeWeekends: Bool = false, assumingNow: Date? = nil, withTimeZone tz: TimeZone? = nil) -> Date {
-        let now = assumingNow ?? DefaultScheduler.instance.now
+        let now = assumingNow ??
+            DefaultScheduler.instance.now.addingTimeInterval(TimeInterval(direction.timeDelta))
         var cal = Calendar.current
         cal.timeZone = tz ?? DefaultScheduler.instance.timeZone
         var result = cal.date(bySettingHour: hh, minute: mm, second: 00, of: now)
@@ -61,7 +62,7 @@ class TimeUtil {
             }
         }
         while excludeWeekends, let actualResult = result, cal.isDateInWeekend(actualResult) {
-            result = cal.date(byAdding: .day, value: direction.dayDelta, to: actualResult)
+            result = cal.date(byAdding: .day, value: direction.timeDelta, to: actualResult)
         }
         return result!
     }
@@ -121,7 +122,7 @@ class TimeUtil {
         case previous
         case next
         
-        fileprivate var dayDelta: Int {
+        fileprivate var timeDelta: Int {
             switch self {
             case .previous:
                 return -1
