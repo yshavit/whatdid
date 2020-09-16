@@ -19,11 +19,11 @@ class DummyScheduler: Scheduler {
         }
     }
     
-    func schedule(at: Date, _ block: @escaping () -> Void) -> ScheduledTask {
+    func schedule(_ description: String, at: Date, _ block: @escaping () -> Void) -> ScheduledTask {
         return add(block)
     }
     
-    func schedule(after: TimeInterval, _ block: @escaping () -> Void) -> ScheduledTask {
+    func schedule(_ description: String, after: TimeInterval, _ block: @escaping () -> Void) -> ScheduledTask {
         return add(block)
     }
     

@@ -10,7 +10,7 @@ class DelegatingSchedulerTest: XCTestCase {
         let delegate = DelegatingScheduler(delegateTo: dummy)
         var count = 0
         
-        let task = delegate.schedule(after: 0) { count += 1 }
+        let task = delegate.schedule("", after: 0) { count += 1 }
         XCTAssertEqual(1, delegate.tasksCount)
         XCTAssertEqual(0, count)
         
@@ -27,7 +27,7 @@ class DelegatingSchedulerTest: XCTestCase {
         let delegate = DelegatingScheduler(delegateTo: dummy)
         var count = 0
         
-        delegate.schedule(after: 0) { count += 1 }
+        delegate.schedule("", after: 0) { count += 1 }
         XCTAssertEqual(1, delegate.tasksCount)
         XCTAssertEqual(0, count)
         
@@ -48,7 +48,7 @@ class DelegatingSchedulerTest: XCTestCase {
         XCTAssertEqual(0, delegate.tasksCount)
         XCTAssertEqual(0, count)
         
-        delegate.schedule(after: 0) { count += 1 }
+        delegate.schedule("", after: 0) { count += 1 }
         XCTAssertEqual(0, delegate.tasksCount)
         XCTAssertEqual(0, count)
         
@@ -62,7 +62,7 @@ class DelegatingSchedulerTest: XCTestCase {
         let delegate = DelegatingScheduler(delegateTo: dummy)
         var count = 0
         
-        delegate.schedule(after: 0) { count += 1 }
+        delegate.schedule("", after: 0) { count += 1 }
         XCTAssertEqual(1, delegate.tasksCount)
         XCTAssertEqual(0, count)
         
@@ -76,7 +76,7 @@ class DelegatingSchedulerTest: XCTestCase {
         let delegate = DelegatingScheduler(delegateTo: dummy)
         var count = 0
         
-        let task = delegate.schedule(after: 0) { count += 1 }
+        let task = delegate.schedule("", after: 0) { count += 1 }
         XCTAssertEqual(1, delegate.tasksCount)
         XCTAssertEqual(0, count)
         

@@ -24,23 +24,23 @@ class DelegatingScheduler: Scheduler {
         return tasks.count
     }
     
-    @discardableResult func schedule(at: Date, _ block: @escaping () -> Void) -> ScheduledTask {
+    @discardableResult func schedule(_ description: String, at: Date, _ block: @escaping () -> Void) -> ScheduledTask {
         guard isOpen else {
             NSLog("Ignoring task because DelegatingScheduler has been closed")
             return NoopTask()
         }
         let work = createTrackingBlock(block)
-        work.tracks = delegate.schedule(at: at, work.run)
+        work.tracks = delegate.schedule(description, at: at, work.run)
         return work
     }
     
-    @discardableResult func schedule(after: TimeInterval, _ block: @escaping () -> Void) -> ScheduledTask {
+    @discardableResult func schedule(_ description: String, after: TimeInterval, _ block: @escaping () -> Void) -> ScheduledTask {
         guard isOpen else {
             NSLog("Ignoring task because DelegatingScheduler has been closed")
             return NoopTask()
         }
         let work = createTrackingBlock(block)
-        work.tracks = delegate.schedule(after: after, work.run)
+        work.tracks = delegate.schedule(description, after: after, work.run)
         return work
     }
     

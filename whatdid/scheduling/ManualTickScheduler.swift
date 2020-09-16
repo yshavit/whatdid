@@ -6,7 +6,7 @@ class ManualTickScheduler: Scheduler {
     private var _now = Date(timeIntervalSince1970: 0)
     private var events = [WorkItem]()
     
-    @discardableResult func schedule(at date: Date, _ block: @escaping () -> Void) -> ScheduledTask {
+    @discardableResult func schedule(_ description: String, at date: Date, _ block: @escaping () -> Void) -> ScheduledTask {
         if date == _now {
             enqueueAction(block)
             return NoopScheduledItem()
@@ -20,8 +20,8 @@ class ManualTickScheduler: Scheduler {
         }
     }
     
-    @discardableResult func schedule(after time: TimeInterval, _ block: @escaping () -> Void) -> ScheduledTask {
-        return schedule(at: _now.addingTimeInterval(time), block)
+    @discardableResult func schedule(_ description: String, after time: TimeInterval, _ block: @escaping () -> Void) -> ScheduledTask {
+        return schedule(description, at: _now.addingTimeInterval(time), block)
     }
     
     var now: Date {

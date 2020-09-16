@@ -157,8 +157,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         case .ptn:
             let jitterMinutes = Int.random(in: -POPUP_INTERVAL_JITTER_MINUTES...POPUP_INTERVAL_JITTER_MINUTES)
             let minutes = Double(POPUP_INTERVAL_MINUTES + jitterMinutes)
-            NSLog("Scheduling a popup in %.0f minutes", minutes)
-            DefaultScheduler.instance.schedule(after: minutes * 60.0) {
+            DefaultScheduler.instance.schedule(String(describing: contents), after: minutes * 60.0) {
                 self.opener.open(.ptn, reason: .scheduled)
             }
         case .dailyEnd:
@@ -173,7 +172,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         NSLog("Snoozing until %@", AppDelegate.DEBUG_DATE_FORMATTER.string(from: date))
         opener.snooze()
         close()
-        let task = DefaultScheduler.instance.schedule(after: date.timeIntervalSinceWhatdidNow, self.unSnooze)
+        let task = DefaultScheduler.instance.schedule("unsnooze", after: date.timeIntervalSinceWhatdidNow, self.unSnooze)
         snoozed = (until: date, unsnoozeTask: task)
     }
     

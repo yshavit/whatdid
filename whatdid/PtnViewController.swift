@@ -70,11 +70,11 @@ class PtnViewController: NSViewController {
         if timeInterval(since: AppDelegate.instance.model.lastEntryDate) > PtnViewController.TIME_UNTIL_NEW_SESSION_PROMPT {
             showNewSessionPrompt()
         } else {
-            scheduler.schedule(after: PtnViewController.TIME_UNTIL_NEW_SESSION_PROMPT, showNewSessionPrompt)
+            scheduler.schedule("new session prompt", after: PtnViewController.TIME_UNTIL_NEW_SESSION_PROMPT, showNewSessionPrompt)
         }
 
         func scheduleUpdateHeaderText() {
-            scheduler.schedule(after: 60) {
+            scheduler.schedule("per-minute update header", after: 60) {
                 self.updateHeaderText()
                 scheduleUpdateHeaderText()
             }

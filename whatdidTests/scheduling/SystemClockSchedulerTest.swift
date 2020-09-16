@@ -37,7 +37,7 @@ class SystemClockSchedulerTest: XCTestCase {
     func testCancelTaskAfterItRuns() {
         let expectation = XCTestExpectation()
         var count = 0
-        let scheduledTask = SystemClockSchedulerTest.scheduler.schedule(after: 0.1) {
+        let scheduledTask = SystemClockSchedulerTest.scheduler.schedule("", after: 0.1) {
             count += 1
             expectation.fulfill()
         }
@@ -69,9 +69,9 @@ class SystemClockSchedulerTest: XCTestCase {
         func start(){
             switch delayStrategy {
             case .byDate:
-                scheduledTask = SystemClockSchedulerTest.scheduler.schedule(at: Date().addingTimeInterval(SystemClockSchedulerTest.delay), setResult)
+                scheduledTask = SystemClockSchedulerTest.scheduler.schedule("", at: Date().addingTimeInterval(SystemClockSchedulerTest.delay), setResult)
             case .byInterval:
-                scheduledTask = SystemClockSchedulerTest.scheduler.schedule(after: SystemClockSchedulerTest.delay, setResult)
+                scheduledTask = SystemClockSchedulerTest.scheduler.schedule("", after: SystemClockSchedulerTest.delay, setResult)
             }
         }
         

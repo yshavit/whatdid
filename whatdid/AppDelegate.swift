@@ -43,8 +43,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func scheduleEndOfDaySummary() {
         let scheduleEndOfDay = TimeUtil.dateForTime(.next, hh: 18, mm: 30)
-        NSLog("Scheduling summary at %@", scheduleEndOfDay.debugDescription)
-        DefaultScheduler.instance.schedule(at: scheduleEndOfDay) {
+        DefaultScheduler.instance.schedule("EOD summary", at: scheduleEndOfDay) {
             self.mainMenu.open(.dailyEnd, reason: .scheduled)
         }
     }

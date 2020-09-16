@@ -204,7 +204,7 @@ class OpenCloseHelperTest: XCTestCase {
         XCTAssertEqual([Message(shouldOpen: "one", reason: .manual)], messages.drain())
         
         var count = 0
-        messages.contextScheduler.schedule(at: Date.distantFuture) { count += 1}
+        messages.contextScheduler.schedule("", at: Date.distantFuture) { count += 1}
         XCTAssertEqual(0, count)
         
         messages.underlyingScheduler.runAllScheduled()
@@ -219,7 +219,7 @@ class OpenCloseHelperTest: XCTestCase {
         XCTAssertEqual([Message(shouldOpen: "one", reason: .manual)], messages.drain())
         
         var count = 0
-        messages.contextScheduler.schedule(at: Date()) { count += 1}
+        messages.contextScheduler.schedule("", at: Date()) { count += 1}
         XCTAssertEqual(0, count)
         
         och.didClose()
@@ -229,7 +229,7 @@ class OpenCloseHelperTest: XCTestCase {
         XCTAssertEqual(0, count)
         
         // And then also add a new task, for good measure
-        messages.contextScheduler.schedule(at: Date()) { count += 1}
+        messages.contextScheduler.schedule("", at: Date()) { count += 1}
         messages.underlyingScheduler.runAllScheduled()
         XCTAssertEqual(0, count)
     }
