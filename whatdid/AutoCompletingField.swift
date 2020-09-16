@@ -24,7 +24,7 @@ class AutoCompletingField: NSView, NSAccessibilityGroup {
     
     private func commonInit() {
         popupManager = PopupManager(parent: self)
-        popupManager.window?.setAccessibilityParent(self)
+        popupManager.window.setAccessibilityParent(self)
         
         textFieldView = AutoCompletingFieldView()
         addSubview(textFieldView)
@@ -54,7 +54,7 @@ class AutoCompletingField: NSView, NSAccessibilityGroup {
         var result = [Any]()
         result.append(contentsOf: textFieldView.accessibilityChildren()!)
         result.append(contentsOf: textFieldView.pulldownButton.accessibilityChildren()!)
-        if popupManager.window?.isVisible ?? false {
+        if popupManager.windowIsVisible {
             result.append(popupManager.scrollView!)
         }
         if let superChildren = super.accessibilityChildren() {
@@ -203,9 +203,26 @@ fileprivate class AutoCompletingFieldView: WhatdidTextField, NSTextViewDelegate,
         case #selector(moveUp(_:)):
             popupManager.moveSelection(down: false)
             return true
+        case #selector(cancelOperation(_:)):
+            if popupManager.windowIsVisible {
+                popupManager.close()
+                return true
+            }
         default:
-            return false
+            break
         }
+        // If we got here, we haven't explicitly handled the command. Find the next responder who will.
+        // For reasons I don't understand, we can't just return "false" here and trust someone else to
+        // find the next responder.
+        var maybeResponder = nextResponder
+        while let responder = maybeResponder {
+            if responder.responds(to: commandSelector) {
+                responder.doCommand(by: commandSelector)
+                return true
+            }
+            maybeResponder = responder.nextResponder
+        }
+        return false
     }
 
     override func becomeFirstResponder() -> Bool {
@@ -421,7 +438,7 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
         return optionsPopup.isVisible
     }
 
-    var window: NSWindow? {
+    var window: NSWindow {
         return optionsPopup
     }
     

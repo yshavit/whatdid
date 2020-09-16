@@ -15,12 +15,26 @@ struct AutocompleteFieldHelper {
         return element.children(matching: .popUpButton).element
     }
     
-    /// The options pane, or `nil` if it is not open
+    /// The options pane, or fail if it is not open
     var optionsScroll: XCUIElement {
         return XCTestCase.group("FieldHelper: fetch optionsScroll") {
             let allScrolls = element.children(matching: .scrollView).allElementsBoundByIndex
             XCTAssertEqual(1, allScrolls.count, "Expected exactly one options pane")
             return allScrolls[0]
+        }
+    }
+    
+    var optionsScrollIsOpen: Bool {
+        return XCTestCase.group("FieldHelper: fetch optionsScroll") {
+            switch element.children(matching: .scrollView).allElementsBoundByIndex.count {
+            case 0:
+                return false
+            case 1:
+                return true
+            default:
+                XCTFail("expected 0 or 1 optionsScrolls")
+                return false
+            }
         }
     }
     

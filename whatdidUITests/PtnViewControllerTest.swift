@@ -649,10 +649,27 @@ class PtnViewControllerTest: XCTestCase {
             XCTAssertTrue(ptn.window.textFields["nfield"].hasFocus)
         }
         group("escape key within notes") {
+            XCTAssertTrue(ptn.window.textFields["nfield"].hasFocus)
             ptn.window.typeKey(.escape, modifierFlags: [])
-            XCTAssertFalse(ptn.window.isVisible)
-            clickStatusMenu()
-            waitForTransition(of: .ptn, toIsVisible: true)
+            waitForTransition(of: .ptn, toIsVisible: false)
+        }
+        group("escape key within project combo") {
+            group("Open PTN") {
+                XCTAssertFalse(ptn.window.isVisible)
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: true)
+            }
+            group("Escape key #1: hide options") {
+                XCTAssertTrue(ptn.pcombo.textField.hasFocus)
+                XCTAssertTrue(ptn.pcombo.optionsScroll.isVisible)
+                ptn.window.typeKey(.escape, modifierFlags: [])
+                XCTAssertFalse(ptn.pcombo.optionsScrollIsOpen)
+            }
+            group("Escape key #2: hide window") {
+                XCTAssertTrue(ptn.window.isVisible)
+                ptn.window.typeKey(.escape, modifierFlags: [])
+                waitForTransition(of: .ptn, toIsVisible: false)
+            }
         }
     }
     
