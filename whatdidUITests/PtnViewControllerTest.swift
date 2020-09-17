@@ -740,9 +740,18 @@ class PtnViewControllerTest: XCTestCase {
             XCTAssertNotNil(firstVisibleElement, "Project not visible")
         }
         group("Check that the window is still within the original bounds") {
-            let dailyReportFrame = app.windows[WindowType.dailyEnd.windowTitle].firstMatch.frame
+            let dailyReportWindow = app.windows[WindowType.dailyEnd.windowTitle].firstMatch
+            let dailyReportFrame = dailyReportWindow.frame
             XCTAssertEqual(dailyReportFrame.minX, originalWindowFrame.minX)
             XCTAssertEqual(dailyReportFrame.maxX, originalWindowFrame.maxX)
+            let project = HierarchicalEntryLevel(ancestor: dailyReportWindow, scope: "Project", label: longProjectName)
+            for (description, e) in project.allElements {
+                XCTAssertTrue(e.isVisible, description)
+                e.hover()
+            }
+        }
+        group("Close the daily report") {
+            clickStatusMenu()
         }
     }
     

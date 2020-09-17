@@ -119,6 +119,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
             }
         }
         if window?.isVisible ?? false {
+            contentViewController?.viewWillAppear()
             cancelClose = true
         } else {
             showWindow(self)
