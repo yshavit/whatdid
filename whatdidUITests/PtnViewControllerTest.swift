@@ -14,11 +14,15 @@ class PtnViewControllerTest: XCTestCase {
         app = XCUIApplication()
         app.launch()
 
-        // The 0.5 isn't necessary, but it positions the cursor in the middle of the item. Just looks nicer.
-        app.menuBars.statusItems["✐"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
-        statusItemPoint = CGEvent(source: nil)?.location
+        findStatusMenuItem()
         let now = Date()
         log("Failed at \(now.utcTimestamp) (\(now.timestamp(at: TimeZone(identifier: "US/Eastern")!)))")
+    }
+    
+    func findStatusMenuItem() {
+        // The 0.5 isn't necessary, but it positions the cursor in the middle of the item. Just looks nicer.
+         app.menuBars.statusItems["✐"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
+         statusItemPoint = CGEvent(source: nil)?.location
     }
     
     override func recordFailure(withDescription description: String, inFile filePath: String, atLine lineNumber: Int, expected: Bool) {
@@ -54,14 +58,35 @@ class PtnViewControllerTest: XCTestCase {
         // when the app is in the background. Instead, I fetched the status item's location during setUp, and
         // now directly post the click events to it.
         group("Click status menu") {
-            let src = CGEventSource(stateID: CGEventSourceStateID.hidSystemState)
             for eventType in [CGEventType.leftMouseDown, CGEventType.leftMouseUp] {
-                let event = CGEvent(mouseEventSource: src, mouseType: eventType, mouseCursorPosition: statusItemPoint, mouseButton: .left)
-                event?.flags = flags
-                event?.post(tap: CGEventTapLocation.cghidEventTap)
-                pauseToLetStabilize()
+                clickEvent(.left, eventType, at: statusItemPoint, with: flags)
             }
         }
+    }
+    
+    func dragStatusMenu(to newX: CGFloat) {
+        group("Drag status menu") {
+            clickEvent(.left, .leftMouseDown, at: statusItemPoint, with: .maskCommand)
+            clickEvent(.left, .leftMouseUp, at: CGPoint(x: newX, y: statusItemPoint.y), with: [])
+            let oldPoint = statusItemPoint!
+            findStatusMenuItem()
+            
+            addTeardownBlock {
+                self.group("Drag status menu back") {
+                    self.clickEvent(.left, .leftMouseDown, at: self.statusItemPoint, with: .maskCommand)
+                    self.clickEvent(.left, .leftMouseUp, at: oldPoint, with: [])
+                    self.findStatusMenuItem()
+                }
+            }
+        }
+    }
+    
+    func clickEvent(_ mouseButton: CGMouseButton, _ mouseType: CGEventType, at position: CGPoint, with flags: CGEventFlags) {
+        let src = CGEventSource(stateID: CGEventSourceStateID.hidSystemState)
+        let downEvent = CGEvent(mouseEventSource: src, mouseType: mouseType, mouseCursorPosition: position, mouseButton: mouseButton)
+        downEvent?.flags = flags
+        downEvent?.post(tap: CGEventTapLocation.cghidEventTap)
+        pauseToLetStabilize()
     }
 
     override func tearDownWithError() throws {
@@ -425,7 +450,7 @@ class PtnViewControllerTest: XCTestCase {
             entriesTextField.typeKey(.enter)
             clickStatusMenu()
         }
-        let dailyReport = app.windows["Here's what you've been doing"]
+        let dailyReport = app.windows[WindowType.dailyEnd.windowTitle]
         group("Open daily report") {
             clickStatusMenu(with: .maskAlternate)
             waitForTransition(of: .dailyEnd, toIsVisible: true)
@@ -670,6 +695,54 @@ class PtnViewControllerTest: XCTestCase {
                 ptn.window.typeKey(.escape, modifierFlags: [])
                 waitForTransition(of: .ptn, toIsVisible: false)
             }
+        }
+    }
+    
+    func testDailyReportResizing() {
+        let longProjectName = "The quick brown fox jumped over the lazy dog because the dog was just so lazy. Poor dog."
+        group("Set up event with long title") {
+            let entries = FlatEntry.serialize(entry(
+                longProjectName,
+                "Some task",
+                "Some notes",
+                from: Date(timeIntervalSince1970: 43200), // 12 hours
+                to: Date(timeIntervalSince1970: 44200)))
+            let ptn = openPtn()
+            ptn.entriesHook.click()
+            ptn.window.typeText(entries + "\r")
+            clickStatusMenu()
+            waitForTransition(of: .ptn, toIsVisible: false)
+        }
+        let originalWindowFrame = group("Open report in two days") {() -> CGRect in
+            dragStatusMenu(to: NSScreen.main!.frame.maxX)
+            setTimeUtc(d: 2, onSessionPrompt: .startNewSession)
+            // When we start the new session, the PTN will disappear, but the daily report will open (since we're past the scheduled date).
+            // Sanity check that the frame's right edge is at the screen's right edge.
+            let dailyReportFrame = self.app.windows[WindowType.dailyEnd.windowTitle].firstMatch.frame
+            XCTAssertEqual(NSScreen.main!.frame.width, dailyReportFrame.maxX)
+            return dailyReportFrame
+        }
+        group("Set time back") {
+            // Our current date is 1/2/1970 00:00:00, and the report starts at the 7am before that. We want the previous day's,
+            // which goes from 12/31/1969 07:00:00 to 1/1/1970 00:00:00.
+            let dailyReportWindow = app.windows[WindowType.dailyEnd.windowTitle].firstMatch
+            XCTAssertTrue(dailyReportWindow.datePickers.firstMatch.hasFocus) // sanity check
+            dailyReportWindow.typeKey(.tab) // tab to the date portion, then arrowdown to decrement it
+            dailyReportWindow.typeKey(.downArrow)
+        }
+        group("Confirm that the report has the entry") {
+            let dailyReportWindow = app.windows[WindowType.dailyEnd.windowTitle].firstMatch
+            let project = HierarchicalEntryLevel(ancestor: dailyReportWindow, scope: "Project", label: longProjectName)
+            let firstVisibleElement = project.allElements.values.first(where: {$0.isVisible})
+            if let visible = firstVisibleElement {
+                log("found: \(visible.simpleDescription)")
+            }
+            XCTAssertNotNil(firstVisibleElement, "Project not visible")
+        }
+        group("Check that the window is still within the original bounds") {
+            let dailyReportFrame = app.windows[WindowType.dailyEnd.windowTitle].firstMatch.frame
+            XCTAssertEqual(dailyReportFrame.minX, originalWindowFrame.minX)
+            XCTAssertEqual(dailyReportFrame.maxX, originalWindowFrame.maxX)
         }
     }
     
