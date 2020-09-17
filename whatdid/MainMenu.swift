@@ -105,9 +105,8 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         
         window!.setContentSize(window!.contentViewController!.view.fittingSize)
         if let mainFrame = NSScreen.main?.visibleFrame, let button = statusItem.button {
-            let buttonBoundsAbsolute = button.window?.convertToScreen(button.bounds)
             var pos = NSPoint(
-                x: buttonBoundsAbsolute?.minX ?? .zero,
+                x: button.window?.frame.minX ?? .zero,
                 y: mainFrame.origin.y + mainFrame.height)
             if let myWindow = window {
                 if let screen = myWindow.screen {
