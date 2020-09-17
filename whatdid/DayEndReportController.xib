@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.3"/>
         <capability name="System colors introduced in macOS 10.13" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,6 +16,7 @@
                 <outlet property="projectsScrollHeight" destination="o6f-K3-YH7" id="2jK-fl-LC2"/>
                 <outlet property="versionLabel" destination="d5X-74-7gY" id="PM5-Ti-8wa"/>
                 <outlet property="view" destination="Qn8-JX-HeH" id="y6a-6x-Afv"/>
+                <outlet property="widthFitsOnScreen" destination="UB3-c9-V8z" id="Rau-r2-VxM"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
@@ -114,9 +115,10 @@
                     <constraints>
                         <constraint firstAttribute="height" relation="lessThanOrEqual" constant="16" id="1ka-g6-16p"/>
                         <constraint firstAttribute="trailing" secondItem="W7j-r2-UD7" secondAttribute="trailing" constant="-1" id="Ggd-Ap-vRa"/>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="12345" id="UB3-c9-V8z" userLabel="width fits on scren"/>
                         <constraint firstItem="W7j-r2-UD7" firstAttribute="leading" secondItem="LDw-zz-ziZ" secondAttribute="leading" constant="1" id="aql-aV-OJW"/>
                         <constraint firstAttribute="height" relation="lessThanOrEqual" secondItem="UTB-GH-C4K" secondAttribute="height" id="dDz-hE-Ybj"/>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="350" id="gqZ-sZ-vJR"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="800" constant="350" id="gqZ-sZ-vJR"/>
                         <constraint firstAttribute="width" relation="lessThanOrEqual" constant="450" id="kCo-JN-Qur"/>
                         <constraint firstAttribute="height" priority="800" constant="37" id="o6f-K3-YH7"/>
                     </constraints>

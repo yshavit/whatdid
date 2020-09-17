@@ -9,6 +9,7 @@ class DayEndReportController: NSViewController {
         // Do view setup here.
     }
     
+    @IBOutlet var widthFitsOnScreen: NSLayoutConstraint!
     @IBOutlet weak var maxViewHeight: NSLayoutConstraint!
     @IBOutlet weak var projectsScroll: NSScrollView!
     @IBOutlet weak var projectsScrollHeight: NSLayoutConstraint!
@@ -46,6 +47,15 @@ class DayEndReportController: NSViewController {
         entryStartDatePicker.dateValue = thisMorning(assumingNow: now)
         
         updateEntries()
+    }
+    
+    override func viewWillAppear() {
+        if let window = view.window, let screen = window.screen {
+            widthFitsOnScreen.constant = screen.frame.maxX - window.frame.minX
+            widthFitsOnScreen.isActive = true
+        } else {
+            widthFitsOnScreen.isActive = false
+        }
     }
     
     func thisMorning(assumingNow now: Date) -> Date {
