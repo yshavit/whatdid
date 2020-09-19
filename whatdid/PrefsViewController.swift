@@ -20,19 +20,29 @@ class PrefsViewController: NSViewController {
         tabButtonsStack.layer?.backgroundColor = NSColor.windowBackgroundColor.cgColor
         
         tabButtonsStack.subviews.forEach {$0.removeFromSuperview()}
-        for tab in mainTabs.tabViewItems {
+        for (i, tab) in mainTabs.tabViewItems.enumerated() {
             let text = tab.label
             let button = ButtonWithClosure(label: text) {_ in
                 print("hello from \(text)")
+                self.mainTabs.selectTabViewItem(at: i)
+                for (otherButtonIdx, subview) in self.tabButtonsStack.arrangedSubviews.enumerated() {
+                    if otherButtonIdx != i {
+                        (subview as? NSButton)?.state = .off
+                    }
+                }
             }
             button.bezelStyle = .smallSquare
             button.image = tab.value(forKey: "image") as? NSImage
             button.imagePosition = .imageLeading
             button.imageScaling = .scaleProportionallyDown
             button.setButtonType(.pushOnPushOff)
+            button.focusRingType = .none
             tabButtonsStack.addArrangedSubview(button)
         }
         tabButtonsStack.addArrangedSubview(NSView()) // trailing spacer
+        if !mainTabs.tabViewItems.isEmpty {
+            mainTabs.selectTabViewItem(at: 0) // TODO save which one is selected
+        }
     }
     
     func setSize(width: CGFloat, minHeight: CGFloat) {
