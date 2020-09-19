@@ -103,6 +103,7 @@ class PtnViewControllerTest: XCTestCase {
             assertThat(window: .ptn, isVisible: false)
             setTimeUtc(h: 0, m: 55) // 02:55; enough time for the popup
             waitForTransition(of: .ptn, toIsVisible: true)
+            XCTAssertTrue(findPtn().pcombo.hasFocus)
         }
         group("Header text") {
             XCTAssertEqual(

@@ -91,6 +91,7 @@ class PtnViewController: NSViewController {
         noteField.stringValue = ""
         setUpSnoozeButton()
         updateHeaderText()
+        grabFocus()
     }
     
     private func setUpSnoozeButton() {
