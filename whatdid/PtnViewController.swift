@@ -183,44 +183,12 @@ class PtnViewController: NSViewController {
     
     @IBAction func preferenceButtonPressed(_ sender: NSButton) {
         if let viewWindow = view.window {
-            let prefsWindow = NSPanel(contentRect: viewWindow.frame, styleMask: [.titled], backing: .buffered, defer: true)
+            let prefsWindow = NSPanel(contentRect: viewWindow.frame, styleMask: [.hudWindow], backing: .buffered, defer: true)
             prefsWindow.backgroundColor = NSColor.windowBackgroundColor
             
             let prefsViewController = PrefsViewController(nibName: "PrefsViewController", bundle: nil)
             prefsViewController.setSize(width: viewWindow.frame.width, minHeight: viewWindow.frame.height)
             prefsWindow.contentViewController = prefsViewController
-            prefsWindow.toolbar = NSToolbar(identifier: "foo")
-            prefsWindow.toolbar?.delegate = prefsViewController
-            
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(750)) {
-                prefsWindow.showsToolbarButton = true
-                print("window has toolbar? \(prefsWindow.toolbar != nil)")
-            }
-            
-//            let prefsMainStack = NSStackView(orientation: .vertical)
-//            prefsMainStack.edgeInsets = NSEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
-//            prefsMainStack.alignment = .left
-//            prefsWindow.contentView = prefsMainStack
-//
-//            let doneOrCancelRow = NSStackView(orientation: .horizontal)
-//
-//            func button(label: String, enabled: Bool = true, endSheetWith response: NSApplication.ModalResponse) -> NSControl {
-//                let result = ButtonWithClosure(label: label, {_ in
-//                    viewWindow.endSheet(prefsWindow, returnCode: response)
-//                })
-//                result.bezelStyle = .roundRect
-//                result.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
-//                if !enabled {
-//                    result.isEnabled = false
-//                }
-//                return result
-//            }
-//
-//            doneOrCancelRow.addArrangedSubview(button(label: "Quit", endSheetWith: .stop))
-//            doneOrCancelRow.addArrangedSubview(NSView())
-//            doneOrCancelRow.addArrangedSubview(button(label: "Cancel", endSheetWith: .cancel))
-//            doneOrCancelRow.addArrangedSubview(button(label: "Save", enabled: false, endSheetWith: .OK))
-//            prefsMainStack.addArrangedSubview(doneOrCancelRow)
             viewWindow.beginSheet(prefsWindow, completionHandler: {reason in
                 if reason == .stop {
                     NSApp.terminate(self)

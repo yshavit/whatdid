@@ -2,7 +2,7 @@
 
 import Cocoa
 
-class PrefsViewController: NSViewController, NSToolbarDelegate {
+class PrefsViewController: NSViewController {
     @IBOutlet private var outerVStackWidth: NSLayoutConstraint!
     @IBOutlet var outerVStackMinHeight: NSLayoutConstraint!
     private var desiredWidth: CGFloat = 0
@@ -24,12 +24,7 @@ class PrefsViewController: NSViewController, NSToolbarDelegate {
             let text = tab.label
             let button = ButtonWithClosure(label: text) {_ in
                 print("hello from \(text)")
-                self.mainTabs.selectTabViewItem(at: i)
-                for (otherButtonIdx, subview) in self.tabButtonsStack.arrangedSubviews.enumerated() {
-                    if otherButtonIdx != i {
-                        (subview as? NSButton)?.state = .off
-                    }
-                }
+                self.selectPane(at: i)
             }
             button.bezelStyle = .smallSquare
             button.image = tab.value(forKey: "image") as? NSImage
@@ -40,31 +35,24 @@ class PrefsViewController: NSViewController, NSToolbarDelegate {
             tabButtonsStack.addArrangedSubview(button)
         }
         tabButtonsStack.addArrangedSubview(NSView()) // trailing spacer
+    }
+    
+    override func viewWillAppear() {
         if !mainTabs.tabViewItems.isEmpty {
-            mainTabs.selectTabViewItem(at: 0) // TODO save which one is selected
+            selectPane(at: 0) // TODO rememeber the previously opened one
         }
     }
     
-    func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-        return mainTabs.tabViewItems.map({tab in NSToolbarItem.Identifier(rawValue: tab.label)})
+    private func selectPane(at index: Int) {
+        for (otherButtonIdx, subview) in self.tabButtonsStack.arrangedSubviews.enumerated() {
+            let state: NSControl.StateValue = otherButtonIdx == index ? .on : .off
+            (subview as? NSButton)?.state = state
+        }
+        self.mainTabs.selectTabViewItem(at: index)
+        view.layout()
+        view.window?.setContentSize(view.fittingSize)
     }
-    
-    func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
-        print("asking for toolbar: \(itemIdentifier.rawValue)")
-        let item = NSToolbarItem(itemIdentifier: itemIdentifier)
-        item.image = NSImage(named: NSImage.infoName)
-        item.label = itemIdentifier.rawValue
-        return item
-    }
-    
-    func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-        return toolbarAllowedItemIdentifiers(toolbar)
-    }
-    
-    func toolbarSelectableItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-        return toolbarDefaultItemIdentifiers(toolbar)
-    }
-    
+
     func setSize(width: CGFloat, minHeight: CGFloat) {
         self.desiredWidth = width
         self.minHeight = minHeight
