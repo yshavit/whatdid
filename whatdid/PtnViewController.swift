@@ -91,6 +91,7 @@ class PtnViewController: NSViewController {
         noteField.stringValue = ""
         setUpSnoozeButton()
         updateHeaderText()
+        grabFocus()
     }
     
     private func setUpSnoozeButton() {
@@ -136,9 +137,10 @@ class PtnViewController: NSViewController {
     
     private func updateHeaderText() {
         let lastEntryDate = AppDelegate.instance.model.lastEntryDate
-        headerText.stringValue = headerText.placeholderString!
-            .replacingOccurrences(of: "{TIME}", with: TimeUtil.formatSuccinctly(date: lastEntryDate))
-            .replacingOccurrences(of: "{DURATION}", with: TimeUtil.daysHoursMinutes(for: timeInterval(since: lastEntryDate)))
+        headerText.stringValue = headerText.placeholderString!.replacingBracketedPlaceholders(with: [
+            "TIME": TimeUtil.formatSuccinctly(date: lastEntryDate),
+            "DURATION": TimeUtil.daysHoursMinutes(for: timeInterval(since: lastEntryDate))
+        ])
     }
     
     @IBAction private func snoozeButtonPressed(_ sender: NSControl) {
@@ -183,32 +185,12 @@ class PtnViewController: NSViewController {
     
     @IBAction func preferenceButtonPressed(_ sender: NSButton) {
         if let viewWindow = view.window {
-            let prefsWindow = NSWindow(contentRect: viewWindow.frame, styleMask: [], backing: .buffered, defer: true)
+            let prefsWindow = NSPanel(contentRect: viewWindow.frame, styleMask: [.hudWindow], backing: .buffered, defer: true)
             prefsWindow.backgroundColor = NSColor.windowBackgroundColor
-            let prefsMainStack = NSStackView(orientation: .vertical)
-            prefsMainStack.edgeInsets = NSEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
-            prefsMainStack.alignment = .left
-            prefsWindow.contentView = prefsMainStack
             
-            let doneOrCancelRow = NSStackView(orientation: .horizontal)
-            
-            func button(label: String, enabled: Bool = true, endSheetWith response: NSApplication.ModalResponse) -> NSControl {
-                let result = ButtonWithClosure(label: label, {_ in
-                    viewWindow.endSheet(prefsWindow, returnCode: response)
-                })
-                result.bezelStyle = .roundRect
-                result.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
-                if !enabled {
-                    result.isEnabled = false
-                }
-                return result
-            }
-            
-            doneOrCancelRow.addArrangedSubview(button(label: "Quit", endSheetWith: .stop))
-            doneOrCancelRow.addArrangedSubview(NSView())
-            doneOrCancelRow.addArrangedSubview(button(label: "Cancel", endSheetWith: .cancel))
-            doneOrCancelRow.addArrangedSubview(button(label: "Save", enabled: false, endSheetWith: .OK))
-            prefsMainStack.addArrangedSubview(doneOrCancelRow)
+            let prefsViewController = PrefsViewController(nibName: "PrefsViewController", bundle: nil)
+            prefsViewController.setSize(width: viewWindow.frame.width, minHeight: viewWindow.frame.height)
+            prefsWindow.contentViewController = prefsViewController
             viewWindow.beginSheet(prefsWindow, completionHandler: {reason in
                 if reason == .stop {
                     NSApp.terminate(self)

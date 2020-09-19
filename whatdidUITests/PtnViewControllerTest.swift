@@ -103,6 +103,7 @@ class PtnViewControllerTest: XCTestCase {
             assertThat(window: .ptn, isVisible: false)
             setTimeUtc(h: 0, m: 55) // 02:55; enough time for the popup
             waitForTransition(of: .ptn, toIsVisible: true)
+            XCTAssertTrue(findPtn().pcombo.hasFocus)
         }
         group("Header text") {
             XCTAssertEqual(
@@ -630,16 +631,24 @@ class PtnViewControllerTest: XCTestCase {
     func testPreferences() {
         let ptn = openPtn()
         let prefsButton = ptn.window.buttons["Preferences"]
+        let prefsSheet = ptn.window.sheets.firstMatch
+        prefsButton.click()
+        group("About") {
+            prefsSheet.tabs["About"].click()
+            // Sanity check: just make sure that the text includes "whatdid {version}".
+            // Note: we'll need to update this whenever we do a version bump.
+            // That seems more explicit and easier to reason about than plumbing the Version class to here
+            XCTAssertTrue(prefsSheet.staticTexts["whatdid 0.1"].firstMatch.isVisible)
+        }
         group("Cancel preferences") {
-            prefsButton.click()
-            wait(for: "prefernces sheet", until: {ptn.window.exists && ptn.window.sheets.count > 0})
-            ptn.window.sheets.firstMatch.buttons["Cancel"].click()
+            wait(for: "preferences sheet", until: {ptn.window.exists && ptn.window.sheets.count > 0})
+            prefsSheet.buttons["Done"].click()
             wait(for: "prefernces sheet", until: {ptn.window.exists && ptn.window.sheets.count == 0})
         }
         group("Quit") {
             prefsButton.click()
             wait(for: "prefernces sheet", until: {ptn.window.exists && ptn.window.sheets.count > 0})
-            ptn.window.sheets.firstMatch.buttons["Quit"].click()
+            prefsSheet.buttons["Quit"].click()
             wait(for: "app to exit", until: {app.state == .notRunning})
        }
     }
