@@ -1,6 +1,7 @@
 // whatdid?
 
 import Cocoa
+import KeyboardShortcuts
 
 class PrefsViewController: NSViewController {
     @IBOutlet private var outerVStackWidth: NSLayoutConstraint!
@@ -37,6 +38,7 @@ class PrefsViewController: NSViewController {
         }
         tabButtonsStack.addArrangedSubview(NSView()) // trailing spacer
         
+        setUpGeneralPanel()
         setUpAboutPanel()
     }
     
@@ -74,6 +76,18 @@ class PrefsViewController: NSViewController {
             mySheetParent.endSheet(myWindow, returnCode: response)
         }
     }
+    //------------------------------------------------------------------
+    // General
+    //------------------------------------------------------------------
+    
+    @IBOutlet var globalShortcutHolder: NSView!
+    
+    private func setUpGeneralPanel() {
+        let recorder = KeyboardShortcuts.RecorderCocoa(for: .grabFocus)
+        globalShortcutHolder.addSubview(recorder)
+        recorder.anchorAllSides(to: globalShortcutHolder)
+    }
+    
     
     //------------------------------------------------------------------
     // ABOUT

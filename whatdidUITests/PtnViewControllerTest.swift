@@ -633,12 +633,32 @@ class PtnViewControllerTest: XCTestCase {
         let prefsButton = ptn.window.buttons["Preferences"]
         let prefsSheet = ptn.window.sheets.firstMatch
         prefsButton.click()
+        XCTAssertTrue(prefsSheet.isVisible)
         group("About") {
             prefsSheet.tabs["About"].click()
             // Sanity check: just make sure that the text includes "whatdid {version}".
             // Note: we'll need to update this whenever we do a version bump.
             // That seems more explicit and easier to reason about than plumbing the Version class to here
             XCTAssertTrue(prefsSheet.staticTexts["whatdid 0.1"].firstMatch.isVisible)
+        }
+        group("General") {
+            prefsSheet.tabs["General"].click()
+            group("Configure global shortcut") {
+                group("Record a new global shotcut") {
+                    prefsSheet.searchFields["Record Shortcut"].click()
+                    ptn.window.typeKey("i", modifierFlags:[.command, .shift])
+                }
+                group("Close PTN and test new shortcut") {
+                    clickStatusMenu()
+                    waitForTransition(of: .ptn, toIsVisible: false)
+                    pressHotkeyShortcut(keyCode: 34) // 34 is "i"
+                    waitForTransition(of: .ptn, toIsVisible: true)
+                }
+                group("Open preferences back up") {
+                    prefsButton.click()
+                    XCTAssertTrue(prefsSheet.isVisible)
+                }
+            }
         }
         group("Cancel preferences") {
             wait(for: "preferences sheet", until: {ptn.window.exists && ptn.window.sheets.count > 0})
@@ -851,11 +871,11 @@ class PtnViewControllerTest: XCTestCase {
         }
     }
 
-    func pressHotkeyShortcut() {
+    func pressHotkeyShortcut(keyCode: CGKeyCode = 7) {
         // 7 == "x"
         for keyDown in [true, false] {
             let src = CGEventSource(stateID: CGEventSourceStateID.hidSystemState)
-            let keyEvent = CGEvent(keyboardEventSource: src, virtualKey: 7, keyDown: keyDown)
+            let keyEvent = CGEvent(keyboardEventSource: src, virtualKey: keyCode, keyDown: keyDown)
             keyEvent!.flags = [.maskCommand, .maskShift]
             keyEvent?.post(tap: CGEventTapLocation.cghidEventTap)
         }

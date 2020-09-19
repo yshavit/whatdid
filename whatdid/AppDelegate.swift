@@ -1,7 +1,7 @@
 // whatdid?
 
 import Cocoa
-import HotKey
+import KeyboardShortcuts
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -10,12 +10,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     public let model = Model()
     @IBOutlet weak var mainMenu: MainMenu!
-    let focusHotKey = HotKey(key: .x, modifiers: [.command, .shift])
     private var deactivationHooks : Atomic<[() -> Void]> = Atomic(wrappedValue: [])
     
     #if UI_TEST
-    private var uiTestWindow : UiTestWindow!
+    private var uiTestWindow: UiTestWindow!
     private var manualTickSchedulerWindow: ManualTickSchedulerWindow!
+    private var oldPrefs: [String : Any]?
     #endif
     
     func onDeactivation(_ block: @escaping () -> Void) {
@@ -32,13 +32,41 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         uiTestWindow = UiTestWindow()
         uiTestWindow.show()
         NSApp.setActivationPolicy(.regular) // UI tests can time out on launch() without this
+        if let bundleId = Bundle.main.bundleIdentifier {
+            oldPrefs = UserDefaults.standard.persistentDomain(forName: bundleId)
+            NSLog("Removing old preferences because this is a UI test. Saved \(oldPrefs?.count ?? 0) to restore later.")
+            UserDefaults.standard.setPersistentDomain([String: Any](), forName: bundleId)
+        }
         #endif
         
         AppDelegate.DEBUG_DATE_FORMATTER.timeZone = DefaultScheduler.instance.timeZone
-        focusHotKey.keyDownHandler = { self.mainMenu.focus() }
+        
+        // Set up the keyboard shortcut
+        let alreadyInitializedKey = "keyboardShortcutInitializedOnFirstStartup"
+        if !UserDefaults.standard.bool(forKey: alreadyInitializedKey) {
+            NSLog("Detected first-time setup. Initializing global shortcut")
+            KeyboardShortcuts.setShortcut(KeyboardShortcuts.Shortcut(.x, modifiers: [.command, .shift]), for: .grabFocus)
+            UserDefaults.standard.set(true, forKey: alreadyInitializedKey)
+        }
+        KeyboardShortcuts.onKeyDown(for: .grabFocus) {
+            self.mainMenu.focus()
+        }
         
         mainMenu.schedule(.ptn)
         scheduleEndOfDaySummary()
+    }
+    
+    func applicationWillTerminate(_ notification: Notification) {
+        #if UI_TEST
+        if let bundleId = Bundle.main.bundleIdentifier {
+            if let toRestore = oldPrefs {
+                NSLog("Restoring old preferences")
+                UserDefaults.standard.setPersistentDomain(toRestore, forName: bundleId)
+            } else {
+                NSLog("No previous preferences to restore")
+            }
+        }
+        #endif
     }
     
     func scheduleEndOfDaySummary() {

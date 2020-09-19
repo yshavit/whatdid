@@ -9,6 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="PrefsViewController" customModule="whatdid" customModuleProvider="target">
             <connections>
                 <outlet property="fullVersion" destination="3K9-EY-10F" id="TTt-Gz-mxh"/>
+                <outlet property="globalShortcutHolder" destination="cdF-qX-q5Y" id="IHs-3K-vOL"/>
                 <outlet property="mainTabs" destination="S38-2I-rYd" id="w8e-74-FHI"/>
                 <outlet property="outerVStackMinHeight" destination="sfZ-rm-XWd" id="HKi-ht-G3J"/>
                 <outlet property="outerVStackWidth" destination="pP3-Nb-iFv" id="WCh-2f-MdV"/>
@@ -80,32 +81,49 @@
                             <tabViewItems>
                                 <tabViewItem label="General" identifier="" id="3Fi-X3-Od3">
                                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="fmt-Cv-gJX">
-                                        <rect key="frame" x="0.0" y="0.0" width="350" height="16"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="350" height="42"/>
                                         <subviews>
-                                            <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ueH-tQ-LbS">
-                                                <rect key="frame" x="0.0" y="0.0" width="38" height="16"/>
-                                                <subviews>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ML9-gR-CKr">
-                                                        <rect key="frame" x="-2" y="0.0" width="42" height="16"/>
-                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="TODO" id="65P-cv-hM5">
-                                                            <font key="font" usesAppearanceFont="YES"/>
-                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                    </textField>
-                                                </subviews>
-                                                <visibilityPriorities>
-                                                    <integer value="1000"/>
-                                                </visibilityPriorities>
-                                                <customSpacing>
-                                                    <real value="3.4028234663852886e+38"/>
-                                                </customSpacing>
-                                            </stackView>
+                                            <gridView xPlacement="leading" yPlacement="bottom" rowAlignment="none" translatesAutoresizingMaskIntoConstraints="NO" id="8wI-wf-FiW">
+                                                <rect key="frame" x="0.0" y="0.0" width="200" height="42"/>
+                                                <rows>
+                                                    <gridRow id="ziJ-5D-O0w"/>
+                                                    <gridRow id="Uhr-eN-flM"/>
+                                                    <gridRow yPlacement="center" id="kjr-6r-i1L"/>
+                                                </rows>
+                                                <columns>
+                                                    <gridColumn id="4ur-bR-EOi"/>
+                                                    <gridColumn id="II0-JS-5iC"/>
+                                                </columns>
+                                                <gridCells>
+                                                    <gridCell row="ziJ-5D-O0w" column="4ur-bR-EOi" id="Ejt-6i-Gg7"/>
+                                                    <gridCell row="ziJ-5D-O0w" column="II0-JS-5iC" id="0ZP-7v-mk4"/>
+                                                    <gridCell row="Uhr-eN-flM" column="4ur-bR-EOi" id="jBw-tg-I0b"/>
+                                                    <gridCell row="Uhr-eN-flM" column="II0-JS-5iC" id="lK6-dn-YqO"/>
+                                                    <gridCell row="kjr-6r-i1L" column="4ur-bR-EOi" id="kpc-aH-1bp">
+                                                        <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8o4-sT-8yL">
+                                                            <rect key="frame" x="-2" y="7" width="98" height="16"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Global shortcut" id="aQi-xR-NJg">
+                                                                <font key="font" usesAppearanceFont="YES"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                    </gridCell>
+                                                    <gridCell row="kjr-6r-i1L" column="II0-JS-5iC" id="Zkr-ES-rDM">
+                                                        <customView key="contentView" translatesAutoresizingMaskIntoConstraints="NO" id="cdF-qX-q5Y" userLabel="Global Shortcut Holder">
+                                                            <rect key="frame" x="100" y="0.0" width="100" height="30"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="100" placeholder="YES" id="ceF-V1-7iI"/>
+                                                            </constraints>
+                                                        </customView>
+                                                    </gridCell>
+                                                </gridCells>
+                                            </gridView>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="ueH-tQ-LbS" firstAttribute="top" secondItem="fmt-Cv-gJX" secondAttribute="top" id="6qK-J3-Q8u"/>
-                                            <constraint firstItem="ueH-tQ-LbS" firstAttribute="leading" secondItem="fmt-Cv-gJX" secondAttribute="leading" id="JSx-j7-rhX"/>
-                                            <constraint firstItem="ueH-tQ-LbS" firstAttribute="height" secondItem="fmt-Cv-gJX" secondAttribute="height" id="dQO-Oz-Xro"/>
+                                            <constraint firstItem="8wI-wf-FiW" firstAttribute="height" secondItem="fmt-Cv-gJX" secondAttribute="height" id="Sls-Yh-Z99"/>
+                                            <constraint firstItem="8wI-wf-FiW" firstAttribute="top" secondItem="fmt-Cv-gJX" secondAttribute="top" id="dlV-Xg-9xA"/>
+                                            <constraint firstItem="8wI-wf-FiW" firstAttribute="leading" secondItem="fmt-Cv-gJX" secondAttribute="leading" id="gOR-aE-Rsc"/>
                                         </constraints>
                                     </view>
                                     <userDefinedRuntimeAttributes>
@@ -237,7 +255,7 @@
                                     <rect key="frame" x="0.0" y="-1" width="72" height="17"/>
                                     <buttonCell key="cell" type="roundRect" title="Quit" bezelStyle="roundedRect" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="RFf-SH-J74">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="menu" size="11"/>
+                                        <font key="font" metaFont="controlContent" size="11"/>
                                     </buttonCell>
                                     <connections>
                                         <action selector="quitButton:" target="-2" id="NFs-i8-kKH"/>
@@ -251,7 +269,7 @@
                                     <rect key="frame" x="252" y="-1" width="98" height="17"/>
                                     <buttonCell key="cell" type="roundRect" title="Done" bezelStyle="roundedRect" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tch-2Y-0P2">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="menu" size="11"/>
+                                        <font key="font" metaFont="controlContent" size="11"/>
                                         <string key="keyEquivalent" base64-UTF8="YES">
 Gw
 </string>

@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		7E07C3B824D121770007FD23 /* DayEndReportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E07C3B624D121770007FD23 /* DayEndReportController.swift */; };
 		7E07C3B924D121770007FD23 /* DayEndReportController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E07C3B724D121770007FD23 /* DayEndReportController.xib */; };
-		7E10088B24CB5FE100D0BAE6 /* HotKey in Frameworks */ = {isa = PBXBuildFile; productRef = 7E10088A24CB5FE100D0BAE6 /* HotKey */; };
 		7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1C2F5024CE43C40070D8CD /* Version.swift */; };
 		7E1F9060250C5CC500992B7F /* TimeZone+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */; };
 		7E30B46124C38D91003F3679 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E30B46024C38D91003F3679 /* Atomic.swift */; };
@@ -46,6 +45,8 @@
 		7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04E123714F0800A0C3A6 /* MainMenu.xib */; };
 		7EA6E22824BD6C5F004B9297 /* PtnViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */; };
 		7EAB5ECD24DA366600E18097 /* TimeUtilTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */; };
+		7EB7495B251699FD001C7DBC /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 7EB7495A251699FD001C7DBC /* KeyboardShortcuts */; };
+		7EB7495D25169A44001C7DBC /* GlobalShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB7495C25169A44001C7DBC /* GlobalShortcut.swift */; };
 		7EBE61F124DD2739000B2CB3 /* PtnViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */; };
 		7EBE61F324DD28F2000B2CB3 /* XCUIElement+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */; };
 		7ECAF0DD250C9C110004647E /* NSButton+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECAF0DC250C9C110004647E /* NSButton+Helpers.swift */; };
@@ -136,6 +137,7 @@
 		7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PtnViewController.xib; sourceTree = "<group>"; };
 		7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TimeUtilTest.swift; path = whatdidTests/util/TimeUtilTest.swift; sourceTree = SOURCE_ROOT; };
+		7EB7495C25169A44001C7DBC /* GlobalShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalShortcut.swift; sourceTree = "<group>"; };
 		7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PtnViewControllerTest.swift; sourceTree = "<group>"; };
 		7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIElement+Helpers.swift"; sourceTree = "<group>"; };
 		7ECAF0DC250C9C110004647E /* NSButton+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSButton+Helpers.swift"; sourceTree = "<group>"; };
@@ -170,7 +172,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7E10088B24CB5FE100D0BAE6 /* HotKey in Frameworks */,
+				7EB7495B251699FD001C7DBC /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,6 +276,7 @@
 				7EF8579F24E241E800867832 /* scheduling */,
 				7E970D6424DA817B00F634AB /* ui_testhook */,
 				7EAC528924CFC90800A13B72 /* util */,
+				7EB7495C25169A44001C7DBC /* GlobalShortcut.swift */,
 			);
 			path = whatdid;
 			sourceTree = "<group>";
@@ -396,7 +399,7 @@
 			);
 			name = whatdid;
 			packageProductDependencies = (
-				7E10088A24CB5FE100D0BAE6 /* HotKey */,
+				7EB7495A251699FD001C7DBC /* KeyboardShortcuts */,
 			);
 			productName = whatdid;
 			productReference = 7E8C04DA23714F0700A0C3A6 /* whatdid.app */;
@@ -471,7 +474,7 @@
 			);
 			mainGroup = 7E8C04D123714F0700A0C3A6;
 			packageReferences = (
-				7E10088924CB5FE100D0BAE6 /* XCRemoteSwiftPackageReference "HotKey" */,
+				7EB74959251699FD001C7DBC /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 			);
 			productRefGroup = 7E8C04DB23714F0700A0C3A6 /* Products */;
 			projectDirPath = "";
@@ -545,6 +548,7 @@
 				7E37A29524C00266005BA1DF /* Model.swift in Sources */,
 				7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */,
 				7EDA368F24D54EA300F5E368 /* FlippedView.swift in Sources */,
+				7EB7495D25169A44001C7DBC /* GlobalShortcut.swift in Sources */,
 				7EF857A324E242AB00867832 /* ManualTickScheduler.swift in Sources */,
 				7E7C384E24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */,
 				7EE4E39824E2523F00552AAF /* SystemClockScheduler.swift in Sources */,
@@ -1052,21 +1056,21 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7E10088924CB5FE100D0BAE6 /* XCRemoteSwiftPackageReference "HotKey" */ = {
+		7EB74959251699FD001C7DBC /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/soffes/HotKey";
+			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.2;
+				minimumVersion = 0.5.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7E10088A24CB5FE100D0BAE6 /* HotKey */ = {
+		7EB7495A251699FD001C7DBC /* KeyboardShortcuts */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7E10088924CB5FE100D0BAE6 /* XCRemoteSwiftPackageReference "HotKey" */;
-			productName = HotKey;
+			package = 7EB74959251699FD001C7DBC /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
+			productName = KeyboardShortcuts;
 		};
 /* End XCSwiftPackageProductDependency section */
 
