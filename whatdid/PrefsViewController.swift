@@ -23,7 +23,6 @@ class PrefsViewController: NSViewController {
         for (i, tab) in mainTabs.tabViewItems.enumerated() {
             let text = tab.label
             let button = ButtonWithClosure(label: text) {_ in
-                print("hello from \(text)")
                 self.selectPane(at: i)
             }
             button.bezelStyle = .smallSquare
@@ -32,6 +31,8 @@ class PrefsViewController: NSViewController {
             button.imageScaling = .scaleProportionallyDown
             button.setButtonType(.pushOnPushOff)
             button.focusRingType = .none
+            button.setAccessibilityRole(.button)
+            button.setAccessibilitySubrole(.tabButtonSubrole)
             tabButtonsStack.addArrangedSubview(button)
         }
         tabButtonsStack.addArrangedSubview(NSView()) // trailing spacer
