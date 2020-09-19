@@ -136,9 +136,10 @@ class PtnViewController: NSViewController {
     
     private func updateHeaderText() {
         let lastEntryDate = AppDelegate.instance.model.lastEntryDate
-        headerText.stringValue = headerText.placeholderString!
-            .replacingOccurrences(of: "{TIME}", with: TimeUtil.formatSuccinctly(date: lastEntryDate))
-            .replacingOccurrences(of: "{DURATION}", with: TimeUtil.daysHoursMinutes(for: timeInterval(since: lastEntryDate)))
+        headerText.stringValue = headerText.placeholderString!.replacingBracketedPlaceholders(with: [
+            "TIME": TimeUtil.formatSuccinctly(date: lastEntryDate),
+            "DURATION": TimeUtil.daysHoursMinutes(for: timeInterval(since: lastEntryDate))
+        ])
     }
     
     @IBAction private func snoozeButtonPressed(_ sender: NSControl) {

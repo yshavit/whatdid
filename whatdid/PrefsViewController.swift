@@ -35,6 +35,8 @@ class PrefsViewController: NSViewController {
             tabButtonsStack.addArrangedSubview(button)
         }
         tabButtonsStack.addArrangedSubview(NSView()) // trailing spacer
+        
+        setUpAboutPanel()
     }
     
     override func viewWillAppear() {
@@ -49,7 +51,7 @@ class PrefsViewController: NSViewController {
             (subview as? NSButton)?.state = state
         }
         self.mainTabs.selectTabViewItem(at: index)
-        view.layout()
+        view.layoutSubtreeIfNeeded()
         view.window?.setContentSize(view.fittingSize)
     }
 
@@ -66,13 +68,46 @@ class PrefsViewController: NSViewController {
         endParentSheet(with: .cancel)
     }
     
-    @IBAction func saveButton(_ sender: Any) {
-        endParentSheet(with: .OK)
-    }
-    
     private func endParentSheet(with response: NSApplication.ModalResponse) {
         if let myWindow = view.window, let mySheetParent = myWindow.sheetParent {
             mySheetParent.endSheet(myWindow, returnCode: response)
         }
     }
+    
+    //------------------------------------------------------------------
+    // ABOUT
+    //------------------------------------------------------------------
+    
+    @IBOutlet var shortVersion: NSTextField!
+    @IBOutlet var fullVersion: NSTextField!
+    @IBOutlet var shaVersion: NSButton!
+    
+    private func setUpAboutPanel() {
+        shortVersion.stringValue = shortVersion.stringValue.replacingBracketedPlaceholders(with: [
+            "version": Version.short
+        ])
+        fullVersion.stringValue = fullVersion.stringValue.replacingBracketedPlaceholders(with: [
+            "fullversion": Version.full
+        ])
+        shaVersion.title = shaVersion.title.replacingBracketedPlaceholders(with: [
+            "sha": Version.gitSha
+        ])
+        shaVersion.toolTip = shaVersion.toolTip?.replacingBracketedPlaceholders(with: [
+            "sha": Version.gitSha.replacingOccurrences(of: ".dirty", with: "")
+        ])
+    }
+    
+    //------------------------------------------------------------------
+    // OTHER / COMMON
+    //------------------------------------------------------------------
+    
+    /// turns a button into an <a href>, with the link coming from the button's tooltip. Hacky, but easy. :-)
+    @IBAction func href(_ sender: NSButton) {
+        if let location = sender.toolTip, let url = URL(string: location) {
+            NSWorkspace.shared.open(url)
+        } else {
+            NSLog("invalid href: \(sender.toolTip ?? "<nil>")")
+        }
+    }
+    
 }
