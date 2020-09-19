@@ -61,6 +61,8 @@
 		7EE0E74624E8899E002D03F8 /* AutoCompletingField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74524E8899E002D03F8 /* AutoCompletingField.swift */; };
 		7EE0E74824EA1ECD002D03F8 /* String+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74724EA1ECD002D03F8 /* String+Helpers.swift */; };
 		7EE0E74A24EA22E7002D03F8 /* NSView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */; };
+		7EE250BB2515B8FE0067C5E9 /* PrefsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE250B92515B8FE0067C5E9 /* PrefsViewController.swift */; };
+		7EE250BC2515B8FE0067C5E9 /* PrefsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EE250BA2515B8FE0067C5E9 /* PrefsViewController.xib */; };
 		7EE4E39624E24A3F00552AAF /* ManualTickSchedulerWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39524E24A3F00552AAF /* ManualTickSchedulerWindow.swift */; };
 		7EE4E39824E2523F00552AAF /* SystemClockScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39724E2523F00552AAF /* SystemClockScheduler.swift */; };
 		7EE4E39A24E25C0200552AAF /* DefaultScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */; };
@@ -148,6 +150,8 @@
 		7EE0E74524E8899E002D03F8 /* AutoCompletingField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletingField.swift; sourceTree = "<group>"; };
 		7EE0E74724EA1ECD002D03F8 /* String+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Helpers.swift"; sourceTree = "<group>"; };
 		7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSView+Helpers.swift"; sourceTree = "<group>"; };
+		7EE250B92515B8FE0067C5E9 /* PrefsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsViewController.swift; sourceTree = "<group>"; };
+		7EE250BA2515B8FE0067C5E9 /* PrefsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefsViewController.xib; sourceTree = "<group>"; };
 		7EE4E39524E24A3F00552AAF /* ManualTickSchedulerWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualTickSchedulerWindow.swift; sourceTree = "<group>"; };
 		7EE4E39724E2523F00552AAF /* SystemClockScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockScheduler.swift; sourceTree = "<group>"; };
 		7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultScheduler.swift; sourceTree = "<group>"; };
@@ -263,6 +267,8 @@
 				7EFEE80123B16EA6002928A2 /* PtnViewController.swift */,
 				7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */,
 				7E7C385324DF3A0300CFF3E7 /* PtnViewController+UIHook.swift */,
+				7EE250B92515B8FE0067C5E9 /* PrefsViewController.swift */,
+				7EE250BA2515B8FE0067C5E9 /* PrefsViewController.xib */,
 				7EAC528A24CFC94700A13B72 /* boilerplate */,
 				7E37A27524BFF73E005BA1DF /* model */,
 				7EF8579F24E241E800867832 /* scheduling */,
@@ -484,6 +490,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E07C3B924D121770007FD23 /* DayEndReportController.xib in Resources */,
+				7EE250BC2515B8FE0067C5E9 /* PrefsViewController.xib in Resources */,
 				7E8C04E023714F0800A0C3A6 /* Assets.xcassets in Resources */,
 				7EA6E22824BD6C5F004B9297 /* PtnViewController.xib in Resources */,
 				7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */,
@@ -546,6 +553,7 @@
 				7EE0E74A24EA22E7002D03F8 /* NSView+Helpers.swift in Sources */,
 				7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */,
 				7E7C385424DF3A0300CFF3E7 /* PtnViewController+UIHook.swift in Sources */,
+				7EE250BB2515B8FE0067C5E9 /* PrefsViewController.swift in Sources */,
 				7E37A29B24C0293E005BA1DF /* Entry+CoreDataProperties.swift in Sources */,
 				7ECAF0DF250D75B70004647E /* WhatdidTextField.swift in Sources */,
 				7EE4E39624E24A3F00552AAF /* ManualTickSchedulerWindow.swift in Sources */,

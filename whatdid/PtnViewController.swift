@@ -185,30 +185,35 @@ class PtnViewController: NSViewController {
         if let viewWindow = view.window {
             let prefsWindow = NSWindow(contentRect: viewWindow.frame, styleMask: [], backing: .buffered, defer: true)
             prefsWindow.backgroundColor = NSColor.windowBackgroundColor
-            let prefsMainStack = NSStackView(orientation: .vertical)
-            prefsMainStack.edgeInsets = NSEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
-            prefsMainStack.alignment = .left
-            prefsWindow.contentView = prefsMainStack
             
-            let doneOrCancelRow = NSStackView(orientation: .horizontal)
+            let prefsViewController = PrefsViewController(nibName: "PrefsViewController", bundle: nil)
+            prefsViewController.setSize(width: viewWindow.frame.width, minHeight: viewWindow.frame.height)
+            prefsWindow.contentViewController = prefsViewController
             
-            func button(label: String, enabled: Bool = true, endSheetWith response: NSApplication.ModalResponse) -> NSControl {
-                let result = ButtonWithClosure(label: label, {_ in
-                    viewWindow.endSheet(prefsWindow, returnCode: response)
-                })
-                result.bezelStyle = .roundRect
-                result.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
-                if !enabled {
-                    result.isEnabled = false
-                }
-                return result
-            }
-            
-            doneOrCancelRow.addArrangedSubview(button(label: "Quit", endSheetWith: .stop))
-            doneOrCancelRow.addArrangedSubview(NSView())
-            doneOrCancelRow.addArrangedSubview(button(label: "Cancel", endSheetWith: .cancel))
-            doneOrCancelRow.addArrangedSubview(button(label: "Save", enabled: false, endSheetWith: .OK))
-            prefsMainStack.addArrangedSubview(doneOrCancelRow)
+//            let prefsMainStack = NSStackView(orientation: .vertical)
+//            prefsMainStack.edgeInsets = NSEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
+//            prefsMainStack.alignment = .left
+//            prefsWindow.contentView = prefsMainStack
+//
+//            let doneOrCancelRow = NSStackView(orientation: .horizontal)
+//
+//            func button(label: String, enabled: Bool = true, endSheetWith response: NSApplication.ModalResponse) -> NSControl {
+//                let result = ButtonWithClosure(label: label, {_ in
+//                    viewWindow.endSheet(prefsWindow, returnCode: response)
+//                })
+//                result.bezelStyle = .roundRect
+//                result.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
+//                if !enabled {
+//                    result.isEnabled = false
+//                }
+//                return result
+//            }
+//
+//            doneOrCancelRow.addArrangedSubview(button(label: "Quit", endSheetWith: .stop))
+//            doneOrCancelRow.addArrangedSubview(NSView())
+//            doneOrCancelRow.addArrangedSubview(button(label: "Cancel", endSheetWith: .cancel))
+//            doneOrCancelRow.addArrangedSubview(button(label: "Save", enabled: false, endSheetWith: .OK))
+//            prefsMainStack.addArrangedSubview(doneOrCancelRow)
             viewWindow.beginSheet(prefsWindow, completionHandler: {reason in
                 if reason == .stop {
                     NSApp.terminate(self)
