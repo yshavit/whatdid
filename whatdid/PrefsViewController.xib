@@ -23,29 +23,41 @@
                 <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kp1-1s-z5L" userLabel="Outer VStack">
                     <rect key="frame" x="0.0" y="0.0" width="350" height="254"/>
                     <subviews>
-                        <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HiW-d6-AUq" userLabel="Tab Buttons">
-                            <rect key="frame" x="0.0" y="158" width="350" height="96"/>
+                        <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HiW-d6-AUq" userLabel="Tab Buttons">
+                            <rect key="frame" x="0.0" y="216" width="350" height="38"/>
                             <subviews>
-                                <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kyk-QN-AE9">
-                                    <rect key="frame" x="0.0" y="73" width="104" height="23"/>
-                                    <buttonCell key="cell" type="roundTextured" title="General" bezelStyle="texturedRounded" image="NSAdvanced" imagePosition="above" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Tbm-ds-WlL">
-                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <button horizontalHuggingPriority="750" verticalHuggingPriority="750" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kyk-QN-AE9">
+                                    <rect key="frame" x="0.0" y="0.0" width="96" height="38"/>
+                                    <buttonCell key="cell" type="square" title="General" bezelStyle="shadowlessSquare" image="NSAdvanced" imagePosition="leading" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Tbm-ds-WlL">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
                                 </button>
-                                <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yIq-Xp-hCi">
-                                    <rect key="frame" x="102" y="68" width="110" height="32"/>
-                                    <buttonCell key="cell" type="push" title="Pref Pane 2" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vyq-sQ-Ukh">
-                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <button horizontalHuggingPriority="750" verticalHuggingPriority="750" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b2F-m0-aIW">
+                                    <rect key="frame" x="96" y="0.0" width="99" height="38"/>
+                                    <buttonCell key="cell" type="square" title="Edit Tasks" bezelStyle="shadowlessSquare" image="NSTouchBarComposeTemplate" imagePosition="leading" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" inset="2" id="riH-LG-1AA">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
                                 </button>
-                                <customView verticalHuggingPriority="750" horizontalCompressionResistancePriority="1" verticalCompressionResistancePriority="1" id="DZT-CR-EY2">
-                                    <rect key="frame" x="210" y="75" width="140" height="21"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <button horizontalHuggingPriority="750" verticalHuggingPriority="750" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d25-Kp-7Kc">
+                                    <rect key="frame" x="195" y="0.0" width="85" height="38"/>
+                                    <buttonCell key="cell" type="square" title="About" bezelStyle="shadowlessSquare" image="NSInfo" imagePosition="leading" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" inset="2" id="nQy-nk-Vts">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                    </buttonCell>
+                                </button>
+                                <customView verticalHuggingPriority="750" horizontalCompressionResistancePriority="1" verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="DZT-CR-EY2">
+                                    <rect key="frame" x="280" y="0.0" width="70" height="38"/>
                                 </customView>
                             </subviews>
+                            <constraints>
+                                <constraint firstItem="d25-Kp-7Kc" firstAttribute="height" secondItem="kyk-QN-AE9" secondAttribute="height" placeholder="YES" id="0aw-5z-p4D"/>
+                                <constraint firstItem="b2F-m0-aIW" firstAttribute="height" secondItem="kyk-QN-AE9" secondAttribute="height" placeholder="YES" id="Vwx-We-SjV"/>
+                                <constraint firstItem="kyk-QN-AE9" firstAttribute="height" secondItem="HiW-d6-AUq" secondAttribute="height" placeholder="YES" id="XuA-3T-WDI"/>
+                            </constraints>
                             <visibilityPriorities>
+                                <integer value="1000"/>
                                 <integer value="1000"/>
                                 <integer value="1000"/>
                                 <integer value="1000"/>
@@ -54,47 +66,57 @@
                                 <real value="3.4028234663852886e+38"/>
                                 <real value="3.4028234663852886e+38"/>
                                 <real value="3.4028234663852886e+38"/>
+                                <real value="3.4028234663852886e+38"/>
                             </customSpacing>
                         </stackView>
+                        <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="tah-vZ-4uX">
+                            <rect key="frame" x="0.0" y="213" width="350" height="5"/>
+                        </box>
                         <tabView controlSize="small" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="S38-2I-rYd">
-                            <rect key="frame" x="0.0" y="16" width="350" height="142"/>
+                            <rect key="frame" x="0.0" y="73" width="350" height="142"/>
                             <tabViewItems>
                                 <tabViewItem label="General" identifier="" id="3Fi-X3-Od3">
                                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="fmt-Cv-gJX">
                                         <rect key="frame" x="0.0" y="0.0" width="350" height="142"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     </view>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="image" keyPath="image" value="NSAdvanced"/>
+                                    </userDefinedRuntimeAttributes>
                                 </tabViewItem>
                                 <tabViewItem label="About" identifier="" id="NwU-Zn-0aF">
                                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="rMy-Zr-TwQ">
-                                        <rect key="frame" x="10" y="33" width="344" height="20"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="350" height="142"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     </view>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="image" keyPath="image" value="NSInfo"/>
+                                    </userDefinedRuntimeAttributes>
                                 </tabViewItem>
                             </tabViewItems>
                         </tabView>
                         <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" horizontalCompressionResistancePriority="999" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YFC-BY-e7h" userLabel="Footer HStack">
-                            <rect key="frame" x="0.0" y="0.0" width="350" height="16"/>
+                            <rect key="frame" x="0.0" y="0.0" width="350" height="73"/>
                             <subviews>
                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SsJ-Pl-v9W">
-                                    <rect key="frame" x="0.0" y="-1" width="68" height="17"/>
+                                    <rect key="frame" x="0.0" y="56" width="68" height="17"/>
                                     <buttonCell key="cell" type="roundRect" title="Quit" bezelStyle="roundedRect" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="RFf-SH-J74">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="menu" size="11"/>
+                                        <font key="font" metaFont="controlContent" size="11"/>
                                     </buttonCell>
                                     <connections>
                                         <action selector="quitButton:" target="-2" id="NFs-i8-kKH"/>
                                     </connections>
                                 </button>
                                 <customView id="4vE-b6-xfr" userLabel="Spacer">
-                                    <rect key="frame" x="72" y="0.0" width="180" height="16"/>
+                                    <rect key="frame" x="72" y="57" width="180" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 </customView>
                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Spf-a6-7Zd">
-                                    <rect key="frame" x="256" y="-1" width="50" height="17"/>
+                                    <rect key="frame" x="256" y="56" width="50" height="17"/>
                                     <buttonCell key="cell" type="roundRect" title="Cancel" bezelStyle="roundedRect" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tch-2Y-0P2">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="menu" size="11"/>
+                                        <font key="font" metaFont="controlContent" size="11"/>
                                         <string key="keyEquivalent" base64-UTF8="YES">
 Gw
 </string>
@@ -104,10 +126,10 @@ Gw
                                     </connections>
                                 </button>
                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qtq-lg-Tz8">
-                                    <rect key="frame" x="310" y="-1" width="40" height="17"/>
+                                    <rect key="frame" x="310" y="56" width="40" height="17"/>
                                     <buttonCell key="cell" type="roundRect" title="Save" bezelStyle="roundedRect" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aTP-hK-K09">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="menu" size="11"/>
+                                        <font key="font" metaFont="controlContent" size="11"/>
                                     </buttonCell>
                                     <connections>
                                         <action selector="saveButton:" target="-2" id="GrO-bg-7jb"/>
@@ -132,6 +154,7 @@ Gw
                         </stackView>
                     </subviews>
                     <constraints>
+                        <constraint firstItem="tah-vZ-4uX" firstAttribute="width" secondItem="kp1-1s-z5L" secondAttribute="width" id="C80-0A-jyg"/>
                         <constraint firstItem="YFC-BY-e7h" firstAttribute="width" secondItem="kp1-1s-z5L" secondAttribute="width" id="MDu-hD-MmM"/>
                         <constraint firstItem="S38-2I-rYd" firstAttribute="width" secondItem="kp1-1s-z5L" secondAttribute="width" id="STZ-NZ-EFK"/>
                         <constraint firstItem="HiW-d6-AUq" firstAttribute="width" secondItem="kp1-1s-z5L" secondAttribute="width" id="Sui-hp-H2m"/>
@@ -142,8 +165,10 @@ Gw
                         <integer value="1000"/>
                         <integer value="1000"/>
                         <integer value="1000"/>
+                        <integer value="1000"/>
                     </visibilityPriorities>
                     <customSpacing>
+                        <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
@@ -161,5 +186,7 @@ Gw
     </objects>
     <resources>
         <image name="NSAdvanced" width="32" height="32"/>
+        <image name="NSInfo" width="32" height="32"/>
+        <image name="NSTouchBarComposeTemplate" width="21" height="30"/>
     </resources>
 </document>

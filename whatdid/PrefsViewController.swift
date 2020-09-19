@@ -19,11 +19,17 @@ class PrefsViewController: NSViewController {
         tabButtonsStack.wantsLayer = true
         tabButtonsStack.layer?.backgroundColor = NSColor.windowBackgroundColor.cgColor
         
+        tabButtonsStack.subviews.forEach {$0.removeFromSuperview()}
         for tab in mainTabs.tabViewItems {
             let text = tab.label
             let button = ButtonWithClosure(label: text) {_ in
                 print("hello from \(text)")
             }
+            button.bezelStyle = .smallSquare
+            button.image = tab.value(forKey: "image") as? NSImage
+            button.imagePosition = .imageLeading
+            button.imageScaling = .scaleProportionallyDown
+            button.setButtonType(.pushOnPushOff)
             tabButtonsStack.addArrangedSubview(button)
         }
         tabButtonsStack.addArrangedSubview(NSView()) // trailing spacer
