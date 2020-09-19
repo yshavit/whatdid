@@ -2,7 +2,7 @@
 
 import Cocoa
 
-class PrefsViewController: NSViewController {
+class PrefsViewController: NSViewController, NSToolbarDelegate {
     @IBOutlet private var outerVStackWidth: NSLayoutConstraint!
     @IBOutlet var outerVStackMinHeight: NSLayoutConstraint!
     private var desiredWidth: CGFloat = 0
@@ -43,6 +43,26 @@ class PrefsViewController: NSViewController {
         if !mainTabs.tabViewItems.isEmpty {
             mainTabs.selectTabViewItem(at: 0) // TODO save which one is selected
         }
+    }
+    
+    func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+        return mainTabs.tabViewItems.map({tab in NSToolbarItem.Identifier(rawValue: tab.label)})
+    }
+    
+    func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
+        print("asking for toolbar: \(itemIdentifier.rawValue)")
+        let item = NSToolbarItem(itemIdentifier: itemIdentifier)
+        item.image = NSImage(named: NSImage.infoName)
+        item.label = itemIdentifier.rawValue
+        return item
+    }
+    
+    func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+        return toolbarAllowedItemIdentifiers(toolbar)
+    }
+    
+    func toolbarSelectableItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+        return toolbarDefaultItemIdentifiers(toolbar)
     }
     
     func setSize(width: CGFloat, minHeight: CGFloat) {
