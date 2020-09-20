@@ -185,7 +185,7 @@ class PtnViewController: NSViewController {
     
     @IBAction func preferenceButtonPressed(_ sender: NSButton) {
         if let viewWindow = view.window {
-            let prefsWindow = NSPanel(contentRect: viewWindow.frame, styleMask: [], backing: .buffered, defer: true)
+            let prefsWindow = NSWindow(contentRect: viewWindow.frame, styleMask: [.titled], backing: .buffered, defer: true)
             prefsWindow.backgroundColor = NSColor.windowBackgroundColor
             
             let prefsViewController = PrefsViewController(nibName: "PrefsViewController", bundle: nil)
