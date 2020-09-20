@@ -14,11 +14,11 @@ extension FlatEntry {
                 return try decoder.decode([FlatEntry].self, from: jsonData)
             } catch {
                 NSLog("Error deserializing \(json): \(error)")
-                return nil!
+                return []
             }
         } else {
             NSLog("Couldn't get UTF-8 data from string: \(json)")
-            return nil!
+            return []
         }
     }
     
@@ -37,7 +37,7 @@ extension FlatEntry {
             return String(data: jsonData, encoding: .utf8)!
         } catch {
             NSLog("failed to encode \(self): \(error)")
-            return nil!
+            return ""
         }
     }
 }

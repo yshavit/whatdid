@@ -76,6 +76,13 @@ class PrefsViewController: NSViewController {
             mySheetParent.endSheet(myWindow, returnCode: response)
         }
     }
+    
+    override func viewDidDisappear() {
+        // Set the new daily report time, and reschedule it (it's fine if it's unchanged)
+        Prefs.dailyReportTime = getHhMm(for: dailyReportTime)
+        AppDelegate.instance.mainMenu.schedule(.dailyEnd)
+    }
+    
     //------------------------------------------------------------------
     // General
     //------------------------------------------------------------------
@@ -108,16 +115,10 @@ class PrefsViewController: NSViewController {
         setTimePicker(dailyReportTime, to: Prefs.dailyReportTime)
     }
     
-    @IBAction func timePickerChanged(_ sender: NSDatePicker) {
-        let components = calendarForDateTimePickers.dateComponents([.hour, .minute], from: sender.dateValue)
-        let hhMm = HoursAndMinutes(hours: components.hour!, minutes: components.minute!)
-        NSLog("Got timePickerChanged call for a NSDatePicker: \(sender.debugDescription)")
-        switch sender {
-        case dailyReportTime:
-            Prefs.dailyReportTime = hhMm
-        default:
-            NSLog("Got timePickerChanged call for unknown NSDatePicker: \(sender.debugDescription)")
-        }
+    func getHhMm(for picker: NSDatePicker) -> HoursAndMinutes {
+        let components = calendarForDateTimePickers.dateComponents([.hour, .minute], from: picker.dateValue)
+        return HoursAndMinutes(hours: components.hour!, minutes: components.minute!)
+        
     }
     
     //------------------------------------------------------------------

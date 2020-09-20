@@ -93,4 +93,8 @@ struct HoursAndMinutes: PrefType {
     func read(_ block: (_ hh: Int, _ mm: Int) -> Void) {
         block(hours, minutes)
     }
+    
+    func map<T>(_ function: (_ hh: Int, _ mm: Int) -> T) -> T {
+        return function(hours, minutes)
+    }
 }

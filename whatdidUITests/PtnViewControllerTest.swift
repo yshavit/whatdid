@@ -659,6 +659,30 @@ class PtnViewControllerTest: XCTestCase {
                     XCTAssertTrue(prefsSheet.isVisible)
                 }
             }
+            group("Set daily report time") {
+                group("Set the time") {
+                    let timePicker = prefsSheet.datePickers["daily report time"]
+                    timePicker.click()
+                    timePicker.typeText("2\t02\t") // last tab is to the AM/PM picker
+                    timePicker.typeKey(.downArrow) // PM -> AM
+                }
+                group("Check for daily report") {
+                    clickStatusMenu() // close the PTN and prefs
+                    setTimeUtc(h: 0, m: 1)
+                    sleepMillis(500) // in case something was going to pop up
+                    XCTAssertFalse(isWindowVisible(.ptn))
+                    XCTAssertFalse(isWindowVisible(.dailyEnd))
+                    setTimeUtc(h: 0, m: 3)
+                    waitForTransition(of: .dailyEnd, toIsVisible: true)
+                }
+                group("Close daily report and re-opens prefs") {
+                    clickStatusMenu()
+                    sleepMillis(500)
+                    clickStatusMenu()
+                    prefsButton.click()
+                    XCTAssertTrue(prefsSheet.isVisible)
+                }
+            }
         }
         group("Cancel preferences") {
             wait(for: "preferences sheet", until: {ptn.window.exists && ptn.window.sheets.count > 0})
@@ -889,7 +913,7 @@ class PtnViewControllerTest: XCTestCase {
             }
         }
         XCTFail("Couldn't find PTN or daily report window")
-        return nil!
+        return app.windows["ERROR ERROR ERROR"]
     }
     
     func pauseToLetStabilize() {

@@ -52,7 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         mainMenu.schedule(.ptn)
-        scheduleEndOfDaySummary()
+        mainMenu.schedule(.dailyEnd)
     }
     
     func applicationWillTerminate(_ notification: Notification) {
@@ -66,13 +66,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
         #endif
-    }
-    
-    func scheduleEndOfDaySummary() {
-        let scheduleEndOfDay = TimeUtil.dateForTime(.next, hh: 18, mm: 30)
-        DefaultScheduler.instance.schedule("EOD summary", at: scheduleEndOfDay) {
-            self.mainMenu.open(.dailyEnd, reason: .scheduled)
-        }
     }
     
     func applicationDidResignActive(_ notification: Notification) {
