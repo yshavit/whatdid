@@ -149,6 +149,11 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     }
     
     func windowWillClose(_ notification: Notification) {
+        if let activeWindow = window {
+            for sheet in activeWindow.sheets {
+                activeWindow.endSheet(sheet, returnCode: .cancel)
+            }
+        }
         NSApp.hide(self)
         statusItem.button?.isHighlighted = false
     }
