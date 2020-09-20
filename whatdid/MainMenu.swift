@@ -14,6 +14,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     private var opener : OpenCloseHelper<WindowContents>!
     private var cancelClose = false
     private var snoozed: (until: Date, unsnoozeTask: ScheduledTask)?
+    private var scheduledTasks = [WindowContents: ScheduledTask]()
     
     enum WindowContents: Int, Comparable {
         /// The Project/Task/Notes window
@@ -153,15 +154,23 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     }
 
     func schedule(_ contents: WindowContents) {
+        let newTask: ScheduledTask
         switch contents {
         case .ptn:
             let jitterMinutes = Int.random(in: -POPUP_INTERVAL_JITTER_MINUTES...POPUP_INTERVAL_JITTER_MINUTES)
             let minutes = Double(POPUP_INTERVAL_MINUTES + jitterMinutes)
-            DefaultScheduler.instance.schedule(String(describing: contents), after: minutes * 60.0) {
+            newTask = DefaultScheduler.instance.schedule(String(describing: contents), after: minutes * 60.0) {
                 self.opener.open(.ptn, reason: .scheduled)
             }
         case .dailyEnd:
-            AppDelegate.instance.scheduleEndOfDaySummary()
+            let scheduleEndOfDay = Prefs.dailyReportTime.map {hh, mm in TimeUtil.dateForTime(.next, hh: hh, mm: mm) }
+            newTask = DefaultScheduler.instance.schedule("EOD summary", at: scheduleEndOfDay) {
+                self.opener.open(.dailyEnd, reason: .scheduled)
+            }
+        }
+        if let oldTask = scheduledTasks.updateValue(newTask, forKey: contents) {
+            NSLog("Replacing scheduled task for \(contents)")
+            oldTask.cancel()
         }
     }
     

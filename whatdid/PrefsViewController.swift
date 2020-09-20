@@ -76,18 +76,50 @@ class PrefsViewController: NSViewController {
             mySheetParent.endSheet(myWindow, returnCode: response)
         }
     }
+    
+    override func viewDidDisappear() {
+        // Set the new daily report time, and reschedule it (it's fine if it's unchanged)
+        Prefs.dailyReportTime = getHhMm(for: dailyReportTime)
+        AppDelegate.instance.mainMenu.schedule(.dailyEnd)
+    }
+    
     //------------------------------------------------------------------
     // General
     //------------------------------------------------------------------
-    
+    @IBOutlet var dailyReportTime: NSDatePicker!
     @IBOutlet var globalShortcutHolder: NSView!
+    let calendarForDateTimePickers = Calendar.current // doesn't actually matter what it is, so long as it's consistent
     
     private func setUpGeneralPanel() {
         let recorder = KeyboardShortcuts.RecorderCocoa(for: .grabFocus)
         globalShortcutHolder.addSubview(recorder)
         recorder.anchorAllSides(to: globalShortcutHolder)
+        
+        func setTimePicker(_ picker: NSDatePicker, to time: HoursAndMinutes) {
+            picker.calendar = calendarForDateTimePickers
+            picker.timeZone = calendarForDateTimePickers.timeZone
+            var dateComponents = DateComponents()
+            time.read() {hours, minutes in
+                dateComponents.hour = hours
+                dateComponents.minute = minutes
+            }
+            dateComponents.calendar = calendarForDateTimePickers
+            dateComponents.timeZone = calendarForDateTimePickers.timeZone
+            NSLog("Converting DateComponents to Date: \(dateComponents)")
+            if let date = dateComponents.date {
+                picker.dateValue = date
+            } else {
+                NSLog("Couldn't convert DateComponents to Date: \(dateComponents)")
+            }
+        }
+        setTimePicker(dailyReportTime, to: Prefs.dailyReportTime)
     }
     
+    func getHhMm(for picker: NSDatePicker) -> HoursAndMinutes {
+        let components = calendarForDateTimePickers.dateComponents([.hour, .minute], from: picker.dateValue)
+        return HoursAndMinutes(hours: components.hour!, minutes: components.minute!)
+        
+    }
     
     //------------------------------------------------------------------
     // ABOUT
