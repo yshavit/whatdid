@@ -28,8 +28,6 @@ class PtnViewControllerTest: XCTestCase {
     override func recordFailure(withDescription description: String, inFile filePath: String, atLine lineNumber: Int, expected: Bool) {
         let now = Date()
         log("Failed at \(now.utcTimestamp) (\(now.timestamp(at: TimeZone(identifier: "US/Eastern")!)))")
-        
-        add(XCTAttachment(screenshot: XCUIScreen.main.screenshot()))
         super.recordFailure(withDescription: description, inFile: filePath, atLine: lineNumber, expected: expected)
     }
     
