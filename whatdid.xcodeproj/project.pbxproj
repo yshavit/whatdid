@@ -47,6 +47,7 @@
 		7EAB5ECD24DA366600E18097 /* TimeUtilTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */; };
 		7EB7495B251699FD001C7DBC /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 7EB7495A251699FD001C7DBC /* KeyboardShortcuts */; };
 		7EB7495D25169A44001C7DBC /* GlobalShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB7495C25169A44001C7DBC /* GlobalShortcut.swift */; };
+		7EB7495F2516F9C7001C7DBC /* Prefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB7495E2516F9C7001C7DBC /* Prefs.swift */; };
 		7EBE61F124DD2739000B2CB3 /* PtnViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */; };
 		7EBE61F324DD28F2000B2CB3 /* XCUIElement+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */; };
 		7ECAF0DD250C9C110004647E /* NSButton+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECAF0DC250C9C110004647E /* NSButton+Helpers.swift */; };
@@ -138,6 +139,7 @@
 		7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PtnViewController.xib; sourceTree = "<group>"; };
 		7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TimeUtilTest.swift; path = whatdidTests/util/TimeUtilTest.swift; sourceTree = SOURCE_ROOT; };
 		7EB7495C25169A44001C7DBC /* GlobalShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalShortcut.swift; sourceTree = "<group>"; };
+		7EB7495E2516F9C7001C7DBC /* Prefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prefs.swift; sourceTree = "<group>"; };
 		7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PtnViewControllerTest.swift; sourceTree = "<group>"; };
 		7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIElement+Helpers.swift"; sourceTree = "<group>"; };
 		7ECAF0DC250C9C110004647E /* NSButton+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSButton+Helpers.swift"; sourceTree = "<group>"; };
@@ -343,6 +345,7 @@
 				7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */,
 				7ECAF0DC250C9C110004647E /* NSButton+Helpers.swift */,
 				7ECAF0DE250D75B70004647E /* WhatdidTextField.swift */,
+				7EB7495E2516F9C7001C7DBC /* Prefs.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -565,6 +568,7 @@
 				7EE0E74624E8899E002D03F8 /* AutoCompletingField.swift in Sources */,
 				7EF8579324E094D100867832 /* OpenCloseHelper.swift in Sources */,
 				7E51DA09250BF5C60088864F /* TimeZone+Helpers.swift in Sources */,
+				7EB7495F2516F9C7001C7DBC /* Prefs.swift in Sources */,
 				7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */,
 				7ECAF0DD250C9C110004647E /* NSButton+Helpers.swift in Sources */,
 				7E07C3B824D121770007FD23 /* DayEndReportController.swift in Sources */,

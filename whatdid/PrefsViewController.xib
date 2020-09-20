@@ -83,12 +83,12 @@
                                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="fmt-Cv-gJX">
                                         <rect key="frame" x="0.0" y="0.0" width="350" height="42"/>
                                         <subviews>
-                                            <gridView xPlacement="leading" yPlacement="bottom" rowAlignment="none" translatesAutoresizingMaskIntoConstraints="NO" id="8wI-wf-FiW">
+                                            <gridView xPlacement="leading" yPlacement="center" rowAlignment="none" translatesAutoresizingMaskIntoConstraints="NO" id="8wI-wf-FiW">
                                                 <rect key="frame" x="0.0" y="0.0" width="200" height="42"/>
                                                 <rows>
                                                     <gridRow id="ziJ-5D-O0w"/>
                                                     <gridRow id="Uhr-eN-flM"/>
-                                                    <gridRow yPlacement="center" id="kjr-6r-i1L"/>
+                                                    <gridRow id="kjr-6r-i1L"/>
                                                 </rows>
                                                 <columns>
                                                     <gridColumn id="4ur-bR-EOi"/>

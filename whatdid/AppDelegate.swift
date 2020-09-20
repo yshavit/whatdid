@@ -42,11 +42,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         AppDelegate.DEBUG_DATE_FORMATTER.timeZone = DefaultScheduler.instance.timeZone
         
         // Set up the keyboard shortcut
-        let alreadyInitializedKey = "keyboardShortcutInitializedOnFirstStartup"
-        if !UserDefaults.standard.bool(forKey: alreadyInitializedKey) {
+        if !Prefs.keyboardShortcutInitializedOnFirstStartup {
             NSLog("Detected first-time setup. Initializing global shortcut")
             KeyboardShortcuts.setShortcut(KeyboardShortcuts.Shortcut(.x, modifiers: [.command, .shift]), for: .grabFocus)
-            UserDefaults.standard.set(true, forKey: alreadyInitializedKey)
+            Prefs.keyboardShortcutInitializedOnFirstStartup = true
         }
         KeyboardShortcuts.onKeyDown(for: .grabFocus) {
             self.mainMenu.focus()
