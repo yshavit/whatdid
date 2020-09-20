@@ -48,6 +48,7 @@
 		7EB7495B251699FD001C7DBC /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 7EB7495A251699FD001C7DBC /* KeyboardShortcuts */; };
 		7EB7495D25169A44001C7DBC /* GlobalShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB7495C25169A44001C7DBC /* GlobalShortcut.swift */; };
 		7EB7495F2516F9C7001C7DBC /* Prefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB7495E2516F9C7001C7DBC /* Prefs.swift */; };
+		7EB7496125170ED6001C7DBC /* PrefsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB7496025170ED6001C7DBC /* PrefsTest.swift */; };
 		7EBE61F124DD2739000B2CB3 /* PtnViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */; };
 		7EBE61F324DD28F2000B2CB3 /* XCUIElement+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */; };
 		7ECAF0DD250C9C110004647E /* NSButton+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECAF0DC250C9C110004647E /* NSButton+Helpers.swift */; };
@@ -140,6 +141,7 @@
 		7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TimeUtilTest.swift; path = whatdidTests/util/TimeUtilTest.swift; sourceTree = SOURCE_ROOT; };
 		7EB7495C25169A44001C7DBC /* GlobalShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalShortcut.swift; sourceTree = "<group>"; };
 		7EB7495E2516F9C7001C7DBC /* Prefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prefs.swift; sourceTree = "<group>"; };
+		7EB7496025170ED6001C7DBC /* PrefsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsTest.swift; sourceTree = "<group>"; };
 		7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PtnViewControllerTest.swift; sourceTree = "<group>"; };
 		7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIElement+Helpers.swift"; sourceTree = "<group>"; };
 		7ECAF0DC250C9C110004647E /* NSButton+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSButton+Helpers.swift"; sourceTree = "<group>"; };
@@ -367,6 +369,7 @@
 				7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */,
 				7EE0E74124E4DF8A002D03F8 /* SubsequenceMatcherTest.swift */,
 				7EEF324724EA54AD002E217A /* NSRange+HelpersTest.swift */,
+				7EB7496025170ED6001C7DBC /* PrefsTest.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -599,6 +602,7 @@
 			files = (
 				7EEF324824EA54AD002E217A /* NSRange+HelpersTest.swift in Sources */,
 				7E6C98D62506B67F00A712EB /* DummyScheduler.swift in Sources */,
+				7EB7496125170ED6001C7DBC /* PrefsTest.swift in Sources */,
 				7E6C98D42503F5C600A712EB /* DelegatingSchedulerTest.swift in Sources */,
 				7EE0E74224E4DF8A002D03F8 /* SubsequenceMatcherTest.swift in Sources */,
 				7E579F702503E2920055D9F6 /* SystemClockSchedulerTest.swift in Sources */,

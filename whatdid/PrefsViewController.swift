@@ -79,13 +79,45 @@ class PrefsViewController: NSViewController {
     //------------------------------------------------------------------
     // General
     //------------------------------------------------------------------
-    
+    @IBOutlet var dailyReportTime: NSDatePicker!
     @IBOutlet var globalShortcutHolder: NSView!
+    let calendarForDateTimePickers = Calendar.current // doesn't actually matter what it is, so long as it's consistent
     
     private func setUpGeneralPanel() {
         let recorder = KeyboardShortcuts.RecorderCocoa(for: .grabFocus)
         globalShortcutHolder.addSubview(recorder)
         recorder.anchorAllSides(to: globalShortcutHolder)
+        
+        func setTimePicker(_ picker: NSDatePicker, to time: HoursAndMinutes) {
+            picker.calendar = calendarForDateTimePickers
+            picker.timeZone = calendarForDateTimePickers.timeZone
+            var dateComponents = DateComponents()
+            time.read() {hours, minutes in
+                dateComponents.hour = hours
+                dateComponents.minute = minutes
+            }
+            dateComponents.calendar = calendarForDateTimePickers
+            dateComponents.timeZone = calendarForDateTimePickers.timeZone
+            NSLog("Converting DateComponents to Date: \(dateComponents)")
+            if let date = dateComponents.date {
+                picker.dateValue = date
+            } else {
+                NSLog("Couldn't convert DateComponents to Date: \(dateComponents)")
+            }
+        }
+        setTimePicker(dailyReportTime, to: Prefs.dailyReportTime)
+    }
+    
+    @IBAction func timePickerChanged(_ sender: NSDatePicker) {
+        let components = calendarForDateTimePickers.dateComponents([.hour, .minute], from: sender.dateValue)
+        let hhMm = HoursAndMinutes(hours: components.hour!, minutes: components.minute!)
+        NSLog("Got timePickerChanged call for a NSDatePicker: \(sender.debugDescription)")
+        switch sender {
+        case dailyReportTime:
+            Prefs.dailyReportTime = hhMm
+        default:
+            NSLog("Got timePickerChanged call for unknown NSDatePicker: \(sender.debugDescription)")
+        }
     }
     
     
