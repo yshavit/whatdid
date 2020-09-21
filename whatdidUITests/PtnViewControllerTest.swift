@@ -673,12 +673,47 @@ class PtnViewControllerTest: XCTestCase {
                     setTimeUtc(h: 0, m: 3)
                     waitForTransition(of: .dailyEnd, toIsVisible: true)
                 }
-                group("Close daily report and re-opens prefs") {
+                group("Close daily report") {
                     clickStatusMenu()
+                }
+            }
+            group("Set snooze-until-tomorrow time") {
+                let snoozeOpts = ptn.window.menuButtons["snoozeopts"]
+                let snoozeOptions = snoozeOpts.descendants(matching: .menuItem)
+                group("Set up") {
+                        group("Set time to 6pm on Friday") {
+                        XCTAssertFalse(isWindowVisible(.ptn))
+                        XCTAssertFalse(isWindowVisible(.dailyEnd))
+                        // We're starting on 1/1/1970 at 2:03 am. That's a Thursday.
+                        setTimeUtc(d: 1, h: 16, m: 0, onSessionPrompt: .startNewSession)
+                        waitForTransition(of: .dailyEnd, toIsVisible: true)
+                        clickStatusMenu() // close the daily report
+                        sleepMillis(500)
+                    }
+                    group("Open prefs") {
+                        clickStatusMenu() // open ptn
+                        snoozeOpts.click()
+                        let snoozeOptionLabels = snoozeOptions.allElementsBoundByIndex.map { $0.title }
+                        XCTAssertEqual(["7:00 pm", "7:30 pm", "8:00 pm", "", "Monday at 9:00 am"], snoozeOptionLabels)
+                        prefsButton.click() // once to dismiss the snooze options popup
+                        sleepMillis(500)
+                        prefsButton.click() // and then to actually click the prefs button
+                    }
+                }
+                group("Set snooze-until-tomorrow") {
+                    let timePicker = prefsSheet.datePickers["snooze until tomorrow time"]
+                    timePicker.click()
+                    timePicker.typeText("11\t23")
+                    prefsSheet.checkBoxes["snooze until tomorrow includes weekends"].click()
+                    prefsSheet.buttons["Done"].click()
+                    snoozeOpts.click()
+                    let snoozeOptionLabels = snoozeOptions.allElementsBoundByIndex.map { $0.title }
+                    XCTAssertEqual(["7:00 pm", "7:30 pm", "8:00 pm", "", "tomorrow at 11:23 am"], snoozeOptionLabels)
+                }
+                group("Open preferences back up") {
+                    prefsButton.click() // once to dismiss the snooze options popup
                     sleepMillis(500)
-                    clickStatusMenu()
-                    prefsButton.click()
-                    XCTAssertTrue(prefsSheet.isVisible)
+                    prefsButton.click() // and then to actually click the prefs button
                 }
             }
         }

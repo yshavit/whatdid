@@ -81,13 +81,22 @@ class PrefsViewController: NSViewController {
         // Set the new daily report time, and reschedule it (it's fine if it's unchanged)
         Prefs.dailyReportTime = getHhMm(for: dailyReportTime)
         AppDelegate.instance.mainMenu.schedule(.dailyEnd)
+        let snoozeInfo = snoozeUntilTomorrowInfo
+        Prefs.dayStartTime = snoozeInfo.hhMm
+        Prefs.daysIncludeWeekends = snoozeInfo.includeWeekends
     }
     
     //------------------------------------------------------------------
     // General
     //------------------------------------------------------------------
+    
+    @IBOutlet var dayStartTimePicker: NSDatePicker!
+    @IBOutlet var daysIncludeWeekends: NSButton!
+    
     @IBOutlet var dailyReportTime: NSDatePicker!
+    
     @IBOutlet var globalShortcutHolder: NSView!
+    
     let calendarForDateTimePickers = Calendar.current // doesn't actually matter what it is, so long as it's consistent
     
     private func setUpGeneralPanel() {
@@ -113,12 +122,17 @@ class PrefsViewController: NSViewController {
             }
         }
         setTimePicker(dailyReportTime, to: Prefs.dailyReportTime)
+        setTimePicker(dayStartTimePicker, to: Prefs.dayStartTime)
+        daysIncludeWeekends.state = Prefs.daysIncludeWeekends ? .on : .off
     }
     
     func getHhMm(for picker: NSDatePicker) -> HoursAndMinutes {
         let components = calendarForDateTimePickers.dateComponents([.hour, .minute], from: picker.dateValue)
         return HoursAndMinutes(hours: components.hour!, minutes: components.minute!)
-        
+    }
+    
+    var snoozeUntilTomorrowInfo: (hhMm: HoursAndMinutes, includeWeekends: Bool) {
+        (getHhMm(for: dayStartTimePicker), daysIncludeWeekends.state == .on)
     }
     
     //------------------------------------------------------------------

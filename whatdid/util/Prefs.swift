@@ -5,6 +5,8 @@ import Cocoa
 struct Prefs {
     @Pref(key: "keyboardShortcutInitializedOnFirstStartup") static var keyboardShortcutInitializedOnFirstStartup = false
     @Pref(key: "dailyReportTime") static var dailyReportTime = HoursAndMinutes(hours: 18, minutes: 00)
+    @Pref(key: "dayStartTime") static var dayStartTime = HoursAndMinutes(hours: 09, minutes: 00)
+    @Pref(key: "daysIncludeWeekends") static var daysIncludeWeekends = false
 }
 
 @propertyWrapper

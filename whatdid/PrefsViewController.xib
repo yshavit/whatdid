@@ -9,6 +9,8 @@
         <customObject id="-2" userLabel="File's Owner" customClass="PrefsViewController" customModule="whatdid" customModuleProvider="target">
             <connections>
                 <outlet property="dailyReportTime" destination="YY2-et-PfP" id="D98-hT-ZmP"/>
+                <outlet property="dayStartTimePicker" destination="GzE-jF-9s2" id="oXP-QE-swi"/>
+                <outlet property="daysIncludeWeekends" destination="S9T-fo-dJ5" id="11E-lS-Brb"/>
                 <outlet property="fullVersion" destination="3K9-EY-10F" id="TTt-Gz-mxh"/>
                 <outlet property="globalShortcutHolder" destination="cdF-qX-q5Y" id="IHs-3K-vOL"/>
                 <outlet property="mainTabs" destination="S38-2I-rYd" id="w8e-74-FHI"/>
@@ -82,10 +84,10 @@
                             <tabViewItems>
                                 <tabViewItem label="General" identifier="" id="3Fi-X3-Od3">
                                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="fmt-Cv-gJX">
-                                        <rect key="frame" x="0.0" y="0.0" width="350" height="66"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="350" height="90"/>
                                         <subviews>
                                             <gridView xPlacement="leading" yPlacement="center" rowAlignment="none" translatesAutoresizingMaskIntoConstraints="NO" id="8wI-wf-FiW">
-                                                <rect key="frame" x="0.0" y="0.0" width="250" height="66"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="374" height="90"/>
                                                 <rows>
                                                     <gridRow id="ziJ-5D-O0w"/>
                                                     <gridRow id="Uhr-eN-flM"/>
@@ -96,8 +98,52 @@
                                                     <gridColumn id="II0-JS-5iC"/>
                                                 </columns>
                                                 <gridCells>
-                                                    <gridCell row="ziJ-5D-O0w" column="4ur-bR-EOi" id="Ejt-6i-Gg7"/>
-                                                    <gridCell row="ziJ-5D-O0w" column="II0-JS-5iC" id="0ZP-7v-mk4"/>
+                                                    <gridCell row="ziJ-5D-O0w" column="4ur-bR-EOi" id="Ejt-6i-Gg7">
+                                                        <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bVG-ba-4hY">
+                                                            <rect key="frame" x="-2" y="70" width="82" height="16"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Day starts at" id="fqS-Zp-fmP">
+                                                                <font key="font" usesAppearanceFont="YES"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                    </gridCell>
+                                                    <gridCell row="ziJ-5D-O0w" column="II0-JS-5iC" id="0ZP-7v-mk4">
+                                                        <stackView key="contentView" distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ID9-jw-Ypn">
+                                                            <rect key="frame" x="150" y="66" width="224" height="24"/>
+                                                            <subviews>
+                                                                <datePicker verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GzE-jF-9s2" userLabel="Day Start Time Picker">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="85" height="28"/>
+                                                                    <datePickerCell key="cell" borderStyle="bezel" alignment="left" drawsBackground="NO" id="zfg-6A-xrN">
+                                                                        <font key="font" metaFont="system"/>
+                                                                        <date key="date" timeIntervalSinceReferenceDate="-978289200">
+                                                                            <!--1970-01-01 05:00:00 +0000-->
+                                                                        </date>
+                                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                        <datePickerElements key="datePickerElements" hour="YES" minute="YES"/>
+                                                                    </datePickerCell>
+                                                                    <accessibility description="snooze until tomorrow time"/>
+                                                                </datePicker>
+                                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="S9T-fo-dJ5">
+                                                                    <rect key="frame" x="84" y="3" width="142" height="18"/>
+                                                                    <buttonCell key="cell" type="check" title="including weekends" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Obp-1W-Xkq">
+                                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                        <font key="font" metaFont="system"/>
+                                                                    </buttonCell>
+                                                                    <accessibility description="snooze until tomorrow includes weekends"/>
+                                                                </button>
+                                                            </subviews>
+                                                            <visibilityPriorities>
+                                                                <integer value="1000"/>
+                                                                <integer value="1000"/>
+                                                            </visibilityPriorities>
+                                                            <customSpacing>
+                                                                <real value="3.4028234663852886e+38"/>
+                                                                <real value="3.4028234663852886e+38"/>
+                                                            </customSpacing>
+                                                        </stackView>
+                                                    </gridCell>
                                                     <gridCell row="Uhr-eN-flM" column="4ur-bR-EOi" id="jBw-tg-I0b">
                                                         <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SWC-aK-o3h">
                                                             <rect key="frame" x="-2" y="40" width="148" height="16"/>
@@ -109,7 +155,7 @@
                                                         </textField>
                                                     </gridCell>
                                                     <gridCell row="Uhr-eN-flM" column="II0-JS-5iC" id="lK6-dn-YqO">
-                                                        <datePicker key="contentView" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YY2-et-PfP">
+                                                        <datePicker key="contentView" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YY2-et-PfP" userLabel="EOD Time picker">
                                                             <rect key="frame" x="150" y="36" width="85" height="28"/>
                                                             <datePickerCell key="cell" borderStyle="bezel" alignment="left" drawsBackground="NO" datePickerMode="range" id="Ewc-ay-xCD">
                                                                 <font key="font" metaFont="system"/>

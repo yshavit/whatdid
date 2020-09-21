@@ -94,7 +94,7 @@ class PtnViewController: NSViewController {
         grabFocus()
     }
     
-    private func setUpSnoozeButton() {
+    private func setUpSnoozeButton(untilTomorrowSettings: (hhMm: HoursAndMinutes, includeWeekends: Bool)? = nil) {
         if let alreadySnoozedUntil = AppDelegate.instance.snoozedUntil {
             snoozeButton.title = "Snoozing until \(TimeUtil.formatSuccinctly(date: alreadySnoozedUntil))..."
             snoozeExtraOptions.isEnabled = false
@@ -123,7 +123,10 @@ class PtnViewController: NSViewController {
                 latestDate = Date(timeIntervalSince1970: snoozeUntil.timeIntervalSince1970)
                 menuItem.representedObject = latestDate
             }
-            let nextSessionDate = TimeUtil.dateForTime(.next, hh: 9, mm: 00, excludeWeekends: true, assumingNow: latestDate)
+            let nextSessionHhMm = untilTomorrowSettings?.hhMm ?? Prefs.dayStartTime
+            let nextSessionWeekends = untilTomorrowSettings?.includeWeekends ?? Prefs.daysIncludeWeekends
+            let nextSessionDate = nextSessionHhMm.map {hh, mm in
+                TimeUtil.dateForTime(.next, hh: hh, mm: mm, excludeWeekends: !nextSessionWeekends, assumingNow: latestDate)}
             if let nextSessionItem = snoozeExtraOptions.lastItem {
                 nextSessionItem.title = TimeUtil.formatSuccinctly(date: nextSessionDate)
                 nextSessionItem.representedObject = nextSessionDate
@@ -195,7 +198,7 @@ class PtnViewController: NSViewController {
                 if reason == .stop {
                     NSApp.terminate(self)
                 }
-                print("Dismissing for reason code=\(reason.rawValue)")
+                self.setUpSnoozeButton(untilTomorrowSettings: prefsViewController.snoozeUntilTomorrowInfo)
             })
         }
     }
