@@ -106,7 +106,7 @@
                                                 </columns>
                                                 <gridCells>
                                                     <gridCell row="ziJ-5D-O0w" column="4ur-bR-EOi" id="Ejt-6i-Gg7">
-                                                        <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bVG-ba-4hY">
+                                                        <textField key="contentView" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bVG-ba-4hY">
                                                             <rect key="frame" x="-2" y="77" width="82" height="16"/>
                                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Day starts at" id="fqS-Zp-fmP">
                                                                 <font key="font" usesAppearanceFont="YES"/>
@@ -152,7 +152,7 @@
                                                         </stackView>
                                                     </gridCell>
                                                     <gridCell row="Uhr-eN-flM" column="4ur-bR-EOi" id="jBw-tg-I0b">
-                                                        <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SWC-aK-o3h">
+                                                        <textField key="contentView" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SWC-aK-o3h">
                                                             <rect key="frame" x="-2" y="47" width="148" height="16"/>
                                                             <textFieldCell key="cell" lineBreakMode="clipping" title="End-of-day summary at" id="Ml4-ZS-lnl">
                                                                 <font key="font" usesAppearanceFont="YES"/>
@@ -183,7 +183,7 @@
                                                     </gridCell>
                                                     <gridCell row="OgE-Hg-t3U" column="II0-JS-5iC" headOfMergedCell="FHv-A2-AyK" id="CDO-td-m0n"/>
                                                     <gridCell row="kjr-6r-i1L" column="4ur-bR-EOi" id="kpc-aH-1bp">
-                                                        <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8o4-sT-8yL">
+                                                        <textField key="contentView" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8o4-sT-8yL">
                                                             <rect key="frame" x="-2" y="7" width="98" height="16"/>
                                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Global shortcut" id="aQi-xR-NJg">
                                                                 <font key="font" usesAppearanceFont="YES"/>
