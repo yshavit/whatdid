@@ -25,10 +25,10 @@ class PtnViewControllerTest: XCTestCase {
          statusItemPoint = CGEvent(source: nil)?.location
     }
     
-    override func recordFailure(withDescription description: String, inFile filePath: String, atLine lineNumber: Int, expected: Bool) {
+    override func record(_ issue: XCTIssue) {
         let now = Date()
         log("Failed at \(now.utcTimestamp) (\(now.timestamp(at: TimeZone(identifier: "US/Eastern")!)))")
-        super.recordFailure(withDescription: description, inFile: filePath, atLine: lineNumber, expected: expected)
+        super.record(issue)
     }
     
     func openPtn(andThen afterAction: (XCUIElement) -> () = {_ in }) -> Ptn {

@@ -18,7 +18,6 @@ class PrefsViewController: NSViewController {
         outerVStackMinHeight.constant = minHeight
         
         tabButtonsStack.wantsLayer = true
-        tabButtonsStack.layer?.backgroundColor = NSColor.windowBackgroundColor.cgColor
         
         tabButtonsStack.subviews.forEach {$0.removeFromSuperview()}
         for (i, tab) in mainTabs.tabViewItems.enumerated() {
@@ -43,6 +42,9 @@ class PrefsViewController: NSViewController {
     }
     
     override func viewWillAppear() {
+        NSAppearance.withEffectiveAppearance {
+            tabButtonsStack.layer?.backgroundColor = NSColor.windowBackgroundColor.cgColor
+        }
         if !mainTabs.tabViewItems.isEmpty {
             selectPane(at: 0) // TODO rememeber the previously opened one
         }

@@ -25,13 +25,13 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView translatesAutoresizingMaskIntoConstraints="NO" id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="358" height="398"/>
+            <rect key="frame" x="0.0" y="0.0" width="558" height="239"/>
             <subviews>
                 <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kp1-1s-z5L" userLabel="Outer VStack">
-                    <rect key="frame" x="4" y="3" width="350" height="392"/>
+                    <rect key="frame" x="4" y="3" width="550" height="233"/>
                     <subviews>
                         <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HiW-d6-AUq" userLabel="Tab Buttons">
-                            <rect key="frame" x="0.0" y="354" width="350" height="38"/>
+                            <rect key="frame" x="0.0" y="195" width="550" height="38"/>
                             <subviews>
                                 <button horizontalHuggingPriority="750" verticalHuggingPriority="750" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kyk-QN-AE9">
                                     <rect key="frame" x="0.0" y="0.0" width="96" height="38"/>
@@ -55,7 +55,7 @@
                                     </buttonCell>
                                 </button>
                                 <customView verticalHuggingPriority="750" horizontalCompressionResistancePriority="1" verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="DZT-CR-EY2">
-                                    <rect key="frame" x="280" y="0.0" width="70" height="38"/>
+                                    <rect key="frame" x="280" y="0.0" width="270" height="38"/>
                                 </customView>
                             </subviews>
                             <constraints>
@@ -77,20 +77,27 @@
                             </customSpacing>
                         </stackView>
                         <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="tah-vZ-4uX">
-                            <rect key="frame" x="0.0" y="351" width="350" height="5"/>
+                            <rect key="frame" x="0.0" y="192" width="550" height="5"/>
                         </box>
+                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="Gf1-tW-OJG" userLabel="spacer (this one defines the vspace const)">
+                            <rect key="frame" x="0.0" y="188" width="163" height="6"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="6" id="z0h-bq-Cxk"/>
+                            </constraints>
+                        </customView>
                         <tabView controlSize="small" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="S38-2I-rYd">
-                            <rect key="frame" x="0.0" y="211" width="350" height="142"/>
+                            <rect key="frame" x="0.0" y="40" width="550" height="148"/>
                             <tabViewItems>
                                 <tabViewItem label="General" identifier="" id="3Fi-X3-Od3">
-                                    <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="fmt-Cv-gJX">
-                                        <rect key="frame" x="0.0" y="0.0" width="350" height="90"/>
+                                    <view key="view" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fmt-Cv-gJX">
+                                        <rect key="frame" x="0.0" y="0.0" width="550" height="148"/>
                                         <subviews>
                                             <gridView xPlacement="leading" yPlacement="center" rowAlignment="none" translatesAutoresizingMaskIntoConstraints="NO" id="8wI-wf-FiW">
-                                                <rect key="frame" x="0.0" y="0.0" width="374" height="90"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="374" height="97"/>
                                                 <rows>
                                                     <gridRow id="ziJ-5D-O0w"/>
                                                     <gridRow id="Uhr-eN-flM"/>
+                                                    <gridRow id="OgE-Hg-t3U"/>
                                                     <gridRow id="kjr-6r-i1L"/>
                                                 </rows>
                                                 <columns>
@@ -100,7 +107,7 @@
                                                 <gridCells>
                                                     <gridCell row="ziJ-5D-O0w" column="4ur-bR-EOi" id="Ejt-6i-Gg7">
                                                         <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bVG-ba-4hY">
-                                                            <rect key="frame" x="-2" y="70" width="82" height="16"/>
+                                                            <rect key="frame" x="-2" y="77" width="82" height="16"/>
                                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Day starts at" id="fqS-Zp-fmP">
                                                                 <font key="font" usesAppearanceFont="YES"/>
                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -110,9 +117,9 @@
                                                     </gridCell>
                                                     <gridCell row="ziJ-5D-O0w" column="II0-JS-5iC" id="0ZP-7v-mk4">
                                                         <stackView key="contentView" distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ID9-jw-Ypn">
-                                                            <rect key="frame" x="150" y="66" width="224" height="24"/>
+                                                            <rect key="frame" x="150" y="73" width="224" height="24"/>
                                                             <subviews>
-                                                                <datePicker verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GzE-jF-9s2" userLabel="Day Start Time Picker">
+                                                                <datePicker verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="GzE-jF-9s2" userLabel="Day Start Time Picker">
                                                                     <rect key="frame" x="0.0" y="0.0" width="85" height="28"/>
                                                                     <datePickerCell key="cell" borderStyle="bezel" alignment="left" drawsBackground="NO" id="zfg-6A-xrN">
                                                                         <font key="font" metaFont="system"/>
@@ -146,7 +153,7 @@
                                                     </gridCell>
                                                     <gridCell row="Uhr-eN-flM" column="4ur-bR-EOi" id="jBw-tg-I0b">
                                                         <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SWC-aK-o3h">
-                                                            <rect key="frame" x="-2" y="40" width="148" height="16"/>
+                                                            <rect key="frame" x="-2" y="47" width="148" height="16"/>
                                                             <textFieldCell key="cell" lineBreakMode="clipping" title="End-of-day summary at" id="Ml4-ZS-lnl">
                                                                 <font key="font" usesAppearanceFont="YES"/>
                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -156,7 +163,7 @@
                                                     </gridCell>
                                                     <gridCell row="Uhr-eN-flM" column="II0-JS-5iC" id="lK6-dn-YqO">
                                                         <datePicker key="contentView" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YY2-et-PfP" userLabel="EOD Time picker">
-                                                            <rect key="frame" x="150" y="36" width="85" height="28"/>
+                                                            <rect key="frame" x="150" y="43" width="85" height="28"/>
                                                             <datePickerCell key="cell" borderStyle="bezel" alignment="left" drawsBackground="NO" datePickerMode="range" id="Ewc-ay-xCD">
                                                                 <font key="font" metaFont="system"/>
                                                                 <date key="date" timeIntervalSinceReferenceDate="-978289200">
@@ -169,6 +176,12 @@
                                                             <accessibility description="daily report time"/>
                                                         </datePicker>
                                                     </gridCell>
+                                                    <gridCell row="OgE-Hg-t3U" column="4ur-bR-EOi" headOfMergedCell="FHv-A2-AyK" id="FHv-A2-AyK">
+                                                        <box key="contentView" verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="sDR-rf-PJk">
+                                                            <rect key="frame" x="0.0" y="34" width="100" height="5"/>
+                                                        </box>
+                                                    </gridCell>
+                                                    <gridCell row="OgE-Hg-t3U" column="II0-JS-5iC" headOfMergedCell="FHv-A2-AyK" id="CDO-td-m0n"/>
                                                     <gridCell row="kjr-6r-i1L" column="4ur-bR-EOi" id="kpc-aH-1bp">
                                                         <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8o4-sT-8yL">
                                                             <rect key="frame" x="-2" y="7" width="98" height="16"/>
@@ -191,6 +204,7 @@
                                             </gridView>
                                         </subviews>
                                         <constraints>
+                                            <constraint firstItem="8wI-wf-FiW" firstAttribute="width" secondItem="fmt-Cv-gJX" secondAttribute="width" id="2dN-Vk-ahM"/>
                                             <constraint firstItem="8wI-wf-FiW" firstAttribute="height" secondItem="fmt-Cv-gJX" secondAttribute="height" id="Sls-Yh-Z99"/>
                                             <constraint firstItem="8wI-wf-FiW" firstAttribute="top" secondItem="fmt-Cv-gJX" secondAttribute="top" id="dlV-Xg-9xA"/>
                                             <constraint firstItem="8wI-wf-FiW" firstAttribute="leading" secondItem="fmt-Cv-gJX" secondAttribute="leading" id="gOR-aE-Rsc"/>
@@ -202,10 +216,10 @@
                                 </tabViewItem>
                                 <tabViewItem label="About" identifier="" id="NwU-Zn-0aF">
                                     <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="rMy-Zr-TwQ">
-                                        <rect key="frame" x="0.0" y="0.0" width="350" height="53"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="550" height="140"/>
                                         <subviews>
                                             <stackView toolTip="https://github.com/yshavit/whatdid/" distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vRX-G9-MoD" userLabel="About VStack">
-                                                <rect key="frame" x="0.0" y="0.0" width="186" height="53"/>
+                                                <rect key="frame" x="0.0" y="87" width="186" height="53"/>
                                                 <subviews>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WTv-mo-8cX">
                                                         <rect key="frame" x="-2" y="37" width="110" height="16"/>
@@ -307,19 +321,23 @@
                             </tabViewItems>
                         </tabView>
                         <customView verticalHuggingPriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="zD3-zr-z0J" userLabel="Variable spacer">
-                            <rect key="frame" x="0.0" y="23" width="350" height="188"/>
+                            <rect key="frame" x="0.0" y="35" width="550" height="5"/>
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" id="eUM-d2-Sw6"/>
+                                <constraint firstAttribute="height" priority="800" constant="5" placeholder="YES" id="joi-31-uqX"/>
                             </constraints>
                         </customView>
+                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="huG-vK-DVR" userLabel="spacer">
+                            <rect key="frame" x="0.0" y="29" width="163" height="6"/>
+                        </customView>
                         <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="S35-fj-6x6">
-                            <rect key="frame" x="0.0" y="14" width="350" height="11"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="7" id="IEO-uz-1pL"/>
-                            </constraints>
+                            <rect key="frame" x="0.0" y="26" width="350" height="5"/>
                         </box>
+                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="KZc-3Z-vM8" userLabel="spacer">
+                            <rect key="frame" x="0.0" y="22" width="163" height="6"/>
+                        </customView>
                         <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" horizontalCompressionResistancePriority="999" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YFC-BY-e7h" userLabel="Footer HStack">
-                            <rect key="frame" x="0.0" y="0.0" width="350" height="16"/>
+                            <rect key="frame" x="0.0" y="6" width="550" height="16"/>
                             <subviews>
                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SsJ-Pl-v9W">
                                     <rect key="frame" x="0.0" y="-1" width="72" height="17"/>
@@ -336,7 +354,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 </customView>
                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Spf-a6-7Zd">
-                                    <rect key="frame" x="252" y="-1" width="98" height="17"/>
+                                    <rect key="frame" x="252" y="-1" width="298" height="17"/>
                                     <buttonCell key="cell" type="roundRect" title="Done" bezelStyle="roundedRect" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tch-2Y-0P2">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="controlContent" size="11"/>
@@ -349,9 +367,10 @@ Gw
                                     </connections>
                                 </button>
                             </subviews>
-                            <edgeInsets key="edgeInsets" left="0.0" right="0.0" top="4" bottom="0.0"/>
                             <constraints>
+                                <constraint firstItem="Spf-a6-7Zd" firstAttribute="top" secondItem="SsJ-Pl-v9W" secondAttribute="top" id="QGh-XQ-cOf"/>
                                 <constraint firstItem="4vE-b6-xfr" firstAttribute="height" secondItem="SsJ-Pl-v9W" secondAttribute="height" id="ZeH-q4-TeG"/>
+                                <constraint firstItem="4vE-b6-xfr" firstAttribute="top" secondItem="SsJ-Pl-v9W" secondAttribute="top" id="beh-pw-rlv"/>
                             </constraints>
                             <visibilityPriorities>
                                 <integer value="1000"/>
@@ -364,14 +383,20 @@ Gw
                                 <real value="3.4028234663852886e+38"/>
                             </customSpacing>
                         </stackView>
+                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="Ljj-sT-xP9" userLabel="spacer">
+                            <rect key="frame" x="0.0" y="0.0" width="163" height="6"/>
+                        </customView>
                     </subviews>
                     <constraints>
+                        <constraint firstItem="huG-vK-DVR" firstAttribute="height" secondItem="Gf1-tW-OJG" secondAttribute="height" id="BvB-eC-NPv"/>
                         <constraint firstItem="tah-vZ-4uX" firstAttribute="width" secondItem="kp1-1s-z5L" secondAttribute="width" id="C80-0A-jyg"/>
+                        <constraint firstItem="Ljj-sT-xP9" firstAttribute="height" secondItem="Gf1-tW-OJG" secondAttribute="height" id="HId-p9-MLL"/>
                         <constraint firstItem="YFC-BY-e7h" firstAttribute="width" secondItem="kp1-1s-z5L" secondAttribute="width" id="MDu-hD-MmM"/>
+                        <constraint firstItem="KZc-3Z-vM8" firstAttribute="height" secondItem="Gf1-tW-OJG" secondAttribute="height" id="NEm-kI-UhQ"/>
                         <constraint firstItem="S38-2I-rYd" firstAttribute="width" secondItem="kp1-1s-z5L" secondAttribute="width" id="STZ-NZ-EFK"/>
                         <constraint firstItem="HiW-d6-AUq" firstAttribute="width" secondItem="kp1-1s-z5L" secondAttribute="width" id="Sui-hp-H2m"/>
                         <constraint firstItem="zD3-zr-z0J" firstAttribute="width" secondItem="kp1-1s-z5L" secondAttribute="width" id="of5-Ab-FLZ"/>
-                        <constraint firstAttribute="width" constant="350" id="pP3-Nb-iFv"/>
+                        <constraint firstAttribute="width" constant="550" id="pP3-Nb-iFv"/>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="sfZ-rm-XWd"/>
                     </constraints>
                     <visibilityPriorities>
@@ -381,8 +406,16 @@ Gw
                         <integer value="1000"/>
                         <integer value="1000"/>
                         <integer value="1000"/>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
                     </visibilityPriorities>
                     <customSpacing>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
@@ -398,7 +431,7 @@ Gw
                 <constraint firstItem="kp1-1s-z5L" firstAttribute="height" secondItem="Hz6-mo-xeY" secondAttribute="height" constant="-6" id="rEw-1M-Awp"/>
                 <constraint firstItem="kp1-1s-z5L" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="3" id="yyn-SO-OvE"/>
             </constraints>
-            <point key="canvasLocation" x="139" y="52.5"/>
+            <point key="canvasLocation" x="205" y="-186"/>
         </customView>
     </objects>
     <resources>
