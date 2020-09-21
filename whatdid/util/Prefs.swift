@@ -10,12 +10,12 @@ struct Prefs {
 }
 
 @propertyWrapper
-fileprivate struct Pref<T: PrefType> {
+struct Pref<T: PrefType> {
     private let key: String
     
-    fileprivate init(wrappedValue: T, key: String) {
-        self.key = key
-        UserDefaults.standard.register(defaults: [key: wrappedValue.asUserDefaultsValue])
+    init(wrappedValue: T, key: String) {
+        self.key = "whatdid." + key
+        UserDefaults.standard.register(defaults: [self.key: wrappedValue.asUserDefaultsValue])
     }
     
     var wrappedValue: T {
@@ -28,7 +28,7 @@ fileprivate struct Pref<T: PrefType> {
     }
 }
 
-fileprivate protocol PrefType {
+protocol PrefType {
     static func readUserDefaultsValue(key: String) -> Self
     static func writeUserDefaultsValue(key: String, value: Self)
     var asUserDefaultsValue: Any { get }
@@ -40,6 +40,20 @@ extension Bool: PrefType {
     }
     
     static func writeUserDefaultsValue(key: String, value: Bool) {
+        UserDefaults.standard.set(value, forKey: key)
+    }
+    
+    var asUserDefaultsValue: Any {
+        self
+    }
+}
+
+extension Int: PrefType {
+    static func readUserDefaultsValue(key: String) -> Int {
+        return UserDefaults.standard.integer(forKey: key)
+    }
+    
+    static func writeUserDefaultsValue(key: String, value: Int) {
         UserDefaults.standard.set(value, forKey: key)
     }
     

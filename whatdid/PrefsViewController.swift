@@ -4,6 +4,8 @@ import Cocoa
 import KeyboardShortcuts
 
 class PrefsViewController: NSViewController {
+    @Pref(key: "prefsview.openItem") static var openTab = 0
+    
     @IBOutlet private var outerVStackWidth: NSLayoutConstraint!
     @IBOutlet var outerVStackMinHeight: NSLayoutConstraint!
     private var desiredWidth: CGFloat = 0
@@ -46,7 +48,7 @@ class PrefsViewController: NSViewController {
             tabButtonsStack.layer?.backgroundColor = NSColor.windowBackgroundColor.cgColor
         }
         if !mainTabs.tabViewItems.isEmpty {
-            selectPane(at: 0) // TODO rememeber the previously opened one
+            selectPane(at: PrefsViewController.openTab)
         }
     }
     
@@ -58,6 +60,7 @@ class PrefsViewController: NSViewController {
         self.mainTabs.selectTabViewItem(at: index)
         view.layoutSubtreeIfNeeded()
         view.window?.setContentSize(view.fittingSize)
+        PrefsViewController.openTab = index
     }
 
     func setSize(width: CGFloat, minHeight: CGFloat) {
