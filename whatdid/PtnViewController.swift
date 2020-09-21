@@ -16,6 +16,7 @@ class PtnViewController: NSViewController {
     @IBOutlet weak var snoozeButton: NSButton!
     private var snoozeUntil : Date?
     @IBOutlet weak var snoozeExtraOptions: NSPopUpButton!
+    private var snoozeOptionsUpdateSpinner: NSProgressIndicator?
     
     private var optionIsPressed = false
     
@@ -95,9 +96,15 @@ class PtnViewController: NSViewController {
     }
     
     private func setUpSnoozeButton(untilTomorrowSettings: (hhMm: HoursAndMinutes, includeWeekends: Bool)? = nil) {
+        if let activeSpinner = snoozeOptionsUpdateSpinner {
+            activeSpinner.removeFromSuperview()
+            snoozeOptionsUpdateSpinner = nil
+        }
+        snoozeButton.isEnabled = true
         if let alreadySnoozedUntil = AppDelegate.instance.snoozedUntil {
             snoozeButton.title = "Snoozing until \(TimeUtil.formatSuccinctly(date: alreadySnoozedUntil))..."
             snoozeExtraOptions.isEnabled = false
+            scheduler.schedule("Snooze options refresh", at: alreadySnoozedUntil, updateSnoozeButton)
         } else {
             // Set up the snooze button. We'll have 4 options at half-hour increments, starting 10 minutes from now.
             // The 10 minutes is so that if it's currently 2:29:59, you won't be annoyed with a "snooze until 2:30" button.
@@ -112,6 +119,7 @@ class PtnViewController: NSViewController {
 
             snoozeButton.title = "Snooze until \(TimeUtil.formatSuccinctly(date: snoozeUntil))   " // extra space for the pulldown option
             self.snoozeUntil = Date(timeIntervalSince1970: snoozeUntil.timeIntervalSince1970)
+            let refreshOptionsAt = snoozeUntil.addingTimeInterval(-300)
             var latestDate = snoozeUntil
             snoozeExtraOptions.isEnabled = true
             for menuItem in snoozeExtraOptions.itemArray[1...] {
@@ -131,11 +139,37 @@ class PtnViewController: NSViewController {
                 nextSessionItem.title = TimeUtil.formatSuccinctly(date: nextSessionDate)
                 nextSessionItem.representedObject = nextSessionDate
             }
+            
+            scheduler.schedule("Snooze options refresh", at: refreshOptionsAt, updateSnoozeButton)
         }
         
         #if UI_TEST
         populateJsonFlatEntryField()
         #endif
+    }
+    
+    private func updateSnoozeButton() {
+        if let snoozeParent = snoozeButton.superview {
+            // Disable the snooze button, and set a spinner
+            snoozeButton.isEnabled = false
+            snoozeExtraOptions.isEnabled = false
+            if snoozeOptionsUpdateSpinner == nil {
+                let newSpinner = NSProgressIndicator()
+                snoozeOptionsUpdateSpinner = newSpinner
+                newSpinner.useAutoLayout()
+                snoozeParent.addSubview(newSpinner)
+                newSpinner.startAnimation(self)
+                newSpinner.isIndeterminate = true
+                newSpinner.style = .spinning
+                newSpinner.centerYAnchor.constraint(equalTo: snoozeButton.centerYAnchor).isActive = true
+                newSpinner.centerXAnchor.constraint(equalTo: snoozeButton.centerXAnchor).isActive = true
+                newSpinner.heightAnchor.constraint(equalTo: snoozeButton.heightAnchor).isActive = true
+            }
+            // Wait a second, and then update the options and set a new spinner
+            scheduler.schedule("Set the new snooze options", after: 1) {
+                self.setUpSnoozeButton()
+            }
+        }
     }
     
     private func updateHeaderText() {

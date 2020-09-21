@@ -280,15 +280,44 @@ class PtnViewControllerTest: XCTestCase {
                 assertThat(window: .ptn, isVisible: false)
             }
         }
+        group("Check snooze option updates") {
+            let button = ptn.buttons["snoozebutton"]
+            group("Initial state") {
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: true)
+                // It's now 1970-01-02 16:31:00 UTC, which is 6:31 pm. Check that the default snooze option is to 7:00.
+                XCTAssertEqual("Snooze until 7:00 pm", button.title.trimmingCharacters(in: .whitespaces))
+                XCTAssertTrue(button.isEnabled)
+            }
+            group("Wait until right before the update") {
+                setTimeUtc(d: 1, h: 16, m: 54, s: 59)
+                // Unchanged
+                XCTAssertEqual("Snooze until 7:00 pm", button.title.trimmingCharacters(in: .whitespaces))
+                XCTAssertTrue(button.isEnabled)
+                XCTAssertEqual(0, ptn.activityIndicators.count) // spinner
+            }
+            group("Update is in progress") {
+                setTimeUtc(d: 1, h: 16, m: 55, s: 00)
+                // Text is unchanged, but button is disabled
+                XCTAssertEqual("Snooze until 7:00 pm", button.title.trimmingCharacters(in: .whitespaces))
+                XCTAssertFalse(button.isEnabled)
+                wait(for: "spinner", timeout: 5, until: {ptn.activityIndicators.count == 1})
+            }
+            group("Update is done") {
+                setTimeUtc(d: 1, h: 16, m: 55, s: 01)
+                // Update complete
+                XCTAssertEqual("Snooze until 7:30 pm", button.title.trimmingCharacters(in: .whitespaces))
+                XCTAssertTrue(button.isEnabled)
+                wait(for: "spinner", timeout: 5, until: {ptn.activityIndicators.count == 0})
+            }
+        }
         group("Check snooze-until-tomorrow option") {
-            // It's currently 6:31 pm on Friday, Jan 2. So "tomorrow" is actually Monday.
-            // The default option is 7:00 pm, and the extra options start at 7:30 pm.
-            clickStatusMenu()
-            waitForTransition(of: .ptn, toIsVisible: true)
+            // It's currently 6:55 pm on Friday, Jan 2. So "tomorrow" is actually Monday.
+            // The default option is 7:30 pm, and the extra options start at 8:00 pm.
             ptn.menuButtons["snoozeopts"].click()
             let snoozeOptions = ptn.menuButtons["snoozeopts"].descendants(matching: .menuItem)
             let snoozeOptionLabels = snoozeOptions.allElementsBoundByIndex.map { $0.title }
-            XCTAssertEqual(["7:30 pm", "8:00 pm", "8:30 pm", "", "Monday at 9:00 am"], snoozeOptionLabels)
+            XCTAssertEqual(["8:00 pm", "8:30 pm", "9:00 pm", "", "Monday at 9:00 am"], snoozeOptionLabels)
         }
     }
     
@@ -876,10 +905,10 @@ class PtnViewControllerTest: XCTestCase {
     
     /// Sets the mocked clock in UTC. If `deactivate` is true (default false), then this will set the mocked clock to set the time when the app deactivates, and then this method will activate
     /// the finder. Otherwise, `onSessionPrompt` governs what to do if the "start a new session?" prompt comes up.
-    func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0, deactivate: Bool = false, onSessionPrompt: LongSessionAction = .ignorePrompt) {
-        group("setting time \(d)d \(h)h \(m)m") {
+    func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0, s: Int = 0, deactivate: Bool = false, onSessionPrompt: LongSessionAction = .ignorePrompt) {
+        group("setting time \(d)d \(h)h \(m)m \(s)s") {
             app.activate() // bring the clockTicker back, if needed
-            let epochSeconds = d * 86400 + h * 3600 + m * 60
+            let epochSeconds = d * 86400 + h * 3600 + m * 60 + s
             let text = "\(epochSeconds)\r"
             let clockTicker = app.windows["Mocked Clock"].children(matching: .textField).element
             if deactivate {

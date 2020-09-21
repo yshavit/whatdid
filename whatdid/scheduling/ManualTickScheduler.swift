@@ -48,10 +48,14 @@ class ManualTickScheduler: Scheduler {
         DispatchQueue.main.async(execute: block)
     }
     
-    private struct WorkItem {
+    private struct WorkItem: CustomStringConvertible {
         let id: UUID
         let fireAt: Date
         let block: () -> Void
+        
+        var description: String {
+            "\(fireAt): \(id)"
+        }
     }
     
     private struct NoopScheduledItem: ScheduledTask {

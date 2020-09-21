@@ -27,12 +27,11 @@ extension XCTestCase {
         XCTestCase.log(message)
     }
     
-    func wait(for description: String, until condition: () -> Bool) {
+    func wait(for description: String, timeout: TimeInterval = 30, until condition: () -> Bool) {
         XCTestCase.wait(for: description, until: condition)
     }
     
-    class func wait(for description: String, until condition: () -> Bool) {
-        let timeout: TimeInterval = 30
+    class func wait(for description: String, timeout: TimeInterval = 30, until condition: () -> Bool) {
         let delay: TimeInterval = 1
         group("Waiting for \(description)") {
             let tryUntil = Date().addingTimeInterval(timeout)
