@@ -1,4 +1,4 @@
-name: Swift
+name: Test
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  build-release:
+  release-build:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
