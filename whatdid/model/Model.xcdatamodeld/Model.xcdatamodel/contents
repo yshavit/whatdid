@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19F101" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19G2021" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Entry" representedClassName="Entry" syncable="YES">
         <attribute name="notes" optional="YES" attributeType="String"/>
         <attribute name="timeApproximatelyStarted" attributeType="Date" usesScalarValueType="NO"/>
@@ -24,18 +24,20 @@
     </entity>
     <entity name="Task" representedClassName="Task" syncable="YES">
         <attribute name="lastUsed" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="projectName" optional="YES" attributeType="String"/>
         <attribute name="task" attributeType="String"/>
         <relationship name="entries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Entry" inverseName="task" inverseEntity="Entry"/>
         <relationship name="project" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Project" inverseName="tasks" inverseEntity="Project"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="task"/>
+                <constraint value="projectName"/>
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="Entry" positionX="-54" positionY="9" width="128" height="103"/>
-        <element name="Project" positionX="-142.80078125" positionY="-105.2265625" width="128" height="88"/>
-        <element name="Task" positionX="-36" positionY="18" width="128" height="103"/>
+        <element name="Entry" positionX="177.66015625" positionY="-160.5390625" width="128" height="103"/>
+        <element name="Project" positionX="-205.12109375" positionY="-130.53515625" width="128" height="88"/>
+        <element name="Task" positionX="-10.3359375" positionY="-160.85546875" width="128" height="118"/>
     </elements>
 </model>

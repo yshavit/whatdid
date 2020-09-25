@@ -8,7 +8,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     public static let instance = NSApplication.shared.delegate as! AppDelegate
     public static let DEBUG_DATE_FORMATTER = ISO8601DateFormatter()
 
-    public let model = Model()
+    private var _model = Model()
     @IBOutlet weak var mainMenu: MainMenu!
     private var deactivationHooks : Atomic<[() -> Void]> = Atomic(wrappedValue: [])
     
@@ -16,6 +16,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var uiTestWindow: UiTestWindow!
     private var manualTickSchedulerWindow: ManualTickSchedulerWindow!
     private var oldPrefs: [String : Any]?
+    #endif
+    
+    var model: Model {
+        _model
+    }
+    
+    #if UI_TEST
+    func resetModel() {
+        _model = Model()
+    }
     #endif
     
     func onDeactivation(_ block: @escaping () -> Void) {

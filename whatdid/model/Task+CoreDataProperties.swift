@@ -14,7 +14,34 @@ extension Task {
     @NSManaged public var task: String
     @NSManaged public var entries: Set<Entry>
     @NSManaged public var project: Project
-
+    
+    @NSManaged private var projectName: String?
+    
+    public override func awakeFromFetch() {
+        projectName = project.project
+        super.awakeFromFetch()
+    }
+    
+    public override func validateForUpdate() throws {
+        setProjectName()
+        try super.validateForUpdate()
+    }
+    
+    public override func validateForDelete() throws {
+        setProjectName()
+        try super.validateForDelete()
+    }
+    
+    public override func validateForInsert() throws {
+        setProjectName()
+        try super.validateForInsert()
+    }
+    
+    private func setProjectName() {
+        if projectName == nil {
+            projectName = project.project
+        }
+    }
 }
 
 // MARK: Generated accessors for entries

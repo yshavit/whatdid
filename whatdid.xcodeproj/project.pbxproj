@@ -28,6 +28,7 @@
 		7E6C98D42503F5C600A712EB /* DelegatingSchedulerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6C98D32503F5C600A712EB /* DelegatingSchedulerTest.swift */; };
 		7E6C98D62506B67F00A712EB /* DummyScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6C98D52506B67F00A712EB /* DummyScheduler.swift */; };
 		7E6F2E6D24F38D9E008874FE /* XCTestCase+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F2E6C24F38D9E008874FE /* XCTestCase+Helpers.swift */; };
+		7E75D0A0251D9A790002DBA0 /* ModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E75D09F251D9A790002DBA0 /* ModelTest.swift */; };
 		7E7B7E6124F2F84000460BC3 /* NSStackView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7B7E6024F2F84000460BC3 /* NSStackView+Helpers.swift */; };
 		7E7C384B24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */; };
 		7E7C384C24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */; };
@@ -35,7 +36,6 @@
 		7E7C384F24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */; };
 		7E7C385224DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C385124DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift */; };
 		7E7C385424DF3A0300CFF3E7 /* PtnViewController+UIHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C385324DF3A0300CFF3E7 /* PtnViewController+UIHook.swift */; };
-		7E7C385624DF3D2600CFF3E7 /* Model+UIHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C385524DF3D2600CFF3E7 /* Model+UIHook.swift */; };
 		7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */; };
 		7E8C04E023714F0800A0C3A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04DF23714F0800A0C3A6 /* Assets.xcassets */; };
 		7E8C04FA23714F0800A0C3A6 /* ComponentUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04F923714F0800A0C3A6 /* ComponentUITests.swift */; };
@@ -118,12 +118,12 @@
 		7E6C98D32503F5C600A712EB /* DelegatingSchedulerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelegatingSchedulerTest.swift; sourceTree = "<group>"; };
 		7E6C98D52506B67F00A712EB /* DummyScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyScheduler.swift; sourceTree = "<group>"; };
 		7E6F2E6C24F38D9E008874FE /* XCTestCase+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Helpers.swift"; sourceTree = "<group>"; };
+		7E75D09F251D9A790002DBA0 /* ModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTest.swift; sourceTree = "<group>"; };
 		7E7B7E6024F2F84000460BC3 /* NSStackView+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSStackView+Helpers.swift"; sourceTree = "<group>"; };
 		7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatEntry.swift; sourceTree = "<group>"; };
 		7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlatEntry+Serde.swift"; sourceTree = "<group>"; };
 		7E7C385124DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlatEntry+SerdeTest.swift"; sourceTree = "<group>"; };
 		7E7C385324DF3A0300CFF3E7 /* PtnViewController+UIHook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PtnViewController+UIHook.swift"; sourceTree = "<group>"; };
-		7E7C385524DF3D2600CFF3E7 /* Model+UIHook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Model+UIHook.swift"; sourceTree = "<group>"; };
 		7E8C04DA23714F0700A0C3A6 /* whatdid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = whatdid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7E8C04DF23714F0800A0C3A6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -217,7 +217,6 @@
 				7E37A29724C0293E005BA1DF /* Entry+CoreDataProperties.swift */,
 				7E37A27224BFF676005BA1DF /* Model.xcdatamodeld */,
 				7E37A29424C00266005BA1DF /* Model.swift */,
-				7E7C385524DF3D2600CFF3E7 /* Model+UIHook.swift */,
 				7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */,
 				7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */,
 			);
@@ -232,6 +231,14 @@
 				7E6C98D52506B67F00A712EB /* DummyScheduler.swift */,
 			);
 			path = scheduling;
+			sourceTree = "<group>";
+		};
+		7E75D09E251D9A500002DBA0 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				7E75D09F251D9A790002DBA0 /* ModelTest.swift */,
+			);
+			path = model;
 			sourceTree = "<group>";
 		};
 		7E7C385024DF36B300CFF3E7 /* model */ = {
@@ -290,8 +297,8 @@
 		7E8C04ED23714F0800A0C3A6 /* whatdidTests */ = {
 			isa = PBXGroup;
 			children = (
+				7E75D09E251D9A500002DBA0 /* model */,
 				7E579F6E2503E2740055D9F6 /* scheduling */,
-				7E970D6524DA81A400F634AB /* ui_testhook */,
 				7EE9A1C024DA35F200EE0FB1 /* util */,
 				7E8C04F023714F0800A0C3A6 /* Info.plist */,
 			);
@@ -318,13 +325,6 @@
 			children = (
 				7E970D6A24DA850D00F634AB /* UiTestWindow.swift */,
 				7E970D6824DA84AF00F634AB /* UiTestWindow.xib */,
-			);
-			path = ui_testhook;
-			sourceTree = "<group>";
-		};
-		7E970D6524DA81A400F634AB /* ui_testhook */ = {
-			isa = PBXGroup;
-			children = (
 			);
 			path = ui_testhook;
 			sourceTree = "<group>";
@@ -553,7 +553,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7EDDFF5E250097B30027E91A /* Date+Helpers.swift in Sources */,
-				7E7C385624DF3D2600CFF3E7 /* Model+UIHook.swift in Sources */,
 				7E37A29524C00266005BA1DF /* Model.swift in Sources */,
 				7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */,
 				7EDA368F24D54EA300F5E368 /* FlippedView.swift in Sources */,
@@ -610,6 +609,7 @@
 				7E6C98D42503F5C600A712EB /* DelegatingSchedulerTest.swift in Sources */,
 				7EE0E74224E4DF8A002D03F8 /* SubsequenceMatcherTest.swift in Sources */,
 				7E579F702503E2920055D9F6 /* SystemClockSchedulerTest.swift in Sources */,
+				7E75D0A0251D9A790002DBA0 /* ModelTest.swift in Sources */,
 				7EF8579524E0961E00867832 /* OpenCloseHelperTest.swift in Sources */,
 				7EAB5ECD24DA366600E18097 /* TimeUtilTest.swift in Sources */,
 			);

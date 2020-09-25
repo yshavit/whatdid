@@ -36,10 +36,10 @@ class PtnViewController: NSViewController {
             }
         }
         projectField.optionsLookupOnFocus = {
-            AppDelegate.instance.model.listProjects(prefix: "")
+            AppDelegate.instance.model.listProjects()
         }
         taskField.optionsLookupOnFocus = {
-            AppDelegate.instance.model.listTasks(project: self.projectField.textField.stringValue, prefix: "")
+            AppDelegate.instance.model.listTasks(project: self.projectField.textField.stringValue)
         }
         projectField.onTextChange = {
             self.taskField.textField.stringValue = ""

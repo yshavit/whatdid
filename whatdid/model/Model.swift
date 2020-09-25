@@ -9,37 +9,55 @@ class Model {
     private static let BREAK_TASK_NOTES = ""
     
     @Atomic private var _lastEntryDate : Date
+    private let modelName: String
+    private let clearAllEntriesOnStartup: Bool
     
-    init() {
+    convenience init() {
+        #if UI_TEST
+        self.init(modelName: "UITest", clearAllEntriesOnStartup: true)
+        #else
+        self.init(modelName: "Model")
+        #endif
+    }
+    
+    init(modelName: String, clearAllEntriesOnStartup: Bool = false) {
+        self.modelName = modelName
+        self.clearAllEntriesOnStartup = clearAllEntriesOnStartup
         _lastEntryDate = DefaultScheduler.instance.now
     }
     
     private lazy var container: NSPersistentContainer = {
-        let localContainer = NSPersistentContainer(name: "Model")
-        
-        #if UI_TEST
-        localContainer.persistentStoreDescriptions.removeAll()
-        let inMemory = NSPersistentStoreDescription()
-        inMemory.type = NSInMemoryStoreType
-        localContainer.persistentStoreDescriptions.append(inMemory)
-        #endif
-        
+        guard let modelURL = Bundle.main.url(forResource: "Model", withExtension: "momd") else {
+            fatalError("Failed to find data model")
+        }
+        guard let mom = NSManagedObjectModel(contentsOf: modelURL) else {
+            fatalError("Failed to create model from file: \(modelURL)")
+        }
+        let localContainer = NSPersistentContainer(name: modelName, managedObjectModel: mom)
+        if clearAllEntriesOnStartup {
+            NSLog("deleting all previous entries.")
+            for store in localContainer.persistentStoreDescriptions {
+                if let url = store.url {
+                    if FileManager.default.fileExists(atPath: url.path) {
+                        NSLog("  rm \(url)")
+                        do {
+                            try FileManager.default.removeItem(at: url)
+                        } catch {
+                            fatalError("couldn't rm \(url): \(error)")
+                        }
+                    } else {
+                        NSLog("  file does not exist: \(url)")
+                    }
+                } else {
+                    NSLog("No URL for store: \(store.debugDescription)")
+                }
+            }
+        }
         localContainer.loadPersistentStores { description, error in
             if let error = error {
                 fatalError("Unable to load persistent stores: \(error)")
             }
         }
-        
-        #if UI_TEST
-        if localContainer.persistentStoreCoordinator.persistentStores.count != 1 {
-            fatalError("Expected just one store. Found: \(localContainer.persistentStoreCoordinator.persistentStores)")
-        }
-        if localContainer.persistentStoreCoordinator.persistentStores[0].type != NSInMemoryStoreType {
-            fatalError("Expected an in-memory store. Found: \(localContainer.persistentStoreCoordinator.persistentStores[0])")
-            
-        }
-        // TODO: deserialize FlatEntries and write them
-        #endif
         
         localContainer.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return localContainer
@@ -53,21 +71,7 @@ class Model {
         return _lastEntryDate
     }
     
-    func listProjects() -> [Project] {
-        var result : [Project]!
-        container.viewContext.performAndWait {
-            let request = NSFetchRequest<Project>(entityName: "Project")
-            do {
-                result = try request.execute()
-            } catch {
-                NSLog("couldn't load projects: %@", error as NSError)
-                result = []
-            }
-        }
-        return result
-    }
-    
-    func listProjects(prefix: String) -> [String] {
+    func listProjects() -> [String] {
         var results : [String]!
         container.viewContext.performAndWait {
             let request = NSFetchRequest<Project>(entityName: "Project")
@@ -78,9 +82,6 @@ class Model {
                     .init(key: "lastUsed", ascending: false),
                     .init(key: "project", ascending: true)
                 ]
-                if !prefix.isEmpty {
-                    request.predicate = NSPredicate(format: "project BEGINSWITH %@", prefix)
-                }
                 request.fetchLimit = 10
                 projects = try request.execute()
             } catch {
@@ -93,7 +94,7 @@ class Model {
         return results
     }
     
-    func listTasks(project: String, prefix: String) -> [String] {
+    func listTasks(project: String) -> [String] {
         var results : [String]!
         container.viewContext.performAndWait {
             let request = NSFetchRequest<Task>(entityName: "Task")
@@ -104,13 +105,7 @@ class Model {
                     .init(key: "lastUsed", ascending: false),
                     .init(key: "task", ascending: true)
                 ]
-                var predicate = NSPredicate(format: "project.project = %@", project)
-                if !prefix.isEmpty {
-                    predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-                        predicate,
-                        NSPredicate(format: "task BEGINSWITH %@", prefix)])
-                }
-                request.predicate = predicate
+                request.predicate = NSPredicate(format: "project.project = %@", project)
                 request.fetchLimit = 10
                 tasks = try request.execute()
             } catch {
@@ -145,10 +140,6 @@ class Model {
             }
         }
         return results
-    }
-    
-    func addBreakEntry(callback: @escaping () -> ()) {
-        addEntryNow(project: Model.BREAK_PROJECT, task: Model.BREAK_TASK, notes: Model.BREAK_TASK_NOTES, callback: callback)
     }
     
     func addEntryNow(project: String, task: String, notes: String, callback: @escaping ()->()) {

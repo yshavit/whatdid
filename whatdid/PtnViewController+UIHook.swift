@@ -18,7 +18,7 @@ extension PtnViewController {
     
     @objc private func setEntriesViaJson(_ field: NSTextField) {
         let entries = FlatEntry.deserialize(from: textField.stringValue)
-        AppDelegate.instance.model.clearAll()
+        AppDelegate.instance.resetModel()
         entries.forEach {AppDelegate.instance.model.add($0, andThen: {})}
     }
     
