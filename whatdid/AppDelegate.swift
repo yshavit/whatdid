@@ -37,7 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         NSLog("Starting whatdid with build %@", Version.pretty)
         #if UI_TEST
-        NSApp.setActivationPolicy(.regular) // so that the windows show up normally
+        setUpActivator()
         NSLog("initializing UI test hooks")
         manualTickSchedulerWindow = ManualTickSchedulerWindow(with: DefaultScheduler.instance)
         uiTestWindow = UiTestWindow()
@@ -117,4 +117,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         return "\(maskAdjusted)\(keyAdjusted)"
     }
+    
+    #if UI_TEST
+    let activatorStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+    private func setUpActivator() {
+        NSApp.setActivationPolicy(.regular) // so that the windows show up normally
+        guard let button = activatorStatusItem.button else {
+            fatalError("No activator button")
+        }
+        button.title = "Activate Whatdid"
+        button.target = self
+        button.action = #selector(handleActivationStatusItemPress)
+    }
+    
+    @objc private func handleActivationStatusItemPress() {
+        NSApp.activate(ignoringOtherApps: true)
+    }
+    #endif
 }

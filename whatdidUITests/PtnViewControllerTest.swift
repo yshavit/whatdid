@@ -19,8 +19,15 @@ class PtnViewControllerTest: XCTestCase {
         log("Failed at \(now.utcTimestamp) (\(now.timestamp(at: TimeZone(identifier: "US/Eastern")!)))")
     }
     
-    func findStatusMenuItem() {
+    func activate(andClickActivatorStatusItem: Bool) {
         app.activate()
+        if andClickActivatorStatusItem {
+            app.menuBars.statusItems["Activate Whatdid"].click()
+        }
+    }
+    
+    func findStatusMenuItem() {
+        activate(andClickActivatorStatusItem: false)
         // The 0.5 isn't necessary, but it positions the cursor in the middle of the item. Just looks nicer.
         app.menuBars.statusItems["✐"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
         statusItemPoint = CGEvent(source: nil)?.location
@@ -336,7 +343,7 @@ class PtnViewControllerTest: XCTestCase {
             
             setTimeUtc(h: 16, m: 30)
             assertThat(window: .ptn, isVisible: false)
-            app.activate()
+            activate(andClickActivatorStatusItem: true)
             waitForTransition(of: .dailyEnd, toIsVisible: true)
             clickStatusMenu() // close the report
             waitForTransition(of: .dailyEnd, toIsVisible: false)
@@ -1175,14 +1182,7 @@ class PtnViewControllerTest: XCTestCase {
             group("Bringing app to background if needed") {
                 if !mockedClockWindow.isVisible {
                     log("Couldn't find mocked clock; trying to activate app")
-                    app.activate() // bring the clockTicker back, if needed
-                    if !mockedClockWindow.isVisible {
-                        log("Trying again to un-stick the app activation")
-                        // try to unstick the app -- make the test active and then reactivate the app?
-                        NSRunningApplication.current.activate(options: [.activateIgnoringOtherApps, .activateAllWindows])
-                        app.activate()
-                        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
-                    }
+                    activate(andClickActivatorStatusItem: true)
                 }
             }
             let epochSeconds = d * 86400 + h * 3600 + m * 60 + s
