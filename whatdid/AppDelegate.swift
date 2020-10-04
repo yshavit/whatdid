@@ -37,6 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         NSLog("Starting whatdid with build %@", Version.pretty)
         #if UI_TEST
+        NSApp.setActivationPolicy(.regular) // so that the windows show up normally
         NSLog("initializing UI test hooks")
         manualTickSchedulerWindow = ManualTickSchedulerWindow(with: DefaultScheduler.instance)
         uiTestWindow = UiTestWindow()
