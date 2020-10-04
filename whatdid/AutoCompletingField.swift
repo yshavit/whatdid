@@ -117,6 +117,24 @@ fileprivate class AutoCompletingFieldView: WhatdidTextField, NSTextViewDelegate,
         }
     }
     
+    override func resize(withOldSuperviewSize oldSize: NSSize) {
+        super.resize(withOldSuperviewSize: oldSize)
+        if parent.popupManager.windowIsVisible, let window = window {
+            let popup = parent.popupManager.window
+            guard window.screen == popup.screen else {
+                NSLog("window screen and autocomplete popup screen were different")
+                return
+            }
+            let myBoundsWithinWindow = convert(bounds, to: nil)
+            let myBoundsWithinScreen = window.convertToScreen(myBoundsWithinWindow)
+            let myBottom = myBoundsWithinScreen.maxY - myBoundsWithinScreen.height
+            let desiredWindowTop = myBottom - PopupManager.HEIGHT_FROM_BOTTOM_OF_FIELD
+            if popup.frame.maxY != desiredWindowTop {
+                popup.setFrameTopLeftPoint(NSPoint(x: popup.frame.minX, y: desiredWindowTop))
+            }
+        }
+    }
+    
     override var nextValidKeyView: NSView? {
         parent.nextValidKeyView
     }
@@ -162,7 +180,7 @@ fileprivate class AutoCompletingFieldView: WhatdidTextField, NSTextViewDelegate,
         }
         // button positioning
         pulldownButton.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        pulldownButton.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        pulldownButton.heightAnchor.constraint(equalToConstant: textFieldCell.cellSize.height).isActive = true
         pulldownButton.widthAnchor.constraint(equalTo: pulldownButton.heightAnchor, multiplier: 0.75).isActive = true
         pulldownButton.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         textFieldCell.widthAdjustment = { self.pulldownButton.frame.width }
@@ -309,13 +327,21 @@ fileprivate class AutoCompletingFieldView: WhatdidTextField, NSTextViewDelegate,
         fileprivate var widthAdjustment: () -> CGFloat = { 0 }
         
         override func drawingRect(forBounds rect: NSRect) -> NSRect {
-            let fromSuper = super.drawingRect(forBounds: rect)
-            return NSRect(x: fromSuper.minX, y: fromSuper.minY, width: fromSuper.width - widthAdjustment(), height: fromSuper.height)
+            return adjusted(super.drawingRect(forBounds: rect))
+        }
+        
+        override func cellSize(forBounds rect: NSRect) -> NSSize {
+            return super.cellSize(forBounds: adjusted(rect))
+        }
+        
+        private func adjusted(_ r: NSRect) -> NSRect {
+            return NSRect(x: r.minX, y: r.minY, width: r.width - widthAdjustment(), height: r.height)
         }
     }
 }
 
 fileprivate class PopupManager: NSObject, NSWindowDelegate {
+    static let HEIGHT_FROM_BOTTOM_OF_FIELD: CGFloat = 2
     private var activeEventMonitors = [Any?]()
     private let optionsPopup: NSPanel
     private let parent: AutoCompletingField
@@ -555,7 +581,7 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
         }
         setWidth(minWidth)
         var popupOrigin = atTopLeft
-        popupOrigin.y -= (optionsPopup.frame.height + 2)
+        popupOrigin.y -= (optionsPopup.frame.height + PopupManager.HEIGHT_FROM_BOTTOM_OF_FIELD)
         optionsPopup.setFrameOrigin(popupOrigin)
         _ = match(lookFor)
         optionsPopup.display()

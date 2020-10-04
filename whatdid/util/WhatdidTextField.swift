@@ -12,4 +12,37 @@ class WhatdidTextField: NSTextField {
         return superSaysYes
     }
     
+    override func textDidChange(_ notification: Notification) {
+        super.textDidChange(notification)
+        let frameHeight = frame.height
+        let _ = stringValue // makes sure intrinsicHeightIncludingWrapping uses the up-to-date text
+        if let desiredHeight = intrinsicHeightIncludingWrapping, desiredHeight != frameHeight {
+            invalidateIntrinsicContentSize()
+        }
+    }
+    
+    override var intrinsicContentSize: NSSize {
+        get {
+            var superAdjusted = super.intrinsicContentSize
+            if let adjustedHeight = intrinsicHeightIncludingWrapping {
+                superAdjusted.height = adjustedHeight
+            }
+            return superAdjusted
+        }
+    }
+    
+    private var intrinsicHeightIncludingWrapping: CGFloat? {
+        guard let cell = self.cell, let screen = window?.screen else {
+            return nil
+        }
+        // I'm not sure why we need to shrink the width, but without it, the
+        // field wraps one char later than it should.
+        let tallBounds = NSRect(
+            x: bounds.minX,
+            y: bounds.minX,
+            width: bounds.width - 4,
+            height: screen.frame.height)
+        let adjustedHeight = cell.cellSize(forBounds: tallBounds)
+        return adjustedHeight.height
+    }
 }

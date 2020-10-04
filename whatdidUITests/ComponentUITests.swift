@@ -137,6 +137,32 @@ class ComponentUITests: XCTestCase {
             testWindow.typeText("select-all 2\r")
             XCTAssertEqual("select-all 2", resultField.stringValue)
         }
+        group("text wrapping") {
+            let origHeight = group("Setup and sanity check") { () -> CGFloat in 
+                fieldHelper.textField.deleteText()
+                fieldHelper.button.click() // open the scroll frame
+                fieldHelper.checkOptionsScrollFrameHeight()
+                return fieldHelper.textField.frame.height
+            }
+            group("Type until wrap") {
+                // Do this in a while loop so that we can adjust for font sizes.
+                var words = "the quick brown fox jumped over the lazy dog".split(separator: " ")
+                words.append(contentsOf: words) // 2x just to be safe
+                for word in words {
+                    fieldHelper.textField.typeText(" \(word)")
+                    if fieldHelper.textField.frame.height != origHeight {
+                        break
+                    }
+                }
+                XCTAssertNotEqual(origHeight, fieldHelper.textField.frame.height)
+                fieldHelper.checkOptionsScrollFrameHeight()
+            }
+            group("Delete all text") {
+                fieldHelper.textField.deleteText()
+                XCTAssertEqual(origHeight, fieldHelper.textField.frame.height)
+                fieldHelper.checkOptionsScrollFrameHeight()
+            }
+        }
     }
     
     func testAutocompleteAFewOptions() {

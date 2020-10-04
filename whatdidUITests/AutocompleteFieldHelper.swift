@@ -4,6 +4,13 @@ import XCTest
 
 struct AutocompleteFieldHelper {
     let element: XCUIElement
+    private var origButtonHeight: CGFloat
+    
+    init(element: XCUIElement) {
+        self.element = element
+        origButtonHeight = -1 // need to init this so we can use the "button" computed property
+        origButtonHeight = button.frame.height
+    }
     
     /// The editable text field
     var textField: XCUIElement {
@@ -48,6 +55,15 @@ struct AutocompleteFieldHelper {
             XCTAssertEqual(0, optionsScroll.children(matching: .textField).count)
             XCTAssertEqual("(no previous entries)", optionsScroll.staticTexts.element.stringValue)
         }
+    }
+    
+    func checkOptionsScrollFrameHeight() {
+        let textFieldFrame = textField.frame
+        let optionsScrollFrame = optionsScroll.frame
+        let buttonFrame = button.frame
+        XCTAssertEqual(textFieldFrame.minY, buttonFrame.minY)
+        XCTAssertEqual(origButtonHeight, buttonFrame.height)
+        XCTAssertEqual(textFieldFrame.maxY + 2, optionsScrollFrame.minY)
     }
 
     var hasFocus: Bool {

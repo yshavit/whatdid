@@ -33,6 +33,18 @@ class PtnViewControllerTest: XCTestCase {
     
     func openPtn(andThen afterAction: (XCUIElement) -> () = {_ in }) -> Ptn {
         return group("open PTN") {
+            switch openWindow {
+            case .none:
+                clickStatusMenu()
+            case let .some(w) where w.title == WindowType.dailyEnd.windowTitle:
+                clickStatusMenu()
+                sleepMillis(500)
+                clickStatusMenu()
+            case let .some(w) where w.title == WindowType.ptn.windowTitle:
+                break
+            case let .some(w):
+                XCTFail("unexpected window: \(w.title)")
+            }
             let ptn = findPtn()
             if !ptn.window.isVisible {
                 clickStatusMenu()
@@ -441,7 +453,73 @@ class PtnViewControllerTest: XCTestCase {
         }
     }
     
-    func testAutoComplete() {
+    func testResizing() {
+        let ptn = openPtn()
+        func checkVerticalAlignments() {
+            group("Check vertical alignments") {
+                let pY = ptn.pcombo.textField.frame.minY
+                let yY = ptn.tcombo.textField.frame.minY
+                let nY = ptn.nfield.frame.minY
+                XCTAssertEqual(pY, yY)
+                XCTAssertEqual(yY, nY)
+                XCTAssertEqual(pY, ptn.window.staticTexts["/"].frame.minY)
+                XCTAssertEqual(pY, ptn.window.staticTexts[":"].frame.minY)
+            }
+        }
+        func typeUntilWrapping(field: XCUIElement, lines: Int) -> CGFloat {
+            let words = String(repeating: "the quick brown fox jumped over the lazy dog ", count: 5).split(separator: " ")
+            field.click()
+            var wrapsRemaining = lines - 1 // for instance, if we need two lines, we need to wrap once
+            var oldHeight = field.frame.height
+            for word in words {
+                field.typeText("\(word) ")
+                let newHeight = field.frame.height
+                XCTAssertGreaterThanOrEqual(newHeight, oldHeight)
+                if newHeight > oldHeight {
+                    wrapsRemaining -= 1
+                    if wrapsRemaining == 0 {
+                        return newHeight
+                    } else {
+                        oldHeight = newHeight
+                    }
+                }
+            }
+            XCTFail("ran out of words before reaching expected wrap")
+            return -1 // won't ever happen
+        }
+        
+        let (originalHeightT, originalHeightN) = group("Get baseline") {() -> (CGFloat, CGFloat) in
+            checkVerticalAlignments()
+            return (ptn.tcombo.textField.frame.height, ptn.nfield.frame.height)
+        }
+        
+        ///  For each of {P, T, N}:
+        /// 1. Type some text until it wraps (to a different number of lines for each one)
+        /// 2. Check that everything is still aligned to top
+        /// 3. Check that the other two fields haven't changed heights
+        let newHeightP = group("type wrapping text into project") {() -> CGFloat in
+            let pHeight = typeUntilWrapping(field: ptn.pcombo.textField, lines: 4)
+            checkVerticalAlignments()
+            XCTAssertEqual(originalHeightT, ptn.tcombo.textField.frame.height)
+            XCTAssertEqual(originalHeightN, ptn.nfield.frame.height)
+            return pHeight
+        }
+        let newHeightT = group("type wrapping text into task") {() -> CGFloat in
+            let tHeight = typeUntilWrapping(field: ptn.tcombo.textField, lines: 3)
+            checkVerticalAlignments()
+            XCTAssertEqual(newHeightP, ptn.pcombo.textField.frame.height)
+            XCTAssertEqual(originalHeightN, ptn.nfield.frame.height)
+            return tHeight
+        }
+        group("type wrapping text into notes") {
+            let _ = typeUntilWrapping(field: ptn.nfield, lines: 2)
+            checkVerticalAlignments()
+            XCTAssertEqual(newHeightP, ptn.pcombo.textField.frame.height)
+            XCTAssertEqual(newHeightT, ptn.tcombo.textField.frame.height)
+        }
+    }
+    
+    func testResizingAndAutoComplete() {
         let ptn = openPtn()
         group("initalize the data") {
             // Three entries, in shuffled alphabetical order (neither fully ascending or descending)
@@ -584,7 +662,7 @@ class PtnViewControllerTest: XCTestCase {
     }
     
     func testFocus() {
-        let ptn = findPtn()
+        let ptn = openPtn()
         group("Scheduled PTN does not activate") {
             setTimeUtc(h: 01, m: 00, deactivate: true)
             sleep(1) // If it was going to be switch to active, this would be enough time
@@ -939,7 +1017,7 @@ class PtnViewControllerTest: XCTestCase {
         } else {
             log("Waiting for a bit, in case a long session prompt is about to come up")
             sleep(1)
-            XCTAssertEqual(0, ptnOrDailyReportWindow.sheets.count)
+            XCTAssertEqual(0, openWindow?.sheets.count)
         }
     }
     
@@ -967,15 +1045,14 @@ class PtnViewControllerTest: XCTestCase {
         }
     }
     
-    var ptnOrDailyReportWindow: XCUIElement {
+    var openWindow: XCUIElement? {
         for windowType in WindowType.allCases {
             let maybe = app.windows[windowType.windowTitle]
             if maybe.exists {
                 return maybe
             }
         }
-        XCTFail("Couldn't find PTN or daily report window")
-        return app.windows["ERROR ERROR ERROR"]
+        return nil
     }
     
     func pauseToLetStabilize() {
