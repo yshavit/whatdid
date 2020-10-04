@@ -1180,8 +1180,8 @@ class PtnViewControllerTest: XCTestCase {
         group("setting time \(d)d \(h)h \(m)m \(s)s") {
             let mockedClockWindow = app.windows["Mocked Clock"]
             group("Bringing app to background if needed") {
-                if !mockedClockWindow.isVisible {
-                    log("Couldn't find mocked clock; trying to activate app")
+                if !(mockedClockWindow.isVisible && mockedClockWindow.isEnabled) {
+                    log("Mocked clock is not visible or is not enabled. Activating whatdid.")
                     activate(andClickActivatorStatusItem: true)
                 }
             }
