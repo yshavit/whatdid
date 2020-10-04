@@ -4,9 +4,6 @@ import Cocoa
 
 class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     
-    private let POPUP_INTERVAL_MINUTES = 10
-    private let POPUP_INTERVAL_JITTER_MINUTES = 2
-    
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
     private var taskAdditionsPane : PtnViewController!
@@ -73,6 +70,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
                 }
             },
             onSchedule: self.schedule)
+        taskAdditionsPane.forceReschedule = opener.forceRescheduleOnClose
     }
     
     @objc private func handleStatusItemPress() {
@@ -162,8 +160,9 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         let newTask: ScheduledTask
         switch contents {
         case .ptn:
-            let jitterMinutes = Int.random(in: -POPUP_INTERVAL_JITTER_MINUTES...POPUP_INTERVAL_JITTER_MINUTES)
-            let minutes = Double(POPUP_INTERVAL_MINUTES + jitterMinutes)
+            let jitter = Prefs.ptnFrequencyJitterMinutes
+            let jitterMinutes = Int.random(in: -jitter...jitter)
+            let minutes = Double(Prefs.ptnFrequencyMinutes + jitterMinutes)
             newTask = DefaultScheduler.instance.schedule(String(describing: contents), after: minutes * 60.0) {
                 self.opener.open(.ptn, reason: .scheduled)
             }
@@ -174,7 +173,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
             }
         }
         if let oldTask = scheduledTasks.updateValue(newTask, forKey: contents) {
-            NSLog("Replacing scheduled task for \(contents)")
+            NSLog("Replaced previously scheduled open for \(contents)")
             oldTask.cancel()
         }
     }

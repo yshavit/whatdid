@@ -11,16 +11,17 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
     private let setter: NSTextField
     private let printUtc: NSTextField
     private let printLocal: NSTextField
-    private let window: NSPanel
+    private let window: NSWindow
     
     init(with scheduler: ManualTickScheduler) {
         self.scheduler = scheduler
-        window = NSPanel(
+        window = NSWindow(
             contentRect: NSRect(x: 0, y: 50, width: 100, height: 50),
             styleMask: [.titled],
             backing: .buffered,
             defer: true,
             screen: nil)
+        window.level = .floating
         window.title = "Mocked Clock"
         
         let stack = NSStackView()

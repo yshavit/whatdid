@@ -71,6 +71,9 @@ extension XCUIElement {
             typeKey("a", modifierFlags: .command)
             typeKey(.delete, modifierFlags:[])
             if let replacementToType = replacement {
+                if !hasFocus {
+                    click()
+                }
                 typeText(replacementToType)
             }
         }

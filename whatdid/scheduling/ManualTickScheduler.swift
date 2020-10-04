@@ -7,6 +7,7 @@ class ManualTickScheduler: Scheduler {
     private var events = [WorkItem]()
     
     @discardableResult func schedule(_ description: String, at date: Date, _ block: @escaping () -> Void) -> ScheduledTask {
+        NSLog("Scheduling \(description) at \(date) (t+\(date.timeIntervalSinceWhatdidNow))")
         if date == _now {
             enqueueAction(block)
             return NoopScheduledItem()

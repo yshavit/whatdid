@@ -14,6 +14,39 @@ class PrefsViewController: NSViewController {
     @IBOutlet var tabButtonsStack: NSStackView!
     @IBOutlet var mainTabs: NSTabView!
     
+    var ptnScheduleChanged: () -> Void = {}
+    
+    @IBInspectable
+    dynamic var ptnFrequencyMinutes: Int {
+        get {
+            Prefs.ptnFrequencyMinutes
+        } set(value) {
+            let adjusted = value.clipped(to: 5...120)
+            if (value == adjusted) {
+                Prefs.ptnFrequencyMinutes = adjusted
+                let tmp = ptnFrequencyJitterMinutes
+                ptnFrequencyJitterMinutes = tmp // this will auto-clip the value if needed, and call the change handler
+            } else {
+                RunLoop.current.perform { self.ptnFrequencyMinutes = adjusted }
+            }
+        }
+    }
+    
+    @IBInspectable
+    dynamic var ptnFrequencyJitterMinutes: Int {
+        get {
+            Prefs.ptnFrequencyJitterMinutes
+        } set (value) {
+            let adjusted = value.clipped(to: 0...(ptnFrequencyMinutes / 2))
+            if (value == adjusted) {
+                Prefs.ptnFrequencyJitterMinutes = adjusted
+                ptnScheduleChanged()
+            } else {
+                RunLoop.current.perform { self.ptnFrequencyJitterMinutes = adjusted }
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         outerVStackWidth.constant = desiredWidth

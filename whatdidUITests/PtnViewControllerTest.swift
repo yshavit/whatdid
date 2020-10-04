@@ -108,20 +108,96 @@ class PtnViewControllerTest: XCTestCase {
         
         // Note: Time starts at 02:00:00 local
         group("basic PTN scheduling") {
-            setTimeUtc(h: 0, m: 5) // 02:05; too soon for the popup
+            // Default is 12 minutes +/- 2.
+            setTimeUtc(h: 0, m: 9) // 02:09; too soon for the popup
             pauseToLetStabilize()
             assertThat(window: .ptn, isVisible: false)
-            setTimeUtc(h: 0, m: 55) // 02:55; enough time for the popup
+            setTimeUtc(h: 0, m: 15) // 02:15; enough time for the popup
             waitForTransition(of: .ptn, toIsVisible: true)
             XCTAssertTrue(findPtn().pcombo.hasFocus)
+            ptn.typeText("Project\tTask\tNotes\r")
+            waitForTransition(of: .ptn, toIsVisible: false)
+        }
+        group("Writing an entry resets the timer") {
+            group("Wait 9 minutes") {
+                setTimeUtc(h: 0, m: 24) // 15 + 9 -- so not enough time to set a popup
+                pauseToLetStabilize()
+                assertThat(window: .ptn, isVisible: false)
+            }
+            group("Manually open PTN and add entry") {
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: true)
+                ptn.typeText("Notes 2\r") // Project and Task are already filled out
+                waitForTransition(of: .ptn, toIsVisible: false)
+            }
+            group("Wait another 9 minutes") {
+                // If the previous group didn't reset the timer, we'd have gotten a scheduled PTN by now,
+                // since it'd be 18 minutes since the last PTN (so more than the 12 + 2 max schedule time).
+                // We expect that the previous group *did* reset the schedule, though, so we won't get one.
+                setTimeUtc(h: 0, m: 33)
+                pauseToLetStabilize()
+                assertThat(window: .ptn, isVisible: false)
+            }
+            group("Open and close PTN without adding entry") {
+                group("Open and close PTN") {
+                    clickStatusMenu()
+                    waitForTransition(of: .ptn, toIsVisible: true)
+                    clickStatusMenu()
+                    waitForTransition(of: .ptn, toIsVisible: false)
+                }
+                group("Wait a final 9 minutes") {
+                    // Opening and closing the PTN (without saving an entry) does *not* reset the clock,
+                    // so by now we've waited 42 - 24 = 18 minutes since the last reset (which was when we
+                    // manually opened the PTN to add an entry). We expect a popup.
+                    setTimeUtc(h: 0, m: 42)
+                    waitForTransition(of: .ptn, toIsVisible: true)
+                }
+            }
+        }
+        group("Check snooze option updates") {
+            let button = ptn.buttons["snoozebutton"]
+            group("Initial state") {
+                // It's now 1970-01-02 16:31:00 UTC, which is 6:31 pm. Check that the default snooze option is to 7:00.
+                XCTAssertEqual("Snooze until 3:00 am", button.title.trimmingCharacters(in: .whitespaces))
+                XCTAssertTrue(button.isEnabled)
+            }
+            group("Wait until right before the update") {
+                setTimeUtc(h:0, m: 54, s: 59)
+                // Unchanged
+                XCTAssertEqual("Snooze until 3:00 am", button.title.trimmingCharacters(in: .whitespaces))
+                XCTAssertTrue(button.isEnabled)
+                XCTAssertEqual(0, ptn.activityIndicators.count) // spinner
+            }
+            group("Update is in progress") {
+                setTimeUtc(h: 0, m: 55, s: 00)
+                // Text is unchanged, but button is disabled
+                XCTAssertEqual("Snooze until 3:00 am", button.title.trimmingCharacters(in: .whitespaces))
+                XCTAssertFalse(button.isEnabled)
+                wait(for: "spinner", timeout: 5, until: {ptn.activityIndicators.count == 1})
+            }
+            group("Update is done") {
+                setTimeUtc(h: 0, m: 55, s: 01)
+                // Update complete
+                XCTAssertEqual("Snooze until 3:30 am", button.title.trimmingCharacters(in: .whitespaces))
+                XCTAssertTrue(button.isEnabled)
+                wait(for: "spinner", timeout: 5, until: {ptn.activityIndicators.count == 0})
+            }
+        }
+        group("Check snooze-until-tomorrow option") {
+            // It's currently 6:55 pm on Friday, Jan 2. So "tomorrow" is actually Monday.
+            // The default option is 7:30 pm, and the extra options start at 8:00 pm.
+            ptn.menuButtons["snoozeopts"].click()
+            let snoozeOptions = ptn.menuButtons["snoozeopts"].descendants(matching: .menuItem)
+            let snoozeOptionLabels = snoozeOptions.allElementsBoundByIndex.map { $0.title }
+            XCTAssertEqual(["4:00 am", "4:30 am", "5:00 am", "", "9:00 am"], snoozeOptionLabels)
         }
         group("Header text") {
             XCTAssertEqual(
-                "What have you been working on for the last 55m (since 2:00 am)?",
+                "What have you been working on for the last 31m (since 2:24 am)?",
                 ptn.staticTexts["durationheader"].stringValue)
-            setTimeUtc(h: 0, m: 57)
+            setTimeUtc(h: 0, m: 56)
             XCTAssertEqual(
-                "What have you been working on for the last 57m (since 2:00 am)?",
+                "What have you been working on for the last 32m (since 2:24 am)?",
                 ptn.staticTexts["durationheader"].stringValue)
         }
         group("snooze button: standard press") {
@@ -232,8 +308,8 @@ class PtnViewControllerTest: XCTestCase {
             }
             group("Add an entry") {
                 let ptnStruct = findPtn()
-                XCTAssertTrue(ptnStruct.pcombo.hasFocus)
-                ptnStruct.pcombo.textField.typeText("One\tTwo\tThree\r")
+                XCTAssertTrue(ptnStruct.nfield.hasFocus) // Remember from above, project and task are already filled
+                ptnStruct.nfield.typeText("Notes 3\r")
                 waitForTransition(of: .ptn, toIsVisible: false)
             }
             group("Wait another 25 minutes") {
@@ -292,44 +368,16 @@ class PtnViewControllerTest: XCTestCase {
                 assertThat(window: .ptn, isVisible: false)
             }
         }
-        group("Check snooze option updates") {
-            let button = ptn.buttons["snoozebutton"]
-            group("Initial state") {
-                clickStatusMenu()
-                waitForTransition(of: .ptn, toIsVisible: true)
-                // It's now 1970-01-02 16:31:00 UTC, which is 6:31 pm. Check that the default snooze option is to 7:00.
-                XCTAssertEqual("Snooze until 7:00 pm", button.title.trimmingCharacters(in: .whitespaces))
-                XCTAssertTrue(button.isEnabled)
-            }
-            group("Wait until right before the update") {
-                setTimeUtc(d: 1, h: 16, m: 54, s: 59)
-                // Unchanged
-                XCTAssertEqual("Snooze until 7:00 pm", button.title.trimmingCharacters(in: .whitespaces))
-                XCTAssertTrue(button.isEnabled)
-                XCTAssertEqual(0, ptn.activityIndicators.count) // spinner
-            }
-            group("Update is in progress") {
-                setTimeUtc(d: 1, h: 16, m: 55, s: 00)
-                // Text is unchanged, but button is disabled
-                XCTAssertEqual("Snooze until 7:00 pm", button.title.trimmingCharacters(in: .whitespaces))
-                XCTAssertFalse(button.isEnabled)
-                wait(for: "spinner", timeout: 5, until: {ptn.activityIndicators.count == 1})
-            }
-            group("Update is done") {
-                setTimeUtc(d: 1, h: 16, m: 55, s: 01)
-                // Update complete
-                XCTAssertEqual("Snooze until 7:30 pm", button.title.trimmingCharacters(in: .whitespaces))
-                XCTAssertTrue(button.isEnabled)
-                wait(for: "spinner", timeout: 5, until: {ptn.activityIndicators.count == 0})
-            }
-        }
         group("Check snooze-until-tomorrow option") {
-            // It's currently 6:55 pm on Friday, Jan 2. So "tomorrow" is actually Monday.
+            // We had a similar check above, but let's redo it so we capture weekend state.
+            // It's currently 6:31 pm on Friday, Jan 2. So "tomorrow" is actually Monday.
             // The default option is 7:30 pm, and the extra options start at 8:00 pm.
+            clickStatusMenu()
+            waitForTransition(of: .ptn, toIsVisible: true)
             ptn.menuButtons["snoozeopts"].click()
             let snoozeOptions = ptn.menuButtons["snoozeopts"].descendants(matching: .menuItem)
             let snoozeOptionLabels = snoozeOptions.allElementsBoundByIndex.map { $0.title }
-            XCTAssertEqual(["8:00 pm", "8:30 pm", "9:00 pm", "", "Monday at 9:00 am"], snoozeOptionLabels)
+            XCTAssertEqual(["7:30 pm", "8:00 pm", "8:30 pm", "", "Monday at 9:00 am"], snoozeOptionLabels)
         }
     }
     
@@ -733,6 +781,140 @@ class PtnViewControllerTest: XCTestCase {
         }
     }
     
+    /// Similar to `testPreferences`, but specific to PTN frequency prefs.
+    /// I'm keeping it separate so I don't have to much with adjusting dates in the other schedule-related tests already in that method.
+    func testPreferencesForPtnFrequency() {
+        let ptn = openPtn()
+        let prefsButton = ptn.window.buttons["Preferences"]
+        let prefsSheet = ptn.window.sheets.firstMatch
+        let frequencyText = prefsSheet.textFields["frequency"]
+        let frequencyStepper = prefsSheet.steppers["frequency stepper"]
+        let jitterText = prefsSheet.textFields["frequency randomness"]
+        let jitterStepper = prefsSheet.steppers["frequency randomness stepper"]
+            
+        group("Setup") {
+            prefsButton.click()
+            XCTAssertTrue(prefsSheet.isVisible)
+            prefsSheet.tabs["General"].click()
+            XCTAssertEqual("12", frequencyText.stringValue)
+            XCTAssertEqual("2", jitterText.stringValue)
+        }
+        group("UI elements") {
+            group("Frequency max is 120") {
+                frequencyText.deleteText(andReplaceWith: "130\r")
+                XCTAssertEqual("120", frequencyText.stringValue)
+
+                frequencyStepper.children(matching: .decrementArrow).element.click()
+                XCTAssertEqual("119", frequencyText.stringValue)
+
+                frequencyStepper.children(matching: .incrementArrow).element.click()
+                XCTAssertEqual("120", frequencyText.stringValue)
+
+                // Make sure the stepper can't go over
+                frequencyStepper.children(matching: .incrementArrow).element.click()
+                XCTAssertEqual("120", frequencyText.stringValue)
+
+                // Make sure the stepper didn't internally set a state of 121
+                frequencyStepper.children(matching: .decrementArrow).element.click()
+                XCTAssertEqual("119", frequencyText.stringValue)
+
+                jitterText.deleteText(andReplaceWith: "70\r")
+                XCTAssertEqual("59", jitterText.stringValue) // half of 119, rounded down
+            }
+            group("Frequency min is 5") {
+                frequencyText.deleteText(andReplaceWith: "4\r")
+                XCTAssertEqual("5", frequencyText.stringValue)
+                XCTAssertEqual("2", jitterText.stringValue) // half of 5, rounded down
+            }
+            group("Jitter stepper") {
+                jitterStepper.children(matching: .decrementArrow).firstMatch.click()
+                XCTAssertEqual("1", jitterText.stringValue)
+
+                jitterStepper.children(matching: .decrementArrow).firstMatch.click()
+                XCTAssertEqual("0", jitterText.stringValue)
+
+                // Make sure the stepper can't go under
+                jitterStepper.children(matching: .decrementArrow).firstMatch.click()
+                XCTAssertEqual("0", jitterText.stringValue)
+
+                // Make sure the stepper didn't internally set a state of -1
+                jitterStepper.children(matching: .incrementArrow).firstMatch.click()
+                XCTAssertEqual("1", jitterText.stringValue)
+            }
+        }
+        group("Scheduling") {
+            // Because the jitter is random, we're going to take a statistical approach to these.
+            //
+            // For the no-jitter variant, we'll try 6 times. If there's 1 minute of jitter, the chance of any
+            // one iteration succeeding is 50%, and the chance of all 10 succeeding is 0.5^6 = 1.56%.
+            // If there's 2 minutes of jitter, the chance of any one iteration succeeding (ie, randomly having
+            // no jitter) is 30%, and the chance of all 10 succeeding is 0.0017%.
+            //
+            // For the with-jitter variant, we'll try up to 10 times with 5 minutes of jitter, which means
+            // jitter is anywhere from -5 to +5: 11 values. The chance of randomly hitting jitter >= 0 is 54.54%
+            // and the chance of doing that 20 times in a row is 0.000543%.
+            var minutesSinceUtc = 0
+            group("Setup: 10-minute schedule") {
+                frequencyText.deleteText(andReplaceWith: "10\r")
+                jitterText.deleteText(andReplaceWith: "0\r")
+                XCTAssertEqual("10", frequencyText.stringValue)
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: false)
+            }
+            group("No jitter") {
+                for i in 0..<6 {
+                    group("Iteration \(i)") {
+                        minutesSinceUtc += 10
+                        let secondsSinceUtc = minutesSinceUtc * 60
+                        setTimeUtc(s: secondsSinceUtc - 1)
+                        pauseToLetStabilize()
+                        XCTAssertNil(openWindow)
+                        setTimeUtc(s: secondsSinceUtc)
+                        waitForTransition(of: .ptn, toIsVisible: true)
+                        clickStatusMenu()
+                        waitForTransition(of: .ptn, toIsVisible: false)
+                    }
+                }
+            }
+            group("Large jitter") {
+                group("Setup") {
+                    clickStatusMenu()
+                    prefsButton.click()
+                    XCTAssertTrue(prefsSheet.isVisible)
+                    jitterText.deleteText(andReplaceWith: "5\r")
+                    clickStatusMenu()
+                    waitForTransition(of: .ptn, toIsVisible: false)
+                }
+                for i in 0..<20 {
+                    let foundPtn = group("Iteration \(i)") {() -> Bool in
+                        minutesSinceUtc += 10
+                        let secondsSinceUtc = minutesSinceUtc * 60
+                        setTimeUtc(s: secondsSinceUtc - 1)
+                        pauseToLetStabilize()
+                        if let window = openWindow {
+                            XCTAssertEqual(WindowType.ptn.windowTitle, window.title)
+                            log("Found PTN")
+                            return true
+                        } else {
+                            // The random jitter was >= 0 minutes. Fast forward another 10 minutes so we can
+                            // ne sure to get the PTN, and then close it and try again.
+                            minutesSinceUtc += 10
+                            setTimeUtc(m: minutesSinceUtc)
+                            waitForTransition(of: .ptn, toIsVisible: true)
+                            clickStatusMenu()
+                            waitForTransition(of: .ptn, toIsVisible: false)
+                            return false
+                        }
+                    }
+                    if foundPtn {
+                        break
+                    }
+                }
+            }
+        }
+        
+    }
+    
     func testPreferences() {
         let ptn = openPtn()
         let prefsButton = ptn.window.buttons["Preferences"]
@@ -824,7 +1006,7 @@ class PtnViewControllerTest: XCTestCase {
                 }
             }
         }
-        group("Cancel preferences") {
+        group("Finish preferences") {
             wait(for: "preferences sheet", until: {ptn.window.exists && ptn.window.sheets.count > 0})
             prefsSheet.buttons["Done"].click()
             wait(for: "prefernces sheet", until: {ptn.window.exists && ptn.window.sheets.count == 0})

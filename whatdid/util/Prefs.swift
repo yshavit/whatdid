@@ -7,6 +7,8 @@ struct Prefs {
     @Pref(key: "dailyReportTime") static var dailyReportTime = HoursAndMinutes(hours: 18, minutes: 00)
     @Pref(key: "dayStartTime") static var dayStartTime = HoursAndMinutes(hours: 09, minutes: 00)
     @Pref(key: "daysIncludeWeekends") static var daysIncludeWeekends = false
+    @Pref(key: "ptnFrequencyMinutes") static var ptnFrequencyMinutes = 12
+    @Pref(key: "ptnFrequencyJitterMinutes") static var ptnFrequencyJitterMinutes = 2
 }
 
 @propertyWrapper

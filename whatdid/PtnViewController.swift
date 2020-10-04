@@ -20,7 +20,8 @@ class PtnViewController: NSViewController {
     
     private var optionIsPressed = false
     
-    var closeAction : () -> Void = {}
+    var closeAction: () -> Void = {}
+    var forceReschedule: () -> Void = {}
     
     var scheduler: Scheduler = DefaultScheduler.instance
     
@@ -227,6 +228,7 @@ class PtnViewController: NSViewController {
             
             let prefsViewController = PrefsViewController(nibName: "PrefsViewController", bundle: nil)
             prefsViewController.setSize(width: viewWindow.frame.width, minHeight: viewWindow.frame.height)
+            prefsViewController.ptnScheduleChanged = forceReschedule
             prefsWindow.contentViewController = prefsViewController
             viewWindow.beginSheet(prefsWindow, completionHandler: {reason in
                 if reason == .stop {
@@ -268,7 +270,10 @@ class PtnViewController: NSViewController {
             project: projectField.textField.stringValue,
             task: taskField.textField.stringValue,
             notes: noteField.stringValue,
-            callback: closeAction
+            callback: {
+                self.forceReschedule()
+                self.closeAction()
+            }
         )
     }
     
@@ -288,7 +293,6 @@ class PtnViewController: NSViewController {
     
     private func showNewSessionPrompt() {
         if let window = view.window {
-            
             let sheet = NSWindow(contentRect: window.contentView!.frame, styleMask: [], backing: .buffered, defer: true)
             let mainStack = NSStackView()
             mainStack.orientation = .vertical
@@ -335,6 +339,7 @@ class PtnViewController: NSViewController {
                 }
                 if startNewSession {
                     AppDelegate.instance.model.setLastEntryDateToNow()
+                    self.forceReschedule()
                     self.closeAction()
                 } else {
                     self.grabFocusEvenIfHasSheet()

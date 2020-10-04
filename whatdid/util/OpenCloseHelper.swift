@@ -47,6 +47,10 @@ class OpenCloseHelper<T: Hashable & Comparable> {
         }
     }
     
+    func forceRescheduleOnClose() {
+        rescheduleOnClose = true
+    }
+    
     func snooze() {
         isSnoozed = true
     }
@@ -59,19 +63,17 @@ class OpenCloseHelper<T: Hashable & Comparable> {
     func didClose() {
         delegatingScheduler?.close()
         delegatingScheduler = nil
-        guard openItem != nil else {
+        guard let item = openItem else {
             return
         }
+        openItem = nil
         if rescheduleOnClose {
-            let item = openItem!
             rescheduleOnClose = false
-            openItem = nil
             // Schedule even if we're snoozed; if we're still snoozed when the schedule hits, then
             // it'll enqueue itself
             NSLog("OpenCloseHelper: scheduling the next \(item)")
             scheduler(item)
         }
-        openItem = nil
         if !isSnoozed {
             pullFromPending()
         }

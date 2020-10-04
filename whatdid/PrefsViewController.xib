@@ -93,8 +93,9 @@
                                         <rect key="frame" x="0.0" y="0.0" width="550" height="148"/>
                                         <subviews>
                                             <gridView xPlacement="leading" yPlacement="center" rowAlignment="none" translatesAutoresizingMaskIntoConstraints="NO" id="8wI-wf-FiW">
-                                                <rect key="frame" x="0.0" y="0.0" width="374" height="97"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="447" height="125"/>
                                                 <rows>
+                                                    <gridRow id="XZL-na-geY"/>
                                                     <gridRow id="ziJ-5D-O0w"/>
                                                     <gridRow id="Uhr-eN-flM"/>
                                                     <gridRow id="OgE-Hg-t3U"/>
@@ -105,6 +106,115 @@
                                                     <gridColumn id="II0-JS-5iC"/>
                                                 </columns>
                                                 <gridCells>
+                                                    <gridCell row="XZL-na-geY" column="4ur-bR-EOi" id="2Qp-R0-Q2j">
+                                                        <textField key="contentView" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="K9K-ak-3e4">
+                                                            <rect key="frame" x="-2" y="106" width="85" height="16"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Prompt every" id="pOY-yU-zkx">
+                                                                <font key="font" usesAppearanceFont="YES"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                    </gridCell>
+                                                    <gridCell row="XZL-na-geY" column="II0-JS-5iC" id="cUr-fb-go0">
+                                                        <stackView key="contentView" distribution="fill" orientation="horizontal" alignment="centerY" spacing="3" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5B5-US-fZ7">
+                                                            <rect key="frame" x="150" y="103" width="297" height="22"/>
+                                                            <subviews>
+                                                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eP2-Vd-05o">
+                                                                    <rect key="frame" x="0.0" y="1" width="35" height="21"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" constant="35" id="hAW-cg-GJz"/>
+                                                                    </constraints>
+                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" usesSingleLineMode="YES" id="F9p-eX-zQP">
+                                                                        <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" formatWidth="-1" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="5eD-n6-YjR"/>
+                                                                        <font key="font" metaFont="system"/>
+                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                    <accessibility description="frequency"/>
+                                                                    <connections>
+                                                                        <binding destination="-2" name="value" keyPath="self.ptnFrequencyMinutes" id="Hbd-ae-wRT">
+                                                                            <dictionary key="options">
+                                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                                            </dictionary>
+                                                                        </binding>
+                                                                    </connections>
+                                                                </textField>
+                                                                <stepper identifier="frequencyStepper" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XPS-cX-PyO" userLabel="Frequency">
+                                                                    <rect key="frame" x="35" y="-3" width="19" height="28"/>
+                                                                    <stepperCell key="cell" continuous="YES" alignment="left" maxValue="120" id="Cid-uc-8Tn"/>
+                                                                    <accessibility description="frequency stepper"/>
+                                                                    <connections>
+                                                                        <binding destination="-2" name="value" keyPath="self.ptnFrequencyMinutes" id="nmi-Tl-uKD"/>
+                                                                    </connections>
+                                                                </stepper>
+                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pPW-Zk-CUe">
+                                                                    <rect key="frame" x="52" y="3" width="141" height="16"/>
+                                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="minutes, plus or minus" id="n2c-sX-3nn">
+                                                                        <font key="font" metaFont="system"/>
+                                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                </textField>
+                                                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Sbj-WK-0IT" userLabel="Randomness">
+                                                                    <rect key="frame" x="194" y="1" width="35" height="21"/>
+                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="Q5O-Pl-FQs">
+                                                                        <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" formatWidth="-1" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="O4S-5f-smy"/>
+                                                                        <font key="font" metaFont="system"/>
+                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                    <accessibility description="frequency randomness"/>
+                                                                    <connections>
+                                                                        <binding destination="-2" name="value" keyPath="self.ptnFrequencyJitterMinutes" id="DyI-90-wqe">
+                                                                            <dictionary key="options">
+                                                                                <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
+                                                                            </dictionary>
+                                                                        </binding>
+                                                                    </connections>
+                                                                </textField>
+                                                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IIK-LL-Vrx">
+                                                                    <rect key="frame" x="229" y="-3" width="19" height="28"/>
+                                                                    <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="cbb-f8-OZ7"/>
+                                                                    <accessibility description="frequency randomness stepper"/>
+                                                                    <connections>
+                                                                        <binding destination="-2" name="value" keyPath="self.ptnFrequencyJitterMinutes" id="Hga-lo-Hqz">
+                                                                            <dictionary key="options">
+                                                                                <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
+                                                                            </dictionary>
+                                                                        </binding>
+                                                                    </connections>
+                                                                </stepper>
+                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Xw6-5H-ksO">
+                                                                    <rect key="frame" x="246" y="3" width="53" height="16"/>
+                                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="minutes" id="h0g-uE-quG">
+                                                                        <font key="font" metaFont="system"/>
+                                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                </textField>
+                                                            </subviews>
+                                                            <constraints>
+                                                                <constraint firstItem="Sbj-WK-0IT" firstAttribute="width" secondItem="eP2-Vd-05o" secondAttribute="width" id="0Ie-jh-GxC"/>
+                                                            </constraints>
+                                                            <visibilityPriorities>
+                                                                <integer value="1000"/>
+                                                                <integer value="1000"/>
+                                                                <integer value="1000"/>
+                                                                <integer value="1000"/>
+                                                                <integer value="1000"/>
+                                                                <integer value="1000"/>
+                                                            </visibilityPriorities>
+                                                            <customSpacing>
+                                                                <real value="3.4028234663852886e+38"/>
+                                                                <real value="3.4028234663852886e+38"/>
+                                                                <real value="3.4028234663852886e+38"/>
+                                                                <real value="3.4028234663852886e+38"/>
+                                                                <real value="3.4028234663852886e+38"/>
+                                                                <real value="3.4028234663852886e+38"/>
+                                                            </customSpacing>
+                                                        </stackView>
+                                                    </gridCell>
                                                     <gridCell row="ziJ-5D-O0w" column="4ur-bR-EOi" id="Ejt-6i-Gg7">
                                                         <textField key="contentView" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bVG-ba-4hY">
                                                             <rect key="frame" x="-2" y="77" width="82" height="16"/>
@@ -431,7 +541,7 @@ Gw
                 <constraint firstItem="kp1-1s-z5L" firstAttribute="height" secondItem="Hz6-mo-xeY" secondAttribute="height" constant="-6" id="rEw-1M-Awp"/>
                 <constraint firstItem="kp1-1s-z5L" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="3" id="yyn-SO-OvE"/>
             </constraints>
-            <point key="canvasLocation" x="205" y="-186"/>
+            <point key="canvasLocation" x="205" y="-186.5"/>
         </customView>
     </objects>
     <resources>

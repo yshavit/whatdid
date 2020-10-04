@@ -17,6 +17,22 @@ class OpenCloseHelperTest: XCTestCase {
         XCTAssertEqual([], messages.drain())
     }
     
+    func test_OpenAsManual_WhileClosed_ButForceSchedule() throws {
+        let (och, messages) = createTestObjects()
+        
+        och.open("one", reason: .manual)
+        XCTAssertEqual("one", och.openItem)
+        XCTAssertEqual([Message(shouldOpen: "one", reason: .manual)], messages.drain())
+        
+        och.forceRescheduleOnClose()
+        XCTAssertEqual("one", och.openItem)
+        XCTAssertEqual([], messages.drain())
+        
+        och.didClose()
+        XCTAssertNil(och.openItem)
+        XCTAssertEqual([Message(shouldSchedule: "one")], messages.drain())
+    }
+    
     func test_OpenAsScheduled_WhileClosed() {
         let (och, messages) = createTestObjects()
         
