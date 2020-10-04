@@ -85,6 +85,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    #if UI_TEST
+    /// For some reason, we need to override this method for the UI test's `app.activate()` to actually show the windows.
+    func applicationDidUnhide(_ notification: Notification) {
+        NSLog("Application unhid")
+    }
+    #endif
+    
     func snooze(until date: Date) {
         mainMenu.snooze(until: date)
     }

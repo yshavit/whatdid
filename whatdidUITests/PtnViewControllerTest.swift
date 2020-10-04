@@ -21,8 +21,8 @@ class PtnViewControllerTest: XCTestCase {
     
     func findStatusMenuItem() {
         // The 0.5 isn't necessary, but it positions the cursor in the middle of the item. Just looks nicer.
-         app.menuBars.statusItems["✐"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
-         statusItemPoint = CGEvent(source: nil)?.location
+        app.menuBars.statusItems["✐"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
+        statusItemPoint = CGEvent(source: nil)?.location
     }
     
     override func recordFailure(withDescription description: String, inFile filePath: String, atLine lineNumber: Int, expected: Bool) {
