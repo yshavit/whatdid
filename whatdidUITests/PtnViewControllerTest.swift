@@ -20,6 +20,7 @@ class PtnViewControllerTest: XCTestCase {
     }
     
     func findStatusMenuItem() {
+        app.activate()
         // The 0.5 isn't necessary, but it positions the cursor in the middle of the item. Just looks nicer.
         app.menuBars.statusItems["✐"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
         statusItemPoint = CGEvent(source: nil)?.location
@@ -1171,6 +1172,7 @@ class PtnViewControllerTest: XCTestCase {
     func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0, s: Int = 0, deactivate: Bool = false, onSessionPrompt: LongSessionAction = .ignorePrompt) {
         group("setting time \(d)d \(h)h \(m)m \(s)s") {
             app.activate() // bring the clockTicker back, if needed
+            XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
             let epochSeconds = d * 86400 + h * 3600 + m * 60 + s
             let text = "\(epochSeconds)\r"
             let clockTicker = app.windows["Mocked Clock"].children(matching: .textField).element
