@@ -1172,11 +1172,18 @@ class PtnViewControllerTest: XCTestCase {
     func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0, s: Int = 0, deactivate: Bool = false, onSessionPrompt: LongSessionAction = .ignorePrompt) {
         group("setting time \(d)d \(h)h \(m)m \(s)s") {
             let mockedClockWindow = app.windows["Mocked Clock"]
-            app.activate() // bring the clockTicker back, if needed
-            if !mockedClockWindow.exists {
-                NSApp.activate(ignoringOtherApps: true) // try to unstick the app -- make the test active and then reactivate the app?
-                app.activate()
-                XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
+            group("Bringing app to background if needed") {
+                if !mockedClockWindow.isVisible {
+                    log("Couldn't find mocked clock; trying to activate app")
+                    app.activate() // bring the clockTicker back, if needed
+                    if !mockedClockWindow.isVisible {
+                        log("Trying again to un-stick the app activation")
+                        // try to unstick the app -- make the test active and then reactivate the app?
+                        NSRunningApplication.current.activate(options: [.activateIgnoringOtherApps, .activateAllWindows])
+                        app.activate()
+                        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
+                    }
+                }
             }
             let epochSeconds = d * 86400 + h * 3600 + m * 60 + s
             let text = "\(epochSeconds)\r"
