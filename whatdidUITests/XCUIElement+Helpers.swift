@@ -65,15 +65,10 @@ extension XCUIElement {
             if replacement != nil {
                 context.add(XCTAttachment(string: replacement!))
             }
-            if !hasFocus {
-                click()
-            }
+            grabFocus()
             typeKey("a", modifierFlags: .command)
-            typeKey(.delete, modifierFlags:[])
+            typeKey(.delete)
             if let replacementToType = replacement {
-                if !hasFocus {
-                    click()
-                }
                 typeText(replacementToType)
             }
         }

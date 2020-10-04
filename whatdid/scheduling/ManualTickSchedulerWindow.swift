@@ -5,6 +5,7 @@ import Cocoa
 class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
     
     private static let deferCheckboxTitle = "Defer until deactivation"
+    let activatorStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
     let scheduler: ManualTickScheduler
     private let deferButton: NSButton
@@ -47,10 +48,21 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
         updateDate()
         window.setIsVisible(true)
         setter.delegate = self
+        setUpActivator()
     }
     
-    @objc func setterAction() {
-        print(setter.stringValue)
+    private func setUpActivator() {
+        guard let button = activatorStatusItem.button else {
+            fatalError("No activator button")
+        }
+        button.title = "Focus Mocked Clock"
+        button.target = self
+        button.action = #selector(grabFocus)
+    }
+    
+    @objc private func grabFocus() {
+        NSApp.activate(ignoringOtherApps: true)
+        window.makeKeyAndOrderFront(self)
     }
     
     func controlTextDidEndEditing(_ obj: Notification) {

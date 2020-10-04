@@ -47,7 +47,7 @@ class AutoCompletingField: NSView, NSAccessibilityGroup {
     }
     
     override func becomeFirstResponder() -> Bool {
-        return window?.makeFirstResponder(textField) ?? false
+        return super.becomeFirstResponder() && (window?.makeFirstResponder(textField) ?? false)
     }
     
     override func accessibilityChildren() -> [Any]? {
@@ -105,15 +105,6 @@ fileprivate class AutoCompletingFieldView: WhatdidTextField, NSTextViewDelegate,
         }
         set(value) {
             NSLog("Unexpected mutation of AutoCompletingFieldView.nextKeyView")
-        }
-    }
-    
-    override var nextResponder: NSResponder? {
-        get {
-            parent.nextResponder
-        }
-        set(value) {
-            NSLog("Unexpected mutation of AutoCompletingFieldView.nextResponder")
         }
     }
     
