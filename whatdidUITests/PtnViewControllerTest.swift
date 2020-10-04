@@ -954,23 +954,26 @@ class PtnViewControllerTest: XCTestCase {
             XCTAssertTrue(ptn.pcombo.hasFocus)
             app.typeText("project a\r")
             clickStatusMenu()
-            XCTAssertFalse(ptn.window.isVisible)
+            waitForTransition(of: .ptn, toIsVisible: false)
         }
         group("Type task, then abandon") {
             clickStatusMenu()
+            waitForTransition(of: .ptn, toIsVisible: true)
             XCTAssertTrue(ptn.tcombo.hasFocus)
             app.typeText("task b\r")
             clickStatusMenu()
-            XCTAssertFalse(ptn.window.isVisible)
+            waitForTransition(of: .ptn, toIsVisible: false)
         }
         group("Enter notes") {
             clickStatusMenu()
+            waitForTransition(of: .ptn, toIsVisible: true)
             XCTAssertTrue(ptn.nfield.hasFocus)
             app.typeText("notes c\r")
             XCTAssertFalse(ptn.window.isVisible)
         }
         group("Reopen PTN") {
             clickStatusMenu()
+            waitForTransition(of: .ptn, toIsVisible: true)
             XCTAssertTrue(ptn.nfield.hasFocus)
             XCTAssertEqual("", ptn.nfield.stringValue)
         }

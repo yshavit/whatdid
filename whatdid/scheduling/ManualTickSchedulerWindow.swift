@@ -17,7 +17,7 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
         self.scheduler = scheduler
         window = NSPanel(
             contentRect: NSRect(x: 0, y: 50, width: 100, height: 50),
-            styleMask: [.titled, .utilityWindow],
+            styleMask: [.titled],
             backing: .buffered,
             defer: true,
             screen: nil)
