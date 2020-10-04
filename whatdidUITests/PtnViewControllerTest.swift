@@ -1171,13 +1171,18 @@ class PtnViewControllerTest: XCTestCase {
     /// the finder. Otherwise, `onSessionPrompt` governs what to do if the "start a new session?" prompt comes up.
     func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0, s: Int = 0, deactivate: Bool = false, onSessionPrompt: LongSessionAction = .ignorePrompt) {
         group("setting time \(d)d \(h)h \(m)m \(s)s") {
+            let mockedClockWindow = app.windows["Mocked Clock"]
             app.activate() // bring the clockTicker back, if needed
-            XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
+            if !mockedClockWindow.exists {
+                NSApp.activate(ignoringOtherApps: true) // try to unstick the app -- make the test active and then reactivate the app?
+                app.activate()
+                XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
+            }
             let epochSeconds = d * 86400 + h * 3600 + m * 60 + s
             let text = "\(epochSeconds)\r"
-            let clockTicker = app.windows["Mocked Clock"].children(matching: .textField).element
+            let clockTicker = mockedClockWindow.children(matching: .textField).element
             if deactivate {
-                app.windows["Mocked Clock"].checkBoxes["Defer until deactivation"].click()
+                mockedClockWindow.checkBoxes["Defer until deactivation"].click()
             }
             clockTicker.deleteText(andReplaceWith: text)
             log("Setting time to \(Date(timeIntervalSince1970: TimeInterval(epochSeconds)).utcTimestamp)")
