@@ -1178,16 +1178,10 @@ class PtnViewControllerTest: XCTestCase {
     /// the finder. Otherwise, `onSessionPrompt` governs what to do if the "start a new session?" prompt comes up.
     func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0, s: Int = 0, deactivate: Bool = false, onSessionPrompt: LongSessionAction = .ignorePrompt) {
         group("setting time \(d)d \(h)h \(m)m \(s)s") {
-            let mockedClockWindow = app.windows["Mocked Clock"]
-            group("Bringing app to background if needed") {
-                let mockedClockWindowQuery = app.descendants(matching: .window).containing(.window, identifier: "Mocked Clock")
-                if !(mockedClockWindowQuery.count > 0 && mockedClockWindow.isVisible && mockedClockWindow.isEnabled) {
-                    log("Mocked clock is not visible or is not enabled. Activating whatdid.")
-                    activate(andClickActivatorStatusItem: true)
-                }
-            }
+            activate(andClickActivatorStatusItem: true)
             let epochSeconds = d * 86400 + h * 3600 + m * 60 + s
             let text = "\(epochSeconds)\r"
+            let mockedClockWindow = app.windows["Mocked Clock"]
             let clockTicker = mockedClockWindow.children(matching: .textField).element
             if deactivate {
                 mockedClockWindow.checkBoxes["Defer until deactivation"].click()
