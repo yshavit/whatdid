@@ -37,20 +37,18 @@ class PtnViewControllerTest: XCTestCase {
             switch openWindow {
             case .none:
                 clickStatusMenu()
-            case let .some(w) where w.title == WindowType.dailyEnd.windowTitle:
-                clickStatusMenu()
-                sleepMillis(500)
-                clickStatusMenu()
             case let .some(w) where w.title == WindowType.ptn.windowTitle:
                 break
+            case let .some(w) where WindowType.allCases.map({$0.windowTitle}).contains(w.title):
+                clickStatusMenu()
+                wait(for: "window to close", until: {openWindow == nil})
+                sleepMillis(500)
+                clickStatusMenu()
             case let .some(w):
                 XCTFail("unexpected window: \(w.title)")
             }
+            waitForTransition(of: .ptn, toIsVisible: true)
             let ptn = findPtn()
-            if !ptn.window.isVisible {
-                clickStatusMenu()
-            }
-            assertThat(window: .ptn, isVisible: true)
             afterAction(ptn.window)
             return ptn
         }
@@ -380,17 +378,6 @@ class PtnViewControllerTest: XCTestCase {
             let snoozeOptionLabels = snoozeOptions.allElementsBoundByIndex.map { $0.title }
             XCTAssertEqual(["7:30 pm", "8:00 pm", "8:30 pm", "", "Monday at 9:00 am"], snoozeOptionLabels)
         }
-    }
-    
-    func testMockedClockFocus() {
-        // Note: Needs to be a scheduled PTN open, not a manual open
-        setTimeUtc(m: 20)
-        clickStatusMenu()
-        waitForTransition(of: .ptn, toIsVisible: false)
-        // Note: needs to be a manual PTN open, not scheduled.
-        clickStatusMenu()
-        print("OK GO")
-        setTimeUtc(d: 1, h: 0, m: 0, onSessionPrompt: .ignorePrompt)
     }
     
     func testLongSessionPrompt() {
@@ -741,7 +728,7 @@ class PtnViewControllerTest: XCTestCase {
         }
         group("Closing the menu resigns active") {
             clickStatusMenu() // close the app
-            XCTAssertFalse(ptn.window.isVisible)
+            wait(for: "window to close", until: {openWindow == nil})
             XCTAssertTrue(app.wait(for: .runningBackground, timeout: 15))
         }
         group("Hot key opens PTN with active and focus") {
@@ -1067,7 +1054,7 @@ class PtnViewControllerTest: XCTestCase {
         }
         group("escape key within project combo") {
             group("Open PTN") {
-                XCTAssertFalse(ptn.window.isVisible)
+                wait(for: "window to close", until: {openWindow == nil})
                 clickStatusMenu()
                 waitForTransition(of: .ptn, toIsVisible: true)
             }
@@ -1078,7 +1065,7 @@ class PtnViewControllerTest: XCTestCase {
                 XCTAssertFalse(ptn.pcombo.optionsScrollIsOpen)
             }
             group("Escape key #2: hide window") {
-                XCTAssertTrue(ptn.window.isVisible)
+                waitForTransition(of: .ptn, toIsVisible: true)
                 ptn.window.typeKey(.escape, modifierFlags: [])
                 waitForTransition(of: .ptn, toIsVisible: false)
             }
@@ -1163,7 +1150,7 @@ class PtnViewControllerTest: XCTestCase {
             waitForTransition(of: .ptn, toIsVisible: true)
             XCTAssertTrue(ptn.nfield.hasFocus)
             app.typeText("notes c\r")
-            XCTAssertFalse(ptn.window.isVisible)
+            waitForTransition(of: .ptn, toIsVisible: false)
         }
         group("Reopen PTN") {
             clickStatusMenu()
