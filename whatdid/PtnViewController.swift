@@ -256,7 +256,9 @@ class PtnViewController: NSViewController {
         } else if taskField.textField.stringValue.isEmpty {
             firstResponder = taskField.textField
         }
-        firstResponder?.becomeFirstResponder()
+        if firstResponder != nil {
+            view.window?.makeFirstResponder(firstResponder)
+        }
     }
     
     func projectOrTaskAction(_ sender: AutoCompletingField) {

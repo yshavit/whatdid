@@ -64,7 +64,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         opener = OpenCloseHelper<WindowContents>(
             onOpen: {ctx in
                 NSLog("MainMenu handling \(ctx.reason) open request for \(ctx.item)")
-                self.open(ctx.item, scheduler: ctx.scheduler)
+                self.doOpen(ctx.item, scheduler: ctx.scheduler)
                 if ctx.reason == .manual {
                     self.focus()
                 }
@@ -84,20 +84,16 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         }
     }
     
-    private func open(_ contents: WindowContents, scheduler: Scheduler?) {
+    private func doOpen(_ contents: WindowContents, scheduler newScheduler: Scheduler) {
         switch (contents) {
         case .dailyEnd:
             let controller = DayEndReportController()
             window?.contentViewController = controller
             controller.prepareForViewing()
-            if let newScheduler = scheduler {
-                controller.scheduler = newScheduler
-            }
+            controller.scheduler = newScheduler
             window?.title = "Here's what you've been doing"
         case .ptn:
-            if let newScheduler = scheduler {
-                taskAdditionsPane.scheduler = newScheduler
-            }
+            taskAdditionsPane.scheduler = newScheduler
             window?.contentViewController = taskAdditionsPane
             window?.title = "What are you working on?"
         }
@@ -126,11 +122,6 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         RunLoop.current.perform {
             self.statusItem.button?.isHighlighted = true
         }
-        if let theWindow = window, let theScreen = theWindow.screen {
-            NSLog("Opened \(contents) window at \(theWindow.frame) within screen \(theScreen.frame)")
-        } else {
-            NSLog("No window or screen. Window \(window == nil ? "is" : "is not") nil, and screen \(window?.screen == nil ? "is" : "is not") nil")
-        }
     }
     
     func focus() {
@@ -138,7 +129,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
             NSApp.activate(ignoringOtherApps: true)
         }
         if !(window?.isVisible ?? false) {
-            open(.ptn, scheduler: nil)
+            opener.open(.ptn, reason: .manual)
         }
         window?.makeKeyAndOrderFront(self)
         if window?.contentView == taskAdditionsPane.view {

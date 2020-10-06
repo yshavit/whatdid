@@ -16,18 +16,15 @@ class PtnViewControllerTest: XCTestCase {
 
         findStatusMenuItem()
         let now = Date()
-        log("Failed at \(now.utcTimestamp) (\(now.timestamp(at: TimeZone(identifier: "US/Eastern")!)))")
+        log("Finished setup at \(now.utcTimestamp) (\(now.timestamp(at: TimeZone(identifier: "US/Eastern")!)))")
     }
     
-    func activate(andClickActivatorStatusItem: Bool) {
+    func activate() {
         app.activate()
-        if andClickActivatorStatusItem {
-            app.menuBars.statusItems["Activate Whatdid"].click()
-        }
     }
     
     func findStatusMenuItem() {
-        activate(andClickActivatorStatusItem: false)
+        activate()
         // The 0.5 isn't necessary, but it positions the cursor in the middle of the item. Just looks nicer.
         app.menuBars.statusItems["✐"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
         statusItemPoint = CGEvent(source: nil)?.location
@@ -343,7 +340,7 @@ class PtnViewControllerTest: XCTestCase {
             
             setTimeUtc(h: 16, m: 30)
             assertThat(window: .ptn, isVisible: false)
-            activate(andClickActivatorStatusItem: true)
+            activate()
             waitForTransition(of: .dailyEnd, toIsVisible: true)
             clickStatusMenu() // close the report
             waitForTransition(of: .dailyEnd, toIsVisible: false)
@@ -387,6 +384,17 @@ class PtnViewControllerTest: XCTestCase {
             let snoozeOptionLabels = snoozeOptions.allElementsBoundByIndex.map { $0.title }
             XCTAssertEqual(["7:30 pm", "8:00 pm", "8:30 pm", "", "Monday at 9:00 am"], snoozeOptionLabels)
         }
+    }
+    
+    func testMockedClockFocus() {
+        // Note: Needs to be a scheduled PTN open, not a manual open
+        setTimeUtc(m: 20)
+        clickStatusMenu()
+        waitForTransition(of: .ptn, toIsVisible: false)
+        // Note: needs to be a manual PTN open, not scheduled.
+        clickStatusMenu()
+        print("OK GO")
+        setTimeUtc(d: 1, h: 0, m: 0, onSessionPrompt: .ignorePrompt)
     }
     
     func testLongSessionPrompt() {
@@ -1178,10 +1186,12 @@ class PtnViewControllerTest: XCTestCase {
     /// the finder. Otherwise, `onSessionPrompt` governs what to do if the "start a new session?" prompt comes up.
     func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0, s: Int = 0, deactivate: Bool = false, onSessionPrompt: LongSessionAction = .ignorePrompt) {
         group("setting time \(d)d \(h)h \(m)m \(s)s") {
-            activate(andClickActivatorStatusItem: true)
             let epochSeconds = d * 86400 + h * 3600 + m * 60 + s
             let text = "\(epochSeconds)\r"
             let mockedClockWindow = app.windows["Mocked Clock"]
+            activate()
+            app.menuBars.statusItems["Focus Mocked Clock"].click()
+            mockedClockWindow.click()
             let clockTicker = mockedClockWindow.children(matching: .textField).element
             if deactivate {
                 mockedClockWindow.checkBoxes["Defer until deactivation"].click()

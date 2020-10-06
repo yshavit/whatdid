@@ -67,10 +67,10 @@ extension XCUIElement {
             }
             grabFocus()
             typeKey("a", modifierFlags: .command)
-            typeKey(.delete, modifierFlags:[])
             if let replacementToType = replacement {
-                grabFocus()
                 typeText(replacementToType)
+            } else {
+                typeKey(.delete, modifierFlags:[])
             }
         }
     }
