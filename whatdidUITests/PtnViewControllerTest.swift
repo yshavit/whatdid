@@ -20,7 +20,7 @@ class PtnViewControllerTest: XCTestCase {
     }
     
     func findStatusMenuItem() {
-        app.activate()
+        activate()
         // The 0.5 isn't necessary, but it positions the cursor in the middle of the item. Just looks nicer.
         app.menuBars.statusItems["✐"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
         statusItemPoint = CGEvent(source: nil)?.location
@@ -334,7 +334,7 @@ class PtnViewControllerTest: XCTestCase {
             
             setTimeUtc(h: 16, m: 30)
             assertThat(window: .ptn, isVisible: false)
-            app.activate()
+            activate()
             waitForTransition(of: .dailyEnd, toIsVisible: true)
             clickStatusMenu() // close the report
             waitForTransition(of: .dailyEnd, toIsVisible: false)
@@ -1165,6 +1165,13 @@ class PtnViewControllerTest: XCTestCase {
         }
     }
     
+    func activate() {
+        app.activate()
+        if !app.wait(for: .runningForeground, timeout: 15) {
+            log("Timed out waiting to run in foreground. Will try to continue. Current state: \(app.state.rawValue)")
+        }
+    }
+    
     /// Sets the mocked clock in UTC. If `deactivate` is true (default false), then this will set the mocked clock to set the time when the app deactivates, and then this method will activate
     /// the finder. Otherwise, `onSessionPrompt` governs what to do if the "start a new session?" prompt comes up.
     func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0, s: Int = 0, deactivate: Bool = false, onSessionPrompt: LongSessionAction = .ignorePrompt) {
@@ -1172,6 +1179,7 @@ class PtnViewControllerTest: XCTestCase {
             let epochSeconds = d * 86400 + h * 3600 + m * 60 + s
             let text = "\(epochSeconds)\r"
             let mockedClockWindow = app.windows["Mocked Clock"]
+            activate()
             app.menuBars.statusItems["Focus Mocked Clock"].click()
             mockedClockWindow.click()
             let clockTicker = mockedClockWindow.children(matching: .textField).element
