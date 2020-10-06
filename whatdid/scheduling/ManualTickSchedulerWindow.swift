@@ -48,7 +48,6 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
         updateDate()
         window.setIsVisible(true)
         setter.delegate = self
-        
         setUpActivator()
     }
     
@@ -62,6 +61,7 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
     }
     
     @objc private func grabFocus() {
+        NSApp.activate(ignoringOtherApps: true)
         window.makeKeyAndOrderFront(self)
     }
     

@@ -19,12 +19,8 @@ class PtnViewControllerTest: XCTestCase {
         log("Finished setup at \(now.utcTimestamp) (\(now.timestamp(at: TimeZone(identifier: "US/Eastern")!)))")
     }
     
-    func activate() {
-        app.activate()
-    }
-    
     func findStatusMenuItem() {
-        activate()
+        app.activate()
         // The 0.5 isn't necessary, but it positions the cursor in the middle of the item. Just looks nicer.
         app.menuBars.statusItems["✐"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
         statusItemPoint = CGEvent(source: nil)?.location
@@ -340,7 +336,7 @@ class PtnViewControllerTest: XCTestCase {
             
             setTimeUtc(h: 16, m: 30)
             assertThat(window: .ptn, isVisible: false)
-            activate()
+            app.activate()
             waitForTransition(of: .dailyEnd, toIsVisible: true)
             clickStatusMenu() // close the report
             waitForTransition(of: .dailyEnd, toIsVisible: false)
@@ -1189,7 +1185,6 @@ class PtnViewControllerTest: XCTestCase {
             let epochSeconds = d * 86400 + h * 3600 + m * 60 + s
             let text = "\(epochSeconds)\r"
             let mockedClockWindow = app.windows["Mocked Clock"]
-            activate()
             app.menuBars.statusItems["Focus Mocked Clock"].click()
             mockedClockWindow.click()
             let clockTicker = mockedClockWindow.children(matching: .textField).element
