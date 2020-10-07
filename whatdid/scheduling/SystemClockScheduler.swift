@@ -15,10 +15,10 @@ class SystemClockScheduler: Scheduler {
     
     func schedule(_ description: String, at date: Date, _ block: @escaping () -> Void) -> ScheduledTask {
         NSLog("Scheduling \(description) at \(date)")
-        let timer = Timer(fire: date, interval: 0, repeats: false, block: {_ in block()})
-        timer.tolerance = SystemClockScheduler.TOLERANCE_SECONDS
-        RunLoop.current.add(timer, forMode: .default)
-        return TimerBasedScheduledTask(timer: timer)
+        let dispatchWorkItem = DispatchWorkItem(block: block)
+        let wallDeadline = DispatchWallTime.now() + date.timeIntervalSince(now)
+        DispatchQueue.main.asyncAfter(wallDeadline: wallDeadline, execute: dispatchWorkItem)
+        return dispatchWorkItem
     }
     
     func schedule(_ description: String, after: TimeInterval, _ block: @escaping () -> Void) -> ScheduledTask {
@@ -28,14 +28,6 @@ class SystemClockScheduler: Scheduler {
         DispatchQueue.main.asyncAfter(wallDeadline: wakeupTime, execute: dispatchWorkItem)
         return dispatchWorkItem
     }
-}
-
-private struct TimerBasedScheduledTask: ScheduledTask {
-   let timer: Timer
-   
-   func cancel() {
-       timer.invalidate()
-   }
 }
 
 extension DispatchWorkItem: ScheduledTask {

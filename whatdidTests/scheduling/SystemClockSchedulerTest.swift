@@ -16,6 +16,8 @@ class SystemClockSchedulerTest: XCTestCase {
             XCTAssertEqual(4, checks.count) // sanity check
             
             checks.forEach { $0.start() }
+            sleep(1)
+            checks.forEach { XCTAssertFalse($0.timerFired) }
             checks.filter{$0.shouldGetCanceled}.forEach {check in
                 XCTAssertNotNil(check.scheduledTask, check.description)
                 check.scheduledTask?.cancel()
