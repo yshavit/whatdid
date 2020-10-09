@@ -23,10 +23,6 @@ class DummyScheduler: Scheduler {
         return add(block)
     }
     
-    func schedule(_ description: String, after: TimeInterval, _ block: @escaping () -> Void) -> ScheduledTask {
-        return add(block)
-    }
-    
     private func add(_ block: @escaping () -> Void) -> ScheduledTask {
         let task = DummyScheduledTask(block)
         tasks.append(task)

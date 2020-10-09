@@ -50,6 +50,31 @@ class SystemClockSchedulerTest: XCTestCase {
         XCTAssertEqual(1, count)
     }
     
+    func testTaskScheduledInPast() {
+        let taskCompletion = XCTestExpectation(description: "task to be run")
+        _ = SystemClockSchedulerTest.scheduler.schedule("", after: -10000) {
+            taskCompletion.fulfill()
+        }
+        wait(for: [taskCompletion], timeout: 10)
+    }
+    
+    func testNoLeaks() {
+        var expectations = [XCTestExpectation]()
+        for _ in 0..<100 {
+            let taskCompletion = XCTestExpectation()
+            expectations.append(taskCompletion)
+            _ = SystemClockSchedulerTest.scheduler.schedule("", after: 1.5) {
+                taskCompletion.fulfill()
+            }
+        }
+        // We should have at least a few tasks still in their 1.5 second waiting period
+        XCTAssertGreaterThan(SystemClockSchedulerTest.scheduler.approximatePendingTasksCount, 0)
+        wait(for: expectations, timeout: 10)
+        // But now that they've all completed, they should all be cleared from memory
+        XCTAssertEqual(0, SystemClockSchedulerTest.scheduler.approximatePendingTasksCount)
+        
+    }
+    
     class SingleCheck: CustomStringConvertible {
         private let delayStrategy: DelayStrategy
         var timerFired = false

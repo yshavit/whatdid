@@ -6,7 +6,12 @@ protocol Scheduler {
     var now: Date { get }
     var timeZone: TimeZone { get }
     @discardableResult func schedule(_ description: String, at: Date, _ block: @escaping () -> Void) -> ScheduledTask
-    @discardableResult func schedule(_ description: String, after: TimeInterval, _ block: @escaping () -> Void) -> ScheduledTask
+}
+
+extension Scheduler {
+    @discardableResult func schedule(_ description: String, after: TimeInterval, _ block: @escaping () -> Void) -> ScheduledTask {
+        return schedule(description, at: now + after, block)
+    }
 }
 
 protocol ScheduledTask {

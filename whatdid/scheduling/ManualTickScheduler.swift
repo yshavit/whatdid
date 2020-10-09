@@ -21,10 +21,6 @@ class ManualTickScheduler: Scheduler {
         }
     }
     
-    @discardableResult func schedule(_ description: String, after time: TimeInterval, _ block: @escaping () -> Void) -> ScheduledTask {
-        return schedule(description, at: _now.addingTimeInterval(time), block)
-    }
-    
     var now: Date {
         get {
             return _now

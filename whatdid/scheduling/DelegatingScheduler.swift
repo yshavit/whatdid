@@ -34,16 +34,6 @@ class DelegatingScheduler: Scheduler {
         return work
     }
     
-    @discardableResult func schedule(_ description: String, after: TimeInterval, _ block: @escaping () -> Void) -> ScheduledTask {
-        guard isOpen else {
-            NSLog("Ignoring task because DelegatingScheduler has been closed")
-            return NoopTask()
-        }
-        let work = createTrackingBlock(block)
-        work.tracks = delegate.schedule(description, after: after, work.run)
-        return work
-    }
-    
     func close() {
         for id in tasks.keys {
             let task = tasks.removeValue(forKey: id)
