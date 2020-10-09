@@ -9,15 +9,20 @@ struct Prefs {
     @Pref(key: "daysIncludeWeekends") static var daysIncludeWeekends = false
     @Pref(key: "ptnFrequencyMinutes") static var ptnFrequencyMinutes = 12
     @Pref(key: "ptnFrequencyJitterMinutes") static var ptnFrequencyJitterMinutes = 2
+    @Pref(key: "launchAtLogin") static var launchAtLogin = false
+    @Pref(key: "launchAtLogin") var launchAtLogin = false
 }
 
 @propertyWrapper
 struct Pref<T: PrefType> {
     private let key: String
+    var projectedValue: PrefsListeners<T>
     
     init(wrappedValue: T, key: String) {
         self.key = "whatdid." + key
         UserDefaults.standard.register(defaults: [self.key: wrappedValue.asUserDefaultsValue])
+        projectedValue = PrefsListeners(wrappedValue)
+        projectedValue.notify(newValue: self.wrappedValue)
     }
     
     var wrappedValue: T {
@@ -26,7 +31,27 @@ struct Pref<T: PrefType> {
         }
         set(value) {
             T.writeUserDefaultsValue(key: key, value: value)
+            projectedValue.notify(newValue: value)
         }
+    }
+}
+
+class PrefsListeners<T> {
+    private var currentValue: T
+    private var listeners = [(T) -> Void]()
+    
+    init(_ defaultValue: T) {
+        self.currentValue = defaultValue
+    }
+    
+    func addListener(_ block: @escaping (T) -> Void) {
+        listeners.append(block)
+        block(currentValue)
+    }
+    
+    fileprivate func notify(newValue: T) {
+        self.currentValue = newValue
+        listeners.forEach { $0(newValue) }
     }
 }
 

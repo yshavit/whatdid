@@ -47,6 +47,15 @@ class PrefsViewController: NSViewController {
         }
     }
     
+    @IBInspectable
+    dynamic var launchAtLogin: Bool {
+        get {
+            Prefs.launchAtLogin
+        } set(value) {
+            Prefs.launchAtLogin = value
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         outerVStackWidth.constant = desiredWidth
