@@ -12,6 +12,13 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Add MacOS certs
+      # To add the CERTIFICATES_P12 to GH secrets, do:
+      # base64 -w 0 cert.p12
+      run: ./buildscripts/add-osx-cert.sh
+      env:
+        CERTIFICATES_P12: ${{ secrets.CERTIFICATES_P12 }}
+        CERTIFICATES_P12_PASSWORD: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
     - name: Build release
       run: xcodebuild clean build -scheme whatdid-release
   ui-tests:

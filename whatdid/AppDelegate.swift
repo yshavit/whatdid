@@ -2,6 +2,7 @@
 
 import Cocoa
 import KeyboardShortcuts
+import ServiceManagement
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -64,6 +65,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         mainMenu.schedule(.ptn)
         mainMenu.schedule(.dailyEnd)
+        setUpLauncher()
     }
     
     func applicationWillTerminate(_ notification: Notification) {
@@ -98,6 +100,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         mainMenu.snoozedUntil
     }
     
+    private func setUpLauncher() {
+        // Taken from https://theswiftdev.com/how-to-launch-a-macos-app-at-login/
+        let launcherAppId = "com.yuvalshavit.WhatdidLauncher"
+        let runningApps = NSWorkspace.shared.runningApplications
+        let isRunning = !runningApps.filter { $0.bundleIdentifier == launcherAppId }.isEmpty
+        
+        Prefs.$launchAtLogin.addListener {enabled in
+            let success = SMLoginItemSetEnabled(launcherAppId as CFString, enabled)
+            NSLog("SMLoginItemSetEnabled -> \(enabled) \(success ? "successfully set" : "NOT set")")
+            
+        }
+
+        if isRunning {
+            DistributedNotificationCenter.default().post(name: .killLauncher, object: Bundle.main.bundleIdentifier!)
+        }
+    }
+    
     static func keyComboString(keyEquivalent: String, keyEquivalentMask: NSEvent.ModifierFlags) -> String {
         var keyAdjusted = keyEquivalent
         var maskAdjusted = keyEquivalentMask
@@ -110,4 +129,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         return "\(maskAdjusted)\(keyAdjusted)"
     }
+}
+
+
+extension Notification.Name {
+    static let killLauncher = Notification.Name("killLauncher")
 }
