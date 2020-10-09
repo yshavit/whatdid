@@ -27,4 +27,8 @@ extension XCUIElementQuery {
             return false
         }
     }
+    
+    var firstMatchMaybe: XCUIElement? {
+        allElementsBoundByIndex.first
+    }
 }

@@ -1291,7 +1291,7 @@ class PtnViewControllerTest: XCTestCase {
     }
     
     func isWindowVisible(_ window: WindowType) -> Bool {
-        let visible = app.windows.matching(.window, identifier: window.windowTitle).firstMatch.isVisible
+        let visible = app.windows.matching(.window, identifier: window.windowTitle).firstMatchMaybe?.isVisible ?? false
         log("↳ \(String(describing: window)) \(visible ? "is visible" : "is not visible")")
         return visible
     }
