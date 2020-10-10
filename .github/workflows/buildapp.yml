@@ -11,6 +11,9 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
+    - name: Will upload artifact
+      if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
+      run: echo "should_upload_app=yes" >> "$GITHUB_ENV"
     - uses: actions/checkout@v2
     - name: Add MacOS certs
       # To add the CERTIFICATES_P12 to GH secrets, do:
@@ -22,13 +25,13 @@ jobs:
     - name: Build archive
       run: xcodebuild -scheme whatdid-release build archive -archivePath build/whatdid
     - name: Export archive
-      if: github.ref == 'refs/heads/main'
+      if: env.should_upload_app
       run: xcodebuild -exportArchive -archivePath build/whatdid.xcarchive -exportPath build -exportOptionsPlist buildscripts/archive-export.plist
     - name: Create zip
-      if: github.ref == 'refs/heads/main'
+      if: env.should_upload_app
       run: (cd build && zip -r whatdid.zip whatdid.app)
     - uses: actions/upload-artifact@v2
-      if: github.ref == 'refs/heads/main'
+      if: env.should_upload_app
       with:
         name: whatdid.zip
         path: build/whatdid.zip
