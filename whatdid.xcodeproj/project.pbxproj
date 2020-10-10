@@ -195,6 +195,7 @@
 		7EF8579A24E220EA00867832 /* OpenReason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenReason.swift; sourceTree = "<group>"; };
 		7EF857A024E2420C00867832 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
 		7EF857A224E242AB00867832 /* ManualTickScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualTickScheduler.swift; sourceTree = "<group>"; };
+		7EF9BDCD253183B100B7EC6D /* whatdidRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = whatdidRelease.entitlements; sourceTree = "<group>"; };
 		7EFEE80123B16EA6002928A2 /* PtnViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PtnViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -328,6 +329,7 @@
 		7E8C04DC23714F0700A0C3A6 /* whatdid */ = {
 			isa = PBXGroup;
 			children = (
+				7EF9BDCD253183B100B7EC6D /* whatdidRelease.entitlements */,
 				7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */,
 				7EE0E74524E8899E002D03F8 /* AutoCompletingField.swift */,
 				7E07C3B624D121770007FD23 /* DayEndReportController.swift */,
@@ -971,11 +973,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = whatdid/whatdid.entitlements;
+				CODE_SIGN_ENTITLEMENTS = whatdid/whatdidRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = CUJYAXXM6G;
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = whatdid/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
