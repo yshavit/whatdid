@@ -5,31 +5,70 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      notarize:
+        description: Enter "yes" to notarize this build.
 
 jobs:
   build:
     runs-on: macos-latest
     steps:
+    - name: Will upload artifact
+      if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
+      run: echo "should_upload_app=yes" >> "$GITHUB_ENV"
     - uses: actions/checkout@v2
-    - name: Add MacOS certs
+    - name: Build
       # To add the CERTIFICATES_P12 to GH secrets, do:
       # base64 -w 0 cert.p12
-      run: ./buildscripts/add-osx-cert.sh
+      run: |
+        ./buildscripts/add-osx-cert.sh
+        xcodebuild -scheme whatdid-release build archive -archivePath build/whatdid
       env:
         CERTIFICATES_P12: ${{ secrets.CERTIFICATES_P12 }}
         CERTIFICATES_P12_PASSWORD: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
-    - name: Build archive
-      run: xcodebuild -scheme whatdid-release build archive -archivePath build/whatdid
-    - name: Export archive
-      if: github.ref == 'refs/heads/main'
-      run: xcodebuild -exportArchive -archivePath build/whatdid.xcarchive -exportPath build -exportOptionsPlist buildscripts/archive-export.plist
-    - name: Create zip
-      if: github.ref == 'refs/heads/main'
-      run: (cd build && zip -r whatdid.zip whatdid.app)
-    - uses: actions/upload-artifact@v2
-      if: github.ref == 'refs/heads/main'
+    - name: Prepare artifacts for upload
+      if: env.should_upload_app
+      run: |
+        set -e -o pipefail
+        xcodebuild -exportArchive -archivePath build/whatdid.xcarchive -exportPath build -exportOptionsPlist buildscripts/archive-export.plist
+        cd build
+        ditto -c -k --keepParent whatdid.app whatdid.zip
+        mkdir logs
+        mv DistributionSummary.plist Packaging.log logs/
+    - name: Notarize app
+      if: env.should_upload_app && github.event.inputs.notarize == 'yes'
+      run: |
+        set -e -o pipefail
+        cd build
+        xcrun altool --notarize-app --primary-bundle-id "com.yuvalshavit.whatdid.gh.${{ github.run_number }}" -u "${{ secrets.APPLE_ID }}" -p "${{ secrets.APPLE_PW }}" -f whatdid.zip --output-format json | tee notarization-results.json
+        notarization_request=$(jq <notarization-results.json -r '."notarization-upload".RequestUUID')
+        timeout_seconds=3600 # in practice, it should be just a few minutes; but Apple says it's less than an hour
+        echo "Will wait up to $timeout_seconds for notarization request $notarization_request."
+        timeout_at=$(( $(date +%s) + $timeout_seconds ))
+        while true ; do
+          if xcrun altool --notarization-history 0 -u "${{ secrets.APPLE_ID }}" -p "${{ secrets.APPLE_PW }}" | grep -qE "${notarization_request}\s+success" ; then
+            echo "Success. Stapling and re-zipping"
+            xcrun stapler staple whatdid.app
+            ditto -c -k --keepParent whatdid.app whatdid.zip
+            break
+          elif [[ $(date +%s) -gt $timeout_at ]]; then
+            echo "Timed out!"
+            exit 1
+          else
+            echo "Notarization not yet complete. Waiting 60 seconds."
+            sleep 60
+          fi
+        done
+    - name: Upload app
+      uses: actions/upload-artifact@v2
+      if: env.should_upload_app
       with:
         name: whatdid.zip
         path: build/whatdid.zip
-  
+    - name: Upload logs
+      uses: actions/upload-artifact@v2
+      if: env.should_upload_app
+      with:
+        name: packaging-logs
+        path: build/logs
