@@ -28,7 +28,7 @@ jobs:
       if: github.ref == 'refs/heads/main'
       run: (cd build && zip -r whatdid.zip whatdid.app)
     - uses: actions/upload-artifact@v2
-      if: github.ref == 'refs/heads.main'
+      if: github.ref == 'refs/heads/main'
       with:
         name: whatdid.zip
         path: build/whatdid.zip
