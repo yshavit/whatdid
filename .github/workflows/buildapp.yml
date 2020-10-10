@@ -22,13 +22,13 @@ jobs:
     - name: Build archive
       run: xcodebuild -scheme whatdid-release build archive -archivePath build/whatdid
     - name: Export archive
-      if: github.ref == 'main'
+      if: github.ref == 'refs/heads/main'
       run: xcodebuild -exportArchive -archivePath build/whatdid.xcarchive -exportPath build -exportOptionsPlist buildscripts/archive-export.plist
     - name: Create zip
-      if: github.ref == 'main'
+      if: github.ref == 'refs/heads/main'
       run: (cd build && zip -r whatdid.zip whatdid.app)
     - uses: actions/upload-artifact@v2
-      if: github.ref == 'main'
+      if: github.ref == 'refs/heads.main'
       with:
         name: whatdid.zip
         path: build/whatdid.zip
