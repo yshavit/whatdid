@@ -635,7 +635,7 @@ class PtnViewControllerTest: XCTestCase {
             let projectA = HierarchicalEntryLevel(ancestor: dailyReport, scope: "Project", label: "project a")
             let tasksForA = dailyReport.groups["Tasks for \"project a\""]
             let task1 = HierarchicalEntryLevel(ancestor: tasksForA, scope: "Task", label: "task 1")
-            let task1Details = tasksForA.staticTexts["Details for task 1"]
+            let task1Details = tasksForA.groups["Details for task 1"]
             group("Duration label and indicator") {
                 XCTAssertEqual("30m", projectA.durationLabel.stringValue)
                 if let indicatorBarValue = projectA.indicatorBar.value as? Double {
@@ -668,7 +668,14 @@ class PtnViewControllerTest: XCTestCase {
                 group("Details") {
                     XCTAssertFalse(task1Details.exists)
                     task1.clickDisclosure(until: task1Details, .isVisible)
-                    XCTAssertEqual("1:15am - 1:27am (12m): first thing\n1:40am - 1:45am (5m): back to first", task1Details.stringValue)
+                    XCTAssertEqual(
+                        [
+                            "1:15am - 1:27am (12m):",
+                            "first thing",
+                            "1:40am - 1:45am (5m):",
+                            "back to first",
+                        ],
+                        task1Details.descendants(matching: .staticText).allElementsBoundByIndex.map({$0.stringValue}))
                 }
             }
             group("Task 1 stays expanded if project a folds") {
