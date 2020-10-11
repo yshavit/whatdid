@@ -37,10 +37,11 @@ class WhatdidTextField: NSTextField {
         }
         // I'm not sure why we need to shrink the width, but without it, the
         // field wraps one char later than it should.
+        let widthShrink: CGFloat = isEditable ? 4.0 : 0.0
         let tallBounds = NSRect(
             x: bounds.minX,
             y: bounds.minX,
-            width: bounds.width - 4,
+            width: bounds.width - widthShrink,
             height: screen.frame.height)
         let adjustedHeight = cell.cellSize(forBounds: tallBounds)
         return adjustedHeight.height

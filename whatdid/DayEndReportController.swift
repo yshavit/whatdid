@@ -231,11 +231,11 @@ class DayEndReportController: NSViewController {
             labelStack.orientation = .horizontal
             labelStack.leadingAnchor.constraint(equalTo: enclosing.leadingAnchor).isActive = true
             
-            let projectLabel = NSTextField(labelWithString: label)
+            let projectLabel = WhatdidTextField(wrappingLabelWithString: label)
             projectLabel.font = NSFont.systemFont(ofSize: NSFont.systemFontSize)
             labelStack.addView(projectLabel, in: .leading)
             projectLabel.setAccessibilityLabel("\(scope) \"\(label)\"")
-            let durationLabel = NSTextField(labelWithString: TimeUtil.daysHoursMinutes(for: duration))
+            let durationLabel = WhatdidTextField(wrappingLabelWithString: TimeUtil.daysHoursMinutes(for: duration))
             durationLabel.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
             labelStack.addView(durationLabel, in: .trailing)
             durationLabel.setAccessibilityLabel("\(scope) time for \"\(label)\"")
