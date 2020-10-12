@@ -99,7 +99,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         }
         
         window!.setContentSize(window!.contentViewController!.view.fittingSize)
-        if let mainFrame = NSScreen.main?.visibleFrame, let button = statusItem.button {
+        if let mainFrame = statusItem.button?.window?.screen?.visibleFrame, let button = statusItem.button {
             var pos = NSPoint(
                 x: button.window?.frame.minX ?? .zero,
                 y: mainFrame.origin.y + mainFrame.height)
