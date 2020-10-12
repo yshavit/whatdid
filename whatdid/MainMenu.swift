@@ -99,19 +99,39 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         }
         
         window!.setContentSize(window!.contentViewController!.view.fittingSize)
-        if let mainFrame = statusItem.button?.window?.screen?.visibleFrame, let button = statusItem.button {
-            var pos = NSPoint(
-                x: button.window?.frame.minX ?? .zero,
-                y: mainFrame.origin.y + mainFrame.height)
-            if let myWindow = window {
-                if let screen = myWindow.screen {
-                    let tooFarLeftBy = (pos.x + myWindow.frame.width) - screen.frame.width
-                    if tooFarLeftBy > 0 {
-                        pos.x -= tooFarLeftBy
-                    }
+        if let button = statusItem.button, let buttonWindow = statusItem.button?.window, let buttonScreen = buttonWindow.screen, let windowToOpen = window {
+            NSLog("Available screens:")
+            let mouseLoc = NSEvent.mouseLocation
+            for screen in NSScreen.screens {
+                var bullet = "-"
+                var suffix = ""
+                if screen.frame.contains(mouseLoc) {
+                    bullet = "*"
+                    suffix = " <-- contains mouse"
                 }
-                window?.setFrameTopLeftPoint(pos)
+                NSLog("    \(bullet) \(screen.frame)\(suffix)")
             }
+            NSLog("    - mouse is at \(mouseLoc)")
+            NSLog("    - button.window: \(buttonWindow.frame)")
+            
+            let buttonRectInWindow = button.convert(button.bounds, to: nil)
+            let buttonRectInScreen = buttonWindow.convertToScreen(buttonRectInWindow)
+            let buttonMarginFromScreenEdge = buttonScreen.frame.maxX - buttonRectInScreen.origin.x
+            let mouseScreen = NSScreen.screens.first {screen in
+                // screen.frame.contains can be off by 1, so enlarge it just slightly.
+                // (This happens especially when the mouse is as high up as it can go.)
+                screen.frame.insetBy(dx: -2, dy: -2).contains(mouseLoc)
+            } ?? buttonScreen // failsafe, but shouldn't ever be needed
+            let xPosInMouseScreen = mouseScreen.frame.maxX - buttonMarginFromScreenEdge
+            var pos = NSPoint(x: xPosInMouseScreen, y: mouseScreen.visibleFrame.maxY)
+            
+            NSLog("    - button.window.screen: \(buttonScreen.frame)")
+            NSLog("    - mouseScreen: \(mouseScreen.frame)")
+            let tooFarLeftBy = (pos.x + windowToOpen.frame.width) - mouseScreen.frame.width
+            if tooFarLeftBy > 0 {
+                pos.x -= tooFarLeftBy
+            }
+            windowToOpen.setFrameTopLeftPoint(pos)
         }
         if window?.isVisible ?? false {
             contentViewController?.viewWillAppear()
