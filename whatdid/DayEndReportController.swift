@@ -105,6 +105,7 @@ class DayEndReportController: NSViewController {
                 outOf: allProjectsTotalTime)
             // Tasks box
             let tasksBox = NSBox()
+            tasksBox.useAutoLayout()
             projectVStack.addArrangedSubview(tasksBox)
             tasksBox.setAccessibilityLabel("Tasks for \"\(project.name)\"")
             tasksBox.title = tasksBox.accessibilityLabel()!
@@ -137,35 +138,56 @@ class DayEndReportController: NSViewController {
                 taskHeader.progressBar.leadingAnchor.constraint(equalTo: projectHeader.progressBar.leadingAnchor).isActive = true
                 taskHeader.progressBar.trailingAnchor.constraint(equalTo: projectHeader.progressBar.trailingAnchor).isActive = true
                 previousDetailsBottomAnchor?.constraint(equalTo: taskHeader.topView.topAnchor, constant: -5).isActive = true
-                var details = ""
+                
+                var taskDetailRows = [[NSView]]()
                 task.forEach {entry in
                     if entry.to < todayStart {
                         timeFormatter.dateFormat = "M/d h:mma"
                     }
-                    details += timeFormatter.string(from: entry.from)
-                    details += " - "
+                    var taskTime = timeFormatter.string(from: entry.from)
+                    taskTime += " - "
                     if TimeUtil.sameDay(entry.from, entry.to) {
                         timeFormatter.dateFormat = "h:mma"
                     }
-                    details += timeFormatter.string(from: entry.to)
-                    details += " (" + TimeUtil.daysHoursMinutes(for: entry.duration) + "): "
-                    details += entry.notes ?? "(no notes entered)"
-                    details += "\n"
+                    taskTime += timeFormatter.string(from: entry.to)
+                    taskTime += " (" + TimeUtil.daysHoursMinutes(for: entry.duration) + "):"
+                    
+                    var taskNotes = (entry.notes ?? "").trimmingCharacters(in: .newlines)
+                    if taskNotes.isEmpty {
+                        taskNotes = "(no notes entered)"
+                    }
+                    let fields = [
+                        NSTextField(labelWithString: taskTime),
+                        WhatdidTextField(wrappingLabelWithString: taskNotes),
+                        NSView()
+                    ]
+                    for field in fields {
+                        if let fieldAsText = field as? NSTextField {
+                            fieldAsText.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
+                        }
+                    }
+                    
+                    taskDetailRows.append(fields)
                 }
-                let taskDescriptions = details.trimmingCharacters(in: .newlines)
-                let taskDetailsView = NSTextField(labelWithString: taskDescriptions)
-                tasksStack.addArrangedSubview(taskDetailsView)
-                taskDetailsView.setAccessibilityLabel("Details for \(task.name)")
-                taskDetailsView.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
-                taskDetailsView.leadingAnchor.constraint(equalTo: taskHeader.progressBar.leadingAnchor).isActive = true
-                previousDetailsBottomAnchor = taskDetailsView.bottomAnchor
-                // For some reason, especially long (in terms of vertical space) tasks can break the layout when they're hidden:
-                // It shows up as a large vertial blank space. Something something intrinsic size? Anyway, zeroing out the contents
-                // when hidden seems to fix that.
-                let removeTextWhenHidden : (NSButton.StateValue) -> Void = {state in
-                    taskDetailsView.stringValue = state == .off ? "" : taskDescriptions
-                }
-                setUpDisclosureExpansion(disclosure: taskHeader.disclosure, details: taskDetailsView, extraAction: removeTextWhenHidden)
+                
+                
+                let taskDetailsGrid = NSGridView(views: taskDetailRows)
+                taskDetailsGrid.columnSpacing = 4
+                taskDetailsGrid.rowSpacing = 2
+                
+                let taskDetailsGridBox = NSBox()
+                taskDetailsGridBox.useAutoLayout()
+                taskDetailsGridBox.setAccessibilityLabel("Details for \(task.name)")
+                taskDetailsGridBox.title = taskDetailsGridBox.accessibilityLabel()!
+                taskDetailsGridBox.titlePosition = .noTitle
+                taskDetailsGridBox.contentView = taskDetailsGrid
+                tasksStack.addArrangedSubview(taskDetailsGridBox)
+                
+                taskDetailsGridBox.leadingAnchor.constraint(equalTo: taskHeader.progressBar.leadingAnchor).isActive = true
+                taskDetailsGridBox.trailingAnchor.constraint(equalTo: taskHeader.progressBar.trailingAnchor).isActive = true
+                
+                previousDetailsBottomAnchor = taskDetailsGridBox.bottomAnchor
+                setUpDisclosureExpansion(disclosure: taskHeader.disclosure, details: taskDetailsGridBox)
             }
         }
     }
@@ -202,20 +224,14 @@ class DayEndReportController: NSViewController {
         )
     }
     
-    private func setUpDisclosureExpansion(disclosure: ButtonWithClosure, details: NSView, extraAction: ((NSButton.StateValue) -> Void)? = nil) {
+    private func setUpDisclosureExpansion(disclosure: ButtonWithClosure, details: NSView) {
         disclosure.onPress {button in
             self.animate({
                 details.isHidden = button.state == .off
-                if let requestedAction = extraAction {
-                    requestedAction(button.state)
-                }
             })
         }
         
         details.isHidden = disclosure.state == .off
-        if let requestedAction = extraAction {
-            requestedAction(disclosure.state)
-        }
         self.projectsScrollHeight.constant = self.projectsContainer.fittingSize.height
         self.view.layoutSubtreeIfNeeded()
     }
@@ -231,11 +247,11 @@ class DayEndReportController: NSViewController {
             labelStack.orientation = .horizontal
             labelStack.leadingAnchor.constraint(equalTo: enclosing.leadingAnchor).isActive = true
             
-            let projectLabel = NSTextField(labelWithString: label)
+            let projectLabel = WhatdidTextField(wrappingLabelWithString: label)
             projectLabel.font = NSFont.systemFont(ofSize: NSFont.systemFontSize)
             labelStack.addView(projectLabel, in: .leading)
             projectLabel.setAccessibilityLabel("\(scope) \"\(label)\"")
-            let durationLabel = NSTextField(labelWithString: TimeUtil.daysHoursMinutes(for: duration))
+            let durationLabel = WhatdidTextField(wrappingLabelWithString: TimeUtil.daysHoursMinutes(for: duration))
             durationLabel.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
             labelStack.addView(durationLabel, in: .trailing)
             durationLabel.setAccessibilityLabel("\(scope) time for \"\(label)\"")
