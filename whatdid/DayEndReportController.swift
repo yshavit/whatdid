@@ -119,14 +119,6 @@ class DayEndReportController: NSViewController {
             tasksStack.orientation = .vertical
             tasksBox.contentView = tasksStack
             
-            let timeFormatter = DateFormatter()
-            timeFormatter.locale = Locale(identifier: "en_US_POSIX")
-            timeFormatter.dateFormat = "h:mma"
-            timeFormatter.timeZone = scheduler.timeZone
-            timeFormatter.amSymbol = "am"
-            timeFormatter.pmSymbol = "pm"
-            
-            
             var previousDetailsBottomAnchor : NSLayoutYAxisAnchor?
             project.forEach {task in
                 let taskHeader = ExpandableProgressBar(
@@ -139,39 +131,7 @@ class DayEndReportController: NSViewController {
                 taskHeader.progressBar.trailingAnchor.constraint(equalTo: projectHeader.progressBar.trailingAnchor).isActive = true
                 previousDetailsBottomAnchor?.constraint(equalTo: taskHeader.topView.topAnchor, constant: -5).isActive = true
                 
-                var taskDetailRows = [[NSView]]()
-                task.forEach {entry in
-                    if entry.to < todayStart {
-                        timeFormatter.dateFormat = "M/d h:mma"
-                    }
-                    var taskTime = timeFormatter.string(from: entry.from)
-                    taskTime += " - "
-                    if TimeUtil.sameDay(entry.from, entry.to) {
-                        timeFormatter.dateFormat = "h:mma"
-                    }
-                    taskTime += timeFormatter.string(from: entry.to)
-                    taskTime += " (" + TimeUtil.daysHoursMinutes(for: entry.duration) + "):"
-                    
-                    var taskNotes = (entry.notes ?? "").trimmingCharacters(in: .newlines)
-                    if taskNotes.isEmpty {
-                        taskNotes = "(no notes entered)"
-                    }
-                    let fields = [
-                        NSTextField(labelWithString: taskTime),
-                        WhatdidTextField(wrappingLabelWithString: taskNotes),
-                        NSView()
-                    ]
-                    for field in fields {
-                        if let fieldAsText = field as? NSTextField {
-                            fieldAsText.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
-                        }
-                    }
-                    
-                    taskDetailRows.append(fields)
-                }
-                
-                
-                let taskDetailsGrid = NSGridView(views: taskDetailRows)
+                let taskDetailsGrid = NSGridView(views: [])
                 taskDetailsGrid.columnSpacing = 4
                 taskDetailsGrid.rowSpacing = 2
                 
@@ -187,8 +147,60 @@ class DayEndReportController: NSViewController {
                 taskDetailsGridBox.trailingAnchor.constraint(equalTo: taskHeader.progressBar.trailingAnchor).isActive = true
                 
                 previousDetailsBottomAnchor = taskDetailsGridBox.bottomAnchor
-                setUpDisclosureExpansion(disclosure: taskHeader.disclosure, details: taskDetailsGridBox)
+                setUpDisclosureExpansion(disclosure: taskHeader.disclosure, details: taskDetailsGridBox) {state in
+                    // For some reason, especially long (in terms of vertical space) task notes can break the layout when they're hidden:
+                    // It shows up as a large vertial blank space in other tasks. Zeroing out the contents when hidden seems to fix that.
+                    if state == .off {
+                        while taskDetailsGrid.numberOfRows > 0 {
+                            taskDetailsGrid.removeRow(at: 0)
+                        }
+                        while taskDetailsGrid.numberOfColumns > 0 {
+                            taskDetailsGrid.removeColumn(at: 0)
+                        }
+                    } else {
+                        self.details(for: task, to: taskDetailsGrid, relativeTo: todayStart)
+                    }
+                    taskDetailsGrid.layoutSubtreeIfNeeded()
+                }
             }
+        }
+    }
+    
+    private func details(for task: Model.GroupedTask, to grid: NSGridView, relativeTo todayStart: Date) {
+        let timeFormatter = DateFormatter()
+        timeFormatter.locale = Locale(identifier: "en_US_POSIX")
+        timeFormatter.dateFormat = "h:mma"
+        timeFormatter.timeZone = scheduler.timeZone
+        timeFormatter.amSymbol = "am"
+        timeFormatter.pmSymbol = "pm"
+        
+        task.forEach {entry in
+            if entry.to < todayStart {
+                timeFormatter.dateFormat = "M/d h:mma"
+            }
+            var taskTime = timeFormatter.string(from: entry.from)
+            taskTime += " - "
+            if TimeUtil.sameDay(entry.from, entry.to) {
+                timeFormatter.dateFormat = "h:mma"
+            }
+            taskTime += timeFormatter.string(from: entry.to)
+            taskTime += " (" + TimeUtil.daysHoursMinutes(for: entry.duration) + "):"
+            
+            var taskNotes = (entry.notes ?? "").trimmingCharacters(in: .newlines)
+            if taskNotes.isEmpty {
+                taskNotes = "(no notes entered)"
+            }
+            let fields = [
+                NSTextField(labelWithString: taskTime),
+                WhatdidTextField(wrappingLabelWithString: taskNotes),
+                NSView()
+            ]
+            for field in fields {
+                if let fieldAsText = field as? NSTextField {
+                    fieldAsText.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
+                }
+            }
+            grid.addRow(with: fields)
         }
     }
     
@@ -224,14 +236,20 @@ class DayEndReportController: NSViewController {
         )
     }
     
-    private func setUpDisclosureExpansion(disclosure: ButtonWithClosure, details: NSView) {
+    private func setUpDisclosureExpansion(disclosure: ButtonWithClosure, details: NSView, extraAction: ((NSButton.StateValue) -> Void)? = nil) {
         disclosure.onPress {button in
             self.animate({
                 details.isHidden = button.state == .off
+                if let requestedAction = extraAction {
+                    requestedAction(button.state)
+                }
             })
         }
         
         details.isHidden = disclosure.state == .off
+        if let requestedAction = extraAction {
+            requestedAction(disclosure.state)
+        }
         self.projectsScrollHeight.constant = self.projectsContainer.fittingSize.height
         self.view.layoutSubtreeIfNeeded()
     }
