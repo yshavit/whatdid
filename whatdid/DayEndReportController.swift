@@ -47,6 +47,7 @@ class DayEndReportController: NSViewController {
         entryStartDatePicker.dateValue = thisMorning(assumingNow: now)
         
         updateEntries()
+        resizeAndLayoutIfNeeded()
     }
     
     override func viewWillAppear() {
@@ -160,7 +161,6 @@ class DayEndReportController: NSViewController {
                     } else {
                         self.details(for: task, to: taskDetailsGrid, relativeTo: todayStart)
                     }
-                    taskDetailsGrid.layoutSubtreeIfNeeded()
                 }
             }
         }
@@ -217,8 +217,7 @@ class DayEndReportController: NSViewController {
                 context.allowsImplicitAnimation = true
                 #endif
                 action()
-                self.projectsScrollHeight.constant = self.projectsContainer.fittingSize.height
-                self.view.layoutSubtreeIfNeeded()
+                self.resizeAndLayoutIfNeeded()
                 
                 let newViewBounds = self.view.bounds
                 if let window = self.view.window, let originalWindowFrame = originalWindowFrameOpt {
@@ -236,6 +235,12 @@ class DayEndReportController: NSViewController {
         )
     }
     
+    private func resizeAndLayoutIfNeeded() {
+        view.layoutSubtreeIfNeeded()
+        projectsScrollHeight.constant = projectsContainer.fittingSize.height
+        view.layoutSubtreeIfNeeded()
+    }
+    
     private func setUpDisclosureExpansion(disclosure: ButtonWithClosure, details: NSView, extraAction: ((NSButton.StateValue) -> Void)? = nil) {
         disclosure.onPress {button in
             self.animate({
@@ -250,8 +255,6 @@ class DayEndReportController: NSViewController {
         if let requestedAction = extraAction {
             requestedAction(disclosure.state)
         }
-        self.projectsScrollHeight.constant = self.projectsContainer.fittingSize.height
-        self.view.layoutSubtreeIfNeeded()
     }
     
     struct ExpandableProgressBar {
