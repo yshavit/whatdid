@@ -7,8 +7,8 @@ on:
     branches: [ main ]
   workflow_dispatch:
     inputs:
-      notarize:
-        description: Enter "yes" to notarize this build.
+      stamp:
+        description: Enter "yes" to stamp this build after notarization.
 
 jobs:
   build:
@@ -27,7 +27,7 @@ jobs:
       env:
         CERTIFICATES_P12: ${{ secrets.CERTIFICATES_P12 }}
         CERTIFICATES_P12_PASSWORD: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
-    - name: Prepare artifacts for upload
+    - name: Notarize and prepare artifacts for upload
       if: env.should_upload_app
       run: |
         set -e -o pipefail
@@ -36,13 +36,14 @@ jobs:
         ditto -c -k --keepParent whatdid.app whatdid.zip
         mkdir logs
         mv DistributionSummary.plist Packaging.log logs/
-    - name: Notarize app
-      if: env.should_upload_app && github.event.inputs.notarize == 'yes'
+        xcrun altool --notarize-app --primary-bundle-id "com.yuvalshavit.whatdid.gh.${{ github.run_number }}" -u "${{ secrets.APPLE_ID }}" -p "${{ secrets.APPLE_PW }}" -f whatdid.zip --output-format json | tee notarization-results.json
+        notarization_request=$(jq <notarization-results.json -r '."notarization-upload".RequestUUID')
+        echo "notarization_request=${notarization_request}" >> "$GITHUB_ENV"
+    - name: Wait for notarization and stamp app
+      if: env.should_upload_app && github.event.inputs.stamp == 'yes'
       run: |
         set -e -o pipefail
         cd build
-        xcrun altool --notarize-app --primary-bundle-id "com.yuvalshavit.whatdid.gh.${{ github.run_number }}" -u "${{ secrets.APPLE_ID }}" -p "${{ secrets.APPLE_PW }}" -f whatdid.zip --output-format json | tee notarization-results.json
-        notarization_request=$(jq <notarization-results.json -r '."notarization-upload".RequestUUID')
         timeout_seconds=3600 # in practice, it should be just a few minutes; but Apple says it's less than an hour
         echo "Will wait up to $timeout_seconds for notarization request $notarization_request."
         timeout_at=$(( $(date +%s) + $timeout_seconds ))
@@ -60,6 +61,8 @@ jobs:
             sleep 60
           fi
         done
+      env:
+        notarization_request: ${{ env.notarization_request }}
     - name: Upload app
       uses: actions/upload-artifact@v2
       if: env.should_upload_app
