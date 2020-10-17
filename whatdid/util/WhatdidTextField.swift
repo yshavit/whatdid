@@ -3,6 +3,7 @@
 import Cocoa
 
 class WhatdidTextField: NSTextField {
+    private var requestedWidth: CGFloat?
 
     override func becomeFirstResponder() -> Bool {
         let superSaysYes = super.becomeFirstResponder()
@@ -21,6 +22,16 @@ class WhatdidTextField: NSTextField {
         }
     }
     
+    override func setFrameSize(_ newSize: NSSize) {
+        super.setFrameSize(newSize)
+        requestNewSize(newSize)
+    }
+    
+    override func setBoundsSize(_ newSize: NSSize) {
+        super.setBoundsSize(newSize)
+        requestNewSize(newSize)
+    }
+    
     override var intrinsicContentSize: NSSize {
         get {
             var superAdjusted = super.intrinsicContentSize
@@ -31,6 +42,13 @@ class WhatdidTextField: NSTextField {
         }
     }
     
+    private func requestNewSize(_ newSize: NSSize) {
+        if requestedWidth != newSize.width {
+            requestedWidth = newSize.width
+            invalidateIntrinsicContentSize()
+        }
+    }
+    
     private var intrinsicHeightIncludingWrapping: CGFloat? {
         guard let cell = self.cell, let screen = window?.screen else {
             return nil
@@ -38,10 +56,12 @@ class WhatdidTextField: NSTextField {
         // I'm not sure why we need to shrink the width, but without it, the
         // field wraps one char later than it should.
         let widthShrink: CGFloat = isEditable ? 4.0 : 0.0
+        let myBounds = bounds
+        let myWidth = requestedWidth ?? myBounds.width
         let tallBounds = NSRect(
-            x: bounds.minX,
-            y: bounds.minX,
-            width: bounds.width - widthShrink,
+            x: myBounds.minX,
+            y: myBounds.minY,
+            width: myWidth - widthShrink,
             height: screen.frame.height)
         let adjustedHeight = cell.cellSize(forBounds: tallBounds)
         return adjustedHeight.height

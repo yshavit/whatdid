@@ -1081,13 +1081,28 @@ class PtnViewControllerTest: XCTestCase {
     
     func testDailyReportResizing() {
         let longProjectName = "The quick brown fox jumped over the lazy dog because the dog was just so lazy. Poor dog."
-        group("Set up event with long title") {
-            let entries = FlatEntry.serialize(entry(
-                longProjectName,
-                "Some task",
-                "Some notes",
-                from: Date(timeIntervalSince1970: 43200), // 12 hours
-                to: Date(timeIntervalSince1970: 44200)))
+        group("Set up events with long text") {
+            let twelveHoursFromEpoch = Date(timeIntervalSince1970: 43200)
+            let entries = FlatEntry.serialize(
+                entry(
+                    longProjectName,
+                    "Some task",
+                    "Some notes",
+                    from: twelveHoursFromEpoch,
+                    to: twelveHoursFromEpoch.addingTimeInterval(60)),
+                entry(
+                    "short project",
+                    "short task",
+                    "short notes",
+                    from: twelveHoursFromEpoch.addingTimeInterval(60),
+                    to: twelveHoursFromEpoch.addingTimeInterval(120)),
+                entry(
+                    "short project",
+                    "short task",
+                    String(repeating: "here are some long notes ", count: 3),
+                    from: twelveHoursFromEpoch.addingTimeInterval(120),
+                    to: twelveHoursFromEpoch.addingTimeInterval(180))
+                )
             let ptn = openPtn()
             ptn.entriesHook.click()
             ptn.window.typeText(entries + "\r")
@@ -1128,8 +1143,33 @@ class PtnViewControllerTest: XCTestCase {
             let project = HierarchicalEntryLevel(ancestor: dailyReportWindow, scope: "Project", label: longProjectName)
             for (description, e) in project.allElements {
                 XCTAssertTrue(e.isVisible, description)
-                e.hover()
             }
+        }
+        group("Check the long notes") {
+            let (shortTaskElem, longTaskElem) = group("Open project and task") {() -> (XCUIElement, XCUIElement) in
+                let dailyReportWindow = app.windows[WindowType.dailyEnd.windowTitle].firstMatch
+                let shortProject = HierarchicalEntryLevel(ancestor: dailyReportWindow, scope: "Project", label: "short project")
+                shortProject.disclosure.click()
+                wait(for: "project to open", until: {dailyReportWindow.groups.count > 0})
+                
+                let tasksForProject = dailyReportWindow.groups["Tasks for \"short project\""]
+                let task = HierarchicalEntryLevel(ancestor: tasksForProject, scope: "Task", label: "short task")
+                task.disclosure.click()
+                wait(for: "task details to open", until: {tasksForProject.groups.staticTexts.count == 4})
+                
+                let taskDetails = tasksForProject.groups["Details for short task"]
+                // the details texts are: [0] time header for short task, [1] short task text, [2] time header for long task, [3] long task text
+                let detailTexts = taskDetails.staticTexts.allElementsBoundByIndex
+                return (detailTexts[1], detailTexts[3])
+            }
+            group("Validate task elements") {
+                XCTAssertTrue(shortTaskElem.stringValue.contains("short notes"))
+                XCTAssertTrue(longTaskElem.stringValue.contains("here are some long notes"))
+                // Make sure the long task height is at least 1.9x the short task height. I would expect it to be 2x, but I'm allowing for
+                // rounding layout squashing, etc.
+                XCTAssertGreaterThanOrEqual(longTaskElem.frame.height, shortTaskElem.frame.height * 1.9)
+            }
+            
         }
         group("Close the daily report") {
             clickStatusMenu()
