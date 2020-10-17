@@ -333,6 +333,7 @@ fileprivate class AutoCompletingFieldView: WhatdidTextField, NSTextViewDelegate,
 
 fileprivate class PopupManager: NSObject, NSWindowDelegate {
     static let HEIGHT_FROM_BOTTOM_OF_FIELD: CGFloat = 2
+    static let GROUPING_LABEL_TAG = 1
     private var activeEventMonitors = [Any?]()
     private let optionsPopup: NSPanel
     private let parent: AutoCompletingField
@@ -370,6 +371,7 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
         scroll.drawsBackground = false
         scroll.hasVerticalScroller = true
         scroll.hasHorizontalScroller = true
+        scroll.autohidesScrollers = true
 
         let flipped = FlippedView()
         flipped.useAutoLayout()
@@ -427,6 +429,9 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
                 noneLabel.widthAnchor.constraint(equalTo: mainStack.widthAnchor).isActive = true
                 return
             }
+            if !values.isEmpty {
+                _ = addGroupingLabel(text: "recent", under: mainStack.topAnchor)
+            }
             for (i, optionText) in values.enumerated() {
                 if i == AutoCompletingField.PINNED_OPTIONS_COUNT {
                     let separator = NSBox()
@@ -440,9 +445,6 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
                 option.stringValue = optionText
                 mainStack.addArrangedSubview(option)
                 option.widthAnchor.constraint(equalTo: mainStack.widthAnchor).isActive = true
-            }
-            if !values.isEmpty {
-                _ = addGroupingLabel(text: "recent", under: mainStack.topAnchor)
             }
         }
     }
@@ -600,14 +602,21 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
     private func addGroupingLabel(text: String, under topAnchor: NSLayoutAnchor<NSLayoutYAxisAnchor>) -> NSView {
         let label = NSTextField(labelWithString: "")
         label.useAutoLayout()
-        mainStack.addSubview(label)
-        label.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
+        mainStack.addArrangedSubview(label)
         label.textColor = NSColor.systemGray
-        label.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        label.trailingAnchor.constraint(equalTo: mainStack.trailingAnchor, constant: -4).isActive = true
+        label.leadingAnchor.constraint(equalTo: mainStack.leadingAnchor, constant: Option.paddingH).isActive = true
+        label.tag = PopupManager.GROUPING_LABEL_TAG
         
         let attributedValue = NSMutableAttributedString(string: text)
-        attributedValue.applyFontTraits(.italicFontMask, range: attributedValue.string.fullNsRange())
+        let fullRange = attributedValue.string.fullNsRange()
+        attributedValue.addAttributes(
+            [
+                .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize * 0.9),
+                .underlineColor: label.textColor!,
+                .underlineStyle: NSUnderlineStyle.single.rawValue
+            ],
+            range: fullRange)
+        attributedValue.applyFontTraits(.italicFontMask, range: fullRange)
         label.attributedStringValue = attributedValue
         return label
     }
@@ -630,6 +639,9 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
             // see that there's nothing there
             let locationInSuperview = mainStack.superview!.convert(event.locationInWindow, from: nil)
             if let hitItem = mainStack.hitTest(locationInSuperview) {
+                if hitItem.tag == PopupManager.GROUPING_LABEL_TAG {
+                    return false
+                }
                 var viewSearch: NSView? = hitItem
                 // The hit happened in the cell; walk up the parent chain to the Option so we can find its value
                 while viewSearch != nil {
