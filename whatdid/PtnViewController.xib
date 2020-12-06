@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -38,10 +38,10 @@
                             <accessibility identifier="durationheader"/>
                         </textField>
                         <customView verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="maZ-n4-VKP" userLabel="Spacer">
-                            <rect key="frame" x="379" y="4" width="144" height="10"/>
+                            <rect key="frame" x="379" y="4" width="141" height="10"/>
                         </customView>
                         <button verticalHuggingPriority="750" horizontalCompressionResistancePriority="150" verticalCompressionResistancePriority="150" translatesAutoresizingMaskIntoConstraints="NO" id="tkS-gq-Cbs" userLabel="Prefs Button">
-                            <rect key="frame" x="523" y="3" width="11" height="11"/>
+                            <rect key="frame" x="520" y="0.0" width="14" height="14"/>
                             <constraints>
                                 <constraint firstAttribute="width" secondItem="tkS-gq-Cbs" secondAttribute="height" multiplier="1:1" id="8lS-9s-VYO"/>
                             </constraints>
@@ -57,7 +57,7 @@
                     </subviews>
                     <edgeInsets key="edgeInsets" left="0.0" right="0.0" top="0.0" bottom="4"/>
                     <constraints>
-                        <constraint firstItem="tkS-gq-Cbs" firstAttribute="height" secondItem="v8p-Bz-hcj" secondAttribute="height" multiplier="0.8" id="en0-CZ-Kv6"/>
+                        <constraint firstItem="tkS-gq-Cbs" firstAttribute="height" secondItem="v8p-Bz-hcj" secondAttribute="height" id="en0-CZ-Kv6"/>
                         <constraint firstItem="v8p-Bz-hcj" firstAttribute="height" secondItem="Xh1-hp-9GB" secondAttribute="height" id="xjb-0x-0tp"/>
                     </constraints>
                     <visibilityPriorities>
@@ -179,7 +179,7 @@
                                     </connections>
                                 </button>
                                 <popUpButton identifier="snoozeopts" translatesAutoresizingMaskIntoConstraints="NO" id="2d3-tf-ady" userLabel="Snooze options">
-                                    <rect key="frame" x="126" y="0.0" width="14" height="14"/>
+                                    <rect key="frame" x="121" y="0.0" width="19" height="14"/>
                                     <constraints>
                                         <constraint firstAttribute="width" secondItem="2d3-tf-ady" secondAttribute="height" multiplier="1:1" id="B6H-b1-avb"/>
                                     </constraints>
