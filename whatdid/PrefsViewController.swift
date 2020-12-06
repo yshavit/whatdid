@@ -187,12 +187,16 @@ class PrefsViewController: NSViewController {
     //------------------------------------------------------------------
     
     @IBOutlet var shortVersion: NSTextField!
+    @IBOutlet var copyright: NSTextField!
     @IBOutlet var fullVersion: NSTextField!
     @IBOutlet var shaVersion: NSButton!
     
     private func setUpAboutPanel() {
         shortVersion.stringValue = shortVersion.stringValue.replacingBracketedPlaceholders(with: [
             "version": Version.short
+        ])
+        copyright.stringValue = copyright.stringValue.replacingBracketedPlaceholders(with: [
+            "copyright": Version.copyright
         ])
         fullVersion.stringValue = fullVersion.stringValue.replacingBracketedPlaceholders(with: [
             "fullversion": Version.full
@@ -204,6 +208,7 @@ class PrefsViewController: NSViewController {
             "sha": Version.gitSha.replacingOccurrences(of: ".dirty", with: "")
         ])
     }
+    
     
     //------------------------------------------------------------------
     // OTHER / COMMON
