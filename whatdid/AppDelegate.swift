@@ -54,14 +54,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         AppDelegate.DEBUG_DATE_FORMATTER.timeZone = DefaultScheduler.instance.timeZone
         
         // Set up the keyboard shortcut
-        if !Prefs.keyboardShortcutInitializedOnFirstStartup {
-            NSLog("Detected first-time setup. Initializing global shortcut")
-            KeyboardShortcuts.setShortcut(KeyboardShortcuts.Shortcut(.x, modifiers: [.command, .shift]), for: .grabFocus)
-            Prefs.keyboardShortcutInitializedOnFirstStartup = true
-        }
-        KeyboardShortcuts.onKeyDown(for: .grabFocus) {
-            self.mainMenu.focus()
-        }
+        KeyboardShortcuts.onKeyDown(for: .grabFocus, action: self.mainMenu.focus)
         
         mainMenu.schedule(.ptn)
         mainMenu.schedule(.dailyEnd)

@@ -717,6 +717,16 @@ class PtnViewControllerTest: XCTestCase {
     
     func testFocus() {
         let ptn = openPtn()
+        group("Set up hot key") {
+            let prefsButton = ptn.window.buttons["Preferences"]
+            let prefsSheet = ptn.window.sheets.firstMatch
+            prefsButton.click()
+            XCTAssertTrue(prefsSheet.isVisible)
+            prefsSheet.tabs["General"].click()
+            prefsSheet.searchFields["Record Shortcut"].click()
+            ptn.window.typeKey("x", modifierFlags:[.command, .shift])
+            prefsSheet.buttons["Done"].click()
+        }
         group("Scheduled PTN does not activate") {
             setTimeUtc(h: 01, m: 00, deactivate: true)
             sleep(1) // If it was going to be switch to active, this would be enough time
