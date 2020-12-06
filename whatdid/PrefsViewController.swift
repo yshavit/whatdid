@@ -190,6 +190,7 @@ class PrefsViewController: NSViewController {
     @IBOutlet var copyright: NSTextField!
     @IBOutlet var fullVersion: NSTextField!
     @IBOutlet var shaVersion: NSButton!
+    @IBOutlet var githubShaInfo: NSStackView!
     
     private func setUpAboutPanel() {
         shortVersion.stringValue = shortVersion.stringValue.replacingBracketedPlaceholders(with: [
@@ -207,6 +208,7 @@ class PrefsViewController: NSViewController {
         shaVersion.toolTip = shaVersion.toolTip?.replacingBracketedPlaceholders(with: [
             "sha": Version.gitSha.replacingOccurrences(of: ".dirty", with: "")
         ])
+        githubShaInfo.isHidden = !NSEvent.modifierFlags.contains(.command)
     }
     
     

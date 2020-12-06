@@ -13,6 +13,7 @@
                 <outlet property="dayStartTimePicker" destination="GzE-jF-9s2" id="oXP-QE-swi"/>
                 <outlet property="daysIncludeWeekends" destination="S9T-fo-dJ5" id="11E-lS-Brb"/>
                 <outlet property="fullVersion" destination="3K9-EY-10F" id="TTt-Gz-mxh"/>
+                <outlet property="githubShaInfo" destination="8WU-1f-RKx" id="RZ1-rU-I3n"/>
                 <outlet property="globalShortcutHolder" destination="cdF-qX-q5Y" id="IHs-3K-vOL"/>
                 <outlet property="mainTabs" destination="S38-2I-rYd" id="w8e-74-FHI"/>
                 <outlet property="outerVStackMinHeight" destination="sfZ-rm-XWd" id="HKi-ht-G3J"/>
@@ -346,38 +347,42 @@
                                         <rect key="frame" x="0.0" y="0.0" width="550" height="148"/>
                                         <subviews>
                                             <stackView toolTip="https://github.com/yshavit/whatdid/" distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vRX-G9-MoD" userLabel="About VStack">
-                                                <rect key="frame" x="0.0" y="0.0" width="185" height="86"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="106" height="70"/>
                                                 <subviews>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WTv-mo-8cX">
-                                                        <rect key="frame" x="-2" y="70" width="110" height="16"/>
-                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="whatdid {version}" id="bNY-1U-YZb">
-                                                            <font key="font" usesAppearanceFont="YES"/>
-                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                    </textField>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5Nx-Hu-dbE">
-                                                        <rect key="frame" x="-2" y="50" width="72" height="16"/>
-                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="{copyright}" id="HLo-dq-1Tg">
+                                                        <rect key="frame" x="-2" y="54" width="110" height="16"/>
+                                                        <textFieldCell key="cell" controlSize="large" lineBreakMode="clipping" title="whatdid {version}" id="bNY-1U-YZb">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5Nx-Hu-dbE">
+                                                        <rect key="frame" x="-2" y="36" width="63" height="14"/>
+                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="{copyright}" id="HLo-dq-1Tg">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3K9-EY-10F" userLabel="build {fullversion}">
-                                                        <rect key="frame" x="-2" y="33" width="84" height="13"/>
+                                                        <rect key="frame" x="-2" y="19" width="84" height="13"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="build {fullversion}" id="Lir-2N-fjv">
                                                             <font key="font" metaFont="systemUltraLight" size="10"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D5Z-57-06l" userLabel="Links">
-                                                        <rect key="frame" x="0.0" y="20" width="15" height="9"/>
+                                                    <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D5Z-57-06l" userLabel="Links">
+                                                        <rect key="frame" x="0.0" y="0.0" width="90" height="15"/>
                                                         <subviews>
                                                             <button toolTip="https://yshavit.github.io/whatdid" translatesAutoresizingMaskIntoConstraints="NO" id="OgO-k9-csc" userLabel="Website">
-                                                                <rect key="frame" x="0.0" y="-3" width="15" height="15"/>
-                                                                <buttonCell key="cell" type="square" alternateTitle="website" bezelStyle="shadowlessSquare" image="globe" catalog="system" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="fIy-Et-Man">
+                                                                <rect key="frame" x="0.0" y="0.0" width="15" height="15"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="9" id="ds9-kq-FNa"/>
+                                                                    <constraint firstAttribute="width" constant="15" id="i0X-r5-UDC"/>
+                                                                </constraints>
+                                                                <buttonCell key="cell" type="square" alternateTitle="website" bezelStyle="shadowlessSquare" image="globe" catalog="system" imagePosition="overlaps" alignment="center" inset="2" id="fIy-Et-Man">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
@@ -385,64 +390,61 @@
                                                                     <action selector="href:" target="-2" id="0kF-uX-Rfh"/>
                                                                 </connections>
                                                             </button>
-                                                        </subviews>
-                                                        <visibilityPriorities>
-                                                            <integer value="1000"/>
-                                                        </visibilityPriorities>
-                                                        <customSpacing>
-                                                            <real value="3.4028234663852886e+38"/>
-                                                        </customSpacing>
-                                                    </stackView>
-                                                    <stackView distribution="fill" orientation="horizontal" alignment="baseline" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kmp-b1-hsa" userLabel="GH link">
-                                                        <rect key="frame" x="0.0" y="0.0" width="185" height="16"/>
-                                                        <subviews>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YGr-g1-7m4">
-                                                                <rect key="frame" x="-2" y="0.0" width="54" height="16"/>
-                                                                <textFieldCell key="cell" lineBreakMode="clipping" title="GitHub: " id="jhi-wn-wJV">
-                                                                    <font key="font" usesAppearanceFont="YES"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <button toolTip="https://github.com/yshavit/whatdid/" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Qgx-ZJ-RmN">
-                                                                <rect key="frame" x="50" y="0.0" width="99" height="16"/>
-                                                                <buttonCell key="cell" type="bevel" title="yshavit/whatdid" bezelStyle="rounded" alignment="right" imageScaling="proportionallyDown" inset="2" id="yML-a4-nda">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <button toolTip="https://github.com/yshavit/whatdid" translatesAutoresizingMaskIntoConstraints="NO" id="k8K-01-WdO" userLabel="GitHub">
+                                                                <rect key="frame" x="23" y="0.0" width="15" height="15"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" secondItem="k8K-01-WdO" secondAttribute="height" multiplier="1:1" id="54U-ft-0Tp"/>
+                                                                </constraints>
+                                                                <buttonCell key="cell" type="square" alternateTitle="GitHub page" bezelStyle="shadowlessSquare" image="GitHub" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="VH1-HS-tMv">
+                                                                    <behavior key="behavior" lightByContents="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
-                                                                <color key="contentTintColor" name="linkColor" catalog="System" colorSpace="catalog"/>
                                                                 <connections>
-                                                                    <action selector="href:" target="-2" id="Tji-BQ-qQR"/>
+                                                                    <action selector="href:" target="-2" id="FTW-qH-3QV"/>
                                                                 </connections>
                                                             </button>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="s8a-TO-M4g">
-                                                                <rect key="frame" x="147" y="1" width="13" height="11"/>
-                                                                <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" title="@" id="1yw-Aj-iAg">
-                                                                    <font key="font" metaFont="menu" size="9"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <button toolTip="https://github.com/yshavit/whatdid/commit/{sha}" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CCA-RA-eto">
-                                                                <rect key="frame" x="158" y="1" width="27" height="11"/>
-                                                                <buttonCell key="cell" type="bevel" title="{sha}" bezelStyle="rounded" alignment="right" controlSize="mini" imageScaling="proportionallyDown" inset="2" id="hMN-3N-viT">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="menu" size="9"/>
-                                                                </buttonCell>
-                                                                <color key="contentTintColor" name="linkColor" catalog="System" colorSpace="catalog"/>
-                                                                <connections>
-                                                                    <action selector="href:" target="-2" id="ZBY-03-RbO"/>
-                                                                </connections>
-                                                            </button>
+                                                            <stackView distribution="fill" orientation="horizontal" alignment="bottom" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8WU-1f-RKx" userLabel="GitHub sha">
+                                                                <rect key="frame" x="46" y="1" width="44" height="14"/>
+                                                                <subviews>
+                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="O7Z-uD-enK">
+                                                                        <rect key="frame" x="-2" y="0.0" width="15" height="14"/>
+                                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="@" id="6se-Iw-Fwr">
+                                                                            <font key="font" metaFont="smallSystem"/>
+                                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                        </textFieldCell>
+                                                                    </textField>
+                                                                    <button toolTip="https://github.com/yshavit/whatdid/commit/{sha}" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CCA-RA-eto">
+                                                                        <rect key="frame" x="12" y="0.0" width="32" height="14"/>
+                                                                        <buttonCell key="cell" type="bevel" title="{sha}" bezelStyle="rounded" alignment="right" controlSize="small" imageScaling="proportionallyDown" inset="2" id="hMN-3N-viT">
+                                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                            <font key="font" metaFont="smallSystem"/>
+                                                                        </buttonCell>
+                                                                        <color key="contentTintColor" name="linkColor" catalog="System" colorSpace="catalog"/>
+                                                                        <connections>
+                                                                            <action selector="href:" target="-2" id="ZBY-03-RbO"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                </subviews>
+                                                                <visibilityPriorities>
+                                                                    <integer value="1000"/>
+                                                                    <integer value="1000"/>
+                                                                </visibilityPriorities>
+                                                                <customSpacing>
+                                                                    <real value="3.4028234663852886e+38"/>
+                                                                    <real value="3.4028234663852886e+38"/>
+                                                                </customSpacing>
+                                                            </stackView>
                                                         </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="k8K-01-WdO" firstAttribute="width" secondItem="OgO-k9-csc" secondAttribute="width" id="ysI-Jl-WOo"/>
+                                                        </constraints>
                                                         <visibilityPriorities>
-                                                            <integer value="1000"/>
                                                             <integer value="1000"/>
                                                             <integer value="1000"/>
                                                             <integer value="1000"/>
                                                         </visibilityPriorities>
                                                         <customSpacing>
-                                                            <real value="3.4028234663852886e+38"/>
                                                             <real value="3.4028234663852886e+38"/>
                                                             <real value="3.4028234663852886e+38"/>
                                                             <real value="3.4028234663852886e+38"/>
@@ -454,10 +456,8 @@
                                                     <integer value="1000"/>
                                                     <integer value="1000"/>
                                                     <integer value="1000"/>
-                                                    <integer value="1000"/>
                                                 </visibilityPriorities>
                                                 <customSpacing>
-                                                    <real value="3.4028234663852886e+38"/>
                                                     <real value="3.4028234663852886e+38"/>
                                                     <real value="3.4028234663852886e+38"/>
                                                     <real value="3.4028234663852886e+38"/>
@@ -592,6 +592,7 @@ Gw
         </customView>
     </objects>
     <resources>
+        <image name="GitHub" width="32" height="32"/>
         <image name="NSAdvanced" width="32" height="32"/>
         <image name="NSInfo" width="32" height="32"/>
         <image name="NSTouchBarComposeTemplate" width="17" height="15"/>
