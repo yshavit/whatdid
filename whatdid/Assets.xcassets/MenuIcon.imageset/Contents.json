@@ -1,0 +1,22 @@
+{
+  "images" : [
+    {
+      "filename" : "logo-19.png",
+      "idiom" : "mac",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "logo-40.png",
+      "idiom" : "mac",
+      "scale" : "2x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "auto-scaling" : "auto",
+    "template-rendering-intent" : "template"
+  }
+}

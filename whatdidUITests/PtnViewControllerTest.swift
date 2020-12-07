@@ -22,7 +22,8 @@ class PtnViewControllerTest: XCTestCase {
     func findStatusMenuItem() {
         activate()
         // The 0.5 isn't necessary, but it positions the cursor in the middle of the item. Just looks nicer.
-        app.menuBars.statusItems["✐"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
+        let menuItem = XCUIApplication().menuBars.children(matching: .statusItem).element(boundBy: 0)
+        menuItem.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
         statusItemPoint = CGEvent(source: nil)?.location
     }
     

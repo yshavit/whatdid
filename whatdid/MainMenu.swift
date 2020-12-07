@@ -57,9 +57,14 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         window?.standardWindowButton(.miniaturizeButton)?.isHidden = true
         window?.standardWindowButton(.zoomButton)?.isHidden = true
         
-        statusItem.button?.title = "✐"
-        statusItem.button?.target = self
-        statusItem.button?.action = #selector(handleStatusItemPress)
+        if let button = statusItem.button {
+            button.title = "✐"
+            button.target = self
+            button.action = #selector(handleStatusItemPress)
+            button.image = NSImage(named: "MenuIcon")
+            button.imagePosition = .imageOnly
+            button.imageScaling = .scaleProportionallyUpOrDown
+        }
         
         opener = OpenCloseHelper<WindowContents>(
             onOpen: {ctx in
