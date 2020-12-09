@@ -77,6 +77,8 @@
 		7EE4E39A24E25C0200552AAF /* DefaultScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */; };
 		7EEF324624EA542D002E217A /* NSRange+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEF324524EA542D002E217A /* NSRange+Helpers.swift */; };
 		7EEF324824EA54AD002E217A /* NSRange+HelpersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEF324724EA54AD002E217A /* NSRange+HelpersTest.swift */; };
+		7EF58F8C2580F180002F9604 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF58F8A2580F180002F9604 /* TutorialViewController.swift */; };
+		7EF58F8D2580F180002F9604 /* TutorialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EF58F8B2580F180002F9604 /* TutorialViewController.xib */; };
 		7EF8579324E094D100867832 /* OpenCloseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579224E094D100867832 /* OpenCloseHelper.swift */; };
 		7EF8579524E0961E00867832 /* OpenCloseHelperTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */; };
 		7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579A24E220EA00867832 /* OpenReason.swift */; };
@@ -191,6 +193,8 @@
 		7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultScheduler.swift; sourceTree = "<group>"; };
 		7EEF324524EA542D002E217A /* NSRange+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRange+Helpers.swift"; sourceTree = "<group>"; };
 		7EEF324724EA54AD002E217A /* NSRange+HelpersTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRange+HelpersTest.swift"; sourceTree = "<group>"; };
+		7EF58F8A2580F180002F9604 /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
+		7EF58F8B2580F180002F9604 /* TutorialViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TutorialViewController.xib; sourceTree = "<group>"; };
 		7EF8579224E094D100867832 /* OpenCloseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCloseHelper.swift; sourceTree = "<group>"; };
 		7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCloseHelperTest.swift; sourceTree = "<group>"; };
 		7EF8579A24E220EA00867832 /* OpenReason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenReason.swift; sourceTree = "<group>"; };
@@ -343,6 +347,8 @@
 				7E7C385324DF3A0300CFF3E7 /* PtnViewController+UIHook.swift */,
 				7EE250B92515B8FE0067C5E9 /* PrefsViewController.swift */,
 				7EE250BA2515B8FE0067C5E9 /* PrefsViewController.xib */,
+				7EF58F8A2580F180002F9604 /* TutorialViewController.swift */,
+				7EF58F8B2580F180002F9604 /* TutorialViewController.xib */,
 				7EAC528A24CFC94700A13B72 /* boilerplate */,
 				7E37A27524BFF73E005BA1DF /* model */,
 				7EF8579F24E241E800867832 /* scheduling */,
@@ -594,6 +600,7 @@
 				7E07C3B924D121770007FD23 /* DayEndReportController.xib in Resources */,
 				7EE250BC2515B8FE0067C5E9 /* PrefsViewController.xib in Resources */,
 				7E8C04E023714F0800A0C3A6 /* Assets.xcassets in Resources */,
+				7EF58F8D2580F180002F9604 /* TutorialViewController.xib in Resources */,
 				7EA6E22824BD6C5F004B9297 /* PtnViewController.xib in Resources */,
 				7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */,
 				7E970D6924DA84AF00F634AB /* UiTestWindow.xib in Resources */,
@@ -684,6 +691,7 @@
 				7EE4E39A24E25C0200552AAF /* DefaultScheduler.swift in Sources */,
 				7E37A29124BFFFCB005BA1DF /* Project+CoreDataProperties.swift in Sources */,
 				7EF857A124E2420C00867832 /* Scheduler.swift in Sources */,
+				7EF58F8C2580F180002F9604 /* TutorialViewController.swift in Sources */,
 				7E37A29024BFFFCB005BA1DF /* Project+CoreDataClass.swift in Sources */,
 				7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */,
 				7E37A29A24C0293E005BA1DF /* Entry+CoreDataClass.swift in Sources */,

@@ -82,6 +82,7 @@ class PtnViewController: NSViewController {
             }
         }
         scheduleUpdateHeaderText()
+        showTutorial()
     }
     
     private func timeInterval(since date: Date) -> TimeInterval {
@@ -348,5 +349,24 @@ class PtnViewController: NSViewController {
                 }
             }
         }
+    }
+    
+    private func showTutorial() {
+        let tutorial = TutorialViewController(nibName: "TutorialViewController", bundle: nil)
+        tutorial.add(
+            .init(
+                title: "\"Whatdid I do all day?!\"",
+                text: "Welcome text",
+                pointingTo: view,
+                atEdge: .minX)
+        )
+        tutorial.add(
+            .init(
+                title: "Project",
+                text: "What is a project?\n\nIt's so many things!",
+                pointingTo: projectField,
+                atEdge: .minY)
+        )
+        tutorial.show()
     }
 }
