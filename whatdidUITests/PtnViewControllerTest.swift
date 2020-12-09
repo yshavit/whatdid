@@ -939,7 +939,7 @@ class PtnViewControllerTest: XCTestCase {
         prefsButton.click()
         XCTAssertTrue(prefsSheet.isVisible)
         group("About") {
-            prefsSheet.tabs["About"].click()
+            prefsSheet.tabs["About / Feedback"].click()
             // Sanity check: just make sure that the text includes "whatdid {version}".
             // Note: we'll need to update this whenever we do a version bump.
             // That seems more explicit and easier to reason about than plumbing the Version class to here
