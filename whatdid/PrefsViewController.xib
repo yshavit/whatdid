@@ -380,10 +380,10 @@
                                                             <button toolTip="https://yshavit.github.io/whatdid" translatesAutoresizingMaskIntoConstraints="NO" id="OgO-k9-csc" userLabel="Website">
                                                                 <rect key="frame" x="0.0" y="0.0" width="15" height="15"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="height" constant="9" id="ds9-kq-FNa"/>
+                                                                    <constraint firstAttribute="height" constant="15" id="ds9-kq-FNa"/>
                                                                     <constraint firstAttribute="width" constant="15" id="i0X-r5-UDC"/>
                                                                 </constraints>
-                                                                <buttonCell key="cell" type="square" alternateTitle="website" bezelStyle="shadowlessSquare" image="globe" catalog="system" imagePosition="overlaps" alignment="center" inset="2" id="fIy-Et-Man">
+                                                                <buttonCell key="cell" type="square" alternateTitle="website" bezelStyle="shadowlessSquare" image="globey" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="fIy-Et-Man">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
                                                                 </buttonCell>
@@ -610,6 +610,6 @@ Gw
         <image name="NSAdvanced" width="32" height="32"/>
         <image name="NSInfo" width="32" height="32"/>
         <image name="NSTouchBarComposeTemplate" width="17" height="15"/>
-        <image name="globe" catalog="system" width="15" height="15"/>
+        <image name="globey" width="16" height="16"/>
     </resources>
 </document>
