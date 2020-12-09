@@ -12,6 +12,7 @@
                 <outlet property="dailyReportTime" destination="YY2-et-PfP" id="D98-hT-ZmP"/>
                 <outlet property="dayStartTimePicker" destination="GzE-jF-9s2" id="oXP-QE-swi"/>
                 <outlet property="daysIncludeWeekends" destination="S9T-fo-dJ5" id="11E-lS-Brb"/>
+                <outlet property="feedbackButton" destination="nCs-Q7-5xg" id="L9n-ar-N9X"/>
                 <outlet property="fullVersion" destination="3K9-EY-10F" id="TTt-Gz-mxh"/>
                 <outlet property="githubShaInfo" destination="8WU-1f-RKx" id="RZ1-rU-I3n"/>
                 <outlet property="globalShortcutHolder" destination="cdF-qX-q5Y" id="IHs-3K-vOL"/>
@@ -342,15 +343,15 @@
                                         <userDefinedRuntimeAttribute type="image" keyPath="image" value="NSAdvanced"/>
                                     </userDefinedRuntimeAttributes>
                                 </tabViewItem>
-                                <tabViewItem label="About" identifier="" id="NwU-Zn-0aF">
+                                <tabViewItem label="About / Feedback" identifier="" id="NwU-Zn-0aF" userLabel="About / Feedback">
                                     <view key="view" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rMy-Zr-TwQ">
                                         <rect key="frame" x="0.0" y="0.0" width="550" height="148"/>
                                         <subviews>
                                             <stackView toolTip="https://github.com/yshavit/whatdid/" distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vRX-G9-MoD" userLabel="About VStack">
-                                                <rect key="frame" x="0.0" y="0.0" width="106" height="70"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="126" height="94"/>
                                                 <subviews>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WTv-mo-8cX">
-                                                        <rect key="frame" x="-2" y="54" width="110" height="16"/>
+                                                        <rect key="frame" x="-2" y="78" width="110" height="16"/>
                                                         <textFieldCell key="cell" controlSize="large" lineBreakMode="clipping" title="whatdid {version}" id="bNY-1U-YZb">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -358,7 +359,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5Nx-Hu-dbE">
-                                                        <rect key="frame" x="-2" y="36" width="63" height="14"/>
+                                                        <rect key="frame" x="-2" y="60" width="63" height="14"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="{copyright}" id="HLo-dq-1Tg">
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -366,7 +367,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3K9-EY-10F" userLabel="build {fullversion}">
-                                                        <rect key="frame" x="-2" y="19" width="84" height="13"/>
+                                                        <rect key="frame" x="-2" y="43" width="84" height="13"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="build {fullversion}" id="Lir-2N-fjv">
                                                             <font key="font" metaFont="systemUltraLight" size="10"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -374,7 +375,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D5Z-57-06l" userLabel="Links">
-                                                        <rect key="frame" x="0.0" y="0.0" width="90" height="15"/>
+                                                        <rect key="frame" x="0.0" y="24" width="90" height="15"/>
                                                         <subviews>
                                                             <button toolTip="https://yshavit.github.io/whatdid" translatesAutoresizingMaskIntoConstraints="NO" id="OgO-k9-csc" userLabel="Website">
                                                                 <rect key="frame" x="0.0" y="0.0" width="15" height="15"/>
@@ -450,14 +451,27 @@
                                                             <real value="3.4028234663852886e+38"/>
                                                         </customSpacing>
                                                     </stackView>
+                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nCs-Q7-5xg">
+                                                        <rect key="frame" x="-7" y="-7" width="140" height="32"/>
+                                                        <string key="toolTip">https://docs.google.com/forms/d/e/1FAIpQLSdW4IfggikujQDN_emQU3_TL3aSOUK3At2HPbSYcc6ryHYzzQ/viewform?usp=pp_url&amp;entry.1562465146={version}</string>
+                                                        <buttonCell key="cell" type="push" title="Provide feedback" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="q52-4l-Qq8">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="href:" target="-2" id="rcc-Qf-Wsd"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                                 <visibilityPriorities>
                                                     <integer value="1000"/>
                                                     <integer value="1000"/>
                                                     <integer value="1000"/>
                                                     <integer value="1000"/>
+                                                    <integer value="1000"/>
                                                 </visibilityPriorities>
                                                 <customSpacing>
+                                                    <real value="3.4028234663852886e+38"/>
                                                     <real value="3.4028234663852886e+38"/>
                                                     <real value="3.4028234663852886e+38"/>
                                                     <real value="3.4028234663852886e+38"/>

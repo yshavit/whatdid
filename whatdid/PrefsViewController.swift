@@ -191,6 +191,7 @@ class PrefsViewController: NSViewController {
     @IBOutlet var fullVersion: NSTextField!
     @IBOutlet var shaVersion: NSButton!
     @IBOutlet var githubShaInfo: NSStackView!
+    @IBOutlet var feedbackButton: NSButton!
     
     private func setUpAboutPanel() {
         shortVersion.stringValue = shortVersion.stringValue.replacingBracketedPlaceholders(with: [
@@ -209,6 +210,14 @@ class PrefsViewController: NSViewController {
             "sha": Version.gitSha.replacingOccurrences(of: ".dirty", with: "")
         ])
         githubShaInfo.isHidden = !NSEvent.modifierFlags.contains(.command)
+        
+        if let versionQuery = Version.pretty.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+            feedbackButton.toolTip = feedbackButton.toolTip?.replacingBracketedPlaceholders(with: [
+                "version": versionQuery
+            ])
+        } else {
+            feedbackButton.removeFromSuperview()
+        }
     }
     
     
