@@ -27,8 +27,8 @@ class TutorialViewController: NSViewController {
         step(forward: true)
     }
     
-    func add(_ step: Step) {
-        steps.append(step)
+    func add(_ steps: Step...) {
+        self.steps.append(contentsOf: steps)
         updatePageCount()
     }
     
@@ -48,7 +48,7 @@ class TutorialViewController: NSViewController {
         
         pageNum.stringValue = "\(currentStep + 1)"
         pageTitle.stringValue = step.title
-        pageText.stringValue = step.text
+        pageText.stringValue = step.text.joined(separator: "\n\n")
         backButton.isEnabled = (currentStep > 0)
         forwardButton.isEnabled = (currentStep < (steps.count - 1))
         pageHeight.constant = view.subviews.map({$0.fittingSize.height}).reduce(0, +)
@@ -68,7 +68,7 @@ class TutorialViewController: NSViewController {
     
     struct Step {
         let title: String
-        let text: String
+        let text: [String]
         let pointingTo: NSView
         let atEdge: NSRectEdge
     }

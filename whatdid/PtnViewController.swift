@@ -8,6 +8,7 @@ class PtnViewController: NSViewController {
     
     @IBOutlet var headerText: NSTextField!
     
+    @IBOutlet weak var prefsButton: NSButton!
     @IBOutlet weak var projectField: AutoCompletingField!
     @IBOutlet weak var taskField: AutoCompletingField!
     @IBOutlet weak var noteField: NSTextField!
@@ -356,16 +357,74 @@ class PtnViewController: NSViewController {
         tutorial.add(
             .init(
                 title: "\"Whatdid I do all day?!\"",
-                text: "Welcome text",
+                text: [
+                    "This window will pop up every so often to ask you what you've been up to.",
+                    "At the end of the day, it'll aggregate all of the checkins and let you see all you've accomplished."
+                ],
+                pointingTo: view,
+                atEdge: .minX),
+            .init(
+                title: "Projects",
+                text: [
+                    "Enter the project you've been working on.",
+                    "A good general rule is that a project will take 1-2 months.",
+                    "This is most useful when looking at reports over months or a year, to see what you accomplished at a high level.",
+                    "This can also be a catch-all, like \"general office work\" or even \"break\"."
+                ],
+                pointingTo: projectField,
+                atEdge: .minY),
+            .init(
+                title: "Tasks",
+                text: [
+                    "A typical task takes 1-5 days.",
+                    "In daily or weekly views, you can use this to see what tasks took up each project's time.",
+                    "For a project like \"general office work\" a task might be \"email\" or \"scheduling my day\"."
+                ],
+                pointingTo: taskField,
+                atEdge: .minY),
+            .init(
+                title: "Notes",
+                text: [
+                    "You can optionally enter notes about your work on this task.",
+                    "This is most useful when looking at a daily report, to see the progression of your day."
+                ],
+                pointingTo: noteField,
+                atEdge: .minY),
+            .init(
+                title: "Snooze",
+                text: [
+                    "You can pause notifications for a while, or even until tomorrow.",
+                    "While Whatdid is snoozing, its timer is still going. When you check in after the snooze, "
+                        + "it'll include the snooze time.",
+                    "This is a useful way to prevent interruptions during meetings."
+                ],
+                pointingTo: snoozeButton,
+                atEdge: .minX),
+            .init(
+                title: "Settings",
+                text: [
+                    "Configure settings like popup frequency or keyboard shortcuts.",
+                    "You can also use this to quit Whatdid.",
+                    "There are also links to drop us feedback!"
+                ],
+                pointingTo: prefsButton,
+                atEdge: .minY),
+            .init(
+                title: "Skip a session",
+                text: [
+                    "Sometimes you're off the clock!",
+                    "Use this to tell Whatdid to just ignore the current session.",
+                    "(Tip: Use this sparingly! For most breaks, create a project called \"break\" so you "
+                        + "can keep track of how many breaks you take throughout the day.)"
+                ],
+                pointingTo: skipButton,
+                atEdge: .minX),
+            .init(
+                title: "That's it", text: [
+                    "I hope you like Whatdid!"
+                ],
                 pointingTo: view,
                 atEdge: .minX)
-        )
-        tutorial.add(
-            .init(
-                title: "Project",
-                text: "What is a project?\n\nIt's so many things!",
-                pointingTo: projectField,
-                atEdge: .minY)
         )
         tutorial.show()
     }
