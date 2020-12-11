@@ -9,6 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="TutorialViewController" customModule="whatdid" customModuleProvider="target">
             <connections>
                 <outlet property="backButton" destination="aYM-Jz-ktS" id="uHh-jm-AT2"/>
+                <outlet property="extraViewContainer" destination="KXi-R3-VDB" id="sNi-OI-fYH"/>
                 <outlet property="forwardButton" destination="GOr-LT-lwh" id="f7b-oc-hBa"/>
                 <outlet property="pageCount" destination="MZh-Nq-RQr" id="2Vh-3b-eZQ"/>
                 <outlet property="pageHeight" destination="ap4-fg-GYU" id="fOv-4d-JRa"/>
@@ -21,16 +22,16 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView verticalHuggingPriority="750" verticalCompressionResistancePriority="500" translatesAutoresizingMaskIntoConstraints="NO" id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="250" height="131"/>
+            <rect key="frame" x="0.0" y="0.0" width="300" height="131"/>
             <subviews>
                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" verticalHuggingPriority="750" verticalCompressionResistancePriority="500" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WHl-CX-UZw" userLabel="Top VStack">
-                    <rect key="frame" x="0.0" y="0.0" width="250" height="131"/>
+                    <rect key="frame" x="0.0" y="0.0" width="300" height="131"/>
                     <subviews>
                         <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="2" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" verticalHuggingPriority="750" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VQw-OC-0rY" userLabel="Header HStack">
-                            <rect key="frame" x="0.0" y="101" width="250" height="30"/>
+                            <rect key="frame" x="0.0" y="117" width="300" height="14"/>
                             <subviews>
                                 <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ihz-O7-BAq" userLabel="Page Num">
-                                    <rect key="frame" x="-2" y="14" width="234" height="14"/>
+                                    <rect key="frame" x="-2" y="0.0" width="284" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="#" id="juc-us-WVq">
                                         <font key="font" metaFont="smallSystem"/>
                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -38,7 +39,7 @@
                                     </textFieldCell>
                                 </textField>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aTO-1C-Tme">
-                                    <rect key="frame" x="230" y="14" width="8" height="14"/>
+                                    <rect key="frame" x="280" y="0.0" width="8" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="/" id="73j-Cl-KWj">
                                         <font key="font" metaFont="smallSystem"/>
                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -46,7 +47,7 @@
                                     </textFieldCell>
                                 </textField>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MZh-Nq-RQr" userLabel="Page Count">
-                                    <rect key="frame" x="236" y="14" width="11" height="14"/>
+                                    <rect key="frame" x="286" y="0.0" width="11" height="14"/>
                                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="#" id="3HJ-Ij-wS1">
                                         <font key="font" metaFont="smallSystem"/>
                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -67,10 +68,10 @@
                             </customSpacing>
                         </stackView>
                         <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="rQN-XR-sn5">
-                            <rect key="frame" x="4" y="90" width="96" height="5"/>
+                            <rect key="frame" x="4" y="107" width="96" height="4"/>
                         </box>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uw0-e5-Ly2">
-                            <rect key="frame" x="2" y="68" width="60" height="16"/>
+                            <rect key="frame" x="2" y="101" width="60" height="0.0"/>
                             <textFieldCell key="cell" lineBreakMode="clipping" title="Tile Title" id="AlO-Aw-b1g">
                                 <font key="font" textStyle="headline" name=".SFNS-Bold"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -78,15 +79,18 @@
                             </textFieldCell>
                         </textField>
                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="999" translatesAutoresizingMaskIntoConstraints="NO" id="gyI-o8-V6z">
-                            <rect key="frame" x="2" y="28" width="250" height="32"/>
+                            <rect key="frame" x="2" y="61" width="300" height="32"/>
                             <textFieldCell key="cell" selectable="YES" title="The multiline description of what's going on. Lorem ipsum and all that." id="Dgg-jO-9MK">
                                 <font key="font" metaFont="system"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>
+                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="KXi-R3-VDB" userLabel="Extra View Container">
+                            <rect key="frame" x="4" y="28" width="292" height="25"/>
+                        </customView>
                         <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wcU-68-L6x" userLabel="Footer HStack">
-                            <rect key="frame" x="4" y="0.0" width="242" height="20"/>
+                            <rect key="frame" x="4" y="0.0" width="292" height="20"/>
                             <subviews>
                                 <button verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="8au-1o-TRy">
                                     <rect key="frame" x="-7" y="-7" width="66" height="32"/>
@@ -99,33 +103,27 @@
                                     </connections>
                                 </button>
                                 <customView horizontalHuggingPriority="1" horizontalCompressionResistancePriority="1" verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="UHW-M3-UuT">
-                                    <rect key="frame" x="56" y="10" width="120" height="10"/>
+                                    <rect key="frame" x="56" y="10" width="170" height="10"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="10" id="SoN-Qc-gVL"/>
                                     </constraints>
                                 </customView>
                                 <button verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="aYM-Jz-ktS">
-                                    <rect key="frame" x="173" y="-7" width="43" height="32"/>
+                                    <rect key="frame" x="223" y="-7" width="43" height="32"/>
                                     <buttonCell key="cell" type="push" title="&lt;" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2CZ-am-6ad">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="boolean" keyPath="forward" value="NO"/>
-                                    </userDefinedRuntimeAttributes>
                                     <connections>
                                         <action selector="stepBack:" target="-2" id="8yA-hl-KEw"/>
                                     </connections>
                                 </button>
                                 <button horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GOr-LT-lwh">
-                                    <rect key="frame" x="206" y="-7" width="43" height="32"/>
+                                    <rect key="frame" x="256" y="-7" width="43" height="32"/>
                                     <buttonCell key="cell" type="push" title="&gt;" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="HLo-CT-4JV">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="boolean" keyPath="forward" value="YES"/>
-                                    </userDefinedRuntimeAttributes>
                                     <connections>
                                         <action selector="stepForward:" target="-2" id="wBX-Yp-7LF"/>
                                     </connections>
@@ -148,8 +146,10 @@
                     <edgeInsets key="edgeInsets" left="4" right="4" top="0.0" bottom="0.0"/>
                     <constraints>
                         <constraint firstItem="VQw-OC-0rY" firstAttribute="width" secondItem="WHl-CX-UZw" secondAttribute="width" id="aaf-7k-plQ"/>
+                        <constraint firstItem="KXi-R3-VDB" firstAttribute="width" secondItem="WHl-CX-UZw" secondAttribute="width" constant="-8" id="lzQ-W6-kgs"/>
                     </constraints>
                     <visibilityPriorities>
+                        <integer value="1000"/>
                         <integer value="1000"/>
                         <integer value="1000"/>
                         <integer value="1000"/>
@@ -162,13 +162,14 @@
                         <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
                     </customSpacing>
                 </stackView>
             </subviews>
             <constraints>
                 <constraint firstItem="WHl-CX-UZw" firstAttribute="height" secondItem="Hz6-mo-xeY" secondAttribute="height" id="0E6-cm-M49"/>
                 <constraint firstItem="WHl-CX-UZw" firstAttribute="width" secondItem="Hz6-mo-xeY" secondAttribute="width" id="125-7K-V8B"/>
-                <constraint firstAttribute="width" constant="250" id="49c-KE-Qdd"/>
+                <constraint firstAttribute="width" constant="300" id="49c-KE-Qdd"/>
                 <constraint firstItem="WHl-CX-UZw" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="7Cy-6E-hCx"/>
                 <constraint firstAttribute="height" constant="131" id="ap4-fg-GYU"/>
                 <constraint firstItem="WHl-CX-UZw" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="uTs-8K-WjB"/>

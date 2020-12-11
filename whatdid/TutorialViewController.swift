@@ -12,6 +12,7 @@ class TutorialViewController: NSViewController {
     @IBOutlet var pageCount: NSTextField!
     @IBOutlet var pageTitle: NSTextField!
     @IBOutlet var pageText: NSTextField!
+    @IBOutlet var extraViewContainer: NSView!
     @IBOutlet var pageHeight: NSLayoutConstraint!
     
     @IBOutlet var backButton: NSButton!
@@ -49,6 +50,11 @@ class TutorialViewController: NSViewController {
         pageNum.stringValue = "\(currentStep + 1)"
         pageTitle.stringValue = step.title
         pageText.stringValue = step.text.joined(separator: "\n\n")
+        extraViewContainer.subviews.forEach { $0.removeFromSuperview() }
+        if let extraView = step.extraView {
+            extraViewContainer.addSubview(extraView)
+            extraView.anchorAllSides(to: extraViewContainer)
+        }
         backButton.isEnabled = (currentStep > 0)
         forwardButton.isEnabled = (currentStep < (steps.count - 1))
         pageHeight.constant = view.subviews.map({$0.fittingSize.height}).reduce(0, +)
@@ -71,5 +77,14 @@ class TutorialViewController: NSViewController {
         let text: [String]
         let pointingTo: NSView
         let atEdge: NSRectEdge
+        let extraView: NSView?
+        
+        init(title: String, text: [String], pointingTo: NSView, atEdge: NSRectEdge, extraView: NSView? = nil) {
+            self.title = title
+            self.text = text
+            self.pointingTo = pointingTo
+            self.atEdge = atEdge
+            self.extraView = extraView
+        }
     }
 }

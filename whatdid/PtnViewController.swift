@@ -1,6 +1,7 @@
 // whatdid?
 
 import Cocoa
+import KeyboardShortcuts
 
 class PtnViewController: NSViewController {
     private static let TIME_UNTIL_NEW_SESSION_PROMPT = TimeInterval(6 * 60 * 60)
@@ -352,17 +353,56 @@ class PtnViewController: NSViewController {
         }
     }
     
-    private func showTutorial() {
+    private func showTutorial(inlinePrefs: Bool = true) {
         let tutorial = TutorialViewController(nibName: "TutorialViewController", bundle: nil)
+        let prefsView: NSView?
+        if Prefs.showedTutorialAtVersion < 0 {
+            Prefs.showedTutorialAtVersion = 0
+            let optionsGrid = NSGridView(numberOfColumns: 3, rows: 0)
+            // Header
+            optionsGrid.addRow(with: [
+                NSTextField(wrappingLabelWithString:
+                                "Since this is your first time running Whatdid, "
+                                + "would you like to:")
+            ])
+            optionsGrid.row(at: 0).mergeCells(in: NSMakeRange(0, 3))
+            // Launch-at-login row
+            let launchAtLoginBox = ButtonWithClosure(checkboxWithTitle: "", target: nil, action: nil)
+            launchAtLoginBox.state = Prefs.launchAtLogin ? .on : .off
+            launchAtLoginBox.onPress {button in
+                Prefs.launchAtLogin = (button.state == .on)
+            }
+            optionsGrid.addRow(with: [
+                NSTextField(labelWithString: "➤ "),
+                NSTextField(wrappingLabelWithString: "Launch Whatdid at login?"),
+                launchAtLoginBox,
+            ])
+            // Shortcut recorder. For some reason, the recorder widget doesn't like to be in
+            // a cell by itself; we need to wrap it in a view first.
+            let recorder = KeyboardShortcuts.RecorderCocoa(for: .grabFocus)
+            let boundsAdjuster = NSView()
+            boundsAdjuster.addSubview(recorder)
+            boundsAdjuster.anchorAllSides(to: recorder)
+            optionsGrid.addRow(with: [
+                NSTextField(labelWithString: "➤ "),
+                NSTextField(wrappingLabelWithString: "Make a shortcut to open this window?"),
+                boundsAdjuster,
+            ])
+            // Put them together
+            prefsView = optionsGrid
+        } else {
+            prefsView = nil
+        }
         tutorial.add(
             .init(
                 title: "\"Whatdid I do all day?!\"",
                 text: [
                     "This window will pop up every so often to ask you what you've been up to.",
-                    "At the end of the day, it'll aggregate all of the checkins and let you see all you've accomplished."
+                    "At the end of the day, it'll aggregate all of the check-ins and let you see all you've accomplished."
                 ],
                 pointingTo: view,
-                atEdge: .minX),
+                atEdge: .minX,
+                extraView: prefsView),
             .init(
                 title: "Projects",
                 text: [
