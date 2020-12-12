@@ -60,6 +60,9 @@ class TutorialViewController: NSViewController {
     }
     
     private func step(forward: Bool) {
+        if currentStep >= 0 && currentStep < steps.count {
+            steps[currentStep].lifecycleHandler?.onDisappear()
+        }
         currentStep += (forward ? 1 : -1)
         guard (0..<steps.count).contains(currentStep) else {
             return
@@ -94,6 +97,7 @@ class TutorialViewController: NSViewController {
         } else {
             highlighWindow.setIsVisible(false)
         }
+        step.lifecycleHandler?.onAppear()
     }
     
     @IBAction func close(_ sender: Any) {
@@ -115,14 +119,16 @@ class TutorialViewController: NSViewController {
         let atEdge: NSRectEdge
         let extraView: NSView?
         let highlight: HighlightMode
+        let lifecycleHandler: LifecycleHandler?
         
-        init(title: String, text: [String], pointingTo: NSView, atEdge: NSRectEdge, extraView: NSView? = nil, highlight: HighlightMode = .normal) {
+        init(title: String, text: [String], pointingTo: NSView, atEdge: NSRectEdge, extraView: NSView? = nil, highlight: HighlightMode = .normal, lifecycleHandler: LifecycleHandler?  = nil) {
             self.title = title
             self.text = text
             self.pointingTo = pointingTo
             self.atEdge = atEdge
             self.extraView = extraView
             self.highlight = highlight
+            self.lifecycleHandler = lifecycleHandler
         }
     }
     
@@ -131,4 +137,9 @@ class TutorialViewController: NSViewController {
         case none
         case exactSize
     }
+}
+
+protocol LifecycleHandler {
+    func onAppear()
+    func onDisappear()
 }

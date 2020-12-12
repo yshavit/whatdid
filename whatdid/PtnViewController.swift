@@ -355,7 +355,7 @@ class PtnViewController: NSViewController {
     
     private func showTutorial(inlinePrefs: Bool = true) {
         let tutorial = TutorialViewController(nibName: "TutorialViewController", bundle: nil)
-        let prefsView: NSView?
+        let prefsView: (NSView, LifecycleHandler)?
         if Prefs.showedTutorialAtVersion < 0 {
             Prefs.showedTutorialAtVersion = 0
             let optionsGrid = NSGridView(numberOfColumns: 3, rows: 0)
@@ -367,15 +367,11 @@ class PtnViewController: NSViewController {
             ])
             optionsGrid.row(at: 0).mergeCells(in: NSMakeRange(0, 3))
             // Launch-at-login row
-            let launchAtLoginBox = ButtonWithClosure(checkboxWithTitle: "", target: nil, action: nil)
-            launchAtLoginBox.state = Prefs.launchAtLogin ? .on : .off
-            launchAtLoginBox.onPress {button in
-                Prefs.launchAtLogin = (button.state == .on)
-            }
+            let launchAtLoginCheckbox = LaunchAtLoginCheckbox()
             optionsGrid.addRow(with: [
                 NSTextField(labelWithString: "➤ "),
                 NSTextField(wrappingLabelWithString: "Launch Whatdid at login?"),
-                launchAtLoginBox,
+                launchAtLoginCheckbox,
             ])
             // Shortcut recorder. For some reason, the recorder widget doesn't like to be in
             // a cell by itself; we need to wrap it in a view first.
@@ -389,7 +385,7 @@ class PtnViewController: NSViewController {
                 boundsAdjuster,
             ])
             // Put them together
-            prefsView = optionsGrid
+            prefsView = (optionsGrid, launchAtLoginCheckbox)
         } else {
             prefsView = nil
         }
@@ -402,7 +398,8 @@ class PtnViewController: NSViewController {
                 ],
                 pointingTo: view,
                 atEdge: .minX,
-                extraView: prefsView),
+                extraView: prefsView?.0,
+                lifecycleHandler: prefsView?.1),
             .init(
                 title: "Projects",
                 text: [
@@ -471,5 +468,30 @@ class PtnViewController: NSViewController {
                 highlight: .exactSize)
         )
         tutorial.show()
+    }
+    
+    class LaunchAtLoginCheckbox: ButtonWithClosure, LifecycleHandler {
+        private var listenHandler: PrefsListenHandler? = nil
+        
+        convenience init() {
+            self.init(checkboxWithTitle: "", target: nil, action: nil)
+            onPress {button in
+                Prefs.launchAtLogin = (button.state == .on)
+            }
+        }
+        
+        func onAppear() {
+            onDisappear()
+            listenHandler = Prefs.$launchAtLogin.addListener {launchAtLogin in
+                self.state = launchAtLogin ? .on : .off
+            }
+        }
+        
+        func onDisappear() {
+            if let oldHandler = listenHandler {
+                oldHandler.unregister()
+                listenHandler = nil
+            }
+        }
     }
 }

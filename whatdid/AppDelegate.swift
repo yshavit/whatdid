@@ -102,7 +102,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         Prefs.$launchAtLogin.addListener {enabled in
             let success = SMLoginItemSetEnabled(launcherAppId as CFString, enabled)
             NSLog("SMLoginItemSetEnabled -> \(enabled) \(success ? "successfully set" : "NOT set")")
-            
         }
 
         if isRunning {
