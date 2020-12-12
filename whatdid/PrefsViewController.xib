@@ -344,15 +344,75 @@
                                         <userDefinedRuntimeAttribute type="image" keyPath="image" value="NSAdvanced"/>
                                     </userDefinedRuntimeAttributes>
                                 </tabViewItem>
-                                <tabViewItem label="About / Feedback" identifier="" id="NwU-Zn-0aF" userLabel="About / Feedback">
+                                <tabViewItem label="Help &amp; Feedback" identifier="" id="c6w-je-Tyn">
+                                    <view key="view" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y90-IT-u7n">
+                                        <rect key="frame" x="0.0" y="0.0" width="550" height="148"/>
+                                        <subviews>
+                                            <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xNy-tY-FG8" userLabel="Help VStack">
+                                                <rect key="frame" x="0.0" y="4" width="163" height="56"/>
+                                                <subviews>
+                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="D4Y-xJ-OZJ">
+                                                        <rect key="frame" x="-7" y="29" width="150" height="32"/>
+                                                        <buttonCell key="cell" type="push" title="Show tutorial again" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dDk-s3-els">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <accessibility description="Show tutorial again"/>
+                                                        <connections>
+                                                            <action selector="showTutorial:" target="-2" id="8nG-vE-nmU"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nCs-Q7-5xg">
+                                                        <rect key="frame" x="-7" y="1" width="140" height="32"/>
+                                                        <string key="toolTip">https://docs.google.com/forms/d/e/1FAIpQLSdW4IfggikujQDN_emQU3_TL3aSOUK3At2HPbSYcc6ryHYzzQ/viewform?usp=pp_url&amp;entry.1562465146={version}</string>
+                                                        <buttonCell key="cell" type="push" title="Provide feedback" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="q52-4l-Qq8">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <accessibility description="Provide feedback"/>
+                                                        <connections>
+                                                            <action selector="href:" target="-2" id="rcc-Qf-Wsd"/>
+                                                        </connections>
+                                                    </button>
+                                                    <customView verticalHuggingPriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="DQo-XJ-VI6" userLabel="Spacer">
+                                                        <rect key="frame" x="0.0" y="0.0" width="163" height="0.0"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" id="hHO-Db-5W0"/>
+                                                        </constraints>
+                                                    </customView>
+                                                </subviews>
+                                                <visibilityPriorities>
+                                                    <integer value="1000"/>
+                                                    <integer value="1000"/>
+                                                    <integer value="1000"/>
+                                                </visibilityPriorities>
+                                                <customSpacing>
+                                                    <real value="3.4028234663852886e+38"/>
+                                                    <real value="3.4028234663852886e+38"/>
+                                                    <real value="3.4028234663852886e+38"/>
+                                                </customSpacing>
+                                            </stackView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" secondItem="xNy-tY-FG8" secondAttribute="height" constant="4" id="35Z-qk-gkG"/>
+                                            <constraint firstItem="xNy-tY-FG8" firstAttribute="leading" secondItem="y90-IT-u7n" secondAttribute="leading" id="Ivq-P8-Pem"/>
+                                            <constraint firstItem="xNy-tY-FG8" firstAttribute="width" secondItem="y90-IT-u7n" secondAttribute="width" id="TvC-GV-IFQ"/>
+                                            <constraint firstItem="xNy-tY-FG8" firstAttribute="top" secondItem="y90-IT-u7n" secondAttribute="top" id="Ure-dE-WTY"/>
+                                        </constraints>
+                                    </view>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="image" keyPath="image" value="Help"/>
+                                    </userDefinedRuntimeAttributes>
+                                </tabViewItem>
+                                <tabViewItem label="About" identifier="" id="NwU-Zn-0aF">
                                     <view key="view" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rMy-Zr-TwQ">
                                         <rect key="frame" x="0.0" y="0.0" width="550" height="148"/>
                                         <subviews>
                                             <stackView toolTip="https://github.com/yshavit/whatdid/" distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vRX-G9-MoD" userLabel="About VStack">
-                                                <rect key="frame" x="0.0" y="0.0" width="126" height="94"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="106" height="70"/>
                                                 <subviews>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WTv-mo-8cX">
-                                                        <rect key="frame" x="-2" y="78" width="110" height="16"/>
+                                                        <rect key="frame" x="-2" y="54" width="110" height="16"/>
                                                         <textFieldCell key="cell" controlSize="large" lineBreakMode="clipping" title="whatdid {version}" id="bNY-1U-YZb">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -360,7 +420,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5Nx-Hu-dbE">
-                                                        <rect key="frame" x="-2" y="60" width="63" height="14"/>
+                                                        <rect key="frame" x="-2" y="36" width="63" height="14"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="{copyright}" id="HLo-dq-1Tg">
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -368,7 +428,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3K9-EY-10F" userLabel="build {fullversion}">
-                                                        <rect key="frame" x="-2" y="43" width="84" height="13"/>
+                                                        <rect key="frame" x="-2" y="19" width="84" height="13"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="build {fullversion}" id="Lir-2N-fjv">
                                                             <font key="font" metaFont="systemUltraLight" size="10"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -376,7 +436,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D5Z-57-06l" userLabel="Links">
-                                                        <rect key="frame" x="0.0" y="24" width="90" height="15"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="90" height="15"/>
                                                         <subviews>
                                                             <button toolTip="https://yshavit.github.io/whatdid" translatesAutoresizingMaskIntoConstraints="NO" id="OgO-k9-csc" userLabel="Website">
                                                                 <rect key="frame" x="0.0" y="0.0" width="15" height="15"/>
@@ -452,27 +512,14 @@
                                                             <real value="3.4028234663852886e+38"/>
                                                         </customSpacing>
                                                     </stackView>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nCs-Q7-5xg">
-                                                        <rect key="frame" x="-7" y="-7" width="140" height="32"/>
-                                                        <string key="toolTip">https://docs.google.com/forms/d/e/1FAIpQLSdW4IfggikujQDN_emQU3_TL3aSOUK3At2HPbSYcc6ryHYzzQ/viewform?usp=pp_url&amp;entry.1562465146={version}</string>
-                                                        <buttonCell key="cell" type="push" title="Provide feedback" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="q52-4l-Qq8">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="href:" target="-2" id="rcc-Qf-Wsd"/>
-                                                        </connections>
-                                                    </button>
                                                 </subviews>
                                                 <visibilityPriorities>
                                                     <integer value="1000"/>
                                                     <integer value="1000"/>
                                                     <integer value="1000"/>
                                                     <integer value="1000"/>
-                                                    <integer value="1000"/>
                                                 </visibilityPriorities>
                                                 <customSpacing>
-                                                    <real value="3.4028234663852886e+38"/>
                                                     <real value="3.4028234663852886e+38"/>
                                                     <real value="3.4028234663852886e+38"/>
                                                     <real value="3.4028234663852886e+38"/>
@@ -608,6 +655,7 @@ Gw
     </objects>
     <resources>
         <image name="GitHub" width="32" height="32"/>
+        <image name="Help" width="32" height="32"/>
         <image name="NSAdvanced" width="32" height="32"/>
         <image name="NSInfo" width="32" height="32"/>
         <image name="NSTouchBarComposeTemplate" width="17" height="15"/>

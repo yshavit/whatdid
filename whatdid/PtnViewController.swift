@@ -238,6 +238,9 @@ class PtnViewController: NSViewController {
                 if reason == .stop {
                     NSApp.terminate(self)
                 }
+                if reason == PrefsViewController.SHOW_TUTORIAL {
+                    self.showTutorial(forVersion: PtnViewController.CURRENT_TUTORIAL_VERSION)
+                }
                 self.setUpSnoozeButton(untilTomorrowSettings: prefsViewController.snoozeUntilTomorrowInfo)
             })
         }

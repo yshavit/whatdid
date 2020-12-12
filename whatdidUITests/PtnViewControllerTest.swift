@@ -175,10 +175,23 @@ class PtnViewControllerTest: XCTestCase {
             group("General tab") {
                 prefsSheet.tabs["General"].click()
                 XCTAssertEqual(true, prefsSheet.checkBoxes["Launch at Login"].value as? Bool)
+                prefsSheet.checkBoxes["Launch at Login"].click() // turn off launch-at-login
                 XCTAssertEqual("⇧⌘U", prefsSheet.searchFields["Record Shortcut"].stringValue)
             }
+            group("Show tutorial again") {
+                prefsSheet.tabs["Help & Feedback"].click()
+                prefsSheet.buttons["Show tutorial again"].click()
+                wait(for: "preferences sheet to close", until: {ptnWindow.exists && ptnWindow.sheets.count == 0})
+                wait(for: "tutorial to open", until: {app.windows[WindowType.ptn.windowTitle].popovers.count == 1})
+                XCTAssertEqual(
+                    1,
+                    tutorialPopover.staticTexts.allElementsBoundByIndex.filter({$0.stringValue.contains(tutorialWelcomeText)}).count
+                )
+                // The "launch at login" and "record shortcut" controls should *not* be there this time
+                XCTAssertEqual(0, tutorialPopover.checkBoxes.count)
+                XCTAssertFalse(prefsSheet.searchFields["Record Shortcut"].exists)
+            }
         }
-        XCTFail("restart tutorial")
     }
     
     func testScheduling() {
@@ -1017,7 +1030,7 @@ class PtnViewControllerTest: XCTestCase {
         prefsButton.click()
         XCTAssertTrue(prefsSheet.isVisible)
         group("About") {
-            prefsSheet.tabs["About / Feedback"].click()
+            prefsSheet.tabs["About"].click()
             // Sanity check: just make sure that the text includes "whatdid {version}".
             // Note: we'll need to update this whenever we do a version bump.
             // That seems more explicit and easier to reason about than plumbing the Version class to here

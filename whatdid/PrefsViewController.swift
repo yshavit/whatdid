@@ -4,7 +4,8 @@ import Cocoa
 import KeyboardShortcuts
 
 class PrefsViewController: NSViewController {
-    @Pref(key: "prefsview.openItem") static var openTab = 0
+    public static let SHOW_TUTORIAL = NSApplication.ModalResponse(27)
+    @Pref(key: "prefsview.openItem") private static var openTab = 0
     
     @IBOutlet private var outerVStackWidth: NSLayoutConstraint!
     @IBOutlet var outerVStackMinHeight: NSLayoutConstraint!
@@ -82,6 +83,7 @@ class PrefsViewController: NSViewController {
         tabButtonsStack.addArrangedSubview(NSView()) // trailing spacer
         
         setUpGeneralPanel()
+        setUpHelpAndFeedbackPanel()
         setUpAboutPanel()
     }
     
@@ -99,6 +101,7 @@ class PrefsViewController: NSViewController {
             let state: NSControl.StateValue = otherButtonIdx == index ? .on : .off
             (subview as? NSButton)?.state = state
         }
+        
         self.mainTabs.selectTabViewItem(at: index)
         view.layoutSubtreeIfNeeded()
         view.window?.setContentSize(view.fittingSize)
@@ -183,6 +186,26 @@ class PrefsViewController: NSViewController {
     }
     
     //------------------------------------------------------------------
+    // HELP & FEEDBACK
+    //------------------------------------------------------------------
+    
+    @IBOutlet var feedbackButton: NSButton!
+    
+    private func setUpHelpAndFeedbackPanel() {
+        if let versionQuery = Version.pretty.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+            feedbackButton.toolTip = feedbackButton.toolTip?.replacingBracketedPlaceholders(with: [
+                "version": versionQuery
+            ])
+        } else {
+            feedbackButton.removeFromSuperview()
+        }
+    }
+    
+    @IBAction func showTutorial(_ sender: Any) {
+        endParentSheet(with: PrefsViewController.SHOW_TUTORIAL)
+    }
+    
+    //------------------------------------------------------------------
     // ABOUT
     //------------------------------------------------------------------
     
@@ -191,7 +214,6 @@ class PrefsViewController: NSViewController {
     @IBOutlet var fullVersion: NSTextField!
     @IBOutlet var shaVersion: NSButton!
     @IBOutlet var githubShaInfo: NSStackView!
-    @IBOutlet var feedbackButton: NSButton!
     
     private func setUpAboutPanel() {
         shortVersion.stringValue = shortVersion.stringValue.replacingBracketedPlaceholders(with: [
@@ -210,14 +232,6 @@ class PrefsViewController: NSViewController {
             "sha": Version.gitSha.replacingOccurrences(of: ".dirty", with: "")
         ])
         githubShaInfo.isHidden = !NSEvent.modifierFlags.contains(.command)
-        
-        if let versionQuery = Version.pretty.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-            feedbackButton.toolTip = feedbackButton.toolTip?.replacingBracketedPlaceholders(with: [
-                "version": versionQuery
-            ])
-        } else {
-            feedbackButton.removeFromSuperview()
-        }
     }
     
     
