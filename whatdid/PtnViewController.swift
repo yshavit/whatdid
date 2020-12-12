@@ -460,11 +460,15 @@ class PtnViewController: NSViewController {
                 pointingTo: skipButton,
                 atEdge: .minX),
             .init(
-                title: "That's it", text: [
-                    "I hope you like Whatdid!"
+                title: "System icon",
+                text: [
+                    "Use the system icon to open up the window whenever you want.",
+                    "You can option-click it to see a report of what you've done so far today.",
+                    "I hope you enjoy Whatdid!"
                 ],
-                pointingTo: view,
-                atEdge: .minX)
+                pointingTo: AppDelegate.instance.mainMenu.statusItem.button!,
+                atEdge: .minY,
+                highlight: .exactSize)
         )
         tutorial.show()
     }

@@ -7,6 +7,7 @@ class TutorialViewController: NSViewController {
     private var steps = [Step]()
     private var currentStep = 0
     private let popover = NSPopover()
+    private let highlighWindow = NSWindow()
     
     @IBOutlet var pageNum: NSTextField!
     @IBOutlet var pageCount: NSTextField!
@@ -20,12 +21,31 @@ class TutorialViewController: NSViewController {
     
     override func awakeFromNib() {
         updatePageCount()
+        
+        
+        highlighWindow.isOpaque = false
+        highlighWindow.backgroundColor = NSColor.controlAccentColor.withAlphaComponent(0)
+        highlighWindow.level = .popUpMenu
+        highlighWindow.styleMask = [.borderless, .fullSizeContentView, .nonactivatingPanel]
+        
+        let box = NSBox()
+        box.boxType = .custom
+        box.titlePosition = .noTitle
+        box.borderColor = NSColor.findHighlightColor.withAlphaComponent(0.5)
+        box.borderWidth = 3
+        box.cornerRadius = 7
+        box.borderType = .lineBorder
+        highlighWindow.contentView = box
     }
     
     func show() {
         popover.contentViewController = self
         currentStep = -1
         step(forward: true)
+    }
+    
+    override func viewDidDisappear() {
+        highlighWindow.setIsVisible(false)
     }
     
     func add(_ steps: Step...) {
@@ -58,6 +78,22 @@ class TutorialViewController: NSViewController {
         backButton.isEnabled = (currentStep > 0)
         forwardButton.isEnabled = (currentStep < (steps.count - 1))
         pageHeight.constant = view.subviews.map({$0.fittingSize.height}).reduce(0, +)
+        
+        if step.highlight != .none, let window = step.pointingTo.window {
+            var frameBorder = step.pointingTo.bounds
+            frameBorder = step.pointingTo.convert(frameBorder, to: nil)
+            frameBorder = window.convertToScreen(frameBorder)
+            if step.highlight == .normal {
+                frameBorder = frameBorder.insetBy(dx: -5, dy: -5)
+            }
+            highlighWindow.setContentSize(frameBorder.size)
+            highlighWindow.setFrame(frameBorder, display: true)
+            if !highlighWindow.isVisible {
+                highlighWindow.setIsVisible(true)
+            }
+        } else {
+            highlighWindow.setIsVisible(false)
+        }
     }
     
     @IBAction func close(_ sender: Any) {
@@ -78,13 +114,21 @@ class TutorialViewController: NSViewController {
         let pointingTo: NSView
         let atEdge: NSRectEdge
         let extraView: NSView?
+        let highlight: HighlightMode
         
-        init(title: String, text: [String], pointingTo: NSView, atEdge: NSRectEdge, extraView: NSView? = nil) {
+        init(title: String, text: [String], pointingTo: NSView, atEdge: NSRectEdge, extraView: NSView? = nil, highlight: HighlightMode = .normal) {
             self.title = title
             self.text = text
             self.pointingTo = pointingTo
             self.atEdge = atEdge
             self.extraView = extraView
+            self.highlight = highlight
         }
+    }
+    
+    enum HighlightMode {
+        case normal
+        case none
+        case exactSize
     }
 }
