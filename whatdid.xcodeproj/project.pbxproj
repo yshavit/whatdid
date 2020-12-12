@@ -79,6 +79,8 @@
 		7EEF324824EA54AD002E217A /* NSRange+HelpersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEF324724EA54AD002E217A /* NSRange+HelpersTest.swift */; };
 		7EF58F8C2580F180002F9604 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF58F8A2580F180002F9604 /* TutorialViewController.swift */; };
 		7EF58F8D2580F180002F9604 /* TutorialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EF58F8B2580F180002F9604 /* TutorialViewController.xib */; };
+		7EF58FA12584972F002F9604 /* UITestCommonConsts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF58FA02584972F002F9604 /* UITestCommonConsts.swift */; };
+		7EF58FA22584972F002F9604 /* UITestCommonConsts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF58FA02584972F002F9604 /* UITestCommonConsts.swift */; };
 		7EF8579324E094D100867832 /* OpenCloseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579224E094D100867832 /* OpenCloseHelper.swift */; };
 		7EF8579524E0961E00867832 /* OpenCloseHelperTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */; };
 		7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579A24E220EA00867832 /* OpenReason.swift */; };
@@ -195,6 +197,7 @@
 		7EEF324724EA54AD002E217A /* NSRange+HelpersTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRange+HelpersTest.swift"; sourceTree = "<group>"; };
 		7EF58F8A2580F180002F9604 /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
 		7EF58F8B2580F180002F9604 /* TutorialViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TutorialViewController.xib; sourceTree = "<group>"; };
+		7EF58FA02584972F002F9604 /* UITestCommonConsts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestCommonConsts.swift; sourceTree = "<group>"; };
 		7EF8579224E094D100867832 /* OpenCloseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCloseHelper.swift; sourceTree = "<group>"; };
 		7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCloseHelperTest.swift; sourceTree = "<group>"; };
 		7EF8579A24E220EA00867832 /* OpenReason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenReason.swift; sourceTree = "<group>"; };
@@ -390,6 +393,7 @@
 			children = (
 				7E970D6A24DA850D00F634AB /* UiTestWindow.swift */,
 				7E970D6824DA84AF00F634AB /* UiTestWindow.xib */,
+				7EF58FA02584972F002F9604 /* UITestCommonConsts.swift */,
 			);
 			path = ui_testhook;
 			sourceTree = "<group>";
@@ -701,6 +705,7 @@
 				7EB57AA825187549009E85F5 /* NSApperance+Helpers.swift in Sources */,
 				7EDA369524D6A95B00F5E368 /* TimeUtil.swift in Sources */,
 				7E37A29D24C0293E005BA1DF /* Task+CoreDataProperties.swift in Sources */,
+				7EF58FA12584972F002F9604 /* UITestCommonConsts.swift in Sources */,
 				7EA1DFC024CA99BF003AD2BC /* MainMenu.swift in Sources */,
 				7E37A29C24C0293E005BA1DF /* Task+CoreDataClass.swift in Sources */,
 			);
@@ -726,6 +731,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7EF58FA22584972F002F9604 /* UITestCommonConsts.swift in Sources */,
 				7E7C384F24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */,
 				7EBE61F324DD28F2000B2CB3 /* XCUIElement+Helpers.swift in Sources */,
 				7E7C384C24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */,

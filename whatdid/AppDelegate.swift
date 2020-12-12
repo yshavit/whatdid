@@ -59,8 +59,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         mainMenu.schedule(.ptn)
         mainMenu.schedule(.dailyEnd)
         setUpLauncher()
+        
         let currentVersion = Prefs.tutorialVersion
-        if currentVersion < PtnViewController.CURRENT_TUTORIAL_VERSION {
+        if SHOW_TUTORIAL_ON_FIRST_START && currentVersion < PtnViewController.CURRENT_TUTORIAL_VERSION {
             mainMenu.openPtnWithTutorial(assumingVersion: currentVersion)
             Prefs.tutorialVersion = PtnViewController.CURRENT_TUTORIAL_VERSION
         }

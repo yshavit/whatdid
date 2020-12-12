@@ -12,11 +12,16 @@ class PtnViewControllerTest: XCTestCase {
     override func setUp() {
         continueAfterFailure = false
         app = XCUIApplication()
-        app.launch()
+        launch(withEnv: startupEnv(suppressTutorial: true))
 
-        findStatusMenuItem()
         let now = Date()
         log("Finished setup at \(now.utcTimestamp) (\(now.timestamp(at: TimeZone(identifier: "US/Eastern")!)))")
+    }
+    
+    private func launch(withEnv env: [String: String]) {
+        app.launchEnvironment = env
+        app.launch()
+        findStatusMenuItem()
     }
     
     func findStatusMenuItem() {
@@ -101,6 +106,26 @@ class PtnViewControllerTest: XCTestCase {
 
     override func tearDownWithError() throws {
         XCUIApplication().terminate()
+    }
+    
+    func testTutorial() {
+        launch(withEnv: startupEnv(suppressTutorial: false))
+        XCTFail("TODO")
+//        
+//        
+//        let popoversQuery = XCUIApplication().windows["What are you working on?"].popovers
+//        popoversQuery.children(matching: .checkBox).element.click() // Launch on login
+//        
+//        let recordShortcutSearchField = popoversQuery.searchFields["Record Shortcut"]
+//        recordShortcutSearchField.click()
+//        recordShortcutSearchField.typeKey("x", modifierFlags:[.command, .shift])
+//        popoversQuery.buttons["Done"].click()
+//        
+//        let popoversQuery = XCUIApplication().windows["What are you working on?"].popovers
+//        popoversQuery.buttons[">"].click()
+//        popoversQuery.buttons["<"].click()
+//        popoversQuery.buttons["Done"].click()
+//        
     }
     
     func testScheduling() {
