@@ -28,6 +28,26 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         opener.open(item, reason: reason)
     }
     
+    func openPtnWithTutorial(assumingVersion currentVersion: Int) {
+        openPtnWithTutorial(assumingVersion: currentVersion, remainingAttempts: 1500)
+    }
+    
+    private func openPtnWithTutorial(assumingVersion currentVersion: Int, remainingAttempts: Int) {
+        // It takes a few millis for the status item to get connected to the screen
+        if remainingAttempts <= 0 {
+            NSLog("Took too long to find status item's screen. Giving up on showing tutorial.")
+        } else if statusItem.button?.window?.screen == nil {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(1)) {
+                self.openPtnWithTutorial(assumingVersion: currentVersion, remainingAttempts: remainingAttempts - 1)
+            }
+        } else {
+            open(.ptn, reason: .manual)
+            if let ptn = taskAdditionsPane {
+                ptn.showTutorial(forVersion: currentVersion)
+            }
+        }
+    }
+    
     override func close() {
         if windowShouldClose(window!) {
             super.close()
@@ -49,14 +69,16 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
                 self.close()
             }
         }
-        window?.contentViewController = taskAdditionsPane
-        window?.delegate = self
-        window?.standardWindowButton(.closeButton)?.isHidden = true
-        window?.isMovable = false
-        window?.standardWindowButton(.closeButton)?.isHidden = true
-        window?.standardWindowButton(.miniaturizeButton)?.isHidden = true
-        window?.standardWindowButton(.zoomButton)?.isHidden = true
         
+        if let window = window {
+            window.contentViewController = taskAdditionsPane
+            window.delegate = self
+            window.standardWindowButton(.closeButton)?.isHidden = true
+            window.isMovable = false
+            window.standardWindowButton(.closeButton)?.isHidden = true
+            window.standardWindowButton(.miniaturizeButton)?.isHidden = true
+            window.standardWindowButton(.zoomButton)?.isHidden = true
+        }
         if let button = statusItem.button {
             button.title = "✐"
             button.target = self
@@ -104,7 +126,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         }
         
         window!.setContentSize(window!.contentViewController!.view.fittingSize)
-        if let button = statusItem.button, let buttonWindow = statusItem.button?.window, let buttonScreen = buttonWindow.screen, let windowToOpen = window {
+        if let button = statusItem.button, let buttonWindow = button.window, let buttonScreen = buttonWindow.screen, let windowToOpen = window {
             NSLog("Available screens:")
             let mouseLoc = NSEvent.mouseLocation
             for screen in NSScreen.screens {

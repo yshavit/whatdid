@@ -4,6 +4,8 @@ import Cocoa
 import KeyboardShortcuts
 
 class PtnViewController: NSViewController {
+    public static let CURRENT_TUTORIAL_VERSION = 0
+    
     private static let TIME_UNTIL_NEW_SESSION_PROMPT = TimeInterval(6 * 60 * 60)
     @IBOutlet var topStack: NSStackView!
     
@@ -84,7 +86,6 @@ class PtnViewController: NSViewController {
             }
         }
         scheduleUpdateHeaderText()
-        showTutorial()
     }
     
     private func timeInterval(since date: Date) -> TimeInterval {
@@ -353,11 +354,10 @@ class PtnViewController: NSViewController {
         }
     }
     
-    private func showTutorial(inlinePrefs: Bool = true) {
+    func showTutorial(forVersion prefsVersion: Int) {
         let tutorial = TutorialViewController(nibName: "TutorialViewController", bundle: nil)
         let prefsView: (NSView, LifecycleHandler)?
-        if Prefs.showedTutorialAtVersion < 0 {
-            Prefs.showedTutorialAtVersion = 0
+        if prefsVersion < 0 {
             let optionsGrid = NSGridView(numberOfColumns: 3, rows: 0)
             // Header
             optionsGrid.addRow(with: [

@@ -59,6 +59,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         mainMenu.schedule(.ptn)
         mainMenu.schedule(.dailyEnd)
         setUpLauncher()
+        let currentVersion = Prefs.tutorialVersion
+        if currentVersion < PtnViewController.CURRENT_TUTORIAL_VERSION {
+            mainMenu.openPtnWithTutorial(assumingVersion: currentVersion)
+            Prefs.tutorialVersion = PtnViewController.CURRENT_TUTORIAL_VERSION
+        }
     }
     
     func applicationWillTerminate(_ notification: Notification) {
