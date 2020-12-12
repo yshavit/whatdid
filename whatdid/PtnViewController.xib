@@ -10,7 +10,9 @@
             <connections>
                 <outlet property="headerText" destination="v8p-Bz-hcj" id="LSE-4P-8lM"/>
                 <outlet property="noteField" destination="6A0-cK-Vnh" id="DMw-Er-dNX"/>
+                <outlet property="prefsButton" destination="tkS-gq-Cbs" id="I1H-5c-cWw"/>
                 <outlet property="projectField" destination="4Lo-U3-YED" id="7SV-al-VYn"/>
+                <outlet property="skipButton" destination="iu6-dS-Gze" id="AlI-GO-bb4"/>
                 <outlet property="snoozeButton" destination="yjZ-yA-5CH" id="kMR-QE-XYq"/>
                 <outlet property="snoozeExtraOptions" destination="2d3-tf-ady" id="sU1-Fq-fTJ"/>
                 <outlet property="taskField" destination="sxc-2C-mp9" id="Pro-Vo-fL6"/>

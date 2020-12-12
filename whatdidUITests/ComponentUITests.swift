@@ -10,6 +10,7 @@ class ComponentUITests: XCTestCase {
     override func setUp() {
         continueAfterFailure = false
         app = XCUIApplication()
+        app.launchEnvironment = startupEnv(suppressTutorial: true)
         app.launch()
         app.activate()
     }

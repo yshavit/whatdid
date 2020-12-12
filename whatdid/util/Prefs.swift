@@ -9,7 +9,7 @@ struct Prefs {
     @Pref(key: "ptnFrequencyMinutes") static var ptnFrequencyMinutes = 12
     @Pref(key: "ptnFrequencyJitterMinutes") static var ptnFrequencyJitterMinutes = 2
     @Pref(key: "launchAtLogin") static var launchAtLogin = false
-    @Pref(key: "launchAtLogin") var launchAtLogin = false
+    @Pref(key: "previouslyLaunchedVersion") static var tutorialVersion = -1
 }
 
 @propertyWrapper
@@ -37,20 +37,34 @@ struct Pref<T: PrefType> {
 
 class PrefsListeners<T> {
     private var currentValue: T
-    private var listeners = [(T) -> Void]()
+    private var listeners = [UUID: (T) -> Void]()
     
     init(_ defaultValue: T) {
         self.currentValue = defaultValue
     }
     
-    func addListener(_ block: @escaping (T) -> Void) {
-        listeners.append(block)
+    @discardableResult
+    func addListener(_ block: @escaping (T) -> Void) -> PrefsListenHandler {
+        let handlerUuid = UUID()
+        let handler = PrefsListenHandler() {
+            self.listeners.removeValue(forKey: handlerUuid)
+        }
+        listeners[handlerUuid] = block
         block(currentValue)
+        return handler
     }
     
     fileprivate func notify(newValue: T) {
         self.currentValue = newValue
-        listeners.forEach { $0(newValue) }
+        listeners.values.forEach { $0(newValue) }
+    }
+}
+
+struct PrefsListenHandler {
+    fileprivate let unregisterAction: () -> Void
+    
+    func unregister() {
+        unregisterAction()
     }
 }
 

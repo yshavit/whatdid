@@ -1,13 +1,17 @@
 // whatdid?
 
 import Cocoa
+import KeyboardShortcuts
 
 class PtnViewController: NSViewController {
+    public static let CURRENT_TUTORIAL_VERSION = 0
+    
     private static let TIME_UNTIL_NEW_SESSION_PROMPT = TimeInterval(6 * 60 * 60)
     @IBOutlet var topStack: NSStackView!
     
     @IBOutlet var headerText: NSTextField!
     
+    @IBOutlet weak var prefsButton: NSButton!
     @IBOutlet weak var projectField: AutoCompletingField!
     @IBOutlet weak var taskField: AutoCompletingField!
     @IBOutlet weak var noteField: NSTextField!
@@ -234,6 +238,9 @@ class PtnViewController: NSViewController {
                 if reason == .stop {
                     NSApp.terminate(self)
                 }
+                if reason == PrefsViewController.SHOW_TUTORIAL {
+                    self.showTutorial(forVersion: PtnViewController.CURRENT_TUTORIAL_VERSION)
+                }
                 self.setUpSnoozeButton(untilTomorrowSettings: prefsViewController.snoozeUntilTomorrowInfo)
             })
         }
@@ -346,6 +353,147 @@ class PtnViewController: NSViewController {
                 } else {
                     self.grabFocusEvenIfHasSheet()
                 }
+            }
+        }
+    }
+    
+    func showTutorial(forVersion prefsVersion: Int) {
+        let tutorial = TutorialViewController(nibName: "TutorialViewController", bundle: nil)
+        let prefsView: (NSView, LifecycleHandler)?
+        if prefsVersion < 0 {
+            let optionsGrid = NSGridView(numberOfColumns: 3, rows: 0)
+            // Header
+            optionsGrid.addRow(with: [
+                NSTextField(wrappingLabelWithString:
+                                "Since this is your first time running Whatdid, "
+                                + "would you like to:")
+            ])
+            optionsGrid.row(at: 0).mergeCells(in: NSMakeRange(0, 3))
+            // Launch-at-login row
+            let launchAtLoginCheckbox = LaunchAtLoginCheckbox()
+            optionsGrid.addRow(with: [
+                NSTextField(labelWithString: "➤ "),
+                NSTextField(wrappingLabelWithString: "Launch Whatdid at login?"),
+                launchAtLoginCheckbox,
+            ])
+            // Shortcut recorder. For some reason, the recorder widget doesn't like to be in
+            // a cell by itself; we need to wrap it in a view first.
+            let recorder = KeyboardShortcuts.RecorderCocoa(for: .grabFocus)
+            let boundsAdjuster = NSView()
+            boundsAdjuster.addSubview(recorder)
+            boundsAdjuster.anchorAllSides(to: recorder)
+            optionsGrid.addRow(with: [
+                NSTextField(labelWithString: "➤ "),
+                NSTextField(wrappingLabelWithString: "Make a shortcut to open this window?"),
+                boundsAdjuster,
+            ])
+            // Put them together
+            prefsView = (optionsGrid, launchAtLoginCheckbox)
+        } else {
+            prefsView = nil
+        }
+        tutorial.add(
+            .init(
+                title: "\"Whatdid I do all day?!\"",
+                text: [
+                    "This window will pop up every so often to ask you what you've been up to.",
+                    "At the end of the day, it'll aggregate all of the check-ins and let you see all you've accomplished."
+                ],
+                pointingTo: view,
+                atEdge: .minX,
+                extraView: prefsView?.0,
+                lifecycleHandler: prefsView?.1),
+            .init(
+                title: "Projects",
+                text: [
+                    "Enter the project you've been working on.",
+                    "A good general rule is that a project will take 1-2 months.",
+                    "This is most useful when looking at reports over months or a year, to see what you accomplished at a high level.",
+                    "This can also be a catch-all, like \"general office work\" or even \"break\"."
+                ],
+                pointingTo: projectField,
+                atEdge: .minY),
+            .init(
+                title: "Tasks",
+                text: [
+                    "A typical task takes 1-5 days.",
+                    "In daily or weekly views, you can use this to see what tasks took up each project's time.",
+                    "For a project like \"general office work\" a task might be \"email\" or \"scheduling my day\"."
+                ],
+                pointingTo: taskField,
+                atEdge: .minY),
+            .init(
+                title: "Notes",
+                text: [
+                    "You can optionally enter notes about your work on this task.",
+                    "This is most useful when looking at a daily report, to see the progression of your day."
+                ],
+                pointingTo: noteField,
+                atEdge: .minY),
+            .init(
+                title: "Snooze",
+                text: [
+                    "You can pause notifications for a while, or even until tomorrow.",
+                    "While Whatdid is snoozing, its timer is still going. When you check in after the snooze, "
+                        + "it'll include the snooze time.",
+                    "This is a useful way to prevent interruptions during meetings."
+                ],
+                pointingTo: snoozeButton,
+                atEdge: .minX),
+            .init(
+                title: "Settings",
+                text: [
+                    "Configure settings like popup frequency or keyboard shortcuts.",
+                    "You can also use this to quit Whatdid.",
+                    "There are also links to drop us feedback!"
+                ],
+                pointingTo: prefsButton,
+                atEdge: .minY),
+            .init(
+                title: "Skip a session",
+                text: [
+                    "Sometimes you're off the clock!",
+                    "Use this to tell Whatdid to just ignore the current session.",
+                    "(Tip: Use this sparingly! For most breaks, create a project called \"break\" so you "
+                        + "can keep track of how many breaks you take throughout the day.)"
+                ],
+                pointingTo: skipButton,
+                atEdge: .minX),
+            .init(
+                title: "System icon",
+                text: [
+                    "Use the system icon to open up the window whenever you want.",
+                    "You can option-click it to see a report of what you've done so far today.",
+                    "I hope you enjoy Whatdid!"
+                ],
+                pointingTo: AppDelegate.instance.mainMenu.statusItem.button!,
+                atEdge: .minY,
+                highlight: .exactSize)
+        )
+        tutorial.show()
+    }
+    
+    class LaunchAtLoginCheckbox: ButtonWithClosure, LifecycleHandler {
+        private var listenHandler: PrefsListenHandler? = nil
+        
+        convenience init() {
+            self.init(checkboxWithTitle: "", target: nil, action: nil)
+            onPress {button in
+                Prefs.launchAtLogin = (button.state == .on)
+            }
+        }
+        
+        func onAppear() {
+            onDisappear()
+            listenHandler = Prefs.$launchAtLogin.addListener {launchAtLogin in
+                self.state = launchAtLogin ? .on : .off
+            }
+        }
+        
+        func onDisappear() {
+            if let oldHandler = listenHandler {
+                oldHandler.unregister()
+                listenHandler = nil
             }
         }
     }

@@ -59,6 +59,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         mainMenu.schedule(.ptn)
         mainMenu.schedule(.dailyEnd)
         setUpLauncher()
+        
+        let currentVersion = Prefs.tutorialVersion
+        if SHOW_TUTORIAL_ON_FIRST_START && currentVersion < PtnViewController.CURRENT_TUTORIAL_VERSION {
+            mainMenu.openPtnWithTutorial(assumingVersion: currentVersion)
+            Prefs.tutorialVersion = PtnViewController.CURRENT_TUTORIAL_VERSION
+        }
     }
     
     func applicationWillTerminate(_ notification: Notification) {
@@ -102,7 +108,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         Prefs.$launchAtLogin.addListener {enabled in
             let success = SMLoginItemSetEnabled(launcherAppId as CFString, enabled)
             NSLog("SMLoginItemSetEnabled -> \(enabled) \(success ? "successfully set" : "NOT set")")
-            
         }
 
         if isRunning {
