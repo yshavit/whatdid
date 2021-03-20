@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -181,13 +181,13 @@
                                     </connections>
                                 </button>
                                 <popUpButton identifier="snoozeopts" translatesAutoresizingMaskIntoConstraints="NO" id="2d3-tf-ady" userLabel="Snooze options">
-                                    <rect key="frame" x="121" y="0.0" width="19" height="14"/>
+                                    <rect key="frame" x="123" y="0.0" width="17" height="14"/>
                                     <constraints>
-                                        <constraint firstAttribute="width" secondItem="2d3-tf-ady" secondAttribute="height" multiplier="1:1" id="B6H-b1-avb"/>
+                                        <constraint firstAttribute="width" secondItem="2d3-tf-ady" secondAttribute="height" multiplier="1.25:1" id="B6H-b1-avb"/>
                                     </constraints>
-                                    <popUpButtonCell key="cell" type="recessed" bezelStyle="recessed" imagePosition="only" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="XN4-G0-EmL">
-                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                        <font key="font" metaFont="systemBold" size="12"/>
+                                    <popUpButtonCell key="cell" type="square" bezelStyle="shadowlessSquare" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="arrowAtCenter" id="XN4-G0-EmL">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="system"/>
                                         <menu key="menu" id="e29-UZ-3Z2">
                                             <items>
                                                 <menuItem state="on" hidden="YES" id="ntA-xD-jFV" userLabel="snooze"/>
