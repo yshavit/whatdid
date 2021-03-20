@@ -61,9 +61,9 @@ struct AutocompleteFieldHelper {
         let textFieldFrame = textField.frame
         let optionsScrollFrame = optionsScroll.frame
         let buttonFrame = button.frame
-        XCTAssertEqual(textFieldFrame.minY, buttonFrame.minY)
-        XCTAssertEqual(origButtonHeight, buttonFrame.height)
-        XCTAssertEqual(textFieldFrame.maxY + 2, optionsScrollFrame.minY)
+        XCTAssertEqual(textFieldFrame.minY.rounded(.down), buttonFrame.minY.rounded(.down))
+        XCTAssertEqual(origButtonHeight.rounded(.down), buttonFrame.height.rounded(.down))
+        XCTAssertEqual(textFieldFrame.maxY.rounded(.down) + 2, optionsScrollFrame.minY.rounded(.down))
     }
 
     var hasFocus: Bool {
