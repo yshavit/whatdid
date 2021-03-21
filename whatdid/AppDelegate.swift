@@ -58,12 +58,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         mainMenu.schedule(.ptn)
         mainMenu.schedule(.dailyEnd)
+        mainMenu.schedule(.dayStart)
         setUpLauncher()
         
         let currentVersion = Prefs.tutorialVersion
         if SHOW_TUTORIAL_ON_FIRST_START && currentVersion < PtnViewController.CURRENT_TUTORIAL_VERSION {
-            mainMenu.openPtnWithTutorial(assumingVersion: currentVersion)
+            mainMenu.whenPtnIsReady {ptn in
+                self.mainMenu.open(.ptn, reason: .manual)
+                ptn.showTutorial(forVersion: currentVersion)
+            }
             Prefs.tutorialVersion = PtnViewController.CURRENT_TUTORIAL_VERSION
+        }
+        
+        if let currentSession = model.getCurrentSession(), let sessionStart = currentSession.startTime {
+            // Check to see if the session is earlier than the start of today. If so, start a new session
+            let dayStart = Prefs.dayStartTime.map { hh, mm in TimeUtil.dateForTime(.previous, hh: hh, mm: mm) }
+            if sessionStart < dayStart {
+                mainMenu.whenPtnIsReady {_ in
+                    self.mainMenu.open(.dayStart, reason: .scheduled)
+                }
+            }
         }
     }
     

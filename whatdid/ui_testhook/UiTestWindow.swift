@@ -14,6 +14,7 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
     override func awakeFromNib() {
         add(AutocompleteComponent())
         add(ButtonWithClosureComponent())
+        add(GoalsViewComponent())
     }
     
     private func add(_ use: TestComponent) {
@@ -114,8 +115,39 @@ fileprivate class AutocompleteComponent: TestComponent {
     }
 }
 
+fileprivate class GoalsViewComponent: TestComponent {
+    
+    private var goalsView: GoalsView?
+    
+    func build(adder: @escaping (NSView) -> Void) {
+        let g1 = add(GoalsView(), to: adder)
+        
+        let box = add(NSBox(), to: adder)
+        box.boxType = .separator
+        box.widthAnchor.constraint(equalToConstant: 350).isActive = true
+        
+        let g2 = add(GoalsView(), to: adder)
+        for g in [g1, g2] {
+            g.widthAnchor.constraint(equalTo: box.widthAnchor).isActive = true
+        }
+        
+        adder(NSButton(title: "sync goals", target: self, action: #selector(self.resetGoalViews(_:))))
+    }
+    
+    @objc private func resetGoalViews(_ button: NSButton) {
+        button.superview?.subviews.compactMap({$0 as? GoalsView}).forEach({$0.reset()})
+    }
+}
+
 fileprivate protocol TestComponent {
     func build(adder: @escaping (NSView) -> Void)
+}
+
+extension TestComponent {
+    func add<T: NSView>(_ element: T, to adder: (NSView) -> Void) -> T {
+        adder(element)
+        return element
+    }
 }
 
 #endif

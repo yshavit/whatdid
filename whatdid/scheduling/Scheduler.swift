@@ -12,6 +12,10 @@ extension Scheduler {
     @discardableResult func schedule(_ description: String, after: TimeInterval, _ block: @escaping () -> Void) -> ScheduledTask {
         return schedule(description, at: now + after, block)
     }
+    
+    func timeInterval(since date: Date) -> TimeInterval {
+        return now.timeIntervalSince(date)
+    }
 }
 
 protocol ScheduledTask {

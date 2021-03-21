@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.3"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="System colors introduced in macOS 10.13" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -10,6 +10,8 @@
         <customObject id="-2" userLabel="File's Owner" customClass="DayEndReportController" customModule="whatdid" customModuleProvider="target">
             <connections>
                 <outlet property="entryStartDatePicker" destination="I9K-te-jfd" id="Zma-bE-IER"/>
+                <outlet property="goalsSummaryGroup" destination="V55-nV-Y5s" id="DxF-mT-cMT"/>
+                <outlet property="goalsSummaryStack" destination="1RQ-eW-vGH" id="L7V-FB-jCR"/>
                 <outlet property="maxViewHeight" destination="1ka-g6-16p" id="IdU-SA-mes"/>
                 <outlet property="projectsContainer" destination="UTB-GH-C4K" id="QTl-1c-03i"/>
                 <outlet property="projectsScroll" destination="LDw-zz-ziZ" id="ccf-fo-s0s"/>
@@ -22,10 +24,10 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qn8-JX-HeH" userLabel="Top">
-            <rect key="frame" x="0.0" y="0.0" width="400" height="72"/>
+            <rect key="frame" x="0.0" y="0.0" width="400" height="97"/>
             <subviews>
-                <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pKe-k9-zAn">
-                    <rect key="frame" x="0.0" y="48" width="267" height="24"/>
+                <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pKe-k9-zAn" userLabel="Header Stack">
+                    <rect key="frame" x="0.0" y="73" width="264" height="24"/>
                     <subviews>
                         <textField identifier="header_label" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-Lm-qUL" userLabel="Header">
                             <rect key="frame" x="-2" y="4" width="118" height="16"/>
@@ -36,7 +38,7 @@
                             </textFieldCell>
                         </textField>
                         <datePicker verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="I9K-te-jfd">
-                            <rect key="frame" x="122" y="0.0" width="148" height="28"/>
+                            <rect key="frame" x="122" y="0.0" width="145" height="28"/>
                             <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="578-tE-w1E">
                                 <font key="font" metaFont="menu" size="11"/>
                                 <date key="date" timeIntervalSinceReferenceDate="-595929600">
@@ -66,6 +68,41 @@
                     </customSpacing>
                 </stackView>
                 <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="hAT-mx-IFG">
+                    <rect key="frame" x="0.0" y="66" width="400" height="5"/>
+                </box>
+                <customView focusRingType="none" translatesAutoresizingMaskIntoConstraints="NO" id="V55-nV-Y5s">
+                    <rect key="frame" x="0.0" y="48" width="400" height="16"/>
+                    <subviews>
+                        <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1RQ-eW-vGH" userLabel="Goals Summary Stack">
+                            <rect key="frame" x="0.0" y="0.0" width="400" height="16"/>
+                            <subviews>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mQu-zC-c2Z" userLabel="Goals summary">
+                                    <rect key="frame" x="-2" y="0.0" width="98" height="16"/>
+                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Goals summary" id="zK2-ck-JJ1">
+                                        <font key="font" usesAppearanceFont="YES"/>
+                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                            </subviews>
+                            <visibilityPriorities>
+                                <integer value="1000"/>
+                            </visibilityPriorities>
+                            <customSpacing>
+                                <real value="3.4028234663852886e+38"/>
+                            </customSpacing>
+                            <accessibility description="Today's goals"/>
+                        </stackView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="1RQ-eW-vGH" firstAttribute="leading" secondItem="V55-nV-Y5s" secondAttribute="leading" id="1uo-V8-xJ0"/>
+                        <constraint firstItem="1RQ-eW-vGH" firstAttribute="width" secondItem="V55-nV-Y5s" secondAttribute="width" id="Blf-hX-KMQ"/>
+                        <constraint firstAttribute="height" constant="16" placeholder="YES" id="Z10-u6-WOy"/>
+                        <constraint firstItem="1RQ-eW-vGH" firstAttribute="top" secondItem="V55-nV-Y5s" secondAttribute="top" id="bYx-sk-E3U"/>
+                        <constraint firstItem="1RQ-eW-vGH" firstAttribute="height" secondItem="V55-nV-Y5s" secondAttribute="height" id="vdW-LG-0TW"/>
+                    </constraints>
+                </customView>
+                <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="h3O-9g-faO">
                     <rect key="frame" x="0.0" y="41" width="400" height="5"/>
                 </box>
                 <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LDw-zz-ziZ" userLabel="Projects scroll">
@@ -144,7 +181,9 @@
                 </textField>
             </subviews>
             <constraints>
+                <constraint firstItem="V55-nV-Y5s" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" id="9OU-Hb-fFQ"/>
                 <constraint firstAttribute="trailing" secondItem="d5X-74-7gY" secondAttribute="trailing" constant="2" id="IbK-aX-und"/>
+                <constraint firstItem="h3O-9g-faO" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" id="WB1-I0-7hD"/>
                 <constraint firstItem="hAT-mx-IFG" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" id="nCY-3T-gJp"/>
                 <constraint firstItem="LDw-zz-ziZ" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" id="oDo-5Q-hjJ"/>
             </constraints>
@@ -154,8 +193,12 @@
                 <integer value="1000"/>
                 <integer value="1000"/>
                 <integer value="1000"/>
+                <integer value="1000"/>
+                <integer value="1000"/>
             </visibilityPriorities>
             <customSpacing>
+                <real value="3.4028234663852886e+38"/>
+                <real value="3.4028234663852886e+38"/>
                 <real value="3.4028234663852886e+38"/>
                 <real value="3.4028234663852886e+38"/>
                 <real value="3.4028234663852886e+38"/>

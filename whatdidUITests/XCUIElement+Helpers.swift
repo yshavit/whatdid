@@ -34,6 +34,10 @@ extension XCUIElement {
         return value as! String
     }
     
+    var boolValue: Bool {
+        return value as! Bool
+    }
+    
     func backtab() {
         typeKey(.tab, modifierFlags: .shift)
     }
@@ -55,6 +59,21 @@ extension XCUIElement {
             result += " with stringValue=\"\(stringValue)\""
         }
         return result
+    }
+    
+    func click(using method: ElementClickMethod) {
+        switch method {
+        case .builtin:
+            click()
+        case .frame(let xInlay, let yInlay):
+            let myFrame = frame
+            let point = CGPoint(
+                x: myFrame.minX + (frame.width * xInlay),
+                y: myFrame.minY + (frame.height * yInlay))
+            
+            XCTestCase.clickEvent(.left, .leftMouseDown, at: point, with: [])
+            XCTestCase.clickEvent(.left, .leftMouseUp, at: point, with: [])
+        }
     }
     
     func deleteText(andReplaceWith replacement: String? = nil) {
@@ -130,6 +149,19 @@ extension XCUIElement {
         lines.forEach { print($0) }
         print(header)
     }
+}
+
+enum ElementClickMethod {
+    /// click using the built-in `XCUIElement.click()` method.
+    case builtin
+    /// Clicks by manually creating mousedown and mouseup events within the element's frame.
+    ///
+    /// Some elements don't handle the builtin approach well, so this method can be more consistent for those.
+    ///
+    /// The events are at a point that's `xInlay`% into the frame by width, and `yInlay`% by height.
+    /// For instance, to click right in the middle (the default), use `(0.5, 0.5)`. To click near the top-left
+    /// of the element, you might do smoething like (0.1, 0.1).
+    case frame(xInlay: CGFloat=0.5, yInlay: CGFloat=0.5)
 }
 
 extension XCUIElement.ElementType {

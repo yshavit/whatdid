@@ -7,6 +7,27 @@ extension XCTestCase {
         return XCTContext.runActivity(named: name, block: {_ in return block()})
     }
     
+    
+    class func clickEvent(_ mouseButton: CGMouseButton, _ mouseType: CGEventType, at position: CGPoint, with flags: CGEventFlags) {
+        let src = CGEventSource(stateID: CGEventSourceStateID.hidSystemState)
+        let downEvent = CGEvent(mouseEventSource: src, mouseType: mouseType, mouseCursorPosition: position, mouseButton: mouseButton)
+        downEvent?.flags = flags
+        downEvent?.post(tap: CGEventTapLocation.cghidEventTap)
+        pauseToLetStabilize()
+    }
+    
+    func clickEvent(_ mouseButton: CGMouseButton, _ mouseType: CGEventType, at position: CGPoint, with flags: CGEventFlags) {
+        XCTestCase.clickEvent(mouseButton, mouseType, at: position, with: flags)
+    }
+    
+    class func pauseToLetStabilize() {
+        sleepMillis(250)
+    }
+    
+    func pauseToLetStabilize() {
+        XCTestCase.sleepMillis(250)
+    }
+    
     class func sleepMillis(_ ms: Int) {
         usleep(useconds_t(ms * 1000))
     }
@@ -29,6 +50,11 @@ extension XCTestCase {
     
     func wait(for description: String, timeout: TimeInterval = 30, until condition: () -> Bool) {
         XCTestCase.wait(for: description, until: condition)
+    }
+    
+    func XCTAssertClose(_ first: CGFloat, _ second: CGFloat, within allowedSpread: CGFloat) {
+        let delta = abs(first - second)
+        XCTAssertLessThanOrEqual(delta, allowedSpread, "\(first) was not within \(allowedSpread) of \(second)")
     }
     
     class func wait(for description: String, timeout: TimeInterval = 30, until condition: () -> Bool) {

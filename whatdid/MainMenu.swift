@@ -18,6 +18,8 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         case ptn
         /// The end-of-day report
         case dailyEnd
+        /// Start of the day
+        case dayStart
         
         static func < (lhs: MainMenu.WindowContents, rhs: MainMenu.WindowContents) -> Bool {
             return lhs.rawValue < rhs.rawValue
@@ -28,22 +30,21 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         opener.open(item, reason: reason)
     }
     
-    func openPtnWithTutorial(assumingVersion currentVersion: Int) {
-        openPtnWithTutorial(assumingVersion: currentVersion, remainingAttempts: 1500)
+    func whenPtnIsReady(_ block: @escaping (PtnViewController) -> Void) {
+        whenPtnIsReady(block, remainingAttempts: 1500)
     }
     
-    private func openPtnWithTutorial(assumingVersion currentVersion: Int, remainingAttempts: Int) {
+    private func whenPtnIsReady(_ block: @escaping (PtnViewController) -> Void, remainingAttempts: Int) {
         // It takes a few millis for the status item to get connected to the screen
         if remainingAttempts <= 0 {
-            NSLog("Took too long to find status item's screen. Giving up on showing tutorial.")
+            NSLog("Took too long to find status item's screen. Giving up on showing initial content.")
         } else if statusItem.button?.window?.screen == nil {
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(1)) {
-                self.openPtnWithTutorial(assumingVersion: currentVersion, remainingAttempts: remainingAttempts - 1)
+                self.whenPtnIsReady(block, remainingAttempts: remainingAttempts - 1)
             }
         } else {
-            open(.ptn, reason: .manual)
             if let ptn = taskAdditionsPane {
-                ptn.showTutorial(forVersion: currentVersion)
+                block(ptn)
             }
         }
     }
@@ -59,16 +60,19 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         opener.didClose()
         return !cancelClose
     }
+    
+    
+    private func contentViewCloseAction() {
+        DispatchQueue.main.async {
+            self.close()
+        }
+    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
         window?.level = .floating
         taskAdditionsPane = PtnViewController()
-        taskAdditionsPane.closeAction = {
-            DispatchQueue.main.async {
-                self.close()
-            }
-        }
+        taskAdditionsPane.closeAction = contentViewCloseAction
         
         if let window = window {
             window.contentViewController = taskAdditionsPane
@@ -123,6 +127,11 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
             taskAdditionsPane.scheduler = newScheduler
             window?.contentViewController = taskAdditionsPane
             window?.title = "What are you working on?"
+        case .dayStart:
+            let controller = DayStartController(onClose: contentViewCloseAction)
+            controller.scheduler = newScheduler
+            window?.contentViewController = controller
+            window?.title = "Start the day with some goals"
         }
         
         window!.setContentSize(window!.contentViewController!.view.fittingSize)
@@ -208,6 +217,11 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
             let scheduleEndOfDay = Prefs.dailyReportTime.map {hh, mm in TimeUtil.dateForTime(.next, hh: hh, mm: mm) }
             newTask = DefaultScheduler.instance.schedule("EOD summary", at: scheduleEndOfDay) {
                 self.opener.open(.dailyEnd, reason: .scheduled)
+            }
+        case .dayStart:
+            let startOfDay = Prefs.dayStartTime.map {hh, mm in TimeUtil.dateForTime(.next, hh: hh, mm: mm) }
+            newTask = DefaultScheduler.instance.schedule("Day start", at: startOfDay) {
+                self.opener.open(.dayStart, reason: .scheduled)
             }
         }
         if let oldTask = scheduledTasks.updateValue(newTask, forKey: contents) {

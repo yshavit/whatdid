@@ -38,15 +38,17 @@ class Model {
             NSLog("deleting all previous entries.")
             for store in localContainer.persistentStoreDescriptions {
                 if let url = store.url {
-                    if FileManager.default.fileExists(atPath: url.path) {
-                        NSLog("  rm \(url)")
-                        do {
-                            try FileManager.default.removeItem(at: url)
-                        } catch {
-                            fatalError("couldn't rm \(url): \(error)")
+                    do {
+                        let urlFileName = url.lastPathComponent
+                        let parentUrl = url.deletingLastPathComponent()
+                        let siblingFiles = try FileManager.default.contentsOfDirectory(atPath: parentUrl.path)
+                        let similarlyPrefixedFileUrls = siblingFiles.filter({ $0.hasPrefix(urlFileName) }).map(parentUrl.appendingPathComponent(_:))
+                        for fileToDelete in similarlyPrefixedFileUrls {
+                            NSLog("will delete \(fileToDelete)")
+                            try FileManager.default.removeItem(at: fileToDelete)
                         }
-                    } else {
-                        NSLog("  file does not exist: \(url)")
+                    } catch {
+                        fatalError("couldn't rm \(url) and siblings: \(error)")
                     }
                 } else {
                     NSLog("No URL for store: \(store.debugDescription)")
@@ -60,6 +62,7 @@ class Model {
         }
         
         localContainer.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        localContainer.viewContext.automaticallyMergesChangesFromParent = true
         return localContainer
     }()
     
@@ -140,6 +143,108 @@ class Model {
             }
         }
         return results
+    }
+    
+    func createNewSession() -> Session {
+        var result: Session?
+        container.viewContext.performAndWait {
+            do {
+                NSLog("Creating new session")
+                result = Session(context: container.viewContext)
+                result?.startTime = DefaultScheduler.instance.now
+                try container.viewContext.save()
+            } catch {
+                NSLog("couldn't save session: %@", error as NSError)
+            }
+        }
+        return result!
+    }
+    
+    func getCurrentSession() -> Session? {
+        var result: Session?
+        container.viewContext.performAndWait {
+            do {
+                let request = NSFetchRequest<Session>(entityName: "Session")
+                request.sortDescriptors = [NSSortDescriptor(key: "startTime", ascending: false)]
+                request.fetchLimit = 1
+                result = try request.execute().first
+            } catch {
+                NSLog("couldn't save session: %@", error as NSError)
+            }
+        }
+        return result
+    }
+    
+    func getOrCreateCurrentSession() -> Session {
+        if let current = getCurrentSession() {
+            return current
+        } else {
+            return createNewSession()
+        }
+    }
+    
+    func listGoalsForCurrentSession() -> [GoalDto] {
+        var results = [GoalDto]()
+        container.viewContext.performAndWait {
+            results = getOrCreateCurrentSession().goals.map(GoalDto.fromManaged(_:))
+        }
+        results.sort()
+        return results
+    }
+    
+    func listGoals(since: Date) -> [GoalDto] {
+        var results = [GoalDto]()
+        container.viewContext.performAndWait {
+            let request = NSFetchRequest<Goal>(entityName: "Goal")
+            request.predicate = NSPredicate(format: "created >= %@", since as NSDate)
+            do {
+                results = try request.execute().map(GoalDto.fromManaged(_:))
+            } catch {
+                NSLog("couldn't lists goals since \(since): %@", error as NSError)
+            }
+        }
+        results.sort()
+        return results
+    }
+    
+    func createNewGoal(goal text: String) -> GoalDto {
+        var result: GoalDto?
+        container.viewContext.performAndWait {
+            do {
+                let session = getOrCreateCurrentSession()
+                let goal = Goal(context: container.viewContext)
+                goal.created = DefaultScheduler.instance.now
+                goal.during = session
+                goal.goal = text
+                goal.during = session
+                goal.orderWithinSession = NSNumber(integerLiteral: session.goals.count)
+                try container.viewContext.save()
+                result = GoalDto.fromManaged(goal)
+            } catch {
+                NSLog("couldn't save goal: %@", error as NSError)
+            }
+        }
+        return result!
+    }
+    
+    func save(goal: GoalDto) {
+        container.performBackgroundTask {context in
+            guard let objectId = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: goal.id) else {
+                NSLog("Error getting NSManagedObjectID for \(goal.id): %@")
+                return
+            }
+            let managedObj = context.object(with: objectId)
+            guard let managed = managedObj as? Goal else {
+                NSLog("object is not a Goal: %@", managedObj)
+                return
+            }
+            managed.completed = goal.completed
+            do {
+                try context.save()
+            } catch {
+                NSLog("Error saving entry: %@", error as NSError)
+            }
+        }
     }
     
     func addEntryNow(project: String, task: String, notes: String, callback: @escaping ()->()) {
@@ -263,6 +368,33 @@ class Model {
             get {
                 return entries.compactMap { $0.duration }.reduce(0, +)
             }
+        }
+    }
+    
+    struct GoalDto: Comparable {
+        static func < (lhs: Model.GoalDto, rhs: Model.GoalDto) -> Bool {
+            return lhs.created < rhs.created
+                || lhs.orderWithinSession < rhs.orderWithinSession
+                || lhs.goal < rhs.goal
+        }
+        
+        fileprivate let id: URL
+        var goal: String
+        var created: Date
+        var completed: Date?
+        fileprivate var orderWithinSession: Int
+        
+        fileprivate static func fromManaged(_ goal: Goal) -> GoalDto {
+            return GoalDto(
+                id: goal.objectID.uriRepresentation(),
+                goal: goal.goal,
+                created: goal.created,
+                completed: goal.completed,
+                orderWithinSession: goal.orderWithinSession?.intValue ?? -1)
+        }
+        
+        var isCompleted: Bool {
+            completed != nil
         }
     }
 }

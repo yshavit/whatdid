@@ -6,11 +6,16 @@ class DayEndReportController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do view setup here.
+        goalsSummaryGroup.setAccessibilityElement(true)
+        goalsSummaryGroup.setAccessibilityEnabled(true)
+        goalsSummaryGroup.setAccessibilityRole(.group)
+        goalsSummaryGroup.setAccessibilityLabel("Today's Goals")
     }
     
     @IBOutlet var widthFitsOnScreen: NSLayoutConstraint!
     @IBOutlet weak var maxViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var goalsSummaryGroup: NSView!
+    @IBOutlet weak var goalsSummaryStack: NSStackView!
     @IBOutlet weak var projectsScroll: NSScrollView!
     @IBOutlet weak var projectsScrollHeight: NSLayoutConstraint!
     @IBOutlet weak var projectsContainer: NSStackView!
@@ -60,12 +65,15 @@ class DayEndReportController: NSViewController {
     }
     
     func thisMorning(assumingNow now: Date) -> Date {
-        return TimeUtil.dateForTime(.previous, hh: 07, mm: 00, assumingNow: now)
+        Prefs.dayStartTime.map {hh, mm in
+            return TimeUtil.dateForTime(.previous, hh: hh, mm: mm, assumingNow: now)
+        }
     }
     
     @IBAction func userChangedEntryStartDate(_ sender: Any) {
         animate(
             {
+                goalsSummaryStack.subviews.forEach { $0.removeFromSuperview() }
                 projectsContainer.subviews.forEach {$0.removeFromSuperview()}
                 let spinner = NSProgressIndicator()
                 projectsContainer.addArrangedSubview(spinner)
@@ -81,9 +89,40 @@ class DayEndReportController: NSViewController {
         )
     }
     
+    private func updateGoals(since startTime: Date) {
+        goalsSummaryStack.subviews.forEach { $0.removeFromSuperview() }
+        
+        let oneDayView = startTime >= Prefs.dayStartTime.map {hh, mm in TimeUtil.dateForTime(.previous, hh: hh, mm: mm)}
+        let goals = AppDelegate.instance.model.listGoals(since: startTime)
+        let completed = goals.filter({$0.isCompleted}).count
+        
+        let summaryText: String
+        if goals.isEmpty {
+            summaryText = oneDayView ? "No goals for today." : "No goals for this time range."
+        } else {
+            summaryText = "Completed \(completed.pluralize("goal", "goals")) out of \(goals.count)."
+        }
+        goalsSummaryStack.addArrangedSubview(NSTextField(labelWithString: summaryText))
+        
+        if !goals.isEmpty {
+            if oneDayView {
+                goals.map(GoalsView.from(_:)).forEach(goalsSummaryStack.addArrangedSubview(_:))
+            } else {
+                goalsSummaryStack.addArrangedSubview(NSTextField(labelWithAttributedString: NSAttributedString(
+                    string: "(not listing them, because you selected more than one day)",
+                    attributes: [
+                        NSAttributedString.Key.font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
+                        NSAttributedString.Key.obliqueness: 0.15
+                    ]
+                )))
+            }
+        }
+    }
+    
     private func updateEntries() {
         let since = entryStartDatePicker.dateValue
         NSLog("Updating entries since %@", since as NSDate)
+        updateGoals(since: since)
         projectsContainer.subviews.forEach {$0.removeFromSuperview()}
         
         let projects = Model.GroupedProjects(from: AppDelegate.instance.model.listEntries(since: since))
