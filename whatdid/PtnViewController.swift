@@ -4,9 +4,10 @@ import Cocoa
 import KeyboardShortcuts
 
 class PtnViewController: NSViewController {
+    
     public static let CURRENT_TUTORIAL_VERSION = 0
     
-    private static let TIME_UNTIL_NEW_SESSION_PROMPT = TimeInterval(6 * 60 * 60)
+
     @IBOutlet var topStack: NSStackView!
     
     @IBOutlet var headerText: NSTextField!
@@ -16,6 +17,7 @@ class PtnViewController: NSViewController {
     @IBOutlet weak var taskField: AutoCompletingField!
     @IBOutlet weak var noteField: NSTextField!
     @IBOutlet weak var skipButton: NSButton!
+    @IBOutlet var goals: GoalsView!
     
     @IBOutlet weak var snoozeButton: NSButton!
     private var snoozeUntil : Date?
@@ -73,11 +75,15 @@ class PtnViewController: NSViewController {
         taskField.nextKeyView = noteField
         noteField.nextKeyView = projectField
         
-        if timeInterval(since: AppDelegate.instance.model.lastEntryDate) > PtnViewController.TIME_UNTIL_NEW_SESSION_PROMPT {
-            showNewSessionPrompt()
-        } else {
-            scheduler.schedule("new session prompt", after: PtnViewController.TIME_UNTIL_NEW_SESSION_PROMPT, showNewSessionPrompt)
-        }
+        setUpNewSessionPrompt(
+            scheduler: scheduler,
+            onNewSession: {
+                self.forceReschedule()
+                self.closeAction()
+            },
+            onKeepSesion: {
+                self.grabFocusEvenIfHasSheet()
+            })
 
         func scheduleUpdateHeaderText() {
             scheduler.schedule("per-minute update header", after: 60) {
@@ -86,10 +92,8 @@ class PtnViewController: NSViewController {
             }
         }
         scheduleUpdateHeaderText()
-    }
-    
-    private func timeInterval(since date: Date) -> TimeInterval {
-        return scheduler.now.timeIntervalSince(date)
+        
+        goals.reset()
     }
     
     override func viewWillAppear() {
@@ -181,7 +185,7 @@ class PtnViewController: NSViewController {
         let lastEntryDate = AppDelegate.instance.model.lastEntryDate
         headerText.stringValue = headerText.placeholderString!.replacingBracketedPlaceholders(with: [
             "TIME": TimeUtil.formatSuccinctly(date: lastEntryDate),
-            "DURATION": TimeUtil.daysHoursMinutes(for: timeInterval(since: lastEntryDate))
+            "DURATION": TimeUtil.daysHoursMinutes(for: scheduler.timeInterval(since: lastEntryDate))
         ])
     }
     
@@ -298,63 +302,6 @@ class PtnViewController: NSViewController {
             }
         }
         super.viewWillDisappear()
-    }
-    
-    private func showNewSessionPrompt() {
-        if let window = view.window {
-            let sheet = NSWindow(contentRect: window.contentView!.frame, styleMask: [], backing: .buffered, defer: true)
-            let mainStack = NSStackView()
-            mainStack.orientation = .vertical
-            mainStack.useAutoLayout()
-            mainStack.edgeInsets = NSEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-            sheet.contentView = mainStack
-            
-            let headerLabel = NSTextField(labelWithString: "It's been a while since you last checked in.")
-            headerLabel.font = NSFont.boldSystemFont(ofSize: NSFont.labelFontSize * 1.25)
-            mainStack.addArrangedSubview(headerLabel)
-            
-            let optionsStack = NSStackView()
-            optionsStack.useAutoLayout()
-            mainStack.addArrangedSubview(optionsStack)
-            optionsStack.orientation = .horizontal
-            optionsStack.widthAnchor.constraint(equalTo: mainStack.widthAnchor).isActive = true
-            optionsStack.addView(
-                ButtonWithClosure(label: "Start new session") {_ in
-                    window.endSheet(sheet, returnCode: .OK)
-                },
-                in: .center)
-            optionsStack.addView(
-                ButtonWithClosure(label: "Continue with current session") {_ in
-                    window.endSheet(sheet, returnCode: .continue)
-                },
-            in: .center)
-            
-            window.makeFirstResponder(nil)
-            window.beginSheet(sheet) {response in
-                let startNewSession: Bool
-                switch(response) {
-                case .OK:
-                    NSLog("Starting new session")
-                    startNewSession = true
-                case .continue:
-                    NSLog("Continuing with existing session")
-                    startNewSession = false
-                case .abort:
-                    NSLog("Aborting window (probably because user closed it via status menu item)")
-                    startNewSession = false
-                default:
-                    NSLog("Unexpected response: \(response.rawValue). Will start new session session.")
-                    startNewSession = false
-                }
-                if startNewSession {
-                    AppDelegate.instance.model.setLastEntryDateToNow()
-                    self.forceReschedule()
-                    self.closeAction()
-                } else {
-                    self.grabFocusEvenIfHasSheet()
-                }
-            }
-        }
     }
     
     func showTutorial(forVersion prefsVersion: Int) {

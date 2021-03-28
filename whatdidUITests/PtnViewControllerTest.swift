@@ -96,12 +96,10 @@ class PtnViewControllerTest: XCTestCase {
         }
     }
     
-    func clickEvent(_ mouseButton: CGMouseButton, _ mouseType: CGEventType, at position: CGPoint, with flags: CGEventFlags) {
-        let src = CGEventSource(stateID: CGEventSourceStateID.hidSystemState)
-        let downEvent = CGEvent(mouseEventSource: src, mouseType: mouseType, mouseCursorPosition: position, mouseButton: mouseButton)
-        downEvent?.flags = flags
-        downEvent?.post(tap: CGEventTapLocation.cghidEventTap)
-        pauseToLetStabilize()
+    /// Clicks on the leftmost element of the date picker, to select its "hours" segment. Otherwise, the system can click
+    /// on anywhere in it, and might choose e.g. the AM/PM part.
+    func clickOnHourSegment(of datePicker: XCUIElement) {
+        datePicker.click(using: .frame(xInlay: 1.0/6))
     }
 
     override func tearDownWithError() throws {
@@ -191,6 +189,186 @@ class PtnViewControllerTest: XCTestCase {
                 XCTAssertEqual(0, tutorialPopover.checkBoxes.count)
                 XCTAssertFalse(prefsSheet.searchFields["Record Shortcut"].exists)
             }
+        }
+    }
+    
+    func testGoals() {
+        group("no goals") {
+            clickStatusMenu(with: .maskAlternate)
+            let goalsReport = openWindow!.groups["Today's Goals"]
+            XCTAssertEqual(
+                ["No goals for today."],
+                goalsReport.staticTexts.allElementsBoundByIndex.map({$0.stringValue}))
+            XCTAssertEqual([], goalsReport.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+            
+            openWindow!.typeKey(.downArrow) // date picker is selected by default, so this goes 1 month earlier
+            XCTAssertEqual(
+                ["No goals for this time range."],
+                goalsReport.staticTexts.allElementsBoundByIndex.map({$0.stringValue}))
+            XCTAssertEqual([], goalsReport.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+            clickStatusMenu()
+        }
+        
+        group("fast-forward to goals prompt") {
+            setTimeUtc(h: 06, m: 59)
+            handleLongSessionPrompt(on: .ptn, .startNewSession)
+            setTimeUtc(h: 07, m: 00)
+        }
+        group("enter goals for day 1") {
+            let goals = find(.morningGoals)
+            group("validate initial") {
+                XCTAssertEqual([""], goals.textFields.allElementsBoundByIndex.map({$0.stringValue}))
+                XCTAssertEqual("Dismiss without setting goals", goals.buttons.allElementsBoundByIndex.last?.title)
+            }
+            group("start typing") {
+                goals.textFields.element(boundBy: 0).typeText("first attempt")
+                XCTAssertEqual(1, goals.textFields.count)
+                XCTAssertEqual("Save", goals.buttons.allElementsBoundByIndex.last?.title)
+            }
+            group("delete text via trash icon") {
+                goals.buttons.element(boundBy: 0).click()
+                XCTAssertEqual([""], goals.textFields.allElementsBoundByIndex.map({$0.stringValue}))
+                XCTAssertEqual("Dismiss without setting goals", goals.buttons.allElementsBoundByIndex.last?.title)
+            }
+            group("type some more") {
+                goals.textFields.element(boundBy: 0).typeText("second attempt")
+                XCTAssertEqual(1, goals.textFields.count)
+                XCTAssertEqual("Save", goals.buttons.allElementsBoundByIndex.last?.title)
+            }
+            group("delete text via command-a") {
+                let field = goals.textFields.element(boundBy: 0)
+                field.typeKey("a", modifierFlags: .command)
+                field.typeKey(.delete)
+                XCTAssertEqual([""], goals.textFields.allElementsBoundByIndex.map({$0.stringValue}))
+                XCTAssertEqual("Dismiss without setting goals", goals.buttons.allElementsBoundByIndex.last?.title)
+            }
+            group("enter a goal and then delete it") {
+                goals.textFields.element(boundBy: 0).typeText("third attempt\r")
+                XCTAssertEqual(["third attempt", ""], goals.textFields.allElementsBoundByIndex.map({$0.stringValue}))
+                XCTAssertEqual("Save", goals.buttons.allElementsBoundByIndex.last?.title)
+
+                goals.buttons.element(boundBy: 0).click()
+                pauseToLetStabilize() // not sure why, but seems to be needed
+                XCTAssertEqual([""], goals.textFields.allElementsBoundByIndex.map({$0.stringValue}))
+                XCTAssertEqual("Dismiss without setting goals", goals.buttons.allElementsBoundByIndex.last?.title)
+            }
+            group("type some entries") {
+                goals.typeText("day 1 goal 1\r")
+                goals.typeText("delete-me a\r")
+                goals.typeText("delete-me b\r")
+                goals.typeText("delete-me c\r")
+                goals.typeText("day 1 goal 2\r")
+                XCTAssertEqual(6, goals.textFields.count) // the 4 above, plus the empty one at the end
+            }
+            group("delete middle entries") {
+                group("delete-me a") {
+                    goals.textFields.element(boundBy: 1).deleteText(andReplaceWith: "") // "delete-me a"
+                    XCTAssertEqual(6, goals.textFields.count) // we haven't finished editing yet, so it's still there
+                }
+                group("delete-me b") {
+                    // grab focus on "delete-me b", which should cause a to delete. b should keep its focus
+                    goals.textFields.element(boundBy: 2).click()
+                    pauseToLetStabilize()
+                    XCTAssertEqual(["delete-me b"], goals.textFields.allElementsBoundByIndex.filter({$0.hasFocus}).map({$0.stringValue}))
+                    goals.deleteText(andReplaceWith: "\r")
+                }
+                group("delete-me c") {
+                    pauseToLetStabilize()
+                    // a and b are both gone now, so c is at index 1 (with "day 1 goal 1" at 0)
+                    goals.buttons.element(boundBy: 1).click()
+                }
+                group("final validation") {
+                    pauseToLetStabilize()
+                    XCTAssertEqual(
+                        ["day 1 goal 1", "day 1 goal 2", ""],
+                        goals.textFields.allElementsBoundByIndex.map({$0.stringValue}))
+                }
+            }
+            group("save") {
+                goals.buttons.allElementsBoundByIndex.last?.click()
+                waitForTransition(of: .morningGoals, toIsVisible: false)
+            }
+        }
+        group("goals are in PTN") {
+            clickStatusMenu()
+            waitForTransition(of: .ptn, toIsVisible: true)
+            let ptnGoals = openWindow!.groups["Goals for today"]
+            XCTAssertEqual(["day 1 goal 1", "day 1 goal 2"], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+            XCTAssertEqual([false, false], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.value as? Bool}))
+        }
+        group("smoke test of PTN goals") {
+            // note: We test this view more extensively in ComponentUITests.testGoalsView
+            let ptnGoals = openWindow!.groups["Goals for today"]
+            group("complete one goal") {
+                ptnGoals.checkBoxes.element(boundBy: 1).click()
+                XCTAssertEqual(["day 1 goal 1", "day 1 goal 2"], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+                XCTAssertEqual([false, true], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.value as? Bool}))
+            }
+            group("dismiss the window") {
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: false)
+            }
+            group("bring window back and confirm goal still selected") {
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: true)
+                XCTAssertEqual(["day 1 goal 1", "day 1 goal 2"], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+                XCTAssertEqual([false, true], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.value as? Bool}))
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: false)
+            }
+        }
+        group("go to next day") {
+            setTimeUtc(d: 1, h: 06, m: 59)
+            waitForTransition(of: .dailyEnd, toIsVisible: true)
+            clickStatusMenu()
+            handleLongSessionPrompt(on: .ptn, .startNewSession)
+        }
+        group("goals prompt does not activate app") {
+            setTimeUtc(d: 1, h: 11, m: 00, deactivate: true)
+            waitForTransition(of: .morningGoals, toIsVisible: true)
+            sleep(1) // If it was going to be switch to active, this would be enough time
+            XCTAssertEqual(XCUIApplication.State.runningBackground, app.state)
+        }
+        group("enter a goal without hitting enter") {
+            let goals = find(.morningGoals)
+            goals.textFields.element(boundBy: 0).click()
+            goals.typeText("day 2 goal 1\r")
+            goals.typeText("day 2 goal 2") // no "\r" !
+            XCTAssertEqual(["day 2 goal 1", "day 2 goal 2"], goals.textFields.allElementsBoundByIndex.map({$0.stringValue}))
+            group("save") {
+                goals.buttons.allElementsBoundByIndex.last?.click()
+                waitForTransition(of: .morningGoals, toIsVisible: false)
+            }
+        }
+        group("complete one goal") {
+            waitForTransition(of: .ptn, toIsVisible: true) // after the goals get saved
+            let ptnGoals = openWindow!.groups["Goals for today"]
+            group("complete one goal") {
+                ptnGoals.checkBoxes.element(boundBy: 1).click()
+                XCTAssertEqual(["day 2 goal 1", "day 2 goal 2"], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+                XCTAssertEqual([false, true], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.value as? Bool}))
+            }
+            dismiss(window: .ptn)
+        }
+        group("look at daily report") {
+            clickStatusMenu(with: .maskAlternate)
+            waitForTransition(of: .dailyEnd, toIsVisible: true)
+            let goalsReport = openWindow!.groups["Today's Goals"]
+            XCTAssertEqual(["Completed 1 goal out of 2."], goalsReport.staticTexts.allElementsBoundByIndex.map({$0.stringValue}))
+            XCTAssertEqual(["day 2 goal 1", "day 2 goal 2"], goalsReport.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+            XCTAssertEqual([false, true], goalsReport.checkBoxes.allElementsBoundByIndex.map({$0.value as? Bool}))
+        }
+        group("look at historical report") {
+            // The date picker is already active, so just tab to its date field
+            let window = openWindow!
+            window.typeText("\t\t")
+            window.typeKey(.downArrow)
+            
+            let goalsReport = openWindow!.groups["Today's Goals"]
+            XCTAssertEqual(
+                ["Completed 2 goals out of 4.", "(not listing them, because you selected more than one day)"],
+                goalsReport.staticTexts.allElementsBoundByIndex.map({$0.stringValue}))
+            XCTAssertEqual([], goalsReport.checkBoxes.allElementsBoundByIndex.map({$0.title}))
         }
     }
     
@@ -298,7 +476,7 @@ class PtnViewControllerTest: XCTestCase {
             // the default snooze is 3:30.
             // Trim whitespace, since we put some in so it aligns well with the snoozeopts button
             XCTAssertEqual("Snooze until 3:30 am", button.title.trimmingCharacters(in: .whitespaces))
-            button.click()
+            button.click(using: .frame()) // open up the unsnooze)
             waitForTransition(of: .ptn, toIsVisible: false)
             
             // To go 03:29+0200, and the PTN should still be hidden
@@ -332,7 +510,7 @@ class PtnViewControllerTest: XCTestCase {
             let button = ptn.buttons["snoozebutton"]
             group("Start snoozing") {
                 XCTAssertEqual("Snooze until 6:00 am", button.title.trimmingCharacters(in: .whitespaces))
-                button.click()
+                button.click(using: .frame()) // open up the unsnooze)
                 waitForTransition(of: .ptn, toIsVisible: false)
             }
             group("Unsnooze a minute later") {
@@ -341,8 +519,10 @@ class PtnViewControllerTest: XCTestCase {
                 clickStatusMenu()
                 waitForTransition(of: .ptn, toIsVisible: true)
                 
-                button.click() // open up the unsnooze
+                wait(for: "snoozebutton to exist", until: {button.exists})
+                button.click(using: .frame()) // open up the unsnooze
                 button.buttons["Unsnooze"].click()
+                
                 assertThat(window: .ptn, isVisible: true) // unsnoozing doesn't close the window
                 clickStatusMenu()
                 waitForTransition(of: .ptn, toIsVisible: false)
@@ -357,7 +537,7 @@ class PtnViewControllerTest: XCTestCase {
             let button = ptn.buttons["snoozebutton"]
             group("Start snoozing until 6:30") {
                 XCTAssertEqual("Snooze until 6:30 am", button.title.trimmingCharacters(in: .whitespaces))
-                button.click()
+                button.click(using: .frame()) // open up the unsnooze)
                 waitForTransition(of: .ptn, toIsVisible: false)
             }
             group("Unsnooze at 6:29") {
@@ -366,7 +546,8 @@ class PtnViewControllerTest: XCTestCase {
                 clickStatusMenu()
                 waitForTransition(of: .ptn, toIsVisible: true)
                 
-                button.click() // open up the unsnooze
+                wait(for: "snoozebutton to exist", until: {button.exists})
+                button.click(using: .frame()) // open up the unsnooze) // open up the unsnooze
                 button.buttons["Unsnooze"].click()
             }
             group("Close PTN without adding entry") {
@@ -385,7 +566,7 @@ class PtnViewControllerTest: XCTestCase {
             let button = ptn.buttons["snoozebutton"]
             group("Start snoozing until 7:30") {
                 XCTAssertEqual("Snooze until 7:30 am", button.title.trimmingCharacters(in: .whitespaces))
-                button.click()
+                button.click(using: .frame()) // open up the unsnooze)
                 waitForTransition(of: .ptn, toIsVisible: false)
             }
             group("Unsnooze at 7:29") {
@@ -394,7 +575,8 @@ class PtnViewControllerTest: XCTestCase {
                 clickStatusMenu()
                 waitForTransition(of: .ptn, toIsVisible: true)
                 
-                button.click() // open up the unsnooze
+                wait(for: "snoozebutton to exist", until: {button.exists})
+                button.click(using: .frame()) // open up the unsnooze) // open up the unsnooze
                 button.buttons["Unsnooze"].click()
             }
             group("Add an entry") {
@@ -420,29 +602,29 @@ class PtnViewControllerTest: XCTestCase {
             // Note: PTN is still up at this point. It's currently 05:31+0200.
             // We'll bring it to 18:29, and then dismiss it.
             // Then the next minute, there should be the daily report
-            setTimeUtc(h: 16, m: 29, onSessionPrompt: .continueWithCurrentSession)
+            setTimeUtc(h: 16, m: 29)
+            handleLongSessionPrompt(on: .ptn, .continueWithCurrentSession)
             type(into: app, entry("my project", "my task", "my notes"))
             waitForTransition(of: .ptn, toIsVisible: false)
             
             setTimeUtc(h: 16, m: 30)
             assertThat(window: .ptn, isVisible: false)
             activate()
-            waitForTransition(of: .dailyEnd, toIsVisible: true)
-            clickStatusMenu() // close the report
-            waitForTransition(of: .dailyEnd, toIsVisible: false)
+            dismiss(window: .dailyEnd)
+            dismiss(window: .morningGoals) // since we crossed from 5:55 to 16:30 abvoe, and thus past 09:00
         }
         group("daily report (with contention with PTN)") {
             // Fast-forward a day. At 18:29 local, we should get a PTN.
             // Wait two minutes (so that the daily report is due) and then type in an entry.
             // We should get the daily report next, which we should then be able to dismiss.
             group("A day later, just before the daily report") {
-                setTimeUtc(d: 1, h: 16, m: 29, onSessionPrompt: .continueWithCurrentSession)
+                setTimeUtc(d: 1, h: 16, m: 29)
                 waitForTransition(of: .ptn, toIsVisible: true)
             }
             group("Now at the daily report") {
                 setTimeUtc(d: 1, h: 16, m: 31)
                 assertThat(window: .dailyEnd, isVisible: false)
-                assertThat(window: .ptn, isVisible: true)
+                handleLongSessionPrompt(on: .ptn, .continueWithCurrentSession)
             }
             group("Enter a PTN entry") {
                 type(into: app, entry("my project", "my task", "my notes"))
@@ -453,6 +635,7 @@ class PtnViewControllerTest: XCTestCase {
             group("Close the daily report") {
                 clickStatusMenu() // close the daily report
                 waitForTransition(of: .dailyEnd, toIsVisible: false)
+                dismiss(window: .morningGoals) // since we went past the 1d 09:00 border
                 // Also wait a second, so that we can be sure it didn't pop back open (GH #72)
                 Thread.sleep(forTimeInterval: 1)
                 assertThat(window: .dailyEnd, isVisible: false)
@@ -475,14 +658,13 @@ class PtnViewControllerTest: XCTestCase {
     func testLongSessionPrompt() {
         group("Long session while PTN is open") {
             clickStatusMenu()
-            setTimeUtc(d: 0, h: 5, m: 59, onSessionPrompt: .ignorePrompt)
-            checkLongSessionPrompt(exists: false)
-            setTimeUtc(d: 0, h: 6, m: 00, onSessionPrompt: .ignorePrompt)
-            checkLongSessionPrompt(exists: true)
+            setTimeUtc(d: 0, h: 5, m: 59)
+            setTimeUtc(d: 0, h: 6, m: 00)
+            handleLongSessionPrompt(on: .ptn, .doNothing)
         }
         group("New session resets the time") {
             group("Select option to start new session") {
-                handleLongSessionPrompt(.startNewSession)
+                handleLongSessionPrompt(on: .ptn, .startNewSession)
                 waitForTransition(of: .ptn, toIsVisible: false)
             }
             group("Create an entry") {
@@ -500,27 +682,25 @@ class PtnViewControllerTest: XCTestCase {
                 ptn.entriesHook.deleteText(andReplaceWith: "\r")
             }
         }
-        group("Long session while PTN is closed") {
-            group("Close PTN") {
-                clickStatusMenu()
-                waitForTransition(of: .ptn, toIsVisible: false)
-                waitForTransition(of: .dailyEnd, toIsVisible: false)
-            }
-            group("Go forward 6 more hours") {
-                setTimeUtc(d: 0, h: 12, m: 10, onSessionPrompt: .ignorePrompt)
-                checkLongSessionPrompt(exists: true)
-            }
+        group("Long session while PTN is open (again)") {
+            setTimeUtc(d: 0, h: 06, m: 15)
+            waitForTransition(of: .ptn, toIsVisible: true)
+            setTimeUtc(d: 0, h: 12, m: 15)
         }
         group("Continuing session keeps the time") {
             group("Select option to continue session") {
-                handleLongSessionPrompt(.continueWithCurrentSession)
+                handleLongSessionPrompt(on: .ptn, .continueWithCurrentSession)
             }
             group("Create an entry") {
-                setTimeUtc(d: 0, h: 12, m: 15)
                 let ptn = findPtn()
                 ptn.pcombo.textField.deleteText() // since it'll be pre-populated with the last "p1"
                 type(into: ptn.window, entry("pA", "tB", "nC"))
                 waitForTransition(of: .ptn, toIsVisible: false)
+            }
+            group("Dismiss morning goals prompt") {
+                // we don't care about this, but it happens so we need to account for it
+                waitForTransition(of: .morningGoals, toIsVisible: true)
+                clickStatusMenu()
             }
             group("Verify entry") {
                 let ptn = openPtn()
@@ -530,15 +710,14 @@ class PtnViewControllerTest: XCTestCase {
                     entries)
             }
         }
-        group("Long session with contention with daily report") {
+        group("Long session while daily report is up") {
             group("Wait until tomorrow") {
                 assertThat(window: .ptn, isVisible: true)
-                setTimeUtc(d: 1, h: 0, m: 0, onSessionPrompt: .ignorePrompt)
+                setTimeUtc(d: 1, h: 0, m: 0)
             }
             group("Close PTN and check for no sheet") {
                 clickStatusMenu()
                 waitForTransition(of: .ptn, toIsVisible: false)
-                checkLongSessionPrompt(exists: false)
                 waitForTransition(of: .dailyEnd, toIsVisible: true)
                 
                 clickStatusMenu()
@@ -549,8 +728,7 @@ class PtnViewControllerTest: XCTestCase {
                 // Because we clicked out of the last PTN (and thus didn't either continue the session or start a new one),
                 // re-opening the PTN should cause us to be instantly re-prompted.
                 clickStatusMenu()
-                checkLongSessionPrompt(exists: true)
-                handleLongSessionPrompt(.startNewSession)
+                handleLongSessionPrompt(on: .ptn, .startNewSession)
             }
         }
         group("Long session prompt after PTN deferred by daily report") {
@@ -563,13 +741,13 @@ class PtnViewControllerTest: XCTestCase {
                 clickStatusMenu()
                 waitForTransition(of: .dailyEnd, toIsVisible: false)
                 wait(for: "PTN to exist", until: {app.windows[WindowType.ptn.windowTitle].exists})
-                checkLongSessionPrompt(exists: true)
+                handleLongSessionPrompt(on: .ptn, .doNothing)
             }
         }
         group("Skip session button") {
             let ptn = findPtn()
             group("Clear out previous entries") {
-                handleLongSessionPrompt(.continueWithCurrentSession)
+                handleLongSessionPrompt(on: .ptn, .continueWithCurrentSession)
                 ptn.entriesHook.deleteText(andReplaceWith: "\r")
             }
             group("Skip a session") {
@@ -588,6 +766,22 @@ class PtnViewControllerTest: XCTestCase {
                 XCTAssertEqual(
                     [FlatEntry(from: date(d: 1, h: 6, m: 10), to: date(d: 1, h: 6, m: 15), project: "One", task: "Two", notes: "Three")],
                     entries)
+            }
+        }
+        group("Long session while goals prompt is up") {
+            group("PTN right before goals") {
+                setTimeUtc(d: 1, h: 8, m: 55)
+                waitForTransition(of: .ptn, toIsVisible: true)
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: false)
+            }
+            group("Goals prompt") {
+                setTimeUtc(d: 1, h: 9, m: 00)
+                waitForTransition(of: .morningGoals, toIsVisible: true)
+            }
+            group("Long session") {
+                setTimeUtc(d: 1, h: 15, m: 00)
+                handleLongSessionPrompt(on: .morningGoals, .startNewSession)
             }
         }
     }
@@ -717,7 +911,8 @@ class PtnViewControllerTest: XCTestCase {
                 clickStatusMenu() // close daily report
                 let ptn = openPtn()
                 ptn.entriesHook.deleteText(andReplaceWith: FlatEntry.serialize(entries.get(startingAtSecondsSince1970: 86400)) + "\r")
-                setTimeUtc(d: 1, h: 0, m: 0, onSessionPrompt: .startNewSession) // also closes the PTN
+                setTimeUtc(d: 1, h: 0, m: 0)
+                handleLongSessionPrompt(on: .ptn, .startNewSession)
                 waitForTransition(of: .ptn, toIsVisible: false)
                 waitForTransition(of: .dailyEnd, toIsVisible: true)
             }
@@ -1057,7 +1252,7 @@ class PtnViewControllerTest: XCTestCase {
             group("Set daily report time") {
                 group("Set the time") {
                     let timePicker = prefsSheet.datePickers["daily report time"]
-                    timePicker.click()
+                    clickOnHourSegment(of: timePicker)
                     timePicker.typeText("2\t02\t") // last tab is to the AM/PM picker
                     timePicker.typeKey(.downArrow) // PM -> AM
                 }
@@ -1071,7 +1266,7 @@ class PtnViewControllerTest: XCTestCase {
                     waitForTransition(of: .dailyEnd, toIsVisible: true)
                 }
                 group("Close daily report") {
-                    clickStatusMenu()
+                    dismiss(window: .dailyEnd)
                 }
             }
             group("Set snooze-until-tomorrow time") {
@@ -1082,9 +1277,10 @@ class PtnViewControllerTest: XCTestCase {
                         XCTAssertFalse(isWindowVisible(.ptn))
                         XCTAssertFalse(isWindowVisible(.dailyEnd))
                         // We're starting on 1/1/1970 at 2:03 am. That's a Thursday.
-                        setTimeUtc(d: 1, h: 16, m: 0, onSessionPrompt: .startNewSession)
-                        waitForTransition(of: .dailyEnd, toIsVisible: true)
-                        clickStatusMenu() // close the daily report
+                        setTimeUtc(d: 1, h: 16, m: 0)
+                        handleLongSessionPrompt(on: .ptn, .startNewSession)
+                        dismiss(window: .dailyEnd)
+                        dismiss(window: .morningGoals)
                         sleepMillis(500)
                     }
                     group("Open prefs") {
@@ -1099,7 +1295,7 @@ class PtnViewControllerTest: XCTestCase {
                 }
                 group("Set snooze-until-tomorrow") {
                     let timePicker = prefsSheet.datePickers["snooze until tomorrow time"]
-                    timePicker.click()
+                    clickOnHourSegment(of: timePicker)
                     timePicker.typeText("11\t23")
                     prefsSheet.checkBoxes["snooze until tomorrow includes weekends"].click()
                     prefsSheet.buttons["Done"].click()
@@ -1213,7 +1409,8 @@ class PtnViewControllerTest: XCTestCase {
         }
         let originalWindowFrame = group("Open report in two days") {() -> CGRect in
             dragStatusMenu(to: NSScreen.main!.frame.maxX)
-            setTimeUtc(d: 2, onSessionPrompt: .startNewSession)
+            setTimeUtc(d: 2)
+            handleLongSessionPrompt(on: .ptn, .startNewSession)
             // When we start the new session, the PTN will disappear, but the daily report will open (since we're past the scheduled date).
             // Sanity check that the frame's right edge is at the screen's right edge.
             let dailyReportFrame = self.app.windows[WindowType.dailyEnd.windowTitle].firstMatch.frame
@@ -1323,7 +1520,7 @@ class PtnViewControllerTest: XCTestCase {
     
     /// Sets the mocked clock in UTC. If `deactivate` is true (default false), then this will set the mocked clock to set the time when the app deactivates, and then this method will activate
     /// the finder. Otherwise, `onSessionPrompt` governs what to do if the "start a new session?" prompt comes up.
-    func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0, s: Int = 0, deactivate: Bool = false, onSessionPrompt: LongSessionAction = .ignorePrompt) {
+    func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0, s: Int = 0, deactivate: Bool = false) {
         group("setting time \(d)d \(h)h \(m)m \(s)s") {
             let epochSeconds = d * 86400 + h * 3600 + m * 60 + s
             let text = "\(epochSeconds)\r"
@@ -1347,34 +1544,21 @@ class PtnViewControllerTest: XCTestCase {
                     sleep(1)
                     print("Okay, continuing.")
                 }
-            } else {
-                handleLongSessionPrompt(onSessionPrompt)
             }
         }
     }
     
-    func checkLongSessionPrompt(exists: Bool) {
-        if exists {
-            let ptn = findPtn()
-            wait(for: "long session prompt", until: {ptn.window.exists && ptn.window.sheets.count > 0})
-        } else {
-            log("Waiting for a bit, in case a long session prompt is about to come up")
-            sleep(1)
-            XCTAssertEqual(0, openWindow?.sheets.count)
-        }
-    }
-    
-    func handleLongSessionPrompt(_ action: LongSessionAction) {
-        let ptn = app.windows[WindowType.ptn.windowTitle]
-        if ptn.exists && ptn.sheets.count > 0 {
-            switch action {
-            case .continueWithCurrentSession:
-                ptn.sheets.buttons["Continue with current session"].click()
-            case .startNewSession:
-                ptn.sheets.buttons["Start new session"].click()
-            case .ignorePrompt:
-                break // nothing
-            }
+    func handleLongSessionPrompt(on windowType: WindowType, _ action: LongSessionAction) {
+        wait(for: "window to exist", until: {openWindow != nil})
+        let window = find(windowType)
+        XCTAssertNotNil(window.sheets.allElementsBoundByIndex.first(where: {$0.title == "Start new session?"}))
+        switch action {
+        case .continueWithCurrentSession:
+            window.sheets.buttons["Continue with current session"].click()
+        case .startNewSession:
+            window.sheets.buttons["Start new session"].click()
+        case .doNothing:
+            break // nothing
         }
     }
 
@@ -1388,23 +1572,38 @@ class PtnViewControllerTest: XCTestCase {
         }
     }
     
-    var openWindow: XCUIElement? {
+    func find(_ windowType: WindowType) -> XCUIElement {
+        guard let (t, e) = openWindowInfo else {
+            XCTFail("no window open")
+            fatalError("should have failed at XCTFail")
+        }
+        XCTAssertEqual(windowType, t)
+        return e
+    }
+    
+    var openWindowInfo: (WindowType, XCUIElement)? {
         for windowType in WindowType.allCases {
             let maybe = app.windows[windowType.windowTitle]
             if maybe.exists {
-                return maybe
+                return (windowType, maybe)
             }
         }
         return nil
     }
     
-    func pauseToLetStabilize() {
-        sleepMillis(250)
+    var openWindow: XCUIElement? {
+        openWindowInfo?.1
+    }
+    
+    var openWindowType: WindowType? {
+        openWindowInfo?.0
     }
     
     func type(into app: XCUIElement, _ entry: FlatEntry) {
         app.comboBoxes["pcombo"].children(matching: .textField).firstMatch.click()
-        app.typeText("\(entry.project)\r\(entry.task)\r\(entry.notes ?? "")\r")
+        for text in [entry.project, entry.task, entry.notes ?? ""] {
+            app.typeText(text + "\r")
+        }
     }
     
     func date(d: Int = 0, h: Int, m: Int) -> Date {
@@ -1439,10 +1638,14 @@ class PtnViewControllerTest: XCTestCase {
             until: {self.isWindowVisible(window) == expected })
     }
     
+    func dismiss(window: WindowType) {
+        waitForTransition(of: window, toIsVisible: true)
+        clickStatusMenu()
+        waitForTransition(of: window, toIsVisible: false)
+    }
+    
     func isWindowVisible(_ window: WindowType) -> Bool {
-        let visible = app.windows.matching(.window, identifier: window.windowTitle).firstMatchMaybe?.isVisible ?? false
-        log("↳ \(String(describing: window)) \(visible ? "is visible" : "is not visible")")
-        return visible
+        return app.windows.matching(NSPredicate(format: "title = %@", window.windowTitle)).count > 0
     }
     
     class EntriesBuilder {
@@ -1531,7 +1734,7 @@ class PtnViewControllerTest: XCTestCase {
     enum LongSessionAction {
         case continueWithCurrentSession
         case startNewSession
-        case ignorePrompt
+        case doNothing
     }
     
     struct Ptn {
@@ -1551,6 +1754,7 @@ class PtnViewControllerTest: XCTestCase {
     enum WindowType: CaseIterable {
         case ptn
         case dailyEnd
+        case morningGoals
         
         var windowTitle: String {
             switch self {
@@ -1558,6 +1762,8 @@ class PtnViewControllerTest: XCTestCase {
                 return "What are you working on?"
             case .dailyEnd:
                 return "Here's what you've been doing"
+            case .morningGoals:
+                return "Start the day with some goals"
             }
         }
     }

@@ -131,9 +131,12 @@ class PrefsViewController: NSViewController {
         // Set the new daily report time, and reschedule it (it's fine if it's unchanged)
         Prefs.dailyReportTime = getHhMm(for: dailyReportTime)
         AppDelegate.instance.mainMenu.schedule(.dailyEnd)
+        
+        // Also reschedule the start-of-day prompt
         let snoozeInfo = snoozeUntilTomorrowInfo
         Prefs.dayStartTime = snoozeInfo.hhMm
         Prefs.daysIncludeWeekends = snoozeInfo.includeWeekends
+        AppDelegate.instance.mainMenu.schedule(.dayStart)
     }
     
     //------------------------------------------------------------------

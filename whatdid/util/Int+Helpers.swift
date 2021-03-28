@@ -11,4 +11,8 @@ extension Int {
         }
         return self
     }
+    
+    func pluralize(_ singular: String, _ plural: String) -> String {
+        return "\(self) \(self == 1 ? singular : plural)"
+    }
 }

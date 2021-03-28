@@ -46,6 +46,11 @@
 		7E8C04FA23714F0800A0C3A6 /* ComponentUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04F923714F0800A0C3A6 /* ComponentUITests.swift */; };
 		7E970D6924DA84AF00F634AB /* UiTestWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E970D6824DA84AF00F634AB /* UiTestWindow.xib */; };
 		7E970D6B24DA850D00F634AB /* UiTestWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E970D6A24DA850D00F634AB /* UiTestWindow.swift */; };
+		7E9C5EAE2606BDFB00D839C4 /* GoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C5EAD2606BDFB00D839C4 /* GoalsView.swift */; };
+		7E9C5EBB260C09AA00D839C4 /* Session+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C5EB7260C09AA00D839C4 /* Session+CoreDataClass.swift */; };
+		7E9C5EBC260C09AA00D839C4 /* Session+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C5EB8260C09AA00D839C4 /* Session+CoreDataProperties.swift */; };
+		7E9C5EBD260C09AA00D839C4 /* Goal+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C5EB9260C09AA00D839C4 /* Goal+CoreDataClass.swift */; };
+		7E9C5EBE260C09AA00D839C4 /* Goal+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C5EBA260C09AA00D839C4 /* Goal+CoreDataProperties.swift */; };
 		7EA1DFC024CA99BF003AD2BC /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */; };
 		7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04E123714F0800A0C3A6 /* MainMenu.xib */; };
 		7EA6E22824BD6C5F004B9297 /* PtnViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */; };
@@ -86,6 +91,11 @@
 		7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579A24E220EA00867832 /* OpenReason.swift */; };
 		7EF857A124E2420C00867832 /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF857A024E2420C00867832 /* Scheduler.swift */; };
 		7EF857A324E242AB00867832 /* ManualTickScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF857A224E242AB00867832 /* ManualTickScheduler.swift */; };
+		7EF883EB260C7D9900170330 /* ExpandableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF883EA260C7D9900170330 /* ExpandableTextField.swift */; };
+		7EF883FC260D7DD400170330 /* DayStartController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF883FA260D7DD400170330 /* DayStartController.swift */; };
+		7EF883FD260D7DD400170330 /* DayStartController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EF883FB260D7DD400170330 /* DayStartController.xib */; };
+		7EF884112610139B00170330 /* NSViewController+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF884102610139B00170330 /* NSViewController+Helper.swift */; };
+		7EF884172610151A00170330 /* TypeAliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF884162610151A00170330 /* TypeAliases.swift */; };
 		7EFEE80223B16EA6002928A2 /* PtnViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFEE80123B16EA6002928A2 /* PtnViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -167,6 +177,11 @@
 		7E8C04FB23714F0800A0C3A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E970D6824DA84AF00F634AB /* UiTestWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UiTestWindow.xib; sourceTree = "<group>"; };
 		7E970D6A24DA850D00F634AB /* UiTestWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UiTestWindow.swift; sourceTree = "<group>"; };
+		7E9C5EAD2606BDFB00D839C4 /* GoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsView.swift; sourceTree = "<group>"; };
+		7E9C5EB7260C09AA00D839C4 /* Session+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Session+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7E9C5EB8260C09AA00D839C4 /* Session+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Session+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		7E9C5EB9260C09AA00D839C4 /* Goal+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Goal+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7E9C5EBA260C09AA00D839C4 /* Goal+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Goal+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PtnViewController.xib; sourceTree = "<group>"; };
 		7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TimeUtilTest.swift; path = whatdidTests/util/TimeUtilTest.swift; sourceTree = SOURCE_ROOT; };
@@ -203,6 +218,11 @@
 		7EF8579A24E220EA00867832 /* OpenReason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenReason.swift; sourceTree = "<group>"; };
 		7EF857A024E2420C00867832 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
 		7EF857A224E242AB00867832 /* ManualTickScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualTickScheduler.swift; sourceTree = "<group>"; };
+		7EF883EA260C7D9900170330 /* ExpandableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableTextField.swift; sourceTree = "<group>"; };
+		7EF883FA260D7DD400170330 /* DayStartController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayStartController.swift; sourceTree = "<group>"; };
+		7EF883FB260D7DD400170330 /* DayStartController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DayStartController.xib; sourceTree = "<group>"; };
+		7EF884102610139B00170330 /* NSViewController+Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSViewController+Helper.swift"; sourceTree = "<group>"; };
+		7EF884162610151A00170330 /* TypeAliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeAliases.swift; sourceTree = "<group>"; };
 		7EF9BDCD253183B100B7EC6D /* whatdidRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = whatdidRelease.entitlements; sourceTree = "<group>"; };
 		7EFEE80123B16EA6002928A2 /* PtnViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PtnViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -251,6 +271,10 @@
 		7E37A27524BFF73E005BA1DF /* model */ = {
 			isa = PBXGroup;
 			children = (
+				7E9C5EB7260C09AA00D839C4 /* Session+CoreDataClass.swift */,
+				7E9C5EB8260C09AA00D839C4 /* Session+CoreDataProperties.swift */,
+				7E9C5EB9260C09AA00D839C4 /* Goal+CoreDataClass.swift */,
+				7E9C5EBA260C09AA00D839C4 /* Goal+CoreDataProperties.swift */,
 				7E37A28C24BFFFCB005BA1DF /* Project+CoreDataClass.swift */,
 				7E37A28D24BFFFCB005BA1DF /* Project+CoreDataProperties.swift */,
 				7E37A29824C0293E005BA1DF /* Task+CoreDataClass.swift */,
@@ -343,6 +367,8 @@
 				7EE0E74524E8899E002D03F8 /* AutoCompletingField.swift */,
 				7E07C3B624D121770007FD23 /* DayEndReportController.swift */,
 				7E07C3B724D121770007FD23 /* DayEndReportController.xib */,
+				7EF883FA260D7DD400170330 /* DayStartController.swift */,
+				7EF883FB260D7DD400170330 /* DayStartController.xib */,
 				7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */,
 				7E8C04E123714F0800A0C3A6 /* MainMenu.xib */,
 				7EFEE80123B16EA6002928A2 /* PtnViewController.swift */,
@@ -421,6 +447,10 @@
 				7EB7495E2516F9C7001C7DBC /* Prefs.swift */,
 				7EB57AA725187548009E85F5 /* NSApperance+Helpers.swift */,
 				7E88F5A92529AB46002B2F2E /* Int+Helpers.swift */,
+				7E9C5EAD2606BDFB00D839C4 /* GoalsView.swift */,
+				7EF883EA260C7D9900170330 /* ExpandableTextField.swift */,
+				7EF884102610139B00170330 /* NSViewController+Helper.swift */,
+				7EF884162610151A00170330 /* TypeAliases.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -608,6 +638,7 @@
 				7EA6E22824BD6C5F004B9297 /* PtnViewController.xib in Resources */,
 				7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */,
 				7E970D6924DA84AF00F634AB /* UiTestWindow.xib in Resources */,
+				7EF883FD260D7DD400170330 /* DayStartController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -674,13 +705,17 @@
 				7EE0E74A24EA22E7002D03F8 /* NSView+Helpers.swift in Sources */,
 				7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */,
 				7E7C385424DF3A0300CFF3E7 /* PtnViewController+UIHook.swift in Sources */,
+				7EF883FC260D7DD400170330 /* DayStartController.swift in Sources */,
 				7EE250BB2515B8FE0067C5E9 /* PrefsViewController.swift in Sources */,
 				7E37A29B24C0293E005BA1DF /* Entry+CoreDataProperties.swift in Sources */,
+				7E9C5EAE2606BDFB00D839C4 /* GoalsView.swift in Sources */,
 				7ECAF0DF250D75B70004647E /* WhatdidTextField.swift in Sources */,
 				7EE4E39624E24A3F00552AAF /* ManualTickSchedulerWindow.swift in Sources */,
+				7E9C5EBC260C09AA00D839C4 /* Session+CoreDataProperties.swift in Sources */,
 				7ECF97A724F1D50100DBF1BF /* NSControl+Helper.swift in Sources */,
 				7EE0E74624E8899E002D03F8 /* AutoCompletingField.swift in Sources */,
 				7EF8579324E094D100867832 /* OpenCloseHelper.swift in Sources */,
+				7EF883EB260C7D9900170330 /* ExpandableTextField.swift in Sources */,
 				7E51DA09250BF5C60088864F /* TimeZone+Helpers.swift in Sources */,
 				7EB7495F2516F9C7001C7DBC /* Prefs.swift in Sources */,
 				7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */,
@@ -693,11 +728,15 @@
 				7E88F5AA2529AB46002B2F2E /* Int+Helpers.swift in Sources */,
 				7E7C384B24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */,
 				7EE4E39A24E25C0200552AAF /* DefaultScheduler.swift in Sources */,
+				7E9C5EBE260C09AA00D839C4 /* Goal+CoreDataProperties.swift in Sources */,
 				7E37A29124BFFFCB005BA1DF /* Project+CoreDataProperties.swift in Sources */,
 				7EF857A124E2420C00867832 /* Scheduler.swift in Sources */,
 				7EF58F8C2580F180002F9604 /* TutorialViewController.swift in Sources */,
+				7EF884172610151A00170330 /* TypeAliases.swift in Sources */,
 				7E37A29024BFFFCB005BA1DF /* Project+CoreDataClass.swift in Sources */,
+				7E9C5EBD260C09AA00D839C4 /* Goal+CoreDataClass.swift in Sources */,
 				7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */,
+				7EF884112610139B00170330 /* NSViewController+Helper.swift in Sources */,
 				7E37A29A24C0293E005BA1DF /* Entry+CoreDataClass.swift in Sources */,
 				7EE0E74024E4DF4A002D03F8 /* SubsequenceMatcher.swift in Sources */,
 				7E970D6B24DA850D00F634AB /* UiTestWindow.swift in Sources */,
@@ -707,6 +746,7 @@
 				7E37A29D24C0293E005BA1DF /* Task+CoreDataProperties.swift in Sources */,
 				7EF58FA12584972F002F9604 /* UITestCommonConsts.swift in Sources */,
 				7EA1DFC024CA99BF003AD2BC /* MainMenu.swift in Sources */,
+				7E9C5EBB260C09AA00D839C4 /* Session+CoreDataClass.swift in Sources */,
 				7E37A29C24C0293E005BA1DF /* Task+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -29,6 +29,120 @@ class ComponentUITests: XCTestCase {
             testWindow.menuItems[name].click()
         }
     }
+    
+    func testGoalsView() {
+        use("GoalsView")
+        
+        func findGoalsBar(_ idx: Int) -> XCUIElement {
+            let e = testWindow.children(matching: .group).matching(identifier: "Goals for today").element(boundBy: idx)
+            XCTAssertTrue(e.exists)
+            return e
+        }
+        
+        group("short task") {
+            let goalsBar = findGoalsBar(0)
+            let textField = goalsBar.children(matching: .textField).element
+            XCTAssertFalse(textField.exists)
+            
+            goalsBar.buttons["Add new goal"].click()
+            XCTAssertTrue(textField.isVisible)
+            XCTAssertEqual("", textField.stringValue)
+            
+            XCTAssertTrue(textField.hasFocus)
+            textField.typeText("one\r")
+            XCTAssertFalse(textField.exists)
+            
+            XCTAssertEqual(["one"], goalsBar.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+            XCTAssertEqual([], findGoalsBar(1).checkBoxes.allElementsBoundByIndex.map({$0.title}))
+        }
+        group("long task") {
+            let goalsBar = findGoalsBar(0)
+            let textField = goalsBar.children(matching: .textField).element
+            goalsBar.buttons["Add new goal"].click()
+            let initialWidth = textField.frame.width
+            group("starts expanding") {
+                for _ in 0..<100 {
+                    textField.typeText("x")
+                    if textField.frame.width != initialWidth {
+                        break
+                    }
+                }
+                XCTAssertGreaterThan(textField.frame.width, initialWidth)
+            }
+            group("shrinks again") {
+                // The "starts expanding" group made us be one bigger than min, so let's delete two chars to check the collapse
+                textField.typeKey(.delete)
+                XCTAssertEqual(textField.frame.width, initialWidth)
+                textField.typeKey(.delete)
+                XCTAssertEqual(textField.frame.width, initialWidth)
+            }
+            let frameBeforeWrap = textField.frame
+            group("wraps to next line") {
+                for _ in 0..<100 {
+                    textField.typeText(" word")
+                    if textField.frame.minY != frameBeforeWrap.minY {
+                        break
+                    }
+                }
+                let afterWrap = textField.frame
+                XCTAssertGreaterThan(afterWrap.minY, frameBeforeWrap.minY)
+                XCTAssertEqual(afterWrap.height, frameBeforeWrap.height)
+                XCTAssertClose(
+                    goalsBar.staticTexts.element(boundBy: 0).frame.minX,
+                    afterWrap.minX,
+                    within: 5) // it's okay if they're unaligned by a few pixels
+            }
+            group("unwraps back to original line") {
+                textField.typeKey(.delete, modifierFlags: .option)
+                textField.typeKey(.delete)
+                let afterUnwrap = textField.frame
+                XCTAssertEqual(afterUnwrap.minY, frameBeforeWrap.minY)
+                XCTAssertClose(
+                    frameBeforeWrap.minX,
+                    afterUnwrap.minX,
+                    within: 0) // it's okay if they're unaligned by a few pixels
+            }
+        }
+        group("enter blank goal") {
+            let goalsBar = findGoalsBar(0)
+            let textField = goalsBar.children(matching: .textField).element
+            textField.typeKey("a", modifierFlags: .command)
+            textField.typeText("  \r")
+
+            // field is dismissed, but no new goals
+            XCTAssertFalse(textField.exists)
+            XCTAssertEqual(["one"], goalsBar.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+        }
+        group("enter a second goal") {
+            let goalsBar = findGoalsBar(0)
+            let textField = goalsBar.children(matching: .textField).element
+            goalsBar.buttons["Add new goal"].click()
+            textField.typeText("two")
+            goalsBar.buttons["Add new goal"].click() // don't submit via enter; submit via the button
+            
+            XCTAssertFalse(textField.exists)
+            XCTAssertEqual(["one", "two"], goalsBar.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+        }
+        group("both boxes are unselected") {
+            XCTAssertEqual([false, false], findGoalsBar(0).checkBoxes.allElementsBoundByIndex.map({$0.boolValue}))
+        }
+        group("select second goal") {
+            let goalsBar = findGoalsBar(0)
+            goalsBar.checkBoxes["two"].click()
+            XCTAssertEqual([false, true], goalsBar.checkBoxes.allElementsBoundByIndex.map({$0.boolValue}))
+        }
+        group("sync to second goals bar") {
+            let secondBar = findGoalsBar(1)
+            
+            XCTAssertEqual([], secondBar.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+            XCTAssertEqual([], secondBar.checkBoxes.allElementsBoundByIndex.map({$0.boolValue}))
+            testWindow.buttons["sync goals"].click()
+            XCTAssertEqual(["one", "two"], secondBar.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+            XCTAssertEqual([false, true], secondBar.checkBoxes.allElementsBoundByIndex.map({$0.boolValue}))
+            
+            XCTAssertFalse(secondBar.children(matching: .textField).element.exists)
+        }
+    }
 
     func testButtonWithClosure() {
         use("ButtonWithClosure")
