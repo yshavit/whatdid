@@ -350,8 +350,8 @@ class PtnViewControllerTest: XCTestCase {
             }
             dismiss(window: .ptn)
         }
-        group("look at daily report") {
-            clickStatusMenu(with: .maskAlternate)
+        group("wait for daily report") {
+            setTimeUtc(d: 1, h: 20, m: 00)
             waitForTransition(of: .dailyEnd, toIsVisible: true)
             let goalsReport = openWindow!.groups["Today's Goals"]
             XCTAssertEqual(["Completed 1 goal out of 2."], goalsReport.staticTexts.allElementsBoundByIndex.map({$0.stringValue}))
@@ -369,6 +369,108 @@ class PtnViewControllerTest: XCTestCase {
                 ["Completed 2 goals out of 4.", "(not listing them, because you selected more than one day)"],
                 goalsReport.staticTexts.allElementsBoundByIndex.map({$0.stringValue}))
             XCTAssertEqual([], goalsReport.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+            clickStatusMenu() // dismiss the gaily goal
+        }
+        group("status menu icon to dismiss goals") {
+            group("ff to next morning") {
+                setTimeUtc(d: 2, h: 09, m: 00) // next day
+                handleLongSessionPrompt(on: .ptn, .startNewSession)
+                waitForTransition(of: .morningGoals, toIsVisible: true)
+            }
+            group("type a goal") {
+                let goals = find(.morningGoals)
+                goals.textFields.element(boundBy: 0).click()
+                goals.typeText("goal 1")
+            }
+            group("dismiss via status menu icon") {
+                clickStatusMenu()
+                XCTAssertNotNil(openWindow)
+                openWindow!.sheets["alert"].buttons["Don't Save"].click()
+                waitForTransition(of: .morningGoals, toIsVisible: false)
+            }
+            group("open ptn and look at goals") {
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: true)
+                let ptnGoals = openWindow!.groups["Goals for today"]
+                XCTAssertEqual([], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+            }
+        }
+        group("status menu icon to save goals") {
+            group("ff to next morning") {
+                setTimeUtc(d: 3, h: 09, m: 00) // next day
+                handleLongSessionPrompt(on: .ptn, .startNewSession)
+                waitForTransition(of: .dailyEnd, toIsVisible: true)
+                clickStatusMenu()
+                waitForTransition(of: .morningGoals, toIsVisible: true)
+            }
+            group("type a goal") {
+                let goals = find(.morningGoals)
+                goals.textFields.element(boundBy: 0).click()
+                goals.typeText("goal 2")
+            }
+            group("save via status menu icon") {
+                clickStatusMenu()
+                XCTAssertNotNil(openWindow)
+                openWindow!.sheets["alert"].buttons["Save"].click()
+                waitForTransition(of: .morningGoals, toIsVisible: false)
+            }
+            group("open ptn and look at goals") {
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: true)
+                let ptnGoals = openWindow!.groups["Goals for today"]
+                XCTAssertEqual(["goal 2"], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+            }
+        }
+        group("push dismiss button without setting goals") {
+            group("ff to next morning") {
+                setTimeUtc(d: 4, h: 09, m: 00) // next day
+                handleLongSessionPrompt(on: .ptn, .startNewSession)
+                waitForTransition(of: .dailyEnd, toIsVisible: true)
+                clickStatusMenu()
+                waitForTransition(of: .morningGoals, toIsVisible: true)
+            }
+            group("dismiss button") {
+                let goals = find(.morningGoals)
+                XCTAssertEqual("Dismiss without setting goals", goals.buttons.allElementsBoundByIndex.last?.title)
+                goals.buttons.allElementsBoundByIndex.last?.click()
+                waitForTransition(of: .morningGoals, toIsVisible: false)
+            }
+            group("open ptn and look at goals") {
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: true)
+                let ptnGoals = openWindow!.groups["Goals for today"]
+                XCTAssertEqual([], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+            }
+            group("add a goal") {
+                // this lets us confirm that the next step also resets the session
+                let ptnWindow = find(.ptn)
+                let goalsView = ptnWindow.children(matching: .group).matching(identifier: "Goals for today").element
+                XCTAssertTrue(goalsView.exists)
+                goalsView.buttons["Add new goal"].click()
+                let textField = goalsView.children(matching: .textField).element
+                XCTAssertTrue(textField.isVisible)
+                textField.typeText("goal again\r")
+            }
+        }
+        group("dismiss via status menu without any goals entered") {
+            group("ff to next morning") {
+                setTimeUtc(d: 5, h: 09, m: 00) // next day
+                handleLongSessionPrompt(on: .ptn, .startNewSession)
+                waitForTransition(of: .dailyEnd, toIsVisible: true)
+                clickStatusMenu()
+                waitForTransition(of: .morningGoals, toIsVisible: true)
+            }
+            // don't type a goal
+            group("dismiss via status menu icon") {
+                clickStatusMenu()
+                waitForTransition(of: .morningGoals, toIsVisible: false)
+            }
+            group("open ptn and look at goals") {
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: true)
+                let ptnGoals = openWindow!.groups["Goals for today"]
+                XCTAssertEqual([], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+            }
         }
     }
     

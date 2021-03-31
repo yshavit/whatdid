@@ -56,6 +56,11 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     }
     
     func windowShouldClose(_ sender: NSWindow) -> Bool {
+        if let closeConfirmer = contentViewController as? CloseConfirmer,
+           !closeConfirmer.requestClose(on: sender)
+        {
+            return false
+        }
         cancelClose = false
         opener.didClose()
         return !cancelClose
