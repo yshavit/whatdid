@@ -12,7 +12,8 @@ extension Int {
         return self
     }
     
-    func pluralize(_ singular: String, _ plural: String) -> String {
-        return "\(self) \(self == 1 ? singular : plural)"
+    func pluralize(_ singular: String, _ plural: String, showValue: Bool = true) -> String {
+        let s = (self == 1) ? singular : plural
+        return showValue ? "\(self) \(s)" : s
     }
 }

@@ -2,7 +2,7 @@
 
 import Cocoa
 
-class DayStartController: NSViewController, NSTextFieldDelegate {
+class DayStartController: NSViewController, NSTextFieldDelegate, CloseConfirmer {
     
     @IBOutlet var saveButton: NSButton!
     @IBOutlet var goals: NSStackView!
@@ -10,6 +10,8 @@ class DayStartController: NSViewController, NSTextFieldDelegate {
     private var goalTemplate: Data!
     private var onClose: (() -> Void)?
     private var saveButtonOriginalText: String?
+    /// tri-value bool; nil means "prompt"
+    private var saveGoalsOnExit: Bool?
     
     var scheduler: Scheduler = DefaultScheduler.instance
     
@@ -22,6 +24,13 @@ class DayStartController: NSViewController, NSTextFieldDelegate {
         goals.subviews.compactMap({$0 as? GoalEntryField})
     }
     
+    private var goalTexts: [String] {
+        goalEntries.compactMap {g in
+            let text = g.goalText.trimmingCharacters(in: .whitespacesAndNewlines)
+            return text.isEmpty ? nil : text
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         goals.subviews.forEach { $0.removeFromSuperview() }
@@ -29,12 +38,50 @@ class DayStartController: NSViewController, NSTextFieldDelegate {
         saveButtonOriginalText = saveButton.title
     }
     
-    override func viewDidAppear() {
+    override func viewWillAppear() {
         setSaveButtonText()
         setUpNewSessionPrompt(
             scheduler: scheduler,
             onNewSession: {},
             onKeepSesion: {})
+    }
+    
+    override func viewWillDisappear() {
+        let model = AppDelegate.instance.model
+        let _ = model.createNewSession()
+        if let shouldSave = saveGoalsOnExit {
+            if shouldSave {
+                goalTexts.forEach { let _ = model.createNewGoal(goal: $0) }
+            }
+        } else {
+            NSLog("saveGoalsOnExit was nil; not saving goals. This is unexpected.")
+        }
+        // We have to clear the entries before closing, or else the "save goals?" alert will show
+        self.goalEntries.forEach({$0.removeGoal()})
+    }
+    
+    func requestClose(on window: NSWindow) -> Bool {
+        if saveGoalsOnExit == nil {
+            let goalsCount = goalTexts.count
+            // don't prompt if there are no goals; this isn't a destructive action (they can always add goals later),
+            // so just let it go.
+            guard goalsCount > 0 else {
+                return true
+            }
+            let confirm = NSAlert()
+            confirm.alertStyle = .warning
+            confirm.messageText = "Save \(goalsCount.pluralize("goal", "goals", showValue: false))?"
+            confirm.informativeText = "You entered \(goalsCount.pluralize("goal", "goals"))."
+            confirm.addButton(withTitle: "Save")
+            confirm.addButton(withTitle: "Don't Save")
+            confirm.beginSheetModal(for: window) {response in
+                self.saveGoalsOnExit = (response == .alertFirstButtonReturn)
+                self.onClose?()
+            }
+            return false
+        } else {
+            return true
+        }
     }
     
     private func addGoalField() {
@@ -53,13 +100,7 @@ class DayStartController: NSViewController, NSTextFieldDelegate {
     }
     
     @IBAction func saveButton(_ sender: Any) {
-        let model = AppDelegate.instance.model
-        let _ = model.createNewSession()
-        goalEntries.map({$0.goalText}).forEach {goal in
-            if !goal.isEmpty {
-                let _ = model.createNewGoal(goal: goal)
-            }
-        }
+        saveGoalsOnExit = true
         onClose?()
     }
     

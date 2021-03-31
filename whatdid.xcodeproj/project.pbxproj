@@ -10,6 +10,7 @@
 		7E07C3B824D121770007FD23 /* DayEndReportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E07C3B624D121770007FD23 /* DayEndReportController.swift */; };
 		7E07C3B924D121770007FD23 /* DayEndReportController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E07C3B724D121770007FD23 /* DayEndReportController.xib */; };
 		7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1C2F5024CE43C40070D8CD /* Version.swift */; };
+		7E1EE6622612EEF1003314EE /* CloseConfirmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1EE6612612EEF1003314EE /* CloseConfirmer.swift */; };
 		7E1F9060250C5CC500992B7F /* TimeZone+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */; };
 		7E2159E625301BFE00EE5A11 /* MainLauncher.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E2159E525301BFE00EE5A11 /* MainLauncher.xib */; };
 		7E30B46124C38D91003F3679 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E30B46024C38D91003F3679 /* Atomic.swift */; };
@@ -133,6 +134,7 @@
 		7E07C3B624D121770007FD23 /* DayEndReportController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayEndReportController.swift; sourceTree = "<group>"; };
 		7E07C3B724D121770007FD23 /* DayEndReportController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DayEndReportController.xib; sourceTree = "<group>"; };
 		7E1C2F5024CE43C40070D8CD /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
+		7E1EE6612612EEF1003314EE /* CloseConfirmer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseConfirmer.swift; sourceTree = "<group>"; };
 		7E2159E525301BFE00EE5A11 /* MainLauncher.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainLauncher.xib; sourceTree = "<group>"; };
 		7E30B46024C38D91003F3679 /* Atomic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
 		7E37A27324BFF676005BA1DF /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -451,6 +453,7 @@
 				7EF883EA260C7D9900170330 /* ExpandableTextField.swift */,
 				7EF884102610139B00170330 /* NSViewController+Helper.swift */,
 				7EF884162610151A00170330 /* TypeAliases.swift */,
+				7E1EE6612612EEF1003314EE /* CloseConfirmer.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -742,6 +745,7 @@
 				7E970D6B24DA850D00F634AB /* UiTestWindow.swift in Sources */,
 				7E6C98D22503EF4900A712EB /* DelegatingScheduler.swift in Sources */,
 				7EB57AA825187549009E85F5 /* NSApperance+Helpers.swift in Sources */,
+				7E1EE6622612EEF1003314EE /* CloseConfirmer.swift in Sources */,
 				7EDA369524D6A95B00F5E368 /* TimeUtil.swift in Sources */,
 				7E37A29D24C0293E005BA1DF /* Task+CoreDataProperties.swift in Sources */,
 				7EF58FA12584972F002F9604 /* UITestCommonConsts.swift in Sources */,
