@@ -97,6 +97,7 @@
 		7EF883FD260D7DD400170330 /* DayStartController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EF883FB260D7DD400170330 /* DayStartController.xib */; };
 		7EF884112610139B00170330 /* NSViewController+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF884102610139B00170330 /* NSViewController+Helper.swift */; };
 		7EF884172610151A00170330 /* TypeAliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF884162610151A00170330 /* TypeAliases.swift */; };
+		7EF8B9E926158E2200834866 /* UITestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8B9E826158E2200834866 /* UITestBase.swift */; };
 		7EFEE80223B16EA6002928A2 /* PtnViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFEE80123B16EA6002928A2 /* PtnViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -225,6 +226,7 @@
 		7EF883FB260D7DD400170330 /* DayStartController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DayStartController.xib; sourceTree = "<group>"; };
 		7EF884102610139B00170330 /* NSViewController+Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSViewController+Helper.swift"; sourceTree = "<group>"; };
 		7EF884162610151A00170330 /* TypeAliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeAliases.swift; sourceTree = "<group>"; };
+		7EF8B9E826158E2200834866 /* UITestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestBase.swift; sourceTree = "<group>"; };
 		7EF9BDCD253183B100B7EC6D /* whatdidRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = whatdidRelease.entitlements; sourceTree = "<group>"; };
 		7EFEE80123B16EA6002928A2 /* PtnViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PtnViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -399,6 +401,7 @@
 				7EF8B9D926158CEF00834866 /* extensions */,
 				7E8C04FB23714F0800A0C3A6 /* Info.plist */,
 				7E7C385024DF36B300CFF3E7 /* model */,
+				7EF8B9E826158E2200834866 /* UITestBase.swift */,
 				7EF8B9DA26158D2400834866 /* util */,
 			);
 			path = whatdidUITests;
@@ -859,6 +862,7 @@
 				7E4778F024F8F177007BAE8C /* AutocompleteFieldHelper.swift in Sources */,
 				7E7C385224DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift in Sources */,
 				7EDDFF5F250097F20027E91A /* Date+Helpers.swift in Sources */,
+				7EF8B9E926158E2200834866 /* UITestBase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

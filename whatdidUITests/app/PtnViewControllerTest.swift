@@ -3,53 +3,8 @@
 import XCTest
 @testable import whatdid
 
-class PtnViewControllerTest: XCTestCase {
+class PtnViewControllerTest: UITestBase {
     private static let SOME_TIME = Date()
-    private static var app : XCUIApplication?
-    /// A point within the status menu item. See `clickStatusMenu()`
-    private static var statusItemPoint: CGPoint!
-
-    override func setUp() {
-        continueAfterFailure = false
-        if PtnViewControllerTest.app == nil {
-            PtnViewControllerTest.launch(withEnv: startupEnv(suppressTutorial: true))
-        }
-
-        let now = Date()
-        log("Finished setup at \(now.utcTimestamp) (\(now.timestamp(at: TimeZone(identifier: "US/Eastern")!)))")
-    }
-    
-    var app: XCUIApplication {
-        PtnViewControllerTest.app!
-    }
-    
-    var statusItemPoint: CGPoint {
-        PtnViewControllerTest.statusItemPoint
-    }
-    
-    private static func launch(withEnv env: [String: String]) {
-        let app = XCUIApplication()
-        PtnViewControllerTest.app = app
-        app.launchEnvironment = env
-        app.launch()
-        findStatusMenuItem()
-    }
-    
-    static func findStatusMenuItem() {
-        activate()
-        // The 0.5 isn't necessary, but it positions the cursor in the middle of the item. Just looks nicer.
-        let menuItem = XCUIApplication().menuBars.children(matching: .statusItem).element(boundBy: 0)
-        menuItem.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
-        PtnViewControllerTest.statusItemPoint = CGEvent(source: nil)?.location
-    }
-    
-    override func recordFailure(withDescription description: String, inFile filePath: String, atLine lineNumber: Int, expected: Bool) {
-        XCUIApplication().terminate()
-        PtnViewControllerTest.app = nil
-        let now = Date()
-        log("Failed at \(now.utcTimestamp) (\(now.timestamp(at: TimeZone(identifier: "US/Eastern")!)))")
-        super.recordFailure(withDescription: description, inFile: filePath, atLine: lineNumber, expected: expected)
-    }
     
     func openPtn(andThen afterAction: (XCUIElement) -> () = {_ in }) -> Ptn {
         return group("open PTN") {
@@ -97,13 +52,13 @@ class PtnViewControllerTest: XCTestCase {
             clickEvent(.left, .leftMouseDown, at: statusItemPoint, with: .maskCommand)
             clickEvent(.left, .leftMouseUp, at: CGPoint(x: newX, y: statusItemPoint.y), with: [])
             let oldPoint = statusItemPoint
-            PtnViewControllerTest.findStatusMenuItem()
+            findStatusMenuItem()
             
             addTeardownBlock {
                 self.group("Drag status menu back") {
                     self.clickEvent(.left, .leftMouseDown, at: self.statusItemPoint, with: .maskCommand)
                     self.clickEvent(.left, .leftMouseUp, at: oldPoint, with: [])
-                    PtnViewControllerTest.findStatusMenuItem()
+                    self.findStatusMenuItem()
                 }
             }
         }
@@ -117,7 +72,7 @@ class PtnViewControllerTest: XCTestCase {
     
     func testTutorial() {
         let tutorialPopover = group("restart app with tutorial") {() -> XCUIElement in
-            PtnViewControllerTest.launch(withEnv: startupEnv(suppressTutorial: false))
+            launch(withEnv: startupEnv(suppressTutorial: false))
             return app.windows[WindowType.ptn.windowTitle].popovers.element
         }
         let tutorialWelcomeText = "This window will pop up every so often to ask you what you've been up to."
@@ -1620,21 +1575,6 @@ class PtnViewControllerTest: XCTestCase {
             XCTAssertEqual("", ptn.pcombo.textField.stringValue) // sanity check
             XCTAssertEqual("", ptn.tcombo.textField.stringValue) // changing pcombo should change tcombo
         }
-    }
-    
-    static func activate() {
-        guard let app = app else {
-            NSLog("ERROR: no app to activate")
-            return
-        }
-        app.activate()
-        if !app.wait(for: .runningForeground, timeout: 15) {
-            log("Timed out waiting to run in foreground. Will try to continue. Current state: \(app.state.rawValue)")
-        }
-    }
-    
-    func activate() {
-        PtnViewControllerTest.activate()
     }
     
     /// Sets the mocked clock in UTC. If `deactivate` is true (default false), then this will set the mocked clock to set the time when the app deactivates, and then this method will activate
