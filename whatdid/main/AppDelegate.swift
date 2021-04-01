@@ -101,18 +101,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    func snooze(until date: Date) {
-        mainMenu.snooze(until: date)
-    }
-    
-    func unSnooze() {
-        mainMenu.unSnooze()
-    }
-    
-    var snoozedUntil: Date? {
-        mainMenu.snoozedUntil
-    }
-    
     private func setUpLauncher() {
         // Taken from https://theswiftdev.com/how-to-launch-a-macos-app-at-login/
         let launcherAppId = "com.yuvalshavit.WhatdidLauncher"
@@ -142,7 +130,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return "\(maskAdjusted)\(keyAdjusted)"
     }
 }
-
 
 extension Notification.Name {
     static let killLauncher = Notification.Name("killLauncher")

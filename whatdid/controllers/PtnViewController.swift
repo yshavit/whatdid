@@ -26,7 +26,7 @@ class PtnViewController: NSViewController {
     
     private var optionIsPressed = false
     
-    var forceReschedule: () -> Void = {}
+    var hooks: PtnViewDelegate?
     
     var scheduler: Scheduler = DefaultScheduler.instance
     
@@ -77,7 +77,7 @@ class PtnViewController: NSViewController {
         setUpNewSessionPrompt(
             scheduler: scheduler,
             onNewSession: {
-                self.forceReschedule()
+                self.hooks?.forceReschedule()
                 self.closeWindowAsync()
             },
             onKeepSesion: {
@@ -109,7 +109,7 @@ class PtnViewController: NSViewController {
             snoozeOptionsUpdateSpinner = nil
         }
         snoozeButton.isEnabled = true
-        if let alreadySnoozedUntil = AppDelegate.instance.snoozedUntil {
+        if let alreadySnoozedUntil = hooks?.snoozedUntil {
             snoozeButton.title = "Snoozing until \(TimeUtil.formatSuccinctly(date: alreadySnoozedUntil))..."
             snoozeExtraOptions.isEnabled = false
             scheduler.schedule("Snooze options refresh", at: alreadySnoozedUntil, updateSnoozeButton)
@@ -189,13 +189,13 @@ class PtnViewController: NSViewController {
     }
     
     @IBAction private func snoozeButtonPressed(_ sender: NSControl) {
-        if let _ = AppDelegate.instance.snoozedUntil {
+        if let _ = hooks?.snoozedUntil {
             let unsnoozePopover = NSPopover()
             unsnoozePopover.behavior = .transient
             
             let unsnoozeViewController = NSViewController()
             let button = ButtonWithClosure(label: "Unsnooze") {_ in
-                AppDelegate.instance.unSnooze()
+                self.hooks?.unSnooze()
                 self.setUpSnoozeButton()
                 unsnoozePopover.close()
             }
@@ -222,7 +222,7 @@ class PtnViewController: NSViewController {
     
     private func snooze(until: Any?) {
         if let date = until as? Date {
-            AppDelegate.instance.snooze(until: date)
+            hooks?.snooze(until: date)
         } else {
             NSLog("error: date not set up (was \(until ?? "nil"))")
         }
@@ -235,7 +235,9 @@ class PtnViewController: NSViewController {
             
             let prefsViewController = PrefsViewController(nibName: "PrefsViewController", bundle: nil)
             prefsViewController.setSize(width: viewWindow.frame.width, minHeight: viewWindow.frame.height)
-            prefsViewController.ptnScheduleChanged = forceReschedule
+            if let hooks = hooks {
+                prefsViewController.ptnScheduleChanged = hooks.forceReschedule
+            }
             prefsWindow.contentViewController = prefsViewController
             viewWindow.beginSheet(prefsWindow, completionHandler: {reason in
                 if reason == .stop {
@@ -283,7 +285,7 @@ class PtnViewController: NSViewController {
             task: taskField.textField.stringValue,
             notes: noteField.stringValue,
             callback: {
-                self.forceReschedule()
+                self.hooks?.forceReschedule()
                 self.closeWindowAsync()
             }
         )
@@ -443,4 +445,11 @@ class PtnViewController: NSViewController {
             }
         }
     }
+}
+
+protocol PtnViewDelegate {
+    func forceReschedule()
+    func snooze(until date: Date)
+    func unSnooze()
+    var snoozedUntil: Date? { get }
 }
