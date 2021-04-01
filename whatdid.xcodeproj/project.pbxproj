@@ -186,7 +186,7 @@
 		7E9C5EBA260C09AA00D839C4 /* Goal+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Goal+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PtnViewController.xib; sourceTree = "<group>"; };
-		7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TimeUtilTest.swift; path = whatdidTests/util/TimeUtilTest.swift; sourceTree = SOURCE_ROOT; };
+		7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TimeUtilTest.swift; path = whatdidTests/scheduling/TimeUtilTest.swift; sourceTree = SOURCE_ROOT; };
 		7EB57AA725187548009E85F5 /* NSApperance+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSApperance+Helpers.swift"; sourceTree = "<group>"; };
 		7EB7495C25169A44001C7DBC /* GlobalShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalShortcut.swift; sourceTree = "<group>"; };
 		7EB7495E2516F9C7001C7DBC /* Prefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prefs.swift; sourceTree = "<group>"; };
@@ -294,9 +294,11 @@
 		7E579F6E2503E2740055D9F6 /* scheduling */ = {
 			isa = PBXGroup;
 			children = (
-				7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */,
 				7E6C98D32503F5C600A712EB /* DelegatingSchedulerTest.swift */,
 				7E6C98D52506B67F00A712EB /* DummyScheduler.swift */,
+				7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */,
+				7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */,
+				7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */,
 			);
 			path = scheduling;
 			sourceTree = "<group>";
@@ -364,28 +366,15 @@
 		7E8C04DC23714F0700A0C3A6 /* whatdid */ = {
 			isa = PBXGroup;
 			children = (
-				7EF9BDCD253183B100B7EC6D /* whatdidRelease.entitlements */,
-				7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */,
-				7EE0E74524E8899E002D03F8 /* AutoCompletingField.swift */,
-				7E07C3B624D121770007FD23 /* DayEndReportController.swift */,
-				7E07C3B724D121770007FD23 /* DayEndReportController.xib */,
-				7EF883FA260D7DD400170330 /* DayStartController.swift */,
-				7EF883FB260D7DD400170330 /* DayStartController.xib */,
-				7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */,
-				7E8C04E123714F0800A0C3A6 /* MainMenu.xib */,
-				7EFEE80123B16EA6002928A2 /* PtnViewController.swift */,
-				7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */,
-				7E7C385324DF3A0300CFF3E7 /* PtnViewController+UIHook.swift */,
-				7EE250B92515B8FE0067C5E9 /* PrefsViewController.swift */,
-				7EE250BA2515B8FE0067C5E9 /* PrefsViewController.xib */,
-				7EF58F8A2580F180002F9604 /* TutorialViewController.swift */,
-				7EF58F8B2580F180002F9604 /* TutorialViewController.xib */,
 				7EAC528A24CFC94700A13B72 /* boilerplate */,
+				7EF8B9CC2615777D00834866 /* controllers */,
+				7EF8B9CF2615790C00834866 /* extensions */,
+				7EF8B9CD261577EE00834866 /* main */,
 				7E37A27524BFF73E005BA1DF /* model */,
 				7EF8579F24E241E800867832 /* scheduling */,
 				7E970D6424DA817B00F634AB /* ui_testhook */,
 				7EAC528924CFC90800A13B72 /* util */,
-				7EB7495C25169A44001C7DBC /* GlobalShortcut.swift */,
+				7EF8B9CE2615786E00834866 /* views */,
 			);
 			path = whatdid;
 			sourceTree = "<group>";
@@ -393,10 +382,11 @@
 		7E8C04ED23714F0800A0C3A6 /* whatdidTests */ = {
 			isa = PBXGroup;
 			children = (
+				7EF8B9D026157A0700834866 /* extensions */,
+				7E8C04F023714F0800A0C3A6 /* Info.plist */,
 				7E75D09E251D9A500002DBA0 /* model */,
 				7E579F6E2503E2740055D9F6 /* scheduling */,
 				7EE9A1C024DA35F200EE0FB1 /* util */,
-				7E8C04F023714F0800A0C3A6 /* Info.plist */,
 			);
 			path = whatdidTests;
 			sourceTree = "<group>";
@@ -404,13 +394,13 @@
 		7E8C04F823714F0800A0C3A6 /* whatdidUITests */ = {
 			isa = PBXGroup;
 			children = (
-				7E7C385024DF36B300CFF3E7 /* model */,
+				7E4778EF24F8F177007BAE8C /* AutocompleteFieldHelper.swift */,
 				7E8C04F923714F0800A0C3A6 /* ComponentUITests.swift */,
 				7E8C04FB23714F0800A0C3A6 /* Info.plist */,
+				7E7C385024DF36B300CFF3E7 /* model */,
 				7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */,
-				7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */,
 				7E6F2E6C24F38D9E008874FE /* XCTestCase+Helpers.swift */,
-				7E4778EF24F8F177007BAE8C /* AutocompleteFieldHelper.swift */,
+				7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */,
 				7E64F02A24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift */,
 			);
 			path = whatdidUITests;
@@ -419,6 +409,7 @@
 		7E970D6424DA817B00F634AB /* ui_testhook */ = {
 			isa = PBXGroup;
 			children = (
+				7E7C385324DF3A0300CFF3E7 /* PtnViewController+UIHook.swift */,
 				7E970D6A24DA850D00F634AB /* UiTestWindow.swift */,
 				7E970D6824DA84AF00F634AB /* UiTestWindow.xib */,
 				7EF58FA02584972F002F9604 /* UITestCommonConsts.swift */,
@@ -430,30 +421,10 @@
 			isa = PBXGroup;
 			children = (
 				7E30B46024C38D91003F3679 /* Atomic.swift */,
-				7E1C2F5024CE43C40070D8CD /* Version.swift */,
-				7EDA368E24D54EA300F5E368 /* FlippedView.swift */,
-				7EDA369224D60FCD00F5E368 /* ButtonWithClosure.swift */,
-				7EDA369424D6A95B00F5E368 /* TimeUtil.swift */,
-				7EF8579224E094D100867832 /* OpenCloseHelper.swift */,
-				7EF8579A24E220EA00867832 /* OpenReason.swift */,
-				7EE0E73F24E4DF4A002D03F8 /* SubsequenceMatcher.swift */,
-				7EE0E74724EA1ECD002D03F8 /* String+Helpers.swift */,
-				7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */,
-				7EEF324524EA542D002E217A /* NSRange+Helpers.swift */,
-				7ECF97A624F1D50100DBF1BF /* NSControl+Helper.swift */,
-				7E7B7E6024F2F84000460BC3 /* NSStackView+Helpers.swift */,
-				7EDDFF5D250097B30027E91A /* Date+Helpers.swift */,
-				7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */,
-				7ECAF0DC250C9C110004647E /* NSButton+Helpers.swift */,
-				7ECAF0DE250D75B70004647E /* WhatdidTextField.swift */,
 				7EB7495E2516F9C7001C7DBC /* Prefs.swift */,
-				7EB57AA725187548009E85F5 /* NSApperance+Helpers.swift */,
-				7E88F5A92529AB46002B2F2E /* Int+Helpers.swift */,
-				7E9C5EAD2606BDFB00D839C4 /* GoalsView.swift */,
-				7EF883EA260C7D9900170330 /* ExpandableTextField.swift */,
-				7EF884102610139B00170330 /* NSViewController+Helper.swift */,
+				7EE0E73F24E4DF4A002D03F8 /* SubsequenceMatcher.swift */,
 				7EF884162610151A00170330 /* TypeAliases.swift */,
-				7E1EE6612612EEF1003314EE /* CloseConfirmer.swift */,
+				7E1C2F5024CE43C40070D8CD /* Version.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -461,9 +432,10 @@
 		7EAC528A24CFC94700A13B72 /* boilerplate */ = {
 			isa = PBXGroup;
 			children = (
+				7E8C04DF23714F0800A0C3A6 /* Assets.xcassets */,
 				7E8C04E423714F0800A0C3A6 /* Info.plist */,
 				7E8C04E523714F0800A0C3A6 /* whatdid.entitlements */,
-				7E8C04DF23714F0800A0C3A6 /* Assets.xcassets */,
+				7EF9BDCD253183B100B7EC6D /* whatdidRelease.entitlements */,
 			);
 			name = boilerplate;
 			sourceTree = "<group>";
@@ -471,11 +443,8 @@
 		7EE9A1C024DA35F200EE0FB1 /* util */ = {
 			isa = PBXGroup;
 			children = (
-				7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */,
-				7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */,
-				7EE0E74124E4DF8A002D03F8 /* SubsequenceMatcherTest.swift */,
-				7EEF324724EA54AD002E217A /* NSRange+HelpersTest.swift */,
 				7EB7496025170ED6001C7DBC /* PrefsTest.swift */,
+				7EE0E74124E4DF8A002D03F8 /* SubsequenceMatcherTest.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -483,14 +452,85 @@
 		7EF8579F24E241E800867832 /* scheduling */ = {
 			isa = PBXGroup;
 			children = (
-				7EF857A024E2420C00867832 /* Scheduler.swift */,
-				7EF857A224E242AB00867832 /* ManualTickScheduler.swift */,
-				7EE4E39524E24A3F00552AAF /* ManualTickSchedulerWindow.swift */,
-				7EE4E39724E2523F00552AAF /* SystemClockScheduler.swift */,
 				7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */,
 				7E6C98D12503EF4900A712EB /* DelegatingScheduler.swift */,
+				7EF857A224E242AB00867832 /* ManualTickScheduler.swift */,
+				7EE4E39524E24A3F00552AAF /* ManualTickSchedulerWindow.swift */,
+				7EF8579224E094D100867832 /* OpenCloseHelper.swift */,
+				7EF8579A24E220EA00867832 /* OpenReason.swift */,
+				7EF857A024E2420C00867832 /* Scheduler.swift */,
+				7EE4E39724E2523F00552AAF /* SystemClockScheduler.swift */,
+				7EDA369424D6A95B00F5E368 /* TimeUtil.swift */,
 			);
 			path = scheduling;
+			sourceTree = "<group>";
+		};
+		7EF8B9CC2615777D00834866 /* controllers */ = {
+			isa = PBXGroup;
+			children = (
+				7E1EE6612612EEF1003314EE /* CloseConfirmer.swift */,
+				7E07C3B624D121770007FD23 /* DayEndReportController.swift */,
+				7E07C3B724D121770007FD23 /* DayEndReportController.xib */,
+				7EF883FA260D7DD400170330 /* DayStartController.swift */,
+				7EF883FB260D7DD400170330 /* DayStartController.xib */,
+				7EE250B92515B8FE0067C5E9 /* PrefsViewController.swift */,
+				7EE250BA2515B8FE0067C5E9 /* PrefsViewController.xib */,
+				7EFEE80123B16EA6002928A2 /* PtnViewController.swift */,
+				7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */,
+				7EF58F8A2580F180002F9604 /* TutorialViewController.swift */,
+				7EF58F8B2580F180002F9604 /* TutorialViewController.xib */,
+			);
+			path = controllers;
+			sourceTree = "<group>";
+		};
+		7EF8B9CD261577EE00834866 /* main */ = {
+			isa = PBXGroup;
+			children = (
+				7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */,
+				7EE0E74524E8899E002D03F8 /* AutoCompletingField.swift */,
+				7EB7495C25169A44001C7DBC /* GlobalShortcut.swift */,
+				7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */,
+				7E8C04E123714F0800A0C3A6 /* MainMenu.xib */,
+			);
+			path = main;
+			sourceTree = "<group>";
+		};
+		7EF8B9CE2615786E00834866 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				7EDA369224D60FCD00F5E368 /* ButtonWithClosure.swift */,
+				7EF883EA260C7D9900170330 /* ExpandableTextField.swift */,
+				7EDA368E24D54EA300F5E368 /* FlippedView.swift */,
+				7E9C5EAD2606BDFB00D839C4 /* GoalsView.swift */,
+				7ECAF0DE250D75B70004647E /* WhatdidTextField.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
+		7EF8B9CF2615790C00834866 /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				7EDDFF5D250097B30027E91A /* Date+Helpers.swift */,
+				7E88F5A92529AB46002B2F2E /* Int+Helpers.swift */,
+				7EB57AA725187548009E85F5 /* NSApperance+Helpers.swift */,
+				7ECAF0DC250C9C110004647E /* NSButton+Helpers.swift */,
+				7ECF97A624F1D50100DBF1BF /* NSControl+Helper.swift */,
+				7EEF324524EA542D002E217A /* NSRange+Helpers.swift */,
+				7E7B7E6024F2F84000460BC3 /* NSStackView+Helpers.swift */,
+				7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */,
+				7EF884102610139B00170330 /* NSViewController+Helper.swift */,
+				7EE0E74724EA1ECD002D03F8 /* String+Helpers.swift */,
+				7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */,
+			);
+			path = extensions;
+			sourceTree = "<group>";
+		};
+		7EF8B9D026157A0700834866 /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				7EEF324724EA54AD002E217A /* NSRange+HelpersTest.swift */,
+			);
+			path = extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
