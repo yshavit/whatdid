@@ -36,34 +36,6 @@ class PtnViewControllerTest: UITestBase {
             tcombo: AutocompleteFieldHelper(element: ptn.comboBoxes["tcombo"]))
     }
     
-    func clickStatusMenu(with flags: CGEventFlags = []){
-        // In headless mode (or whatever GH actions uses), I can't just use the XCUIElement's `click()`
-        // when the app is in the background. Instead, I fetched the status item's location during setUp, and
-        // now directly post the click events to it.
-        group("Click status menu") {
-            for eventType in [CGEventType.leftMouseDown, CGEventType.leftMouseUp] {
-                clickEvent(.left, eventType, at: statusItemPoint, with: flags)
-            }
-        }
-    }
-    
-    func dragStatusMenu(to newX: CGFloat) {
-        group("Drag status menu") {
-            clickEvent(.left, .leftMouseDown, at: statusItemPoint, with: .maskCommand)
-            clickEvent(.left, .leftMouseUp, at: CGPoint(x: newX, y: statusItemPoint.y), with: [])
-            let oldPoint = statusItemPoint
-            findStatusMenuItem()
-            
-            addTeardownBlock {
-                self.group("Drag status menu back") {
-                    self.clickEvent(.left, .leftMouseDown, at: self.statusItemPoint, with: .maskCommand)
-                    self.clickEvent(.left, .leftMouseUp, at: oldPoint, with: [])
-                    self.findStatusMenuItem()
-                }
-            }
-        }
-    }
-    
     /// Clicks on the leftmost element of the date picker, to select its "hours" segment. Otherwise, the system can click
     /// on anywhere in it, and might choose e.g. the AM/PM part.
     func clickOnHourSegment(of datePicker: XCUIElement) {

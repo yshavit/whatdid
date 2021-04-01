@@ -5,23 +5,61 @@ import XCTest
 class UITestBase: XCTestCase {
     
     private static var app : XCUIApplication?
-    /// A point within the status menu item. See `clickStatusMenu()`
-    private static var statusItemPoint: CGPoint!
+    /// A point within the status menu item. Access this via `var statusItemPoint`, which calculates it if needed.
+    private static var _statusItemPoint: CGPoint?
     
     var app: XCUIApplication {
         UITestBase.app!
-    }
-    
-    var statusItemPoint: CGPoint {
-        UITestBase.statusItemPoint
     }
     
     func activate() {
         UITestBase.activate()
     }
     
-    func findStatusMenuItem() {
-        UITestBase.findStatusMenuItem()
+    static var statusItemPoint: CGPoint {
+        get {
+            if let result = _statusItemPoint {
+                return result
+            } else {
+                activate()
+                // The 0.5 isn't necessary, but it positions the cursor in the middle of the item. Just looks nicer.
+                let menuItem = XCUIApplication().menuBars.children(matching: .statusItem).element(boundBy: 0)
+                menuItem.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
+                _statusItemPoint = CGEvent(source: nil)?.location
+                return _statusItemPoint!
+            }
+        }
+    }
+    
+    func clickStatusMenu(with flags: CGEventFlags = []){
+        // In headless mode (or whatever GH actions uses), I can't just use the XCUIElement's `click()`
+        // when the app is in the background. Instead, I fetched the status item's location during setUp, and
+        // now directly post the click events to it.
+        group("Click status menu") {
+            for eventType in [CGEventType.leftMouseDown, CGEventType.leftMouseUp] {
+                clickEvent(.left, eventType, at: UITestBase.statusItemPoint, with: flags)
+            }
+        }
+    }
+    
+    func dragStatusMenu(to newX: CGFloat) {
+        group("Drag status menu") {
+            clickEvent(.left, .leftMouseDown, at: UITestBase.statusItemPoint, with: .maskCommand)
+            clickEvent(.left, .leftMouseUp, at: CGPoint(x: newX, y: UITestBase.statusItemPoint.y), with: [])
+            let oldPoint = UITestBase.statusItemPoint
+            // We dragged to the very edge of the screen, but the actual icon will
+            // be to the left of that (for instance, it can't be to the right of the clock).
+            // So, just invalidate our statusItemPoint cache, and we'll look it up as needed.
+            UITestBase._statusItemPoint = nil
+            
+            addTeardownBlock {
+                self.group("Drag status menu back") {
+                    self.clickEvent(.left, .leftMouseDown, at: UITestBase.statusItemPoint, with: .maskCommand)
+                    self.clickEvent(.left, .leftMouseUp, at: oldPoint, with: [])
+                    UITestBase._statusItemPoint = oldPoint
+                }
+            }
+        }
     }
     
     func launch(withEnv env: [String: String]) {
@@ -57,19 +95,10 @@ class UITestBase: XCTestCase {
         }
     }
     
-    private static func findStatusMenuItem() {
-        activate()
-        // The 0.5 isn't necessary, but it positions the cursor in the middle of the item. Just looks nicer.
-        let menuItem = XCUIApplication().menuBars.children(matching: .statusItem).element(boundBy: 0)
-        menuItem.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
-        UITestBase.statusItemPoint = CGEvent(source: nil)?.location
-    }
-    
     private static func launch(withEnv env: [String: String]) {
         let app = XCUIApplication()
         PtnViewControllerTest.app = app
         app.launchEnvironment = env
         app.launch()
-        findStatusMenuItem()
     }
 }
