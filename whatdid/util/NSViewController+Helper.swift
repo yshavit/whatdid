@@ -5,6 +5,14 @@ import Cocoa
 extension NSViewController {
     private static let TIME_UNTIL_NEW_SESSION_PROMPT = TimeInterval(6 * 60 * 60)
     
+    /// Closes the window that this controller is in. This happens from a `DispatchQueue.main.async` call, which
+    /// you need in order for things to work right (I forget what, exactly).
+    func closeWindowAsync() {
+        DispatchQueue.main.async {
+            self.view.window?.windowController?.close()
+        }
+    }
+    
     func setUpNewSessionPrompt(scheduler: Scheduler, onNewSession: @escaping Action, onKeepSesion: @escaping Action) {
         if scheduler.timeInterval(since: AppDelegate.instance.model.lastEntryDate) > NSViewController.TIME_UNTIL_NEW_SESSION_PROMPT {
             showNewSessionPrompt(onNewSession: onNewSession, onKeepSesion: onKeepSesion)

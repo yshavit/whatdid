@@ -8,17 +8,11 @@ class DayStartController: NSViewController, NSTextFieldDelegate, CloseConfirmer 
     @IBOutlet var goals: NSStackView!
     @IBOutlet var goalPrototype: NSStackView!
     private var goalTemplate: Data!
-    private var onClose: (() -> Void)?
     private var saveButtonOriginalText: String?
     /// tri-value bool; nil means "prompt"
     private var saveGoalsOnExit: Bool?
     
     var scheduler: Scheduler = DefaultScheduler.instance
-    
-    convenience init(onClose: @escaping () -> Void) {
-        self.init()
-        self.onClose = onClose
-    }
     
     private var goalEntries: [GoalEntryField] {
         goals.subviews.compactMap({$0 as? GoalEntryField})
@@ -76,7 +70,7 @@ class DayStartController: NSViewController, NSTextFieldDelegate, CloseConfirmer 
             confirm.addButton(withTitle: "Don't Save")
             confirm.beginSheetModal(for: window) {response in
                 self.saveGoalsOnExit = (response == .alertFirstButtonReturn)
-                self.onClose?()
+                self.closeWindowAsync()
             }
             return false
         } else {
@@ -101,7 +95,7 @@ class DayStartController: NSViewController, NSTextFieldDelegate, CloseConfirmer 
     
     @IBAction func saveButton(_ sender: Any) {
         saveGoalsOnExit = true
-        onClose?()
+        closeWindowAsync()
     }
     
     private func goalFinishedTextEditing() {

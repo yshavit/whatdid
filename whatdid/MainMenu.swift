@@ -65,19 +65,11 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
         opener.didClose()
         return !cancelClose
     }
-    
-    
-    private func contentViewCloseAction() {
-        DispatchQueue.main.async {
-            self.close()
-        }
-    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
         window?.level = .floating
         taskAdditionsPane = PtnViewController()
-        taskAdditionsPane.closeAction = contentViewCloseAction
         
         if let window = window {
             window.contentViewController = taskAdditionsPane
@@ -133,7 +125,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
             window?.contentViewController = taskAdditionsPane
             window?.title = "What are you working on?"
         case .dayStart:
-            let controller = DayStartController(onClose: contentViewCloseAction)
+            let controller = DayStartController()
             controller.scheduler = newScheduler
             window?.contentViewController = controller
             window?.title = "Start the day with some goals"
