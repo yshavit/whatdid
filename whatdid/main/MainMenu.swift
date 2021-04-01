@@ -2,7 +2,7 @@
 
 import Cocoa
 
-class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
+class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDelegate {
     
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
@@ -98,7 +98,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
                 }
             },
             onSchedule: self.schedule)
-        taskAdditionsPane.forceReschedule = opener.forceRescheduleOnClose
+        taskAdditionsPane.hooks = self
     }
     
     @objc private func handleStatusItemPress() {
@@ -113,40 +113,31 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
     }
     
     private func doOpen(_ contents: WindowContents, scheduler newScheduler: Scheduler) {
+        guard let window = window else {
+            NSLog("no window to open")
+            return
+        }
         switch (contents) {
         case .dailyEnd:
             let controller = DayEndReportController()
-            window?.contentViewController = controller
+            window.contentViewController = controller
             controller.prepareForViewing()
             controller.scheduler = newScheduler
-            window?.title = "Here's what you've been doing"
+            window.title = "Here's what you've been doing"
         case .ptn:
             taskAdditionsPane.scheduler = newScheduler
-            window?.contentViewController = taskAdditionsPane
-            window?.title = "What are you working on?"
+            window.contentViewController = taskAdditionsPane
+            window.title = "What are you working on?"
         case .dayStart:
             let controller = DayStartController()
             controller.scheduler = newScheduler
-            window?.contentViewController = controller
-            window?.title = "Start the day with some goals"
+            window.contentViewController = controller
+            window.title = "Start the day with some goals"
         }
         
-        window!.setContentSize(window!.contentViewController!.view.fittingSize)
-        if let button = statusItem.button, let buttonWindow = button.window, let buttonScreen = buttonWindow.screen, let windowToOpen = window {
-            NSLog("Available screens:")
+        window.setContentSize(window.contentViewController!.view.fittingSize)
+        if let button = statusItem.button, let buttonWindow = button.window, let buttonScreen = buttonWindow.screen {
             let mouseLoc = NSEvent.mouseLocation
-            for screen in NSScreen.screens {
-                var bullet = "-"
-                var suffix = ""
-                if screen.frame.contains(mouseLoc) {
-                    bullet = "*"
-                    suffix = " <-- contains mouse"
-                }
-                NSLog("    \(bullet) \(screen.frame)\(suffix)")
-            }
-            NSLog("    - mouse is at \(mouseLoc)")
-            NSLog("    - button.window: \(buttonWindow.frame)")
-            
             let buttonRectInWindow = button.convert(button.bounds, to: nil)
             let buttonRectInScreen = buttonWindow.convertToScreen(buttonRectInWindow)
             let buttonMarginFromScreenEdge = buttonScreen.frame.maxX - buttonRectInScreen.origin.x
@@ -158,15 +149,14 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
             let xPosInMouseScreen = mouseScreen.frame.maxX - buttonMarginFromScreenEdge
             var pos = NSPoint(x: xPosInMouseScreen, y: mouseScreen.visibleFrame.maxY)
             
-            NSLog("    - button.window.screen: \(buttonScreen.frame)")
-            NSLog("    - mouseScreen: \(mouseScreen.frame)")
-            let tooFarLeftBy = (pos.x + windowToOpen.frame.width) - mouseScreen.frame.width
+            // Adjust the position if it would put the window off the edge of the screen
+            let tooFarLeftBy = (pos.x + window.frame.width) - mouseScreen.frame.width
             if tooFarLeftBy > 0 {
                 pos.x -= tooFarLeftBy
             }
-            windowToOpen.setFrameTopLeftPoint(pos)
+            window.setFrameTopLeftPoint(pos)
         }
-        if window?.isVisible ?? false {
+        if window.isVisible {
             contentViewController?.viewWillAppear()
             cancelClose = true
         } else {
@@ -225,6 +215,10 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate {
             NSLog("Replaced previously scheduled open for \(contents)")
             oldTask.cancel()
         }
+    }
+    
+    func forceReschedule() {
+        opener.forceRescheduleOnClose()
     }
     
     func snooze(until date: Date) {
