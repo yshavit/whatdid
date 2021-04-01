@@ -394,14 +394,12 @@
 		7E8C04F823714F0800A0C3A6 /* whatdidUITests */ = {
 			isa = PBXGroup;
 			children = (
-				7E4778EF24F8F177007BAE8C /* AutocompleteFieldHelper.swift */,
-				7E8C04F923714F0800A0C3A6 /* ComponentUITests.swift */,
+				7EF8B9DC26158D4E00834866 /* app */,
+				7EF8B9DD26158D6200834866 /* component */,
+				7EF8B9D926158CEF00834866 /* extensions */,
 				7E8C04FB23714F0800A0C3A6 /* Info.plist */,
 				7E7C385024DF36B300CFF3E7 /* model */,
-				7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */,
-				7E6F2E6C24F38D9E008874FE /* XCTestCase+Helpers.swift */,
-				7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */,
-				7E64F02A24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift */,
+				7EF8B9DA26158D2400834866 /* util */,
 			);
 			path = whatdidUITests;
 			sourceTree = "<group>";
@@ -531,6 +529,40 @@
 				7EEF324724EA54AD002E217A /* NSRange+HelpersTest.swift */,
 			);
 			path = extensions;
+			sourceTree = "<group>";
+		};
+		7EF8B9D926158CEF00834866 /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				7E6F2E6C24F38D9E008874FE /* XCTestCase+Helpers.swift */,
+				7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */,
+				7E64F02A24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift */,
+			);
+			path = extensions;
+			sourceTree = "<group>";
+		};
+		7EF8B9DA26158D2400834866 /* util */ = {
+			isa = PBXGroup;
+			children = (
+				7E4778EF24F8F177007BAE8C /* AutocompleteFieldHelper.swift */,
+			);
+			path = util;
+			sourceTree = "<group>";
+		};
+		7EF8B9DC26158D4E00834866 /* app */ = {
+			isa = PBXGroup;
+			children = (
+				7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */,
+			);
+			path = app;
+			sourceTree = "<group>";
+		};
+		7EF8B9DD26158D6200834866 /* component */ = {
+			isa = PBXGroup;
+			children = (
+				7E8C04F923714F0800A0C3A6 /* ComponentUITests.swift */,
+			);
+			path = component;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
