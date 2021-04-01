@@ -26,7 +26,6 @@ class PtnViewController: NSViewController {
     
     private var optionIsPressed = false
     
-    var closeAction: () -> Void = {}
     var forceReschedule: () -> Void = {}
     
     var scheduler: Scheduler = DefaultScheduler.instance
@@ -79,7 +78,7 @@ class PtnViewController: NSViewController {
             scheduler: scheduler,
             onNewSession: {
                 self.forceReschedule()
-                self.closeAction()
+                self.closeWindowAsync()
             },
             onKeepSesion: {
                 self.grabFocusEvenIfHasSheet()
@@ -285,14 +284,14 @@ class PtnViewController: NSViewController {
             notes: noteField.stringValue,
             callback: {
                 self.forceReschedule()
-                self.closeAction()
+                self.closeWindowAsync()
             }
         )
     }
     
     @IBAction func skipButtonPressed(_ sender: Any) {
         AppDelegate.instance.model.setLastEntryDateToNow()
-        closeAction()
+        closeWindowAsync()
     }
     
     override func viewWillDisappear() {
