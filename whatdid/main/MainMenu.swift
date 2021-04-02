@@ -13,7 +13,29 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
     private var snoozed: (until: Date, unsnoozeTask: ScheduledTask)?
     private var scheduledTasks = [WindowContents: ScheduledTask]()
     
-    enum WindowContents: Int, Comparable {
+    #if UI_TEST
+    func reset() {
+        // Keep asking whether we should close, until the answer comes back yes. What this amounts to
+        // is that we'll flush any pending scheduled opens. There can only be as many of these as WindowContents values,
+        // so only loop that many times; this serves as a backstop against an infinite loop, in case there's a bug elsewhere
+        // in the opener logic.
+        if let window = window {
+            for _ in WindowContents.allCases {
+                _ = windowShouldClose(window)
+            }
+            window.contentViewController?.closeWindowAsync()
+        }
+        // Cancel any outstanding scheduled tasks. These shouldn't actually matter, because they'll be things like updating
+        // the "it's been X minutes" text, or the snooze options; but may as well.
+        for task in scheduledTasks.values {
+            task.cancel()
+        }
+        // Lastly, re-initialize the PTN itself.
+        taskAdditionsPane = PtnViewController()
+    }
+    #endif
+    
+    enum WindowContents: Int, Comparable, CaseIterable {
         /// The Project/Task/Notes window
         case ptn
         /// The end-of-day report

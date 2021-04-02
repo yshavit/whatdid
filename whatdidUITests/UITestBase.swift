@@ -31,13 +31,19 @@ class UITestBase: XCTestCase {
         }
     }
     
-    func clickStatusMenu(with flags: CGEventFlags = []){
+    func clickStatusMenu(with flags: CGEventFlags = []) {
         // In headless mode (or whatever GH actions uses), I can't just use the XCUIElement's `click()`
         // when the app is in the background. Instead, I fetched the status item's location during setUp, and
         // now directly post the click events to it.
         group("Click status menu") {
+            leftClick("status menu", at: UITestBase.statusItemPoint, with: flags)
+        }
+    }
+    
+    func leftClick(_ description: String, at point: CGPoint, with flags: CGEventFlags = []) {
+        group("Click \(description)") {
             for eventType in [CGEventType.leftMouseDown, CGEventType.leftMouseUp] {
-                clickEvent(.left, eventType, at: UITestBase.statusItemPoint, with: flags)
+                clickEvent(.left, eventType, at: point, with: flags)
             }
         }
     }
@@ -66,6 +72,10 @@ class UITestBase: XCTestCase {
         UITestBase.launch(withEnv: env)
     }
     
+    func uiSetUp() {
+        // nothing
+    }
+    
     final override func setUp() {
         continueAfterFailure = false
         if UITestBase.app == nil {
@@ -74,6 +84,7 @@ class UITestBase: XCTestCase {
 
         let now = Date()
         log("Finished setup at \(now.utcTimestamp) (\(now.timestamp(at: TimeZone(identifier: "US/Eastern")!)))")
+        uiSetUp()
     }
     
     final override func recordFailure(withDescription description: String, inFile filePath: String, atLine lineNumber: Int, expected: Bool) {
