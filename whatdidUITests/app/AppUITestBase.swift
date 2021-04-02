@@ -42,13 +42,21 @@ class AppUITestBase: UITestBase {
         datePicker.click(using: .frame(xInlay: 1.0/6))
     }
     
+    private static var focusMenuItemPoint: CGPoint?
+    
     override func uiSetUp() {
         activate()
-        let focusMenuItem = XCUIApplication().menuBars.children(matching: .statusItem)["Focus Mocked Clock"]
-        focusMenuItem.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
-        let focusMenuItemPoint = CGEvent(source: nil)?.location
-        XCTAssertNotNil(focusMenuItemPoint)
-        leftClick("focus/reset menu item", at: focusMenuItemPoint!, with: .maskAlternate)
+        let clickPoint: CGPoint
+        if let p = AppUITestBase.focusMenuItemPoint {
+            clickPoint = p
+        } else {
+            let focusMenuItem = XCUIApplication().menuBars.children(matching: .statusItem)["Focus Mocked Clock"]
+            focusMenuItem.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
+            AppUITestBase.focusMenuItemPoint = CGEvent(source: nil)?.location
+            XCTAssertNotNil(AppUITestBase.focusMenuItemPoint)
+            clickPoint = AppUITestBase.focusMenuItemPoint!
+        }
+        leftClick("focus/reset menu item", at: clickPoint, with: .maskAlternate)
     }
     
     /// Sets the mocked clock in UTC. If `deactivate` is true (default false), then this will set the mocked clock to set the time when the app deactivates, and then this method will activate
@@ -105,19 +113,17 @@ class AppUITestBase: UITestBase {
     }
     
     func find(_ windowType: WindowType) -> XCUIElement {
-        guard let (t, e) = openWindowInfo else {
-            XCTFail("no window open")
-            fatalError("should have failed at XCTFail")
-        }
-        XCTAssertEqual(windowType, t)
-        return e
+        let w = app.windows[windowType.windowTitle]
+        XCTAssertTrue(w.exists)
+        return w
     }
     
     var openWindowInfo: (WindowType, XCUIElement)? {
-        for windowType in WindowType.allCases {
-            let maybe = app.windows[windowType.windowTitle]
-            if maybe.exists {
-                return (windowType, maybe)
+        for window in app.windows.allElementsBoundByIndex {
+            for windowType in WindowType.allCases {
+                if window.title == windowType.windowTitle && window.exists {
+                    return (windowType, window)
+                }
             }
         }
         return nil

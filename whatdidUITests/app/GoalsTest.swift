@@ -20,7 +20,7 @@ class GoalsTest: AppUITestBase {
                 ["No goals for today."],
                 goalsReport.staticTexts.allElementsBoundByIndex.map({$0.stringValue}))
             XCTAssertEqual([], goalsReport.checkBoxes.allElementsBoundByIndex.map({$0.title}))
-            
+
             openWindow!.typeKey(.downArrow) // date picker is selected by default, so this goes 1 month earlier
             XCTAssertEqual(
                 ["No goals for this time range."],
@@ -157,9 +157,14 @@ class GoalsTest: AppUITestBase {
     }
     
     func testGoalsPromptDoesNotActivateApp() {
-        _ = openMorningGoals(deactivate: true)
-        sleep(1) // If it was going to be switch to active, this would be enough time
-        XCTAssertEqual(XCUIApplication.State.runningBackground, app.state)
+        group("fast forward to just before the goals") {
+            setTimeUtc(h: 06, m: 59)
+            handleLongSessionPrompt(on: .ptn, .startNewSession)
+        }
+        group("open goals while in background") {
+            setTimeUtc(h: 07, m: 00, deactivate: true)
+            XCTAssertEqual(XCUIApplication.State.runningBackground, app.state)
+        }
     }
     
     func testGoalsPromptWithoutHittingEnterOnLastElement() {
@@ -197,7 +202,7 @@ class GoalsTest: AppUITestBase {
             window.datePickers.element.click(using: .frame(xInlay: 0.1))
             window.typeText("\t\t")
             window.typeKey(.downArrow)
-            
+
             let goalsReport = window.groups["Today's Goals"]
             XCTAssertEqual(
                 ["Completed 1 goal out of 2.", "(not listing them, because you selected more than one day)"],
@@ -275,13 +280,13 @@ class GoalsTest: AppUITestBase {
         }
         group("open ptn and look at goals") {
             clickStatusMenu()
-            waitForTransition(of: .ptn, toIsVisible: true)
-            let ptnGoals = openWindow!.groups["Goals for today"]
+            let ptnWindow = find(.ptn)
+            let ptnGoals = ptnWindow.groups["Goals for today"]
             XCTAssertEqual([], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.title}))
         }
         group("add a goal") {
-            // this lets us confirm that the next step also resets the session
             let ptnWindow = find(.ptn)
+            // this lets us confirm that the next step also resets the session
             let goalsView = ptnWindow.children(matching: .group).matching(identifier: "Goals for today").element
             XCTAssertTrue(goalsView.exists)
             goalsView.buttons["Add new goal"].click()
@@ -306,14 +311,21 @@ class GoalsTest: AppUITestBase {
         }
     }
     
-    private func openMorningGoals(deactivate: Bool = false) -> XCUIElement {
+    private func openMorningGoals() -> XCUIElement {
         return group("fast-forward to goals prompt") {
-            setTimeUtc(h: 06, m: 59)
+            setTimeUtc(h: 07, m: 00)
             handleLongSessionPrompt(on: .ptn, .startNewSession)
-            setTimeUtc(h: 07, m: 00, deactivate: deactivate)
             return wait(for: .morningGoals)
         }
     }
+    
+    /// Whether we've double-checked the goals for day 1 in `getToGoalsPromptOnDay2`.
+    /// That method sets up goals on day 1, and then fast-forwards to day 2. We want to validate that the goals actually got set, since tests
+    /// will check that they don't carry over (and we don't want a false negative due to two bugs, one that fails to reset the goals, and the other
+    /// that fails to set them in the first place).
+    /// But, that validation takes time, and we only need it once per run of this class -- just to validate that it's working correctly at all.
+    /// If it works one time, we can trust it to work always.
+    private var haveDoubleCheckedDay1Goals = false
     
     /// Gets us to a goals prompt on day 2, where day 1 had some goals.
     /// This is useful for validating that the old goals went away.
@@ -324,19 +336,20 @@ class GoalsTest: AppUITestBase {
             day1.buttons.allElementsBoundByIndex.last?.click()
             waitForTransition(of: .morningGoals, toIsVisible: false)
         }
-        group("goal is in PTN") {
-            clickStatusMenu()
-            let ptnGoals = wait(for: .ptn).groups["Goals for today"]
-            XCTAssertEqual(["goal on day 1"], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.title}))
-            XCTAssertEqual([false], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.value as? Bool}))
-            clickStatusMenu()
+        if !haveDoubleCheckedDay1Goals {
+            group("goal is in PTN") {
+                clickStatusMenu()
+                let ptnGoals = wait(for: .ptn).groups["Goals for today"]
+                XCTAssertEqual(["goal on day 1"], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+                clickStatusMenu()
+            }
+            haveDoubleCheckedDay1Goals = true
         }
         group("fast-forward to goals on day 2") {
-            setTimeUtc(d: 1, h: 06, m: 59)
+            setTimeUtc(d: 1, h: 07, m: 00)
             let _ = wait(for: .dailyEnd)
             clickStatusMenu()
             handleLongSessionPrompt(on: .ptn, .startNewSession)
-            setTimeUtc(d: 1, h: 07, m: 00)
         }
     }
 
