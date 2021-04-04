@@ -50,7 +50,7 @@ class AppUITestBase: UITestBase {
         if let p = AppUITestBase.focusMenuItemPoint {
             clickPoint = p
         } else {
-            let focusMenuItem = XCUIApplication().menuBars.children(matching: .statusItem)["Focus Mocked Clock"]
+            let focusMenuItem = XCUIApplication().menuBars.children(matching: .statusItem)["Focus Whatdid"]
             focusMenuItem.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
             AppUITestBase.focusMenuItemPoint = CGEvent(source: nil)?.location
             XCTAssertNotNil(AppUITestBase.focusMenuItemPoint)
@@ -66,9 +66,9 @@ class AppUITestBase: UITestBase {
         group("setting time \(d)d \(h)h \(m)m \(s)s") {
             let epochSeconds = d * 86400 + h * 3600 + m * 60 + s
             let text = "\(epochSeconds)\r"
-            let mockedClockWindow = app.windows["Mocked Clock"]
+            let mockedClockWindow = app.windows["UI Test Window"]
             activate()
-            app.menuBars.statusItems["Focus Mocked Clock"].click()
+            app.menuBars.statusItems["Focus Whatdid"].click()
             mockedClockWindow.click()
             let clockTicker = mockedClockWindow.children(matching: .textField).element
             if deactivate {
