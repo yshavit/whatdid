@@ -207,28 +207,6 @@ class AppUITestBase: UITestBase {
         return app.windows.matching(NSPredicate(format: "title = %@", window.windowTitle)).count > 0
     }
     
-    class EntriesBuilder {
-        private var _entries = [(p: String, t: String, n: String, duration: TimeInterval)]()
-        
-        @discardableResult func add(project: String, task: String, notes: String, minutes: Double) -> EntriesBuilder {
-            _entries.append((p: project, t: task, n: notes, duration: minutes * 60.0))
-            return self
-        }
-        
-        func get(startingAtSecondsSince1970 start: Int = 0) -> [FlatEntry] {
-            let totalInterval = _entries.map({$0.duration}).reduce(0, +)
-            var startTime = Date(timeIntervalSince1970: Double(start) - totalInterval)
-            var flatEntries = [FlatEntry]()
-            for e in _entries {
-                let from = startTime
-                let to = startTime.addingTimeInterval(e.duration)
-                flatEntries.append(FlatEntry(from: from, to: to, project: e.p, task: e.t, notes: e.n))
-                startTime = to
-            }
-            return flatEntries
-        }
-    }
-    
     struct HierarchicalEntryLevel {
         let ancestor: XCUIElement
         let scope: String

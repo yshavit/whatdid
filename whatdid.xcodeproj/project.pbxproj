@@ -85,6 +85,7 @@
 		7EE4E39A24E25C0200552AAF /* DefaultScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */; };
 		7EEF324624EA542D002E217A /* NSRange+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEF324524EA542D002E217A /* NSRange+Helpers.swift */; };
 		7EEF324824EA54AD002E217A /* NSRange+HelpersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEF324724EA54AD002E217A /* NSRange+HelpersTest.swift */; };
+		7EEF62D426195C3800528000 /* DailyReportTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEF62D326195C3800528000 /* DailyReportTest.swift */; };
 		7EF58F8C2580F180002F9604 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF58F8A2580F180002F9604 /* TutorialViewController.swift */; };
 		7EF58F8D2580F180002F9604 /* TutorialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EF58F8B2580F180002F9604 /* TutorialViewController.xib */; };
 		7EF58FA12584972F002F9604 /* UITestCommonConsts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF58FA02584972F002F9604 /* UITestCommonConsts.swift */; };
@@ -219,6 +220,7 @@
 		7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultScheduler.swift; sourceTree = "<group>"; };
 		7EEF324524EA542D002E217A /* NSRange+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRange+Helpers.swift"; sourceTree = "<group>"; };
 		7EEF324724EA54AD002E217A /* NSRange+HelpersTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRange+HelpersTest.swift"; sourceTree = "<group>"; };
+		7EEF62D326195C3800528000 /* DailyReportTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyReportTest.swift; sourceTree = "<group>"; };
 		7EF58F8A2580F180002F9604 /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
 		7EF58F8B2580F180002F9604 /* TutorialViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TutorialViewController.xib; sourceTree = "<group>"; };
 		7EF58FA02584972F002F9604 /* UITestCommonConsts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestCommonConsts.swift; sourceTree = "<group>"; };
@@ -564,10 +566,11 @@
 			isa = PBXGroup;
 			children = (
 				7EF8B9FC2616BCEF00834866 /* AppUITestBase.swift */,
+				7EEF62D326195C3800528000 /* DailyReportTest.swift */,
 				7EF8BA062616C77A00834866 /* GoalsTest.swift */,
 				7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */,
-				7EDD2BC52616EFCB005E6A4B /* TutorialTest.swift */,
 				7EDD2BCB2616F06A005E6A4B /* ScheduleTest.swift */,
+				7EDD2BC52616EFCB005E6A4B /* TutorialTest.swift */,
 			);
 			path = app;
 			sourceTree = "<group>";
@@ -879,6 +882,7 @@
 				7E7C385224DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift in Sources */,
 				7EDDFF5F250097F20027E91A /* Date+Helpers.swift in Sources */,
 				7EF8B9E926158E2200834866 /* UITestBase.swift in Sources */,
+				7EEF62D426195C3800528000 /* DailyReportTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
