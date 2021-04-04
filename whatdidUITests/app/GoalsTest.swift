@@ -82,7 +82,17 @@ class GoalsTest: AppUITestBase {
             wait(
                 for: "expected goals",
                 timeout: 10,
-                until: { goals.textFields.allElementsBoundByIndex.map({$0.stringValue}) == expected })
+                until: {
+                    let snapshot: XCUIElementSnapshot
+                    do {
+                        snapshot = try goals.snapshot()
+                    } catch {
+                        log("error while grabbing snapshot: \(error)")
+                        return false
+                    }
+                    let textFields = snapshot.children.filter {$0.elementType == .textField}
+                    return textFields.map({$0.value as? String}) == expected
+                })
         }
         group("type some entries") {
             goals.typeText("day 1 goal 1\r")
@@ -111,7 +121,7 @@ class GoalsTest: AppUITestBase {
             }
             group("delete-me c") {
                 // a and b are both gone now, so c is at index 1 (with "day 1 goal 1" at 0)
-                goals.buttons.element(boundBy: 1).click()
+                goals.buttons.element(boundBy: 1).click(using: .frame())
                 lookForGoals("day 1 goal 1", "day 1 goal 2", "")
             }
         }

@@ -173,9 +173,7 @@ class ScheduleTest: AppUITestBase {
             clickStatusMenu()
             waitForTransition(of: .ptn, toIsVisible: true)
             
-            wait(for: "snoozebutton to exist", until: {button.isVisible})
-            button.click(using: .frame()) // open up the unsnooze
-            button.buttons["Unsnooze"].click()
+            clickUnsnooze(under: button)
             
             assertThat(window: .ptn, isVisible: true) // unsnoozing doesn't close the window
             clickStatusMenu()
@@ -200,9 +198,7 @@ class ScheduleTest: AppUITestBase {
             clickStatusMenu()
             waitForTransition(of: .ptn, toIsVisible: true)
             
-            wait(for: "snoozebutton to exist", until: {button.exists})
-            button.click(using: .frame()) // open up the unsnooze) // open up the unsnooze
-            button.buttons["Unsnooze"].click()
+            clickUnsnooze(under: button)
         }
         group("Close PTN without adding entry") {
             sleep(1)
@@ -233,10 +229,7 @@ class ScheduleTest: AppUITestBase {
             assertThat(window: .ptn, isVisible: false) // still snoozing
             clickStatusMenu()
             waitForTransition(of: .ptn, toIsVisible: true)
-            
-            wait(for: "snoozebutton to be visible", until: {button.isVisible})
-            button.click(using: .frame()) // open up the unsnooze
-            button.buttons["Unsnooze"].click()
+            clickUnsnooze(under: button)
         }
         group("Add an entry") {
             ptn.typeText("my project\r")
@@ -427,6 +420,20 @@ class ScheduleTest: AppUITestBase {
             if foundJitterBelowZero && foundJitterAboveZero {
                 break // we've seen one of each, so we're done!
             }
+        }
+    }
+    
+    /// For some reason, the VM on GH Actions really struggles with this. I'm separating it out so that I can debug
+    /// and tune it in one place
+    func clickUnsnooze(under button: XCUIElement) {
+        group("click unsnooze") {
+            wait(for: "snoozebutton to be visible", until: {button.isVisible})
+            pauseToLetStabilize()
+            button.click(using: .frame()) // open up the unsnooze
+            
+            wait(for: "snoozebutton to be visible", until: {button.buttons["Unsnooze"].isVisible})
+            pauseToLetStabilize()
+            button.buttons["Unsnooze"].click(using: .frame())
         }
     }
     

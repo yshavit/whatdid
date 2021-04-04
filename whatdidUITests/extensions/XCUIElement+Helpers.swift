@@ -158,6 +158,8 @@ enum ElementClickMethod {
     ///
     /// Some elements don't handle the builtin approach well, so this method can be more consistent for those.
     ///
+    /// I don't actually know why that is, so, insert-shrug-emoji-here.
+    ///
     /// The events are at a point that's `xInlay`% into the frame by width, and `yInlay`% by height.
     /// For instance, to click right in the middle (the default), use `(0.5, 0.5)`. To click near the top-left
     /// of the element, you might do smoething like (0.1, 0.1).
