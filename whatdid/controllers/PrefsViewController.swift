@@ -57,6 +57,12 @@ class PrefsViewController: NSViewController {
         }
     }
     
+    @IBInspectable
+    dynamic var requireNotes: Bool {
+        get { Prefs.requireNotes }
+        set(value) { Prefs.requireNotes = value}
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         outerVStackWidth.constant = desiredWidth

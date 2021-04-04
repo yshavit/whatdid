@@ -10,6 +10,7 @@ struct Prefs {
     @Pref(key: "ptnFrequencyJitterMinutes") static var ptnFrequencyJitterMinutes = 2
     @Pref(key: "launchAtLogin") static var launchAtLogin = false
     @Pref(key: "previouslyLaunchedVersion") static var tutorialVersion = -1
+    @Pref(key: "requireNotes") static var requireNotes = false
 }
 
 @propertyWrapper

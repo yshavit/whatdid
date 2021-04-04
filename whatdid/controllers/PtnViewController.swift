@@ -6,7 +6,6 @@ import KeyboardShortcuts
 class PtnViewController: NSViewController {
     
     public static let CURRENT_TUTORIAL_VERSION = 0
-    
 
     @IBOutlet var topStack: NSStackView!
     
@@ -60,6 +59,16 @@ class PtnViewController: NSViewController {
         #endif
     }
     
+    private func setNotesPlaceholder() {
+        let asText = Prefs.requireNotes ? "notes (required)" : "notes"
+        if let placeholder = noteField.placeholderAttributedString {
+            let attributes = placeholder.attributes(at: 0, effectiveRange: nil)
+            noteField.placeholderAttributedString = NSAttributedString(string: asText, attributes: attributes)
+        } else if noteField.placeholderString != nil {
+            noteField.placeholderString = asText
+        }
+    }
+    
     func reset() {
         noteField.stringValue = ""
         if projectField.textField.stringValue.isEmpty {
@@ -98,6 +107,7 @@ class PtnViewController: NSViewController {
     override func viewWillAppear() {
         super.viewWillAppear()
         noteField.stringValue = ""
+        setNotesPlaceholder()
         setUpSnoozeButton()
         updateHeaderText()
         grabFocus()
@@ -246,6 +256,7 @@ class PtnViewController: NSViewController {
                 if reason == PrefsViewController.SHOW_TUTORIAL {
                     self.showTutorial(forVersion: PtnViewController.CURRENT_TUTORIAL_VERSION)
                 }
+                self.setNotesPlaceholder()
                 self.setUpSnoozeButton(untilTomorrowSettings: prefsViewController.snoozeUntilTomorrowInfo)
             })
         }
@@ -280,15 +291,33 @@ class PtnViewController: NSViewController {
     }
     
     @IBAction func notesFieldAction(_ sender: NSTextField) {
-        AppDelegate.instance.model.addEntryNow(
-            project: projectField.textField.stringValue,
-            task: taskField.textField.stringValue,
-            notes: noteField.stringValue,
-            callback: {
-                self.hooks?.forceReschedule()
-                self.closeWindowAsync()
-            }
-        )
+        let project = projectField.textField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        let task = taskField.textField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        let notes = noteField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        var allowEntry = true
+        if project.isEmpty {
+            projectField.textField.flashTextField()
+            allowEntry = false
+        }
+        if task.isEmpty {
+            taskField.textField.flashTextField()
+            allowEntry = false
+        }
+        if notes.isEmpty && Prefs.requireNotes {
+            noteField.flashTextField()
+            allowEntry = false
+        }
+        if allowEntry {
+            AppDelegate.instance.model.addEntryNow(
+                project: project,
+                task: task,
+                notes: notes,
+                callback: {
+                    self.hooks?.forceReschedule()
+                    self.closeWindowAsync()
+                }
+            )
+        }
     }
     
     @IBAction func skipButtonPressed(_ sender: Any) {
