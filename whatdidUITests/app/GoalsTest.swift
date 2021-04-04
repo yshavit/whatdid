@@ -78,36 +78,41 @@ class GoalsTest: AppUITestBase {
     /// Multiple goals, and rm'ing them as well.
     func testEditingMultipleGoals() {
         let goals = openMorningGoals()
+        func lookForGoals(_ expected: String...) {
+            wait(
+                for: "expected goals",
+                timeout: 10,
+                until: { goals.textFields.allElementsBoundByIndex.map({$0.stringValue}) == expected })
+        }
         group("type some entries") {
             goals.typeText("day 1 goal 1\r")
             goals.typeText("delete-me a\r")
             goals.typeText("delete-me b\r")
             goals.typeText("delete-me c\r")
             goals.typeText("day 1 goal 2\r")
-            XCTAssertEqual(6, goals.textFields.count) // the 4 above, plus the empty one at the end
+            // Expect the 5 above, plus the empty one at the end
+            lookForGoals("day 1 goal 1", "delete-me a", "delete-me b", "delete-me c", "day 1 goal 2", "")
         }
         group("delete middle entries") {
             group("delete-me a") {
                 goals.textFields.element(boundBy: 1).deleteText(andReplaceWith: "") // "delete-me a"
-                XCTAssertEqual(6, goals.textFields.count) // we haven't finished editing yet, so it's still there
+                // we haven't finished editing yet, so a's field is still there, as a blank text
+                lookForGoals("day 1 goal 1", "", "delete-me b", "delete-me c", "day 1 goal 2", "")
             }
-            group("delete-me b") {
+            group("click on b") {
                 // grab focus on "delete-me b", which should cause a to delete. b should keep its focus
                 goals.textFields.element(boundBy: 2).click()
-                pauseToLetStabilize()
+                lookForGoals("day 1 goal 1", "delete-me b", "delete-me c", "day 1 goal 2", "")
                 XCTAssertEqual(["delete-me b"], goals.textFields.allElementsBoundByIndex.filter({$0.hasFocus}).map({$0.stringValue}))
+            }
+            group("delete-me b") {
                 goals.deleteText(andReplaceWith: "\r")
+                lookForGoals("day 1 goal 1", "delete-me c", "day 1 goal 2", "")
             }
             group("delete-me c") {
-                pauseToLetStabilize()
                 // a and b are both gone now, so c is at index 1 (with "day 1 goal 1" at 0)
                 goals.buttons.element(boundBy: 1).click()
-            }
-            group("final validation") {
-                pauseToLetStabilize()
-                XCTAssertEqual(
-                    ["day 1 goal 1", "day 1 goal 2", ""],
-                    goals.textFields.allElementsBoundByIndex.map({$0.stringValue}))
+                lookForGoals("day 1 goal 1", "day 1 goal 2", "")
             }
         }
         group("save") {
@@ -280,7 +285,7 @@ class GoalsTest: AppUITestBase {
         }
         group("open ptn and look at goals") {
             clickStatusMenu()
-            let ptnWindow = find(.ptn)
+            let ptnWindow = wait(for: .ptn)
             let ptnGoals = ptnWindow.groups["Goals for today"]
             XCTAssertEqual([], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.title}))
         }

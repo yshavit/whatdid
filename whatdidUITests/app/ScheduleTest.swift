@@ -173,7 +173,7 @@ class ScheduleTest: AppUITestBase {
             clickStatusMenu()
             waitForTransition(of: .ptn, toIsVisible: true)
             
-            wait(for: "snoozebutton to exist", until: {button.exists})
+            wait(for: "snoozebutton to exist", until: {button.isVisible})
             button.click(using: .frame()) // open up the unsnooze
             button.buttons["Unsnooze"].click()
             
@@ -234,8 +234,8 @@ class ScheduleTest: AppUITestBase {
             clickStatusMenu()
             waitForTransition(of: .ptn, toIsVisible: true)
             
-            wait(for: "snoozebutton to exist", until: {button.exists})
-            button.click(using: .frame()) // open up the unsnooze) // open up the unsnooze
+            wait(for: "snoozebutton to be visible", until: {button.isVisible})
+            button.click(using: .frame()) // open up the unsnooze
             button.buttons["Unsnooze"].click()
         }
         group("Add an entry") {
