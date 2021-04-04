@@ -155,7 +155,9 @@ class GoalsTest: AppUITestBase {
         group("complete one goal") {
             ptnGoals.checkBoxes.element(boundBy: 1).click(using: .frame())
             XCTAssertEqual(["day 1 goal 1", "day 1 goal 2"], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.title}))
-            XCTAssertEqual([false, true], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.value as? Bool}))
+            wait(for: "goal to complete", until: {
+                ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.title}) == ["day 1 goal 1", "day 1 goal 2"]
+            })
         }
         group("dismiss the window") {
             clickStatusMenu()
@@ -168,6 +170,58 @@ class GoalsTest: AppUITestBase {
             XCTAssertEqual([false, true], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.value as? Bool}))
             clickStatusMenu()
             waitForTransition(of: .ptn, toIsVisible: false)
+        }
+    }
+    
+    func testGoalAddedLaterInDay() {
+        let goals = openMorningGoals()
+        group("first goal") {
+            goals.typeText("goal 1")
+            goals.buttons.allElementsBoundByIndex.last?.click()
+            waitForTransition(of: .morningGoals, toIsVisible: false)
+        }
+        let goalsBar = group("goal right on border") {() -> XCUIElement in
+            setTimeUtc(h: 08, m: 00)
+            let ptn = wait(for: .ptn)
+            let goalsBar = ptn.children(matching: .group).matching(identifier: "Goals for today").element
+            goalsBar.buttons["Add new goal"].click()
+            goalsBar.children(matching: .textField).element.typeText("goal 2\r")
+            return goalsBar
+        }
+        group("goal right after grace period") {
+            setTimeUtc(h: 08, m: 00, s: 01)
+            goalsBar.buttons["Add new goal"].click()
+            goalsBar.children(matching: .textField).element.typeText("goal 3\r")
+        }
+        group("validate in ptn") {
+            XCTAssertEqual(
+                ["goal 1", "goal 2", "goal 3 🔸"],
+                goalsBar.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+        }
+        group("validate in ptn after it re-opens") {
+            checkForAndDismiss(window: .ptn)
+            clickStatusMenu()
+            waitForTransition(of: .ptn, toIsVisible: true)
+            XCTAssertEqual(
+                ["goal 1", "goal 2", "goal 3 🔸"],
+                goalsBar.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+            clickStatusMenu()
+            waitForTransition(of: .ptn, toIsVisible: false)
+        }
+        group("validate in daily report") {
+            clickStatusMenu(with: .maskAlternate)
+            let dailyReport = wait(for: .dailyEnd)
+            XCTAssertEqual(
+                ["goal 1", "goal 2", "goal 3 🔸"],
+                dailyReport.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+        }
+        group("new goal keeps badge after completion") {
+            let dailyReport = find(.dailyEnd)
+            let goal3 = dailyReport.checkBoxes.element(boundBy: 2)
+            XCTAssertEqual("goal 3 🔸", goal3.title)
+            goal3.click()
+            wait(for: "goal to be selected", until: {goal3.boolValue})
+            XCTAssertEqual("goal 3 🔸", goal3.title)
         }
     }
     
