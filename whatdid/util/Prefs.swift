@@ -13,7 +13,7 @@ struct Prefs {
 }
 
 @propertyWrapper
-struct Pref<T: PrefType> {
+class Pref<T: PrefType> {
     private let key: String
     var projectedValue: PrefsListeners<T>
     
@@ -22,6 +22,9 @@ struct Pref<T: PrefType> {
         UserDefaults.standard.register(defaults: [self.key: wrappedValue.asUserDefaultsValue])
         projectedValue = PrefsListeners(wrappedValue)
         projectedValue.notify(newValue: self.wrappedValue)
+        #if UI_TEST
+        allPrefs.append(self)
+        #endif
     }
     
     var wrappedValue: T {
@@ -154,3 +157,23 @@ struct HoursAndMinutes: PrefType {
         return function(hours, minutes)
     }
 }
+
+#if UI_TEST
+private protocol ResettablePref {
+    func resetPref()
+}
+private var allPrefs = [ResettablePref]()
+
+func resetAllPrefs() {
+    allPrefs.forEach { $0.resetPref() }
+}
+
+extension Pref: ResettablePref {
+    
+    func resetPref() {
+        UserDefaults.standard.removeObject(forKey: self.key)
+        let defaultValue = wrappedValue // we just deleted the old value, so this will read the default
+        wrappedValue = defaultValue
+    }
+}
+#endif

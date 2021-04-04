@@ -5,6 +5,13 @@ import Foundation
 class ManualTickScheduler: Scheduler {
     private var _now = Date(timeIntervalSince1970: 0)
     private var events = [WorkItem]()
+    private var listeners = [(Date) -> Void]()
+    
+    func reset() {
+        _now = Date(timeIntervalSince1970: 0)
+        listeners.forEach { $0(_now) }
+        events = []
+    }
     
     @discardableResult func schedule(_ description: String, at date: Date, _ block: @escaping () -> Void) -> ScheduledTask {
         NSLog("Scheduling \(description) at \(date) (t+\(date.timeIntervalSinceWhatdidNow))")
@@ -21,6 +28,10 @@ class ManualTickScheduler: Scheduler {
         }
     }
     
+    func addListener(_ listener: @escaping (Date) -> Void) {
+        listeners.append(listener)
+    }
+    
     var now: Date {
         get {
             return _now
@@ -30,6 +41,7 @@ class ManualTickScheduler: Scheduler {
             // I'm going to go for just the easy approach; efficiency isn't a concern here.
             events.filter { $0.fireAt <= value } .forEach { self.enqueueAction($0.block) }
             events.removeAll(where: { $0.fireAt <= value})
+            listeners.forEach { $0(value) }
         }
     }
     

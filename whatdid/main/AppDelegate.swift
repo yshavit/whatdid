@@ -27,6 +27,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func resetModel() {
         _model = Model()
     }
+    
+    func resetAll() {
+        // The scheduler has to get reset first, because various things depend on it:
+        // 1) The mainMenu has scheduled actions that we don't want to run (just to save time).
+        // 2) The model has its `lastEntryDate`
+        // 3) And of course, we have the various PTN/day-start/day-end schedules.
+        DefaultScheduler.instance.reset()
+        mainMenu.reset()
+        resetModel()
+        kickOffInitialSchedules()
+        resetAllPrefs()
+    }
     #endif
     
     func onDeactivation(_ block: @escaping () -> Void) {
@@ -35,7 +47,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
+    func applicationDidFinishLaunching(_: Notification) {
         NSLog("Starting whatdid with build %@", Version.pretty)
         #if UI_TEST
         NSApp.setActivationPolicy(.regular) // so that the windows show up normally
@@ -55,11 +67,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // Set up the keyboard shortcut
         KeyboardShortcuts.onKeyDown(for: .grabFocus, action: self.mainMenu.focus)
-        
+        // Set up the lanch-on-login functionality, if needed
+        setUpLauncher()
+        // Kick off the various scheduled popups (PTN, day start, day end).
+        kickOffInitialSchedules()
+    }
+    
+    private func kickOffInitialSchedules() {
         mainMenu.schedule(.ptn)
         mainMenu.schedule(.dailyEnd)
         mainMenu.schedule(.dayStart)
-        setUpLauncher()
         
         let currentVersion = Prefs.tutorialVersion
         if SHOW_TUTORIAL_ON_FIRST_START && currentVersion < PtnViewController.CURRENT_TUTORIAL_VERSION {

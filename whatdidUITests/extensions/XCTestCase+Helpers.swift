@@ -13,7 +13,7 @@ extension XCTestCase {
         let downEvent = CGEvent(mouseEventSource: src, mouseType: mouseType, mouseCursorPosition: position, mouseButton: mouseButton)
         downEvent?.flags = flags
         downEvent?.post(tap: CGEventTapLocation.cghidEventTap)
-        pauseToLetStabilize()
+        sleepMillis(50)
     }
     
     func clickEvent(_ mouseButton: CGMouseButton, _ mouseType: CGEventType, at position: CGPoint, with flags: CGEventFlags) {
@@ -21,11 +21,11 @@ extension XCTestCase {
     }
     
     class func pauseToLetStabilize() {
-        sleepMillis(250)
+        sleepMillis(150)
     }
     
     func pauseToLetStabilize() {
-        XCTestCase.sleepMillis(250)
+        XCTestCase.sleepMillis(150)
     }
     
     class func sleepMillis(_ ms: Int) {

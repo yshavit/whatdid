@@ -17,7 +17,7 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
     init(with scheduler: ManualTickScheduler) {
         self.scheduler = scheduler
         window = NSWindow(
-            contentRect: NSRect(x: 0, y: 50, width: 100, height: 50),
+            contentRect: NSRect(x: 0, y: 100, width: 100, height: 100),
             styleMask: [.titled],
             backing: .buffered,
             defer: true,
@@ -44,8 +44,14 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
         printLocal = NSTextField(labelWithString: "")
         stack.addArrangedSubview(printLocal)
         
+        let div = NSBox()
+        div.boxType = .separator
+        stack.addArrangedSubview(div)
+        stack.addArrangedSubview(ButtonWithClosure(label: "Reset All", {_ in AppDelegate.instance.resetAll()}))
+        
         super.init()
         updateDate()
+        scheduler.addListener(self.updateDateDisplays(to:))
         window.setIsVisible(true)
         setter.delegate = self
         setUpActivator()
@@ -61,6 +67,9 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
     }
     
     @objc private func grabFocus() {
+        if NSEvent.modifierFlags.contains(.option) {
+            AppDelegate.instance.resetAll()
+        }
         NSApp.activate(ignoringOtherApps: true)
         window.makeKeyAndOrderFront(self)
     }
@@ -69,16 +78,21 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
         updateDate()
     }
     
+    func updateDateDisplays(to date: Date) {
+        setter.stringValue = "\(Int(date.timeIntervalSince1970))"
+        
+        let timeFormatter = ISO8601DateFormatter()
+        timeFormatter.timeZone = TimeZone.utc
+        printUtc.stringValue = timeFormatter.string(from: date)
+        
+        timeFormatter.timeZone = DefaultScheduler.instance.timeZone
+        printLocal.stringValue = timeFormatter.string(from: date)
+    }
+    
     private func updateDate() {
         if let dateAsInt = Int(setter.stringValue) {
             let date = Date(timeIntervalSince1970: Double(dateAsInt))
-            
-            let timeFormatter = ISO8601DateFormatter()
-            timeFormatter.timeZone = TimeZone.utc
-            printUtc.stringValue = timeFormatter.string(from: date)
-            
-            timeFormatter.timeZone = DefaultScheduler.instance.timeZone
-            printLocal.stringValue = timeFormatter.string(from: date)
+            updateDateDisplays(to: date)
             
             switch deferButton.state {
             case .on:
