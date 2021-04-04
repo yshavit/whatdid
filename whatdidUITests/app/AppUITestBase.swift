@@ -57,6 +57,7 @@ class AppUITestBase: UITestBase {
             clickPoint = AppUITestBase.focusMenuItemPoint!
         }
         leftClick("focus/reset menu item", at: clickPoint, with: .maskAlternate)
+        wait(for: "window to close", until: {openWindow == nil})
     }
     
     /// Sets the mocked clock in UTC. If `deactivate` is true (default false), then this will set the mocked clock to set the time when the app deactivates, and then this method will activate
@@ -118,10 +119,16 @@ class AppUITestBase: UITestBase {
         return w
     }
     
+    /// Simple overload of `find(_:WindowType)` that lets you use the window in a closure, just to keep variable scope tighter.
+    func find(_ windowType: WindowType, then action: (XCUIElement) -> Void) {
+        let w = find(windowType)
+        action(w)
+    }
+    
     var openWindowInfo: (WindowType, XCUIElement)? {
         for window in app.windows.allElementsBoundByIndex {
             for windowType in WindowType.allCases {
-                if window.title == windowType.windowTitle && window.exists {
+                if window.exists && window.title == windowType.windowTitle {
                     return (windowType, window)
                 }
             }
@@ -130,11 +137,20 @@ class AppUITestBase: UITestBase {
     }
     
     var openWindow: XCUIElement? {
-        openWindowInfo?.1
+        let potentialWindows = app.windows.matching(NSPredicate(format: "title in %@", Set(WindowType.byTitle.keys))).allElementsBoundByIndex
+        
+        if potentialWindows.isEmpty {
+            return nil
+        }
+        XCTAssertEqual(1, potentialWindows.count)
+        return potentialWindows[0]
     }
     
     var openWindowType: WindowType? {
-        openWindowInfo?.0
+        guard let openWindow = openWindow else {
+            return nil
+        }
+        return WindowType.byTitle[openWindow.title]
     }
     
     func type(into app: XCUIElement, _ entry: FlatEntry) {
@@ -181,7 +197,7 @@ class AppUITestBase: UITestBase {
         return find(window)
     }
     
-    func dismiss(window: WindowType) {
+    func checkForAndDismiss(window: WindowType) {
         waitForTransition(of: window, toIsVisible: true)
         clickStatusMenu()
         waitForTransition(of: window, toIsVisible: false)
@@ -308,6 +324,10 @@ class AppUITestBase: UITestBase {
             case .morningGoals:
                 return "Start the day with some goals"
             }
+        }
+        
+        static var byTitle = WindowType.allCases.reduce(into: [String:WindowType]()) {dict, windowType in
+            dict[windowType.windowTitle] = windowType
         }
     }
 }

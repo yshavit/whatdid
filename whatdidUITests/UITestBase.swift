@@ -111,5 +111,6 @@ class UITestBase: XCTestCase {
         PtnViewControllerTest.app = app
         app.launchEnvironment = env
         app.launch()
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 15))
     }
 }

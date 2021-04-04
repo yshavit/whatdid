@@ -19,6 +19,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
         // is that we'll flush any pending scheduled opens. There can only be as many of these as WindowContents values,
         // so only loop that many times; this serves as a backstop against an infinite loop, in case there's a bug elsewhere
         // in the opener logic.
+        unSnooze()
         if let window = window {
             for _ in WindowContents.allCases {
                 _ = windowShouldClose(window)
@@ -32,6 +33,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
         }
         // Lastly, re-initialize the PTN itself.
         taskAdditionsPane = PtnViewController()
+        taskAdditionsPane.hooks = self
     }
     #endif
     
