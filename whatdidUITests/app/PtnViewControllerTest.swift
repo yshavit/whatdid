@@ -4,6 +4,64 @@ import XCTest
 @testable import whatdid
 
 class PtnViewControllerTest: AppUITestBase {
+    
+    func testRequiredFields() {
+        let ptn = openPtn()
+        
+        /// Click to the project field, and then tab to the other two.
+        /// Because focusing one of these fields also selects all its text, we can delete by just pressing the delete key.
+        /// This always hits the enter key on notes.
+        func typeViaTabs(_ p: String, _ t: String, _ n: String) {
+            ptn.pcombo.textField.click()
+            for entry in [p + "\t", t + "\t", n + "\r"] {
+                if entry.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    app.typeKey(.delete)
+                }
+                app.typeText(entry)
+            }
+        }
+        
+        group("project is required") {
+            typeViaTabs("", "task", "notes")
+            sleep(1)
+            XCTAssertEqual(.ptn, openWindowType)
+        }
+        group("task is required") {
+            typeViaTabs("project", "", "notes")
+            sleep(1)
+            XCTAssertEqual(.ptn, openWindowType)
+        }
+        group("notes are not required") {
+            typeViaTabs("project", "task", "")
+            waitForTransition(of: .ptn, toIsVisible: false)
+        }
+        group("set preferences to require notes") {
+            group("open PTN back up") {
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: true)
+                XCTAssertEqual("notes", ptn.nfield.placeholderValue) // not "(required)"
+            }
+            let prefsSheet = group("open prefs") {() -> XCUIElement in
+                ptn.window.buttons["Preferences"].click()
+                let prefsSheet = ptn.window.sheets.firstMatch
+                wait(for: "prefs sheet to show", until: {prefsSheet.isVisible})
+                return prefsSheet
+            }
+            group("set prefs and hide window") {
+                prefsSheet.tabs["General"].click()
+                prefsSheet.checkBoxes["Require Notes"].click()
+                prefsSheet.buttons["Done"].click()
+                wait(for: "prefs sheet to hide", until: {!prefsSheet.isVisible})
+            }
+        }
+        group("verify notes are required") {
+            XCTAssertEqual("notes (required)", ptn.nfield.placeholderValue)
+            typeViaTabs("project", "task", "")
+            sleep(1)
+            XCTAssertEqual(.ptn, openWindowType)
+        }
+    }
+    
     func testResizing() {
         let ptn = openPtn()
         func checkVerticalAlignments() {

@@ -153,7 +153,7 @@ class GoalsTest: AppUITestBase {
             return wait(for: .ptn)
         }
         group("complete one goal") {
-            ptnGoals.checkBoxes.element(boundBy: 1).click()
+            ptnGoals.checkBoxes.element(boundBy: 1).click(using: .frame())
             XCTAssertEqual(["day 1 goal 1", "day 1 goal 2"], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.title}))
             XCTAssertEqual([false, true], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.value as? Bool}))
         }
