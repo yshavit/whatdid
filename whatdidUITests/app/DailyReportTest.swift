@@ -154,6 +154,100 @@ class DailyReportTest: AppUITestBase {
             XCTAssertTrue(project1Header.isVisible)
         }
     }
+    
+    func testDailyReportResizing() {
+        let longProjectName = "The quick brown fox jumped over the lazy dog because the dog was just so lazy. Poor dog."
+        group("Set up events with long text") {
+            let twelveHoursFromEpoch = Date(timeIntervalSince1970: 43200)
+            let entries = FlatEntry.serialize(
+                entry(
+                    longProjectName,
+                    "Some task",
+                    "Some notes",
+                    from: twelveHoursFromEpoch,
+                    to: twelveHoursFromEpoch.addingTimeInterval(60)),
+                entry(
+                    "short project",
+                    "short task",
+                    "short notes",
+                    from: twelveHoursFromEpoch.addingTimeInterval(60),
+                    to: twelveHoursFromEpoch.addingTimeInterval(120)),
+                entry(
+                    "short project",
+                    "short task",
+                    String(repeating: "here are some long notes ", count: 3),
+                    from: twelveHoursFromEpoch.addingTimeInterval(120),
+                    to: twelveHoursFromEpoch.addingTimeInterval(180))
+                )
+            let ptn = openPtn()
+            ptn.entriesHook.click()
+            ptn.window.typeText(entries + "\r")
+            clickStatusMenu()
+            waitForTransition(of: .ptn, toIsVisible: false)
+        }
+        let originalWindowFrame = group("Open report in two days") {() -> CGRect in
+            dragStatusMenu(to: NSScreen.main!.frame.maxX)
+            setTimeUtc(d: 2)
+            handleLongSessionPrompt(on: .ptn, .startNewSession)
+            // When we start the new session, the PTN will disappear, but the daily report will open (since we're past the scheduled date).
+            // Sanity check that the frame's right edge is at the screen's right edge.
+            let dailyReportFrame = self.app.windows[WindowType.dailyEnd.windowTitle].firstMatch.frame
+            XCTAssertEqual(NSScreen.main!.frame.width, dailyReportFrame.maxX)
+            return dailyReportFrame
+        }
+        group("Set time back") {
+            // Our current date is 1/2/1970 00:00:00, and the report starts at the 7am before that. We want the previous day's,
+            // which goes from 12/31/1969 07:00:00 to 1/1/1970 00:00:00.
+            let dailyReportWindow = app.windows[WindowType.dailyEnd.windowTitle].firstMatch
+            XCTAssertTrue(dailyReportWindow.datePickers.firstMatch.hasFocus) // sanity check
+            dailyReportWindow.typeKey(.tab) // tab to the date portion, then arrowdown to decrement it
+            dailyReportWindow.typeKey(.downArrow)
+        }
+        group("Confirm that the report has the entry") {
+            let dailyReportWindow = app.windows[WindowType.dailyEnd.windowTitle].firstMatch
+            let project = HierarchicalEntryLevel(ancestor: dailyReportWindow, scope: "Project", label: longProjectName)
+            let firstVisibleElement = project.allElements.values.first(where: {$0.isVisible})
+            if let visible = firstVisibleElement {
+                log("found: \(visible.simpleDescription)")
+            }
+            XCTAssertNotNil(firstVisibleElement, "Project not visible")
+        }
+        group("Check that the window is still within the original bounds") {
+            let dailyReportWindow = app.windows[WindowType.dailyEnd.windowTitle].firstMatch
+            let dailyReportFrame = dailyReportWindow.frame
+            XCTAssertEqual(dailyReportFrame.minX, originalWindowFrame.minX)
+            XCTAssertEqual(dailyReportFrame.maxX, originalWindowFrame.maxX)
+            let project = HierarchicalEntryLevel(ancestor: dailyReportWindow, scope: "Project", label: longProjectName)
+            for (description, e) in project.allElements {
+                XCTAssertTrue(e.isVisible, description)
+            }
+        }
+        group("Check the long notes") {
+            let (shortTaskElem, longTaskElem) = group("Open project and task") {() -> (XCUIElement, XCUIElement) in
+                let dailyReportWindow = app.windows[WindowType.dailyEnd.windowTitle].firstMatch
+                let shortProject = HierarchicalEntryLevel(ancestor: dailyReportWindow, scope: "Project", label: "short project")
+                shortProject.disclosure.click()
+                wait(for: "project to open", until: {dailyReportWindow.groups.count > 0})
+                
+                let tasksForProject = dailyReportWindow.groups["Tasks for \"short project\""]
+                let task = HierarchicalEntryLevel(ancestor: tasksForProject, scope: "Task", label: "short task")
+                task.disclosure.click()
+                wait(for: "task details to open", until: {tasksForProject.groups.staticTexts.count == 4})
+                
+                let taskDetails = tasksForProject.groups["Details for short task"]
+                // the details texts are: [0] time header for short task, [1] short task text, [2] time header for long task, [3] long task text
+                let detailTexts = taskDetails.staticTexts.allElementsBoundByIndex
+                return (detailTexts[1], detailTexts[3])
+            }
+            group("Validate task elements") {
+                XCTAssertTrue(shortTaskElem.stringValue.contains("short notes"))
+                XCTAssertTrue(longTaskElem.stringValue.contains("here are some long notes"))
+                // Make sure the long task height is at least 1.9x the short task height. I would expect it to be 2x, but I'm allowing for
+                // rounding layout squashing, etc.
+                XCTAssertGreaterThanOrEqual(longTaskElem.frame.height, shortTaskElem.frame.height * 1.9)
+            }   
+        }
+    }
 
     class EntriesBuilder {
         private var _entries = [(p: String, t: String, n: String, duration: TimeInterval)]()

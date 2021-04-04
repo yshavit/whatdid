@@ -62,7 +62,7 @@ class AppUITestBase: UITestBase {
     
     /// Sets the mocked clock in UTC. If `deactivate` is true (default false), then this will set the mocked clock to set the time when the app deactivates, and then this method will activate
     /// the finder. Otherwise, `onSessionPrompt` governs what to do if the "start a new session?" prompt comes up.
-    func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0, s: Int = 0, deactivate: Bool = false) {
+    func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0, s: Int = 0, deactivate: Bool = false, activateFirst: Bool = true) {
         group("setting time \(d)d \(h)h \(m)m \(s)s") {
             let epochSeconds = d * 86400 + h * 3600 + m * 60 + s
             let text = "\(epochSeconds)\r"
@@ -90,9 +90,15 @@ class AppUITestBase: UITestBase {
         }
     }
     
+    func checkThatLongSessionPrompt(on window: XCUIElement, exists: Bool) {
+        let actual = window.sheets.matching(NSPredicate(format: "title = %@", "Start new session?")).count
+        let expected = exists ? 1 : 0
+        XCTAssertEqual(expected, actual)
+    }
+    
     func handleLongSessionPrompt(on windowType: WindowType, _ action: LongSessionAction) {
         let window = wait(for: windowType)
-        XCTAssertNotNil(window.sheets.allElementsBoundByIndex.first(where: {$0.title == "Start new session?"}))
+        checkThatLongSessionPrompt(on: window, exists: true)
         switch action {
         case .continueWithCurrentSession:
             window.sheets.buttons["Continue with current session"].click()
