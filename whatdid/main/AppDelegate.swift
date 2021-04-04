@@ -37,6 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         mainMenu.reset()
         resetModel()
         kickOffInitialSchedules()
+        resetAllPrefs()
     }
     #endif
     

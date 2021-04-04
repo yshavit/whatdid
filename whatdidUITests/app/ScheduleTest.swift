@@ -326,6 +326,110 @@ class ScheduleTest: AppUITestBase {
         }
     }
     
+    // For the no-jitter variant, we'll try 6 times. If there's 1 minute of jitter, the chance of any
+    // one iteration succeeding is 50%, and the chance of all 10 succeeding is 0.5^6 = 1.56%.
+    // If there's 2 minutes of jitter, the chance of any one iteration succeeding (ie, randomly having
+    // no jitter) is 30%, and the chance of all 10 succeeding is 0.0017%.
+    func testCustomScheduleNoJitter() {
+        let ptn = openPtn()
+        let prefsButton = ptn.window.buttons["Preferences"]
+        let prefsSheet = ptn.window.sheets.firstMatch
+        let frequencyText = prefsSheet.textFields["frequency"]
+        let jitterText = prefsSheet.textFields["frequency randomness"]
+        
+        group("Setup") {
+            group("Open prefs") {
+                prefsButton.click()
+                XCTAssertTrue(prefsSheet.isVisible)
+                prefsSheet.tabs["General"].click()
+            }
+            group("Set schedule: 10m±0m") {
+                frequencyText.deleteText(andReplaceWith: "10\r")
+                jitterText.deleteText(andReplaceWith: "0\r")
+                XCTAssertEqual("10", frequencyText.stringValue)
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: false)
+            }
+        }
+        
+        var minutesSinceUtc = 0
+        for i in 0..<6 {
+            group("Iteration \(i)") {
+                minutesSinceUtc += 10
+                let secondsSinceUtc = minutesSinceUtc * 60
+                setTimeUtc(s: secondsSinceUtc - 1)
+                pauseToLetStabilize()
+                XCTAssertNil(openWindow)
+                setTimeUtc(s: secondsSinceUtc)
+                checkForAndDismiss(window: .ptn)
+            }
+        }
+    }
+    
+    /// Because the jitter is random, we're going to take a statistical approach to these.
+    ///
+    /// For the with-jitter variant, we'll try up to 20 times with 5 minutes of jitter, which means
+    /// jitter is anywhere from -5 to +5: 11 values. The chance of randomly hitting jitter > 0 is 45.45%
+    /// and the chance of doing that 20 times in a row is 0.000014%; so there's a very small chance
+    /// of never hitting jitter >= 0. Similarly, there's a very small chance of never hitting jitter less than zero.
+    /// So, we just run the 20 loops until we find both one jitter above 0 and one below it; as long as we
+    /// have those two values, we can be reasonably certain there's some randomness.
+    func testCustomScheduleWithJitter() {
+        let ptn = openPtn()
+        let prefsButton = ptn.window.buttons["Preferences"]
+        let prefsSheet = ptn.window.sheets.firstMatch
+        let frequencyText = prefsSheet.textFields["frequency"]
+        let jitterText = prefsSheet.textFields["frequency randomness"]
+        
+        group("Setup") {
+            group("Open prefs") {
+                prefsButton.click()
+                XCTAssertTrue(prefsSheet.isVisible)
+                prefsSheet.tabs["General"].click()
+            }
+            group("Set schedule: 10m±0m") {
+                frequencyText.deleteText(andReplaceWith: "10\r")
+                jitterText.deleteText(andReplaceWith: "5\r")
+                XCTAssertEqual("10", frequencyText.stringValue)
+                clickStatusMenu()
+                waitForTransition(of: .ptn, toIsVisible: false)
+            }
+        }
+        var minutesSinceUtc = 0
+        var foundJitterBelowZero = false
+        var foundJitterAboveZero = false
+        for i in 0..<20 {
+            // Returns whether the jitter was < 0. See doc on this method for why we care.
+            let foundPtn = group("Iteration \(i)") {() -> Bool in
+                minutesSinceUtc += 10
+                let secondsSinceUtc = minutesSinceUtc * 60
+                setTimeUtc(s: secondsSinceUtc - 1)
+                pauseToLetStabilize()
+                if let window = openWindow {
+                    XCTAssertEqual(WindowType.ptn.windowTitle, window.title)
+                    log("Found PTN")
+                    return true
+                } else {
+                    // The random jitter was >= 0 minutes. Fast forward another 10 minutes so we can
+                    // be sure to get the PTN, and then close it and try again.
+                    minutesSinceUtc += 10
+                    setTimeUtc(m: minutesSinceUtc)
+                    checkForAndDismiss(window: .ptn)
+                    return false
+                }
+            }
+            log("Was jitter below zero? => \(foundPtn)")
+            if foundPtn {
+                foundJitterBelowZero = true
+            } else {
+                foundJitterAboveZero = true
+            }
+            if foundJitterBelowZero && foundJitterAboveZero {
+                break // we've seen one of each, so we're done!
+            }
+        }
+    }
+    
     /// Opens the PTN and returns a `(ptn, snoozeButton)` pair
     private func openPtnAndGetButton() -> (XCUIElement, XCUIElement) {
         group("open PTN") {() -> (XCUIElement, XCUIElement) in

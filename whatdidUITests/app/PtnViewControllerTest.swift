@@ -471,9 +471,7 @@ class PtnViewControllerTest: UITestBase {
         }
     }
     
-    /// Similar to `testPreferences`, but specific to PTN frequency prefs.
-    /// I'm keeping it separate so I don't have to much with adjusting dates in the other schedule-related tests already in that method.
-    func testPreferencesForPtnFrequency() {
+    func testScheduleUiElements() {
         let ptn = openPtn()
         let prefsButton = ptn.window.buttons["Preferences"]
         let prefsSheet = ptn.window.sheets.firstMatch
@@ -532,78 +530,8 @@ class PtnViewControllerTest: UITestBase {
                 XCTAssertEqual("1", jitterText.stringValue)
             }
         }
-        group("Scheduling") {
-            // Because the jitter is random, we're going to take a statistical approach to these.
-            //
-            // For the no-jitter variant, we'll try 6 times. If there's 1 minute of jitter, the chance of any
-            // one iteration succeeding is 50%, and the chance of all 10 succeeding is 0.5^6 = 1.56%.
-            // If there's 2 minutes of jitter, the chance of any one iteration succeeding (ie, randomly having
-            // no jitter) is 30%, and the chance of all 10 succeeding is 0.0017%.
-            //
-            // For the with-jitter variant, we'll try up to 10 times with 5 minutes of jitter, which means
-            // jitter is anywhere from -5 to +5: 11 values. The chance of randomly hitting jitter >= 0 is 54.54%
-            // and the chance of doing that 20 times in a row is 0.000543%.
-            var minutesSinceUtc = 0
-            group("Setup: 10-minute schedule") {
-                frequencyText.deleteText(andReplaceWith: "10\r")
-                jitterText.deleteText(andReplaceWith: "0\r")
-                XCTAssertEqual("10", frequencyText.stringValue)
-                clickStatusMenu()
-                waitForTransition(of: .ptn, toIsVisible: false)
-            }
-            group("No jitter") {
-                for i in 0..<6 {
-                    group("Iteration \(i)") {
-                        minutesSinceUtc += 10
-                        let secondsSinceUtc = minutesSinceUtc * 60
-                        setTimeUtc(s: secondsSinceUtc - 1)
-                        pauseToLetStabilize()
-                        XCTAssertNil(openWindow)
-                        setTimeUtc(s: secondsSinceUtc)
-                        waitForTransition(of: .ptn, toIsVisible: true)
-                        clickStatusMenu()
-                        waitForTransition(of: .ptn, toIsVisible: false)
-                    }
-                }
-            }
-            group("Large jitter") {
-                group("Setup") {
-                    clickStatusMenu()
-                    prefsButton.click()
-                    XCTAssertTrue(prefsSheet.isVisible)
-                    jitterText.deleteText(andReplaceWith: "5\r")
-                    clickStatusMenu()
-                    waitForTransition(of: .ptn, toIsVisible: false)
-                }
-                for i in 0..<20 {
-                    let foundPtn = group("Iteration \(i)") {() -> Bool in
-                        minutesSinceUtc += 10
-                        let secondsSinceUtc = minutesSinceUtc * 60
-                        setTimeUtc(s: secondsSinceUtc - 1)
-                        pauseToLetStabilize()
-                        if let window = openWindow {
-                            XCTAssertEqual(WindowType.ptn.windowTitle, window.title)
-                            log("Found PTN")
-                            return true
-                        } else {
-                            // The random jitter was >= 0 minutes. Fast forward another 10 minutes so we can
-                            // ne sure to get the PTN, and then close it and try again.
-                            minutesSinceUtc += 10
-                            setTimeUtc(m: minutesSinceUtc)
-                            waitForTransition(of: .ptn, toIsVisible: true)
-                            clickStatusMenu()
-                            waitForTransition(of: .ptn, toIsVisible: false)
-                            return false
-                        }
-                    }
-                    if foundPtn {
-                        break
-                    }
-                }
-            }
-        }
-        
     }
+    
     
     func testPreferences() {
         let ptn = openPtn()
