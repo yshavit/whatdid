@@ -379,9 +379,10 @@ class Model {
         }
         
         fileprivate let id: URL
-        var goal: String
-        var created: Date
+        let goal: String
+        let created: Date
         var completed: Date?
+        let sessionStart: Date
         fileprivate var orderWithinSession: Int
         
         fileprivate static func fromManaged(_ goal: Goal) -> GoalDto {
@@ -390,6 +391,7 @@ class Model {
                 goal: goal.goal,
                 created: goal.created,
                 completed: goal.completed,
+                sessionStart: goal.during?.startTime ?? goal.created,
                 orderWithinSession: goal.orderWithinSession?.intValue ?? -1)
         }
         

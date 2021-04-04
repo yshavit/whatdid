@@ -3,6 +3,8 @@
 import Cocoa
 
 class GoalsView: NSView, NSAccessibilityGroup {
+    private static let new_marker = "🔸"
+    private static let new_goal_grace_time = TimeInterval(60 * 60) // one hour
     private static let horizontal_spacing: CGFloat = 3
     private static let small_control_font = NSFont.controlContentFont(ofSize: NSFont.systemFontSize(for: .small))
     
@@ -193,17 +195,35 @@ class GoalsView: NSView, NSAccessibilityGroup {
         let checkbox = ButtonWithClosure(checkboxWithTitle: "", target: nil, action: nil)
         checkbox.controlSize = .small
         checkbox.state = goal.isCompleted ? .on : .off
-        checkbox.attributedTitle = NSAttributedString(string: goal.goal)
-        checkbox.attributedAlternateTitle = NSAttributedString(string: goal.goal, attributes: [
+        let addedLate = goal.created.timeIntervalSince(goal.sessionStart) > new_goal_grace_time
+        checkbox.attributedTitle = goalTitle(string: goal.goal, addedLate: addedLate)
+        checkbox.attributedAlternateTitle = goalTitle(string: goal.goal, addedLate: addedLate, attributes: [
             .obliqueness: 0.15,
             .foregroundColor: NSColor.controlAccentColor
         ])
+        if addedLate {
+            checkbox.toolTip = "\(new_marker) – You added this tip later in the day."
+        }
         checkbox.onPress {button in
             var toSave = goal
             toSave.completed = (button.state == .on) ? DefaultScheduler.instance.now : nil
             AppDelegate.instance.model.save(goal: toSave)
         }
         return checkbox
+    }
+    
+    private static func goalTitle(string: String, addedLate: Bool, attributes: [NSAttributedString.Key:Any]? = nil) -> NSAttributedString {
+        guard addedLate else {
+            return NSAttributedString(string: string, attributes: attributes)
+        }
+        var newAttributes = attributes ?? [:]
+        /// As far as I can tell, `.supersript`
+        newAttributes[.superscript] = 1
+        newAttributes[.font] = NSFont.controlContentFont(ofSize: NSFont.systemFontSize(for: .small) * 0.6)
+        let builder = NSMutableAttributedString()
+        builder.append(NSAttributedString(string: string + " ", attributes: attributes))
+        builder.append(NSAttributedString(string: GoalsView.new_marker, attributes: newAttributes))
+        return builder
     }
     
     private class Spacer: NSTextField {
