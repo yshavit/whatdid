@@ -135,12 +135,11 @@ class PtnViewControllerTest: AppUITestBase {
             // We want both the lowest and highest values (alphanumerically) to be in the middle.
             // That means that when we autocomplete "wh*", we can be sure that we're getting date-ordered
             // entries.
-            let entriesSerialized = FlatEntry.serialize(
+            entriesHook = [
                 entry("wheredid", "something else", "notes 2", from: t(-100), to: t(-90)),
                 entry("whatdid", "autothing", "notes 1", from: t(-80), to: t(-70)),
                 entry("whytdid", "autothing", "notes 1", from: t(-80), to: t(-70)),
-                entry("whodid", "something else", "notes 2", from: t(-60), to: t(-50)))
-            ptn.entriesHook.deleteText(andReplaceWith: entriesSerialized + "\r")
+                entry("whodid", "something else", "notes 2", from: t(-60), to: t(-50))]
         }
         group("autocomplete wh*") {
             let pcombo = ptn.pcombo.textField
@@ -339,10 +338,9 @@ class PtnViewControllerTest: AppUITestBase {
         group("Validate") {
             clickStatusMenu()
             waitForTransition(of: .ptn, toIsVisible: true)
-            let entries = FlatEntry.deserialize(from: findPtn().entriesHook.stringValue)
             XCTAssertEqual(
                 [FlatEntry(from: date(h: 1, m: 00), to: date(h: 1, m: 15), project: "One", task: "Two", notes: "Three")],
-                entries)
+                entriesHook)
         }
     }
 }

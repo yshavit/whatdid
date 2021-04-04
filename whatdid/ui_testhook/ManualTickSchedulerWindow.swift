@@ -12,10 +12,12 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
     private let setter: NSTextField
     private let printUtc: NSTextField
     private let printLocal: NSTextField
+    private let entriesField: NSTextField
     
     override init() {
         setter = NSTextField(string: "0")
         setter.isEditable = true
+        setter.setAccessibilityLabel("uitestwindowclock")
         
         deferButton = NSButton(checkboxWithTitle: ManualTickSchedulerWindow.deferCheckboxTitle, target: nil, action: nil)
         
@@ -23,11 +25,20 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
         printUtc.setAccessibilityLabel("mockclock_status")
         printLocal = NSTextField(labelWithString: "")
         
+        entriesField = NSTextField(string: "")
+        entriesField.setAccessibilityLabel("uihook_flatentryjson")
+        entriesField.action = #selector(setEntriesViaJson)
+        
         super.init()
         
         updateDate()
         scheduler.addListener(self.updateDateDisplays(to:))
         setter.delegate = self
+        
+        entriesField.target = self
+        entriesField.action = #selector(self.setEntriesViaJson(_:))
+        AppDelegate.instance.model.addListener(self.populateJsonFlatEntryField)
+        
         setUpActivator()
     }
     
@@ -37,10 +48,14 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
         adder(printUtc)
         adder(printLocal)
         
-        let div = NSBox()
-        div.boxType = .separator
-        adder(div)
+        let div1 = NSBox()
+        div1.boxType = .separator
+        adder(div1)
+        adder(entriesField)
         
+        let div2 = NSBox()
+        div2.boxType = .separator
+        adder(div2)
         adder(ButtonWithClosure(label: "Reset All", {_ in AppDelegate.instance.resetAll()}))
     }
     
@@ -62,6 +77,17 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
             window.makeKeyAndOrderFront(self)
             window.makeFirstResponder(setter)
         }
+    }
+    
+    func populateJsonFlatEntryField() {
+        let entries = AppDelegate.instance.model.listEntries(since: Date.distantPast)
+        entriesField.stringValue = FlatEntry.serialize(entries)
+    }
+    
+    @objc private func setEntriesViaJson(_ field: NSTextField) {
+        let entries = FlatEntry.deserialize(from: entriesField.stringValue)
+        AppDelegate.instance.resetModel()
+        entries.forEach {AppDelegate.instance.model.add($0, andThen: {})}
     }
     
     func controlTextDidEndEditing(_ obj: Notification) {

@@ -70,7 +70,7 @@ class AppUITestBase: UITestBase {
             activate()
             app.menuBars.statusItems["Focus Whatdid"].click()
             mockedClockWindow.click()
-            let clockTicker = mockedClockWindow.children(matching: .textField).element
+            let clockTicker = mockedClockWindow.textFields["uitestwindowclock"]
             if deactivate {
                 mockedClockWindow.checkBoxes["Defer until deactivation"].click()
             }
@@ -129,6 +129,21 @@ class AppUITestBase: UITestBase {
     func find(_ windowType: WindowType, then action: (XCUIElement) -> Void) {
         let w = find(windowType)
         action(w)
+    }
+    
+    var entriesHook: [FlatEntry] {
+        get {
+            return FlatEntry.deserialize(from: focusedEntriesHookField.stringValue)
+        }
+        set (value) {
+            focusedEntriesHookField.deleteText(andReplaceWith: FlatEntry.serialize(value) + "\r")
+        }
+    }
+    
+    private var focusedEntriesHookField: XCUIElement {
+        activate()
+        app.menuBars.statusItems["Focus Whatdid"].click()
+        return app.windows["UI Test Window"].textFields["uihook_flatentryjson"]
     }
     
     var openWindowInfo: (WindowType, XCUIElement)? {
@@ -287,10 +302,6 @@ class AppUITestBase: UITestBase {
         
         var nfield: XCUIElement {
             window.textFields["nfield"]
-        }
-        
-        var entriesHook: XCUIElement {
-            window.textFields["uihook_flatentryjson"]
         }
     }
     

@@ -24,7 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     #if UI_TEST
     func resetModel() {
-        _model = Model()
+        _model = Model(emptyCopyOf: _model)
     }
     
     func resetAll() {

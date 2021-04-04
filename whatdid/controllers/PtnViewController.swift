@@ -53,10 +53,6 @@ class PtnViewController: NSViewController {
         taskField.action = self.projectOrTaskAction
         
         headerText.placeholderString = headerText.stringValue
-        
-        #if UI_TEST
-        addJsonFlatEntryField()
-        #endif
     }
     
     private func setNotesPlaceholder() {
@@ -160,10 +156,6 @@ class PtnViewController: NSViewController {
             
             scheduler.schedule("Snooze options refresh", at: refreshOptionsAt, updateSnoozeButton)
         }
-        
-        #if UI_TEST
-        populateJsonFlatEntryField()
-        #endif
     }
     
     private func updateSnoozeButton() {

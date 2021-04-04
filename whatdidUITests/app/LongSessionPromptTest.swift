@@ -123,11 +123,9 @@ class LongSessionPromptTest: AppUITestBase {
             waitForTransition(of: .ptn, toIsVisible: false)
         }
         group("validate") {
-            let ptn = openPtn()
-            let entries = FlatEntry.deserialize(from: ptn.entriesHook.stringValue)
             XCTAssertEqual(
                 [FlatEntry(from: start, to: end, project: "pA", task: "tB", notes: "nC")],
-                entries)
+                entriesHook)
         }
     }
 }
