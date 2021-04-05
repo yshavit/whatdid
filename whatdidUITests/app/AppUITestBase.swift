@@ -57,7 +57,12 @@ class AppUITestBase: UITestBase {
             clickPoint = AppUITestBase.focusMenuItemPoint!
         }
         leftClick("focus/reset menu item", at: clickPoint, with: .maskAlternate)
+        leftClick("", at: clickPoint, with: []) // for some reason, we need this to flush out the maskAlternate
         wait(for: "window to close", until: {openWindow == nil})
+    }
+    
+    override func uiTearDown() {
+        clearPasteboardIfNeeded()
     }
     
     /// Sets the mocked clock in UTC. If `deactivate` is true (default false), then this will set the mocked clock to set the time when the app deactivates, and then this method will activate
@@ -69,7 +74,7 @@ class AppUITestBase: UITestBase {
             let mockedClockWindow = app.windows["UI Test Window"]
             activate()
             app.menuBars.statusItems["Focus Whatdid"].click()
-            mockedClockWindow.click()
+            mockedClockWindow.staticTexts.firstMatch.click()
             let clockTicker = mockedClockWindow.textFields["uitestwindowclock"]
             if deactivate {
                 mockedClockWindow.checkBoxes["Defer until deactivation"].click()
@@ -91,9 +96,11 @@ class AppUITestBase: UITestBase {
     }
     
     func checkThatLongSessionPrompt(on window: XCUIElement, exists: Bool) {
-        let actual = window.sheets.matching(NSPredicate(format: "title = %@", "Start new session?")).count
-        let expected = exists ? 1 : 0
-        XCTAssertEqual(expected, actual)
+        wait(for: "long session prompt", until: {
+            let actual = window.sheets.matching(NSPredicate(format: "title = %@", "Start new session?")).count
+            let expected = exists ? 1 : 0
+            return expected == actual
+        })
     }
     
     func handleLongSessionPrompt(on windowType: WindowType, _ action: LongSessionAction) {
@@ -133,17 +140,35 @@ class AppUITestBase: UITestBase {
     
     var entriesHook: [FlatEntry] {
         get {
-            return FlatEntry.deserialize(from: focusedEntriesHookField.stringValue)
+            activate()
+            app.menuBars.statusItems["Focus Whatdid"].click()
+            let field = app.windows["UI Test Window"].textFields["uihook_flatentryjson"]
+            return FlatEntry.deserialize(from: field.stringValue)
         }
         set (value) {
-            focusedEntriesHookField.deleteText(andReplaceWith: FlatEntry.serialize(value) + "\r")
+            activate()
+            clearPasteboardIfNeeded()
+            
+            let pasteboardButton = app.windows["UI Test Window"].buttons["uihook_flatentryjson_pasteboard"]
+            let rmButton = app.windows["UI Test Window"].buttons["uihook_flatentryjson_pasteboard_rm"]
+            pasteboardButton.click()
+            
+            wait(for: "pasteboard to be set up", until: {rmButton.isEnabled})
+            let pasteboard = NSPasteboard(name: .init(pasteboardButton.title))
+            pasteboard.clearContents()
+            let entriesString = FlatEntry.serialize(value)
+            XCTAssertTrue(pasteboard.setString(entriesString, forType: .string))
+            pasteboardButton.click()
         }
     }
     
-    private var focusedEntriesHookField: XCUIElement {
+    private func clearPasteboardIfNeeded() {
         activate()
-        app.menuBars.statusItems["Focus Whatdid"].click()
-        return app.windows["UI Test Window"].textFields["uihook_flatentryjson"]
+        let rmButton = app.windows["UI Test Window"].buttons["uihook_flatentryjson_pasteboard_rm"]
+        if rmButton.isEnabled {
+            rmButton.click()
+        }
+        wait(for: "pasteboard to release", until: {!rmButton.isEnabled})
     }
     
     var openWindowInfo: (WindowType, XCUIElement)? {

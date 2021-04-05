@@ -58,12 +58,12 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
 
 fileprivate class ButtonWithClosureComponent: TestComponent {
     func build(adder: @escaping (NSView) -> Void) {
-        let button = ButtonWithClosure()
-        button.useAutoLayout()
-        adder(button)
-        button.setAccessibilityLabel("button_with_closure")
+        let pasteboardButton = ButtonWithClosure()
+        pasteboardButton.useAutoLayout()
+        adder(pasteboardButton)
+        pasteboardButton.setAccessibilityLabel("button_with_closure")
         var counter = Atomic(wrappedValue: 1)
-        button.onPress {button in
+        pasteboardButton.onPress {pasteboardButton in
             let currentCount = counter.map { $0 + 1}
             let labelString = "count=\(currentCount), pressed on self=\(true)"
             let label = NSTextField(labelWithString: labelString)
@@ -147,8 +147,8 @@ fileprivate class GoalsViewComponent: TestComponent {
         adder(NSButton(title: "sync goals", target: self, action: #selector(self.resetGoalViews(_:))))
     }
     
-    @objc private func resetGoalViews(_ button: NSButton) {
-        button.superview?.subviews.compactMap({$0 as? GoalsView}).forEach({$0.reset()})
+    @objc private func resetGoalViews(_ pasteboardButton: NSButton) {
+        pasteboardButton.superview?.subviews.compactMap({$0 as? GoalsView}).forEach({$0.reset()})
     }
 }
 

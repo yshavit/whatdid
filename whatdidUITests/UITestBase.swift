@@ -42,16 +42,15 @@ class UITestBase: XCTestCase {
     
     func leftClick(_ description: String, at point: CGPoint, with flags: CGEventFlags = []) {
         group("Click \(description)") {
-            for eventType in [CGEventType.leftMouseDown, CGEventType.leftMouseUp] {
-                clickEvent(.left, eventType, at: point, with: flags)
-            }
+            clickEvent(.leftMouseDown, at: point, with: flags)
+            clickEvent(.leftMouseUp, at: point, with: flags)
         }
     }
     
     func dragStatusMenu(to newX: CGFloat) {
         group("Drag status menu") {
-            clickEvent(.left, .leftMouseDown, at: UITestBase.statusItemPoint, with: .maskCommand)
-            clickEvent(.left, .leftMouseUp, at: CGPoint(x: newX, y: UITestBase.statusItemPoint.y), with: [])
+            clickEvent(.leftMouseDown, at: UITestBase.statusItemPoint, with: .maskCommand)
+            clickEvent(.leftMouseUp, at: CGPoint(x: newX, y: UITestBase.statusItemPoint.y), with: [])
             let oldPoint = UITestBase.statusItemPoint
             // We dragged to the very edge of the screen, but the actual icon will
             // be to the left of that (for instance, it can't be to the right of the clock).
@@ -60,8 +59,8 @@ class UITestBase: XCTestCase {
             
             addTeardownBlock {
                 self.group("Drag status menu back") {
-                    self.clickEvent(.left, .leftMouseDown, at: UITestBase.statusItemPoint, with: .maskCommand)
-                    self.clickEvent(.left, .leftMouseUp, at: oldPoint, with: [])
+                    self.clickEvent(.leftMouseDown, at: UITestBase.statusItemPoint, with: .maskCommand)
+                    self.clickEvent(.leftMouseUp, at: oldPoint, with: [])
                     UITestBase._statusItemPoint = oldPoint
                 }
             }
@@ -76,6 +75,12 @@ class UITestBase: XCTestCase {
         // nothing
     }
     
+    /// A teardown hook. This will be called once per test, regardless of whether the test succeeded or failed. If it happens after a failure,
+    /// this will be invoked before the application gets terminated.
+    func uiTearDown() {
+        // nothing
+    }
+    
     final override func setUp() {
         continueAfterFailure = false
         if UITestBase.app == nil {
@@ -87,7 +92,18 @@ class UITestBase: XCTestCase {
         uiSetUp()
     }
     
+    final override func tearDown() {
+        if UITestBase.app != nil {
+            uiTearDown()
+        }
+    }
+    
     final override func recordFailure(withDescription description: String, inFile filePath: String, atLine lineNumber: Int, expected: Bool) {
+        if UITestBase.app != nil {
+            uiTearDown()
+        } else {
+            log("ERROR: couldn't find app, so won't call uiTearDown!")
+        }
         XCUIApplication().terminate()
         UITestBase.app = nil
         let now = Date()

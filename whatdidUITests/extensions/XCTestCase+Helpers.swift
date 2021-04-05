@@ -7,17 +7,18 @@ extension XCTestCase {
         return XCTContext.runActivity(named: name, block: {_ in return block()})
     }
     
-    
-    class func clickEvent(_ mouseButton: CGMouseButton, _ mouseType: CGEventType, at position: CGPoint, with flags: CGEventFlags) {
-        let src = CGEventSource(stateID: CGEventSourceStateID.hidSystemState)
-        let downEvent = CGEvent(mouseEventSource: src, mouseType: mouseType, mouseCursorPosition: position, mouseButton: mouseButton)
-        downEvent?.flags = flags
-        downEvent?.post(tap: CGEventTapLocation.cghidEventTap)
-        sleepMillis(50)
+    class func clickEvent(_ mouseType: CGEventType, at position: CGPoint, with flags: CGEventFlags) {
+        guard let event = CGEvent(mouseEventSource: nil, mouseType: mouseType, mouseCursorPosition: position, mouseButton: .left) else {
+            XCTFail("couldn't create event")
+            return
+        }
+        event.flags = flags
+        event.post(tap: CGEventTapLocation.cghidEventTap)
+        sleepMillis(150)
     }
     
-    func clickEvent(_ mouseButton: CGMouseButton, _ mouseType: CGEventType, at position: CGPoint, with flags: CGEventFlags) {
-        XCTestCase.clickEvent(mouseButton, mouseType, at: position, with: flags)
+    func clickEvent(_ mouseType: CGEventType, at position: CGPoint, with flags: CGEventFlags) {
+        XCTestCase.clickEvent(mouseType, at: position, with: flags)
     }
     
     class func pauseToLetStabilize() {

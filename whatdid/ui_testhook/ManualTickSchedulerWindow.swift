@@ -5,7 +5,11 @@ import Cocoa
 class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
     
     private static let deferCheckboxTitle = "Defer until deactivation"
-    let activatorStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+    /// Note that this is super wide. We'll also set the alpha to 0, which effectively hides the item.
+    /// This lets us take screenshots of it without it getting in the way; and the wideness means that if we
+    /// order the icons as whatdid's being rightmost and then this directly left of it, then the screenshots won't include
+    /// any other icons the system has, either.
+    let activatorStatusItem = NSStatusBar.system.statusItem(withLength: 400)
     
     let scheduler: ManualTickScheduler = DefaultScheduler.instance
     private let deferButton: NSButton
@@ -13,6 +17,7 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
     private let printUtc: NSTextField
     private let printLocal: NSTextField
     private let entriesField: NSTextField
+    private let pasteboardButton: PasteboardView
     
     override init() {
         setter = NSTextField(string: "0")
@@ -27,7 +32,13 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
         
         entriesField = NSTextField(string: "")
         entriesField.setAccessibilityLabel("uihook_flatentryjson")
-        entriesField.action = #selector(setEntriesViaJson)
+        // We need to init pasteboardButton before super.init(), but we can't set target: self until after that call.
+        // So we create most of the field's hookup here, but then set the target below
+        entriesField.action = #selector(self.setEntriesViaJson(field:))
+        
+        // See the comment on entriesField above for why we don't set the action yet
+        pasteboardButton = PasteboardView()
+        pasteboardButton.setAccessibilityLabel("uihook_flatentryjson_pasteboard")
         
         super.init()
         
@@ -36,7 +47,10 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
         setter.delegate = self
         
         entriesField.target = self
-        entriesField.action = #selector(self.setEntriesViaJson(_:))
+        pasteboardButton.action = {data in
+            self.setEntriesViaJson(string: data)
+            self.entriesField.stringValue = data
+        }
         AppDelegate.instance.model.addListener(self.populateJsonFlatEntryField)
         
         setUpActivator()
@@ -52,6 +66,7 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
         div1.boxType = .separator
         adder(div1)
         adder(entriesField)
+        adder(pasteboardButton)
         
         let div2 = NSBox()
         div2.boxType = .separator
@@ -66,6 +81,9 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
         button.title = "Focus Whatdid"
         button.target = self
         button.action = #selector(grabFocus)
+        button.attributedTitle = NSAttributedString(string: button.title, attributes: [
+            NSAttributedString.Key.foregroundColor: NSColor.black.withAlphaComponent(0)
+        ])
     }
     
     @objc private func grabFocus() {
@@ -84,8 +102,12 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
         entriesField.stringValue = FlatEntry.serialize(entries)
     }
     
-    @objc private func setEntriesViaJson(_ field: NSTextField) {
-        let entries = FlatEntry.deserialize(from: entriesField.stringValue)
+    @objc private func setEntriesViaJson(field: NSTextField) {
+        setEntriesViaJson(string: entriesField.stringValue)
+    }
+    
+    private func setEntriesViaJson(string: String) {
+        let entries = FlatEntry.deserialize(from: string)
         AppDelegate.instance.resetModel()
         entries.forEach {AppDelegate.instance.model.add($0, andThen: {})}
     }
