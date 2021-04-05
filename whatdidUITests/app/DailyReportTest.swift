@@ -15,9 +15,8 @@ class DailyReportTest: AppUITestBase {
                 .add(project: "project a", task: "task 1", notes: "back to first", minutes: 5)
                 .add(project: "project b", task: "task 1", notes: "fizz", minutes: 5)
                 .add(project: "project c", task: "task 2", notes: "fuzz", minutes: 10)
-            let ptn = openPtn()
-            let entriesSerialized = FlatEntry.serialize(entries.get(startingAtSecondsSince1970: secondsIn24Hrs))
-            ptn.entriesHook.deleteText(andReplaceWith: entriesSerialized + "\r")
+            let _ = openPtn()
+            entriesHook = entries.get(startingAtSecondsSince1970: secondsIn24Hrs)
         }
         group("report opens while PTN is already open") {
             setTimeUtc(d: 1, h: 0, m: 0)
@@ -29,18 +28,18 @@ class DailyReportTest: AppUITestBase {
     }
     
     func testSizeWhenOpeningUncontended() {
-        group("fast-forward to just before daily report") {
-            setTimeUtc(h: 15, m: 59)
-            handleLongSessionPrompt(on: .ptn, .continueWithCurrentSession)
+        group("set some values") {
             let entries = EntriesBuilder()
                 .add(project: "project a", task: "task 1", notes: "first thing", minutes: 12)
                 .add(project: "project a", task: "task 2", notes: "sidetrack", minutes: 13)
                 .add(project: "project a", task: "task 1", notes: "back to first", minutes: 5)
                 .add(project: "project b", task: "task 1", notes: "fizz", minutes: 5)
                 .add(project: "project c", task: "task 2", notes: "fuzz", minutes: 10)
-            let entriesSerialized = FlatEntry.serialize(entries.get(startingAtSecondsSince1970: secondsIn24Hrs))
-            openPtn().entriesHook.deleteText(andReplaceWith: entriesSerialized + "\r")
-            clickStatusMenu() // dismiss the PTNc
+            entriesHook = entries.get(startingAtSecondsSince1970: secondsIn24Hrs)
+        }
+        group("fast-forward to just before daily report") {
+            setTimeUtc(h: 15, m: 59)
+            handleLongSessionPrompt(on: .ptn, .startNewSession)
             checkForAndDismiss(window: .morningGoals) // since we crossed the 9-hour mark
         }
         group("wait for daily report") {
@@ -57,13 +56,9 @@ class DailyReportTest: AppUITestBase {
                 .add(project: "project a", task: "task 1", notes: "back to first", minutes: 5)
                 .add(project: "project b", task: "task 1", notes: "fizz", minutes: 5)
                 .add(project: "project c", task: "task 2", notes: "fuzz", minutes: 10)
-            let ptn = openPtn()
-            let entriesTextField  = ptn.entriesHook
-            entriesTextField.deleteText(andReplaceWith: FlatEntry.serialize(entries.get()))
-            entriesTextField.typeKey(.enter)
+            entriesHook = entries.get()
         }
         group("bring up daily report") {
-            clickStatusMenu()
             clickStatusMenu(with: .maskAlternate)
             waitForTransition(of: .dailyEnd, toIsVisible: true)
         }
@@ -126,17 +121,14 @@ class DailyReportTest: AppUITestBase {
     
     /// Create lots of projects, such that we need to scroll to see them all
     func testDailyReportScrollBar() {
-        let ptn = openPtn()
         group("Initalize the data") {
             let manyEntries = EntriesBuilder()
             for i in 1...25 {
                 manyEntries.add(project: "project \(i)", task: "only task", notes: "", minutes: Double(i))
             }
-            ptn.entriesHook.deleteText(andReplaceWith: FlatEntry.serialize(manyEntries.get(startingAtSecondsSince1970: secondsIn24Hrs)))
-            ptn.entriesHook.typeKey(.enter)
+            entriesHook = manyEntries.get(startingAtSecondsSince1970: secondsIn24Hrs)
         }
         group("bring up daily report") {
-            clickStatusMenu()
             clickStatusMenu(with: .maskAlternate)
             waitForTransition(of: .dailyEnd, toIsVisible: true)
         }
@@ -159,7 +151,7 @@ class DailyReportTest: AppUITestBase {
         let longProjectName = "The quick brown fox jumped over the lazy dog because the dog was just so lazy. Poor dog."
         group("Set up events with long text") {
             let twelveHoursFromEpoch = Date(timeIntervalSince1970: 43200)
-            let entries = FlatEntry.serialize(
+            entriesHook = [
                 entry(
                     longProjectName,
                     "Some task",
@@ -178,12 +170,7 @@ class DailyReportTest: AppUITestBase {
                     String(repeating: "here are some long notes ", count: 3),
                     from: twelveHoursFromEpoch.addingTimeInterval(120),
                     to: twelveHoursFromEpoch.addingTimeInterval(180))
-                )
-            let ptn = openPtn()
-            ptn.entriesHook.click()
-            ptn.window.typeText(entries + "\r")
-            clickStatusMenu()
-            waitForTransition(of: .ptn, toIsVisible: false)
+            ]
         }
         let originalWindowFrame = group("Open report in two days") {() -> CGRect in
             dragStatusMenu(to: NSScreen.main!.frame.maxX)

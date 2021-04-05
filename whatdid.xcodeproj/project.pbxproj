@@ -41,7 +41,6 @@
 		7E7C384E24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */; };
 		7E7C384F24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */; };
 		7E7C385224DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C385124DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift */; };
-		7E7C385424DF3A0300CFF3E7 /* PtnViewController+UIHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C385324DF3A0300CFF3E7 /* PtnViewController+UIHook.swift */; };
 		7E88F5AA2529AB46002B2F2E /* Int+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E88F5A92529AB46002B2F2E /* Int+Helpers.swift */; };
 		7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */; };
 		7E8C04E023714F0800A0C3A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04DF23714F0800A0C3A6 /* Assets.xcassets */; };
@@ -174,7 +173,6 @@
 		7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatEntry.swift; sourceTree = "<group>"; };
 		7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlatEntry+Serde.swift"; sourceTree = "<group>"; };
 		7E7C385124DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlatEntry+SerdeTest.swift"; sourceTree = "<group>"; };
-		7E7C385324DF3A0300CFF3E7 /* PtnViewController+UIHook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PtnViewController+UIHook.swift"; sourceTree = "<group>"; };
 		7E88F5A92529AB46002B2F2E /* Int+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Helpers.swift"; sourceTree = "<group>"; };
 		7E8C04DA23714F0700A0C3A6 /* whatdid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = whatdid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -426,10 +424,10 @@
 		7E970D6424DA817B00F634AB /* ui_testhook */ = {
 			isa = PBXGroup;
 			children = (
-				7E7C385324DF3A0300CFF3E7 /* PtnViewController+UIHook.swift */,
+				7EE4E39524E24A3F00552AAF /* ManualTickSchedulerWindow.swift */,
+				7EF58FA02584972F002F9604 /* UITestCommonConsts.swift */,
 				7E970D6A24DA850D00F634AB /* UiTestWindow.swift */,
 				7E970D6824DA84AF00F634AB /* UiTestWindow.xib */,
-				7EF58FA02584972F002F9604 /* UITestCommonConsts.swift */,
 			);
 			path = ui_testhook;
 			sourceTree = "<group>";
@@ -472,7 +470,6 @@
 				7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */,
 				7E6C98D12503EF4900A712EB /* DelegatingScheduler.swift */,
 				7EF857A224E242AB00867832 /* ManualTickScheduler.swift */,
-				7EE4E39524E24A3F00552AAF /* ManualTickSchedulerWindow.swift */,
 				7EF8579224E094D100867832 /* OpenCloseHelper.swift */,
 				7EF8579A24E220EA00867832 /* OpenReason.swift */,
 				7EF857A024E2420C00867832 /* Scheduler.swift */,
@@ -806,7 +803,6 @@
 				7EFEE80223B16EA6002928A2 /* PtnViewController.swift in Sources */,
 				7EE0E74A24EA22E7002D03F8 /* NSView+Helpers.swift in Sources */,
 				7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */,
-				7E7C385424DF3A0300CFF3E7 /* PtnViewController+UIHook.swift in Sources */,
 				7EF883FC260D7DD400170330 /* DayStartController.swift in Sources */,
 				7EE250BB2515B8FE0067C5E9 /* PrefsViewController.swift in Sources */,
 				7E37A29B24C0293E005BA1DF /* Entry+CoreDataProperties.swift in Sources */,

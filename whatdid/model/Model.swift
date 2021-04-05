@@ -20,6 +20,26 @@ class Model {
         #endif
     }
     
+    #if UI_TEST
+    private var entriesListeners = [() -> Void]()
+    
+    convenience init(emptyCopyOf other: Model) {
+        self.init(modelName: other.modelName, clearAllEntriesOnStartup: other.clearAllEntriesOnStartup)
+        entriesListeners.append(contentsOf: other.entriesListeners)
+        notifyListeners()
+    }
+    
+    func addListener(_ listener: @escaping () -> Void) {
+        entriesListeners.append(listener)
+    }
+    
+    func notifyListeners() {
+        DispatchQueue.main.async {
+            self.entriesListeners.forEach { $0() }
+        }
+    }
+    #endif
+    
     init(modelName: String, clearAllEntriesOnStartup: Bool = false) {
         self.modelName = modelName
         self.clearAllEntriesOnStartup = clearAllEntriesOnStartup
@@ -283,6 +303,9 @@ class Model {
                 NSLog("Error saving entry: %@", error as NSError)
             }
             callback()
+            #if UI_TEST
+            self.notifyListeners()
+            #endif
         })
     }
     

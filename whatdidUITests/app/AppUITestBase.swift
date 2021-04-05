@@ -50,7 +50,7 @@ class AppUITestBase: UITestBase {
         if let p = AppUITestBase.focusMenuItemPoint {
             clickPoint = p
         } else {
-            let focusMenuItem = XCUIApplication().menuBars.children(matching: .statusItem)["Focus Mocked Clock"]
+            let focusMenuItem = XCUIApplication().menuBars.children(matching: .statusItem)["Focus Whatdid"]
             focusMenuItem.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
             AppUITestBase.focusMenuItemPoint = CGEvent(source: nil)?.location
             XCTAssertNotNil(AppUITestBase.focusMenuItemPoint)
@@ -66,11 +66,11 @@ class AppUITestBase: UITestBase {
         group("setting time \(d)d \(h)h \(m)m \(s)s") {
             let epochSeconds = d * 86400 + h * 3600 + m * 60 + s
             let text = "\(epochSeconds)\r"
-            let mockedClockWindow = app.windows["Mocked Clock"]
+            let mockedClockWindow = app.windows["UI Test Window"]
             activate()
-            app.menuBars.statusItems["Focus Mocked Clock"].click()
+            app.menuBars.statusItems["Focus Whatdid"].click()
             mockedClockWindow.click()
-            let clockTicker = mockedClockWindow.children(matching: .textField).element
+            let clockTicker = mockedClockWindow.textFields["uitestwindowclock"]
             if deactivate {
                 mockedClockWindow.checkBoxes["Defer until deactivation"].click()
             }
@@ -129,6 +129,21 @@ class AppUITestBase: UITestBase {
     func find(_ windowType: WindowType, then action: (XCUIElement) -> Void) {
         let w = find(windowType)
         action(w)
+    }
+    
+    var entriesHook: [FlatEntry] {
+        get {
+            return FlatEntry.deserialize(from: focusedEntriesHookField.stringValue)
+        }
+        set (value) {
+            focusedEntriesHookField.deleteText(andReplaceWith: FlatEntry.serialize(value) + "\r")
+        }
+    }
+    
+    private var focusedEntriesHookField: XCUIElement {
+        activate()
+        app.menuBars.statusItems["Focus Whatdid"].click()
+        return app.windows["UI Test Window"].textFields["uihook_flatentryjson"]
     }
     
     var openWindowInfo: (WindowType, XCUIElement)? {
@@ -287,10 +302,6 @@ class AppUITestBase: UITestBase {
         
         var nfield: XCUIElement {
             window.textFields["nfield"]
-        }
-        
-        var entriesHook: XCUIElement {
-            window.textFields["uihook_flatentryjson"]
         }
     }
     

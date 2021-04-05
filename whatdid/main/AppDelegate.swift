@@ -15,7 +15,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     #if UI_TEST
     private var uiTestWindow: UiTestWindow!
-    private var manualTickSchedulerWindow: ManualTickSchedulerWindow!
     private var oldPrefs: [String : Any]?
     #endif
     
@@ -25,7 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     #if UI_TEST
     func resetModel() {
-        _model = Model()
+        _model = Model(emptyCopyOf: _model)
     }
     
     func resetAll() {
@@ -52,7 +51,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         #if UI_TEST
         NSApp.setActivationPolicy(.regular) // so that the windows show up normally
         NSLog("initializing UI test hooks")
-        manualTickSchedulerWindow = ManualTickSchedulerWindow(with: DefaultScheduler.instance)
         uiTestWindow = UiTestWindow()
         uiTestWindow.show()
         NSApp.setActivationPolicy(.regular) // UI tests can time out on launch() without this

@@ -7,61 +7,63 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
     private static let deferCheckboxTitle = "Defer until deactivation"
     let activatorStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
-    let scheduler: ManualTickScheduler
+    let scheduler: ManualTickScheduler = DefaultScheduler.instance
     private let deferButton: NSButton
     private let setter: NSTextField
     private let printUtc: NSTextField
     private let printLocal: NSTextField
-    private let window: NSWindow
+    private let entriesField: NSTextField
     
-    init(with scheduler: ManualTickScheduler) {
-        self.scheduler = scheduler
-        window = NSWindow(
-            contentRect: NSRect(x: 0, y: 100, width: 100, height: 100),
-            styleMask: [.titled],
-            backing: .buffered,
-            defer: true,
-            screen: nil)
-        window.level = .floating
-        window.title = "Mocked Clock"
-        
-        let stack = NSStackView()
-        stack.orientation = .vertical
-        stack.alignment = .leading
-        window.contentView = stack
-        
+    override init() {
         setter = NSTextField(string: "0")
         setter.isEditable = true
-        stack.addArrangedSubview(setter)
+        setter.setAccessibilityLabel("uitestwindowclock")
         
         deferButton = NSButton(checkboxWithTitle: ManualTickSchedulerWindow.deferCheckboxTitle, target: nil, action: nil)
-        stack.addArrangedSubview(deferButton)
         
         printUtc = NSTextField(labelWithString: "")
         printUtc.setAccessibilityLabel("mockclock_status")
-        stack.addArrangedSubview(printUtc)
-        
         printLocal = NSTextField(labelWithString: "")
-        stack.addArrangedSubview(printLocal)
         
-        let div = NSBox()
-        div.boxType = .separator
-        stack.addArrangedSubview(div)
-        stack.addArrangedSubview(ButtonWithClosure(label: "Reset All", {_ in AppDelegate.instance.resetAll()}))
+        entriesField = NSTextField(string: "")
+        entriesField.setAccessibilityLabel("uihook_flatentryjson")
+        entriesField.action = #selector(setEntriesViaJson)
         
         super.init()
+        
         updateDate()
         scheduler.addListener(self.updateDateDisplays(to:))
-        window.setIsVisible(true)
         setter.delegate = self
+        
+        entriesField.target = self
+        entriesField.action = #selector(self.setEntriesViaJson(_:))
+        AppDelegate.instance.model.addListener(self.populateJsonFlatEntryField)
+        
         setUpActivator()
+    }
+    
+    func build(adder: @escaping (NSView) -> Void) {
+        adder(setter)
+        adder(deferButton)
+        adder(printUtc)
+        adder(printLocal)
+        
+        let div1 = NSBox()
+        div1.boxType = .separator
+        adder(div1)
+        adder(entriesField)
+        
+        let div2 = NSBox()
+        div2.boxType = .separator
+        adder(div2)
+        adder(ButtonWithClosure(label: "Reset All", {_ in AppDelegate.instance.resetAll()}))
     }
     
     private func setUpActivator() {
         guard let button = activatorStatusItem.button else {
             fatalError("No activator button")
         }
-        button.title = "Focus Mocked Clock"
+        button.title = "Focus Whatdid"
         button.target = self
         button.action = #selector(grabFocus)
     }
@@ -71,7 +73,21 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
             AppDelegate.instance.resetAll()
         }
         NSApp.activate(ignoringOtherApps: true)
-        window.makeKeyAndOrderFront(self)
+        if let window = setter.window {
+            window.makeKeyAndOrderFront(self)
+            window.makeFirstResponder(setter)
+        }
+    }
+    
+    func populateJsonFlatEntryField() {
+        let entries = AppDelegate.instance.model.listEntries(since: Date.distantPast)
+        entriesField.stringValue = FlatEntry.serialize(entries)
+    }
+    
+    @objc private func setEntriesViaJson(_ field: NSTextField) {
+        let entries = FlatEntry.deserialize(from: entriesField.stringValue)
+        AppDelegate.instance.resetModel()
+        entries.forEach {AppDelegate.instance.model.add($0, andThen: {})}
     }
     
     func controlTextDidEndEditing(_ obj: Notification) {

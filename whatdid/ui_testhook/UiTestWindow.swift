@@ -12,6 +12,8 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
     }
     
     override func awakeFromNib() {
+        componentSelector.removeAllItems()
+        add(MainComponent())
         add(AutocompleteComponent())
         add(ButtonWithClosureComponent())
         add(GoalsViewComponent())
@@ -31,6 +33,7 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
     func show() {
         _ = window?.title // force the window nib to load
         componentSelector.selectItem(at: 0) // the zeroith item
+        selectComponentToTest(componentSelector)
         showWindow(self)
         NSApp.activate(ignoringOtherApps: true)
     }
@@ -70,6 +73,16 @@ fileprivate class ButtonWithClosureComponent: TestComponent {
             adder(label)
         }
     }
+}
+
+fileprivate class MainComponent: TestComponent {
+    
+    private let schedulerWindow = ManualTickSchedulerWindow()
+    
+    func build(adder: @escaping (NSView) -> Void) {
+        schedulerWindow.build(adder: adder)
+    }
+    
 }
 
 fileprivate class AutocompleteComponent: TestComponent {
