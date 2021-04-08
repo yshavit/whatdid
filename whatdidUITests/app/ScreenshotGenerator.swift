@@ -77,7 +77,7 @@ class ScreenshotGenerator: AppUITestBase {
             y: 0,
             width: frame.width,
             height: frame.height + frame.minY)
-        screenshot(named: "daily report", frame: withMenuBar)
+        screenshot(named: name, frame: withMenuBar)
     }
     
     func screenshot(named name: String, frame: NSRect) {
