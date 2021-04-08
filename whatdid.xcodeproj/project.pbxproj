@@ -83,7 +83,7 @@
 		7EE0E74A24EA22E7002D03F8 /* NSView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */; };
 		7EE250BB2515B8FE0067C5E9 /* PrefsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE250B92515B8FE0067C5E9 /* PrefsViewController.swift */; };
 		7EE250BC2515B8FE0067C5E9 /* PrefsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EE250BA2515B8FE0067C5E9 /* PrefsViewController.xib */; };
-		7EE4E39624E24A3F00552AAF /* ManualTickSchedulerWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39524E24A3F00552AAF /* ManualTickSchedulerWindow.swift */; };
+		7EE4E39624E24A3F00552AAF /* WhatdidControlHooks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39524E24A3F00552AAF /* WhatdidControlHooks.swift */; };
 		7EE4E39824E2523F00552AAF /* SystemClockScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39724E2523F00552AAF /* SystemClockScheduler.swift */; };
 		7EE4E39A24E25C0200552AAF /* DefaultScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */; };
 		7EEF324624EA542D002E217A /* NSRange+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEF324524EA542D002E217A /* NSRange+Helpers.swift */; };
@@ -223,7 +223,7 @@
 		7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSView+Helpers.swift"; sourceTree = "<group>"; };
 		7EE250B92515B8FE0067C5E9 /* PrefsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsViewController.swift; sourceTree = "<group>"; };
 		7EE250BA2515B8FE0067C5E9 /* PrefsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefsViewController.xib; sourceTree = "<group>"; };
-		7EE4E39524E24A3F00552AAF /* ManualTickSchedulerWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualTickSchedulerWindow.swift; sourceTree = "<group>"; };
+		7EE4E39524E24A3F00552AAF /* WhatdidControlHooks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatdidControlHooks.swift; sourceTree = "<group>"; };
 		7EE4E39724E2523F00552AAF /* SystemClockScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockScheduler.swift; sourceTree = "<group>"; };
 		7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultScheduler.swift; sourceTree = "<group>"; };
 		7EEF324524EA542D002E217A /* NSRange+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRange+Helpers.swift"; sourceTree = "<group>"; };
@@ -430,7 +430,7 @@
 		7E970D6424DA817B00F634AB /* ui_testhook */ = {
 			isa = PBXGroup;
 			children = (
-				7EE4E39524E24A3F00552AAF /* ManualTickSchedulerWindow.swift */,
+				7EE4E39524E24A3F00552AAF /* WhatdidControlHooks.swift */,
 				7EA4D3DD261AC9F300EEBF17 /* PasteboardView.swift */,
 				7EF58FA02584972F002F9604 /* UITestCommonConsts.swift */,
 				7E970D6A24DA850D00F634AB /* UiTestWindow.swift */,
@@ -819,7 +819,7 @@
 				7E37A29B24C0293E005BA1DF /* Entry+CoreDataProperties.swift in Sources */,
 				7E9C5EAE2606BDFB00D839C4 /* GoalsView.swift in Sources */,
 				7ECAF0DF250D75B70004647E /* WhatdidTextField.swift in Sources */,
-				7EE4E39624E24A3F00552AAF /* ManualTickSchedulerWindow.swift in Sources */,
+				7EE4E39624E24A3F00552AAF /* WhatdidControlHooks.swift in Sources */,
 				7E9C5EBC260C09AA00D839C4 /* Session+CoreDataProperties.swift in Sources */,
 				7ECF97A724F1D50100DBF1BF /* NSControl+Helper.swift in Sources */,
 				7EE0E74624E8899E002D03F8 /* AutoCompletingField.swift in Sources */,

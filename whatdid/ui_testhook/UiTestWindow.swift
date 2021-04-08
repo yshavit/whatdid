@@ -77,7 +77,7 @@ fileprivate class ButtonWithClosureComponent: TestComponent {
 
 fileprivate class MainComponent: TestComponent {
     
-    private let schedulerWindow = ManualTickSchedulerWindow()
+    private let schedulerWindow = WhatdidControlHooks()
     
     func build(adder: @escaping (NSView) -> Void) {
         schedulerWindow.build(adder: adder)

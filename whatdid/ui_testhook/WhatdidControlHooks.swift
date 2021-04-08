@@ -2,7 +2,7 @@
 #if UI_TEST
 import Cocoa
 
-class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
+class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
     
     private static let deferCheckboxTitle = "Defer until deactivation"
     /// Note that this is super wide. We'll also set the alpha to 0, which effectively hides the item.
@@ -25,7 +25,7 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
         setter.isEditable = true
         setter.setAccessibilityLabel("uitestwindowclock")
         
-        deferButton = NSButton(checkboxWithTitle: ManualTickSchedulerWindow.deferCheckboxTitle, target: nil, action: nil)
+        deferButton = NSButton(checkboxWithTitle: WhatdidControlHooks.deferCheckboxTitle, target: nil, action: nil)
         
         printUtc = NSTextField(labelWithString: "")
         printUtc.setAccessibilityLabel("mockclock_status")
@@ -160,7 +160,7 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
                 deferButton.title = "Deferral pending"
                 deferButton.isEnabled = false
                 AppDelegate.instance.onDeactivation {
-                    self.deferButton.title = ManualTickSchedulerWindow.deferCheckboxTitle
+                    self.deferButton.title = WhatdidControlHooks.deferCheckboxTitle
                     self.deferButton.isEnabled = true
                     self.deferButton.state = .off
                     self.scheduler.now = date
