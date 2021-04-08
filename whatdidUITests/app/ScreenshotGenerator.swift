@@ -3,6 +3,44 @@ import XCTest
 @testable import whatdid
 
 class ScreenshotGenerator: AppUITestBase {
+    
+    override func uiSetUp() {
+        super.uiSetUp()
+        
+        // Drag the "Focus Whatdid" item all the way to the right, and then the main whatdid icon
+        // all the way to the right. That means that the rightmost icon will be the whatdid one, followed
+        // by the focus one. We'll then hide the focus one.
+        let screenRight = NSScreen.main!.frame.maxX
+        
+        // 1. Drag the focus item all the way to the right, and add a teardown to move it back.
+        /// drags the focus item to a new x, and returns the old x
+        func dragFocusItem(horizontallyTo x: CGFloat) -> CGFloat {
+            let focusItemPoint = UITestBase.hoverToFindPoint(in: app.menuBars.statusItems["Focus Whatdid"])
+            clickEvent(.leftMouseDown, at: focusItemPoint, with: .maskCommand)
+            clickEvent(.leftMouseUp, at: CGPoint(x: x, y: focusItemPoint.y), with: [])
+            return focusItemPoint.x
+        }
+        let originalX = dragFocusItem(horizontallyTo: screenRight)
+        addTeardownBlock {
+            // originalX is center-aligned, so substract half the width to get to the original left edge.
+            // That's where we want to drag to.
+            let originalLeft = originalX - (self.app.menuBars.statusItems["Focus Whatdid"].frame.width / 2)
+            _ = dragFocusItem(horizontallyTo: originalLeft)
+        }
+        
+        // 2. Drag the status item to the right, too. This method registers its own teardown block.
+        dragStatusMenu(to: screenRight)
+        
+        // 3. Hide the status item, and make it wide; this gets the other system icons out of the way for screenshots.
+        let statusItemHider = app.windows["UI Test Window"].checkBoxes["Hide 'Focus Whatdid' Status Item"]
+        statusItemHider.click()
+        addTeardownBlock {
+            if statusItemHider.boolValue {
+                statusItemHider.click()
+            }
+        }
+    }
+    
 
     func testPtnAndDailyReport() {
         group("set up entries") {

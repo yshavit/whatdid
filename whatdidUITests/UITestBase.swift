@@ -22,13 +22,16 @@ class UITestBase: XCTestCase {
                 return result
             } else {
                 activate()
-                // The 0.5 isn't necessary, but it positions the cursor in the middle of the item. Just looks nicer.
-                let menuItem = XCUIApplication().menuBars.children(matching: .statusItem).element(boundBy: 0)
-                menuItem.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
-                _statusItemPoint = CGEvent(source: nil)?.location
+                _statusItemPoint = hoverToFindPoint(in: app!.menuBars.children(matching: .statusItem).element(boundBy: 0))
                 return _statusItemPoint!
             }
         }
+    }
+    
+    static func hoverToFindPoint(in element: XCUIElement) -> CGPoint {
+        // The 0.5 isn't necessary, but it positions the cursor in the middle of the item. Just looks nicer.
+        element.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
+        return CGEvent(source: nil)!.location
     }
     
     func clickStatusMenu(with flags: CGEventFlags = []) {
