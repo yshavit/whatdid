@@ -114,9 +114,6 @@ class ManualTickSchedulerWindow: NSObject, NSTextFieldDelegate {
             var attributes = [NSAttributedString.Key : Any]()
             if toggle.state == .on {
                 attributes[.foregroundColor] = NSColor.black.withAlphaComponent(0)
-                activatorStatusItem.length = 400
-            } else {
-                activatorStatusItem.length = NSStatusItem.variableLength
             }
             button.attributedTitle = NSAttributedString(string: button.title, attributes: attributes)
         }
