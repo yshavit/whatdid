@@ -247,15 +247,9 @@ class DayEndReportController: NSViewController {
     private func animate(_ action: () -> Void, duration: Double = 0.5, andThen: (() -> Void)? = nil) {
         let originalWindowFrameOpt = self.view.window?.frame
         let originalViewBounds = self.view.bounds
-        NSAnimationContext.runAnimationGroup(
-            {context in
-                #if UI_TEST
-                context.duration = 0
-                context.allowsImplicitAnimation = false
-                #else
-                context.duration = duration
-                context.allowsImplicitAnimation = true
-                #endif
+        AnimationHelper.animate(
+            duration: duration,
+            change: {
                 action()
                 self.resizeAndLayoutIfNeeded()
                 
@@ -271,8 +265,7 @@ class DayEndReportController: NSViewController {
                     window.setFrame(newWindowFrame, display: true)
                 }
             },
-            completionHandler: andThen
-        )
+            onComplete: andThen)
     }
     
     private func resizeAndLayoutIfNeeded() {

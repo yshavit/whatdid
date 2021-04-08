@@ -42,6 +42,7 @@
 		7E7C384E24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */; };
 		7E7C384F24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */; };
 		7E7C385224DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C385124DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift */; };
+		7E88CC8E261EB5A900968F64 /* AnimationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E88CC8D261EB5A900968F64 /* AnimationHelper.swift */; };
 		7E88F5AA2529AB46002B2F2E /* Int+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E88F5A92529AB46002B2F2E /* Int+Helpers.swift */; };
 		7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */; };
 		7E8C04E023714F0800A0C3A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04DF23714F0800A0C3A6 /* Assets.xcassets */; };
@@ -177,6 +178,7 @@
 		7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatEntry.swift; sourceTree = "<group>"; };
 		7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlatEntry+Serde.swift"; sourceTree = "<group>"; };
 		7E7C385124DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlatEntry+SerdeTest.swift"; sourceTree = "<group>"; };
+		7E88CC8D261EB5A900968F64 /* AnimationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationHelper.swift; sourceTree = "<group>"; };
 		7E88F5A92529AB46002B2F2E /* Int+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Helpers.swift"; sourceTree = "<group>"; };
 		7E8C04DA23714F0700A0C3A6 /* whatdid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = whatdid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -430,11 +432,11 @@
 		7E970D6424DA817B00F634AB /* ui_testhook */ = {
 			isa = PBXGroup;
 			children = (
-				7EE4E39524E24A3F00552AAF /* WhatdidControlHooks.swift */,
 				7EA4D3DD261AC9F300EEBF17 /* PasteboardView.swift */,
 				7EF58FA02584972F002F9604 /* UITestCommonConsts.swift */,
 				7E970D6A24DA850D00F634AB /* UiTestWindow.swift */,
 				7E970D6824DA84AF00F634AB /* UiTestWindow.xib */,
+				7EE4E39524E24A3F00552AAF /* WhatdidControlHooks.swift */,
 			);
 			path = ui_testhook;
 			sourceTree = "<group>";
@@ -442,6 +444,7 @@
 		7EAC528924CFC90800A13B72 /* util */ = {
 			isa = PBXGroup;
 			children = (
+				7E88CC8D261EB5A900968F64 /* AnimationHelper.swift */,
 				7E30B46024C38D91003F3679 /* Atomic.swift */,
 				7EB7495E2516F9C7001C7DBC /* Prefs.swift */,
 				7EE0E73F24E4DF4A002D03F8 /* SubsequenceMatcher.swift */,
@@ -847,6 +850,7 @@
 				7E9C5EBD260C09AA00D839C4 /* Goal+CoreDataClass.swift in Sources */,
 				7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */,
 				7EF884112610139B00170330 /* NSViewController+Helper.swift in Sources */,
+				7E88CC8E261EB5A900968F64 /* AnimationHelper.swift in Sources */,
 				7E37A29A24C0293E005BA1DF /* Entry+CoreDataClass.swift in Sources */,
 				7EE0E74024E4DF4A002D03F8 /* SubsequenceMatcher.swift in Sources */,
 				7E970D6B24DA850D00F634AB /* UiTestWindow.swift in Sources */,

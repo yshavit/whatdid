@@ -84,6 +84,12 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
 
         divider()
         adder(hideStatusItem)
+        let useAnimationsButton = ButtonWithClosure(checkboxWithTitle: "Use animations", target: nil, action: nil)
+        useAnimationsButton.state = AnimationHelper.use_animations ? .on : .off
+        useAnimationsButton.onPress {button in
+            AnimationHelper.use_animations = button.state == .on
+        }
+        adder(useAnimationsButton)
     }
     
     private func setUpActivator() {

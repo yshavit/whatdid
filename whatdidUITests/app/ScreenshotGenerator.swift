@@ -7,6 +7,7 @@ class ScreenshotGenerator: AppUITestBase {
     override func uiSetUp() {
         super.uiSetUp()
         // 3. Hide the status item, and unhide it when we're done.
+        activate()
         let statusItemHider = app.windows["UI Test Window"].checkBoxes["Hide 'Focus Whatdid' Status Item"]
         statusItemHider.click()
         addTeardownBlock {
