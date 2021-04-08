@@ -1,0 +1,45 @@
+name: Screenshot
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  screenshot:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Dismiss upgrade dialog if present
+      run: |
+            update_name=$(softwareupdate -l | grep "Title: " | awk -F[:,] '{print $2}' | awk '{$1=$1};1')
+            if [ ! -z "$update_name" ]; then
+                sudo softwareupdate --ignore "$update_name"
+            fi
+    - name: Install xcparse
+      run: brew install chargepoint/xcparse/xcparse
+    - name: Build and run screenshot generator
+      run: xcodebuild clean test -scheme whatdid-ui-test -only-testing whatdidUITests/ScreenshotGenerator -resultBundlePath ${{ runner.temp }}/test-results/bundle
+    - name: Gather screenshots
+      run: |
+            mkdir -p "${{ runner.temp }}/screenshots/all"
+            mkdir -p "${{ runner.temp }}/screenshots/export/screenshots-${{ github.run_number }}"
+            # export the screenshots, organized by test
+            xcparse screenshots --test '${{ runner.temp }}/test-results/bundle' '${{ runner.temp }}/screenshots/all'
+            for screenshot_file in $(find '${{ runner.temp }}/screenshots/all/ScreenshotGenerator' -name '*.png'); do
+              # screenshot_file will be something like:
+              # .../screenshots/ScreenshotGenerator/testDailyReport()/daily-report_1_1A98890B-2184-400D-97D2-A5B51E3B25FB.png
+              # We want to turn that into t just "daily-report.png"
+              short_name="$(basename "$screenshot_file" | sed 's/_.*\.png$/.png/')"
+              if [[ -f "${{ runner.temp }}/screenshots/export/$short_name" ]]; then
+                # This guards against a bug where multiple actions write to the same simple name.
+                # In that case, just use the original, uuid'd name.
+                short_name="$(basename "$screenshot_file")"
+              fi
+              mv "$screenshot_file" "${{ runner.temp }}/screenshots/export/screenshots-${{ github.run_number }}/$short_name"
+            done
+    - name: Upload screenshots
+      uses: actions/upload-artifact@v2
+      with:
+        name: screenshots-${{ github.run_number }}
+        path: ${{ runner.temp }}/screenshots/export

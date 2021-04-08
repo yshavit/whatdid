@@ -1,0 +1,47 @@
+| 9:10  | general             | email               | morning email rounds                                              |
+| 09:22 | general             | email               | morning email rounds                                              |
+| 09:31 | website revamp      | new homepage        |                                                                   |
+| 09:41 | website revamp      | new homepage        |                                                                   |
+| 09:49 | website revamp      | new homepage        |                                                                   |
+| 09:58 | website revamp      | new homepage        |                                                                   |
+| 10:09 | website revamp      | new homepage        |                                                                   |
+| 10:17 | main popup window   | autocomplete        | started on search algorithm                                       |
+| 10:28 | main popup window   | autocomplete        | unit tested algorithm                                             |
+| 10:37 | main popup window   | autocomplete        | trying to find out how to plug results into field autocomplete    |
+| 10:46 | main popup window   | autocomplete        | found one approach: NSTextFieldDelegate                           |
+| 10:57 | main popup window   | autocomplete        | plugged search results into delegate; can't get it to work        |
+| 11:09 | main popup window   | autocomplete        | still trying to get the text field to show results well           |
+| 11:19 | main popup window   | autocomplete        | autocomplete is working!                                          |
+| 11:29 | main popup window   | autocomplete        | UI tests: got basic mocks in place                                |
+| 11:40 | main popup window   | autocomplete        | UI tests: how do I validate the field's selection?                |
+| 11:50 | general             | email               | replied to Erin                                                   |
+| 12:01 | break               | lunch               |                                                                   |
+| 12:33 | main popup window   | styling             | working on highlight colors                                       |
+| 12:42 | main popup window   | styling             | went with default highlight; experimenting with focus border now  |
+| 12:53 | main popup window   | styling             | good enough for prototype                                         |
+| 13:01 | test infrastructure | UI test framework   | helper methods for finding fields                                 |
+| 13:09 | test infrastructure | UI test framework   | helper methods for validating results                             |
+| 13:21 | test infrastructure | UI test framework   | more helper methods                                               |
+| 13:33 | test infrastructure | UI test framework   | now I just need some mocked data...                               |
+| 13:44 | test infrastructure | UI test framework   | finished mocked data producer                                     |
+| 13:53 | test infrastructure | UI test framework   | starting prototype: UI test with full mocked data                 |
+| 14:02 | test infrastructure | UI test framework   | created dummy window for holding elements to test                 |
+| 14:12 | test infrastructure | UI test framework   | plugged my mocked data into window's field                        |
+| 14:23 | test infrastructure | UI test framework   | got validation to do something, but it's failing -- not sure why  |
+| 14:34 | break               | social              | video coffee with friends                                         |
+| 14:43 | test infrastructure | UI test framework   | picking back up from where I was, reading logs                    |
+| 14:53 | test infrastructure | UI test framework   | figured out the problem; was missing a space in the expected data |
+| 15:31 | test infrastructure | UI test framework   | adding autocomplete field to test window                          |
+| 16:30 | meetings            | design review       | Erin's proposal for new website metrics                           |
+| 16:40 | test infrastructure | automated test runs |                                                                   |
+| 16:49 | test infrastructure | automated test runs |                                                                   |
+| 16:59 | test infrastructure | automated test runs |                                                                   |
+| 17:08 | test infrastructure | automated test runs |                                                                   |
+| 17:17 | test infrastructure | automated test runs |                                                                   |
+| 17:27 | test infrastructure | automated test runs |                                                                   |
+| 17:39 | test infrastructure | design doc          | wrote introduction, "why do we need automated tests?"             |
+| 17:51 | test infrastructure | design doc          | started section on available technologies                         |
+| 18:02 | test infrastructure | design doc          | still exploring what tech is out there                            |
+| 18:12 | test infrastructure | design doc          | research into github actions                                      |
+| 18:23 | break               | social media        | got distracted on twitter                                         |
+| 18:35 | general             | email               | end of day emails                                                 |

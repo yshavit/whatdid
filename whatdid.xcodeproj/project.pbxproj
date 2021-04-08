@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7E0562F9261AB07800F6CDD7 /* screenshot-entries.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7E0562F8261AB07800F6CDD7 /* screenshot-entries.txt */; };
 		7E07C3B824D121770007FD23 /* DayEndReportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E07C3B624D121770007FD23 /* DayEndReportController.swift */; };
 		7E07C3B924D121770007FD23 /* DayEndReportController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E07C3B724D121770007FD23 /* DayEndReportController.xib */; };
 		7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1C2F5024CE43C40070D8CD /* Version.swift */; };
@@ -53,6 +54,7 @@
 		7E9C5EBD260C09AA00D839C4 /* Goal+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C5EB9260C09AA00D839C4 /* Goal+CoreDataClass.swift */; };
 		7E9C5EBE260C09AA00D839C4 /* Goal+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C5EBA260C09AA00D839C4 /* Goal+CoreDataProperties.swift */; };
 		7EA1DFC024CA99BF003AD2BC /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */; };
+		7EA4D3DE261AC9F300EEBF17 /* PasteboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA4D3DD261AC9F300EEBF17 /* PasteboardView.swift */; };
 		7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04E123714F0800A0C3A6 /* MainMenu.xib */; };
 		7EA6E22824BD6C5F004B9297 /* PtnViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */; };
 		7EAB5ECD24DA366600E18097 /* TimeUtilTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */; };
@@ -63,6 +65,7 @@
 		7EB7496125170ED6001C7DBC /* PrefsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB7496025170ED6001C7DBC /* PrefsTest.swift */; };
 		7EBE61F124DD2739000B2CB3 /* PtnViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */; };
 		7EBE61F324DD28F2000B2CB3 /* XCUIElement+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */; };
+		7EC1FC38261AA9160095388F /* ScreenshotGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC1FC37261AA9160095388F /* ScreenshotGenerator.swift */; };
 		7ECAF0DD250C9C110004647E /* NSButton+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECAF0DC250C9C110004647E /* NSButton+Helpers.swift */; };
 		7ECAF0DF250D75B70004647E /* WhatdidTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECAF0DE250D75B70004647E /* WhatdidTextField.swift */; };
 		7ECF97A724F1D50100DBF1BF /* NSControl+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECF97A624F1D50100DBF1BF /* NSControl+Helper.swift */; };
@@ -139,6 +142,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7E0562F8261AB07800F6CDD7 /* screenshot-entries.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "screenshot-entries.txt"; sourceTree = "<group>"; };
 		7E07C3B624D121770007FD23 /* DayEndReportController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayEndReportController.swift; sourceTree = "<group>"; };
 		7E07C3B724D121770007FD23 /* DayEndReportController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DayEndReportController.xib; sourceTree = "<group>"; };
 		7E1C2F5024CE43C40070D8CD /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
@@ -193,6 +197,7 @@
 		7E9C5EB9260C09AA00D839C4 /* Goal+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Goal+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7E9C5EBA260C09AA00D839C4 /* Goal+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Goal+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
+		7EA4D3DD261AC9F300EEBF17 /* PasteboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteboardView.swift; sourceTree = "<group>"; };
 		7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PtnViewController.xib; sourceTree = "<group>"; };
 		7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TimeUtilTest.swift; path = whatdidTests/scheduling/TimeUtilTest.swift; sourceTree = SOURCE_ROOT; };
 		7EB57AA725187548009E85F5 /* NSApperance+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSApperance+Helpers.swift"; sourceTree = "<group>"; };
@@ -201,6 +206,7 @@
 		7EB7496025170ED6001C7DBC /* PrefsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsTest.swift; sourceTree = "<group>"; };
 		7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PtnViewControllerTest.swift; sourceTree = "<group>"; };
 		7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIElement+Helpers.swift"; sourceTree = "<group>"; };
+		7EC1FC37261AA9160095388F /* ScreenshotGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotGenerator.swift; sourceTree = "<group>"; };
 		7ECAF0DC250C9C110004647E /* NSButton+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSButton+Helpers.swift"; sourceTree = "<group>"; };
 		7ECAF0DE250D75B70004647E /* WhatdidTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatdidTextField.swift; sourceTree = "<group>"; };
 		7ECF97A624F1D50100DBF1BF /* NSControl+Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSControl+Helper.swift"; sourceTree = "<group>"; };
@@ -425,6 +431,7 @@
 			isa = PBXGroup;
 			children = (
 				7EE4E39524E24A3F00552AAF /* ManualTickSchedulerWindow.swift */,
+				7EA4D3DD261AC9F300EEBF17 /* PasteboardView.swift */,
 				7EF58FA02584972F002F9604 /* UITestCommonConsts.swift */,
 				7E970D6A24DA850D00F634AB /* UiTestWindow.swift */,
 				7E970D6824DA84AF00F634AB /* UiTestWindow.xib */,
@@ -576,6 +583,8 @@
 				7EEF62E1261964C700528000 /* PrefsUITest.swift */,
 				7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */,
 				7EDD2BCB2616F06A005E6A4B /* ScheduleTest.swift */,
+				7E0562F8261AB07800F6CDD7 /* screenshot-entries.txt */,
+				7EC1FC37261AA9160095388F /* ScreenshotGenerator.swift */,
 				7EDD2BC52616EFCB005E6A4B /* TutorialTest.swift */,
 			);
 			path = app;
@@ -752,6 +761,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E0562F9261AB07800F6CDD7 /* screenshot-entries.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -800,6 +810,7 @@
 				7E7C384E24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */,
 				7EE4E39824E2523F00552AAF /* SystemClockScheduler.swift in Sources */,
 				7EEF324624EA542D002E217A /* NSRange+Helpers.swift in Sources */,
+				7EA4D3DE261AC9F300EEBF17 /* PasteboardView.swift in Sources */,
 				7EFEE80223B16EA6002928A2 /* PtnViewController.swift in Sources */,
 				7EE0E74A24EA22E7002D03F8 /* NSView+Helpers.swift in Sources */,
 				7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */,
@@ -891,6 +902,7 @@
 				7EDDFF5F250097F20027E91A /* Date+Helpers.swift in Sources */,
 				7EF8B9E926158E2200834866 /* UITestBase.swift in Sources */,
 				7EEF62D426195C3800528000 /* DailyReportTest.swift in Sources */,
+				7EC1FC38261AA9160095388F /* ScreenshotGenerator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

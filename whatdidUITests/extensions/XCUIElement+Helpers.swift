@@ -71,8 +71,8 @@ extension XCUIElement {
                 x: myFrame.minX + (frame.width * xInlay),
                 y: myFrame.minY + (frame.height * yInlay))
             
-            XCTestCase.clickEvent(.left, .leftMouseDown, at: point, with: [])
-            XCTestCase.clickEvent(.left, .leftMouseUp, at: point, with: [])
+            XCTestCase.clickEvent(.leftMouseDown, at: point, with: [])
+            XCTestCase.clickEvent(.leftMouseUp, at: point, with: [])
         }
     }
     
