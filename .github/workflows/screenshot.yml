@@ -38,9 +38,11 @@ jobs:
     - name: Build and run screenshot generator
       run: xcodebuild clean test -scheme whatdid-ui-test -only-testing whatdidUITests/ScreenshotGenerator -resultBundlePath ${{ runner.temp }}/test-results/bundle
     - name: Restore time zone
+      if: ${{ always() }}
       run: |
             sudo systemsetup -settimezone "${{ steps.initial.outputs.timezone }}"
     - name: Gather screenshots
+      if: ${{ always() }}
       run: |
             mkdir -p "${{ runner.temp }}/screenshots/all"
             mkdir -p "${{ runner.temp }}/screenshots/export/screenshots-${{ github.run_number }}"
@@ -59,6 +61,7 @@ jobs:
               mv "$screenshot_file" "${{ runner.temp }}/screenshots/export/screenshots-${{ github.run_number }}/$short_name"
             done
     - name: Upload screenshots
+      if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
         name: screenshots-${{ github.run_number }}
