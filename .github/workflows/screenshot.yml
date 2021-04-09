@@ -48,7 +48,7 @@ jobs:
             mkdir -p "${{ runner.temp }}/screenshots/export/screenshots-${{ github.run_number }}"
             # export the screenshots, organized by test
             xcparse screenshots --test '${{ runner.temp }}/test-results/bundle' '${{ runner.temp }}/screenshots/all'
-            for screenshot_file in $(find '${{ runner.temp }}/screenshots/all/ScreenshotGenerator' -name '*.png'); do
+            for screenshot_file in $(find '${{ runner.temp }}/screenshots/all/ScreenshotGenerator' -name  '*.png' -or -name '*.jpg'); do
               # screenshot_file will be something like:
               # .../screenshots/ScreenshotGenerator/testDailyReport()/daily-report_1_1A98890B-2184-400D-97D2-A5B51E3B25FB.png
               # We want to turn that into t just "daily-report.png"
