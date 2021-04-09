@@ -18,8 +18,29 @@ jobs:
             fi
     - name: Install xcparse
       run: brew install chargepoint/xcparse/xcparse
+    - Name: Save current time zone
+      # Save the current time zone.
+      # systemsetup returns e.g. "Time Zone: US/New_York", and we just
+      # want the "US/New_York" bit.
+      id: initial
+      run: 'echo "::set-output name=timezone::@$(sudo systemsetup -gettimezone | cut -d ' ' -f 3)"'
+            
+    - name: Set time zone
+      run: |
+            # Find a time zone such that it's 6 or 7pm.
+            # (tail -n +2 drops the first line, which is a header)
+            for tz in $(sudo systemsetup -listtimezones | tail -n +2); do
+              sudo systemsetup -settimezone "$tz"
+              now_hr="$(date +%H)"
+              if [[ $now_hr -ge 18 && $now_hr -le 19 ]]; then
+                break
+              fi
+            done
     - name: Build and run screenshot generator
       run: xcodebuild clean test -scheme whatdid-ui-test -only-testing whatdidUITests/ScreenshotGenerator -resultBundlePath ${{ runner.temp }}/test-results/bundle
+    - name: Restore time zone
+      run: |
+            sudo systemsetup -settimezone "${{ steps.initial.outputs.timezone }}"
     - name: Gather screenshots
       run: |
             mkdir -p "${{ runner.temp }}/screenshots/all"

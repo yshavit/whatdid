@@ -19,16 +19,27 @@ class ScreenshotGenerator: AppUITestBase {
     
 
     func testPtnAndDailyReport() {
-        group("set up entries") {
+        let lastEntryEpochSeconds = group("set up entries") {() -> Int in
             entriesHook = readEntries()
             let lastEntry = entriesHook.last!
-            setTimeUtc(s: Int(lastEntry.to.timeIntervalSince1970))
-            // PTN will come up
-            handleLongSessionPrompt(on: .ptn, .continueWithCurrentSession)
+            return Int(lastEntry.to.timeIntervalSince1970)
+        }
+        group("fast-forward to now") {
+            // fast forward to the last entry's timestamp, minus 16 minutes.
+            // We want to do -16 minutes so that when we then open the PTN right at that last-entry
+            // timestamp, it will say "what have you been doing for the last 16 minutes?"
+            // 16 minutes is also useful because it means that when we fast-forward to the last-entry
+            // timestamp, we're guaranteed a PTN popup
+            setTimeUtc(s: lastEntryEpochSeconds  - (16 * 60))
+            
+            handleLongSessionPrompt(on: .ptn, .startNewSession)
+            checkForAndDismiss(window: .dailyEnd)
+            checkForAndDismiss(window: .morningGoals)
+            setTimeUtc(s: lastEntryEpochSeconds)
         }
         
         group("ptn") {
-            let ptn = find(.ptn)
+            let ptn = wait(for: .ptn)
             ptn.typeKey(.escape) // dismiss the autocomplete popup
             group("add some goals") {
                 let goalsPane = find(.ptn).children(matching: .group).matching(identifier: "Goals for today").firstMatch
@@ -56,7 +67,7 @@ class ScreenshotGenerator: AppUITestBase {
             checkForAndDismiss(window: .ptn)
         }
         group("daily report") {
-            // The daily report will come up next
+            clickStatusMenu(with: .maskAlternate)
             let report = wait(for: .dailyEnd)
             let testInfraTasks = report.groups["Tasks for \"test infrastructure\""]
             group("expand 'test infrastructure' project") {
