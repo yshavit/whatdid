@@ -47,8 +47,8 @@ class DayStartController: NSViewController, NSTextFieldDelegate, CloseConfirmer 
             if shouldSave {
                 goalTexts.forEach { let _ = model.createNewGoal(goal: $0) }
             }
-        } else {
-            NSLog("saveGoalsOnExit was nil; not saving goals. This is unexpected.")
+        } else if !goalTexts.isEmpty {
+            NSLog("saveGoalsOnExit was nil, but there were goal texts; not saving goals. This is unexpected.")
         }
         // We have to clear the entries before closing, or else the "save goals?" alert will show
         self.goalEntries.forEach({$0.removeGoal()})
@@ -80,13 +80,12 @@ class DayStartController: NSViewController, NSTextFieldDelegate, CloseConfirmer 
     
     private func addGoalField() {
         let field = GoalEntryField(owner: self)
-        NSAnimationContext.runAnimationGroup(
-            {context in
-                context.allowsImplicitAnimation = true
-                context.duration = 2
+        AnimationHelper.animate(
+            duration: 2,
+            change: {
                 goals.addArrangedSubview(field)
             },
-            completionHandler: field.grabFocus)
+            onComplete: field.grabFocus)
     }
     
     func controlTextDidChange(_ obj: Notification) {
@@ -152,16 +151,13 @@ class DayStartController: NSViewController, NSTextFieldDelegate, CloseConfirmer 
         
         @objc func removeGoal() {
             if owner.canRemove(self) {
-                NSAnimationContext.runAnimationGroup(
-                    {context in
-                        context.allowsImplicitAnimation = true
-                        context.duration = 0.1
+                AnimationHelper.animate(
+                    duration: 0.1,
+                    change: {
                         self.alphaValue = 0
                     },
-                    completionHandler: {
-                        NSAnimationContext.runAnimationGroup {context in
-                            context.allowsImplicitAnimation = true
-                            context.duration = 0.4
+                    onComplete: {
+                        AnimationHelper.animate(duration: 0.4) {
                             let windowBeforeRemove = self.window
                             self.removeFromSuperview()
                             if let windowBeforeRemove = windowBeforeRemove, let content = windowBeforeRemove.contentView {
@@ -169,8 +165,7 @@ class DayStartController: NSViewController, NSTextFieldDelegate, CloseConfirmer 
                             }
                             self.owner.setSaveButtonText()
                         }
-                    }
-                )
+                    })
             } else {
                 field.stringValue = ""
                 owner.setSaveButtonText()

@@ -156,9 +156,7 @@ class ExpandableTextField: NSView, NSTextFieldDelegate {
     }
     
     private func toggleExpansion() {
-        NSAnimationContext.runAnimationGroup {context in
-            context.duration = 0.5
-            context.allowsImplicitAnimation = true
+        AnimationHelper.animate(duration: 0.5) {
             isExpanded = !isExpanded
         }
     }
