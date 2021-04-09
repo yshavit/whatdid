@@ -47,8 +47,8 @@ class DayStartController: NSViewController, NSTextFieldDelegate, CloseConfirmer 
             if shouldSave {
                 goalTexts.forEach { let _ = model.createNewGoal(goal: $0) }
             }
-        } else {
-            NSLog("saveGoalsOnExit was nil; not saving goals. This is unexpected.")
+        } else if !goalTexts.isEmpty {
+            NSLog("saveGoalsOnExit was nil, but there were goal texts; not saving goals. This is unexpected.")
         }
         // We have to clear the entries before closing, or else the "save goals?" alert will show
         self.goalEntries.forEach({$0.removeGoal()})
