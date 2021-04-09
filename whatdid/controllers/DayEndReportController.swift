@@ -20,7 +20,6 @@ class DayEndReportController: NSViewController {
     @IBOutlet weak var projectsScrollHeight: NSLayoutConstraint!
     @IBOutlet weak var projectsContainer: NSStackView!
     @IBOutlet weak var entryStartDatePicker: NSDatePicker!
-    @IBOutlet weak var versionLabel: NSTextField!
     
     var scheduler: Scheduler = DefaultScheduler.instance
     
@@ -28,7 +27,6 @@ class DayEndReportController: NSViewController {
         if #available(OSX 10.15.4, *) {
             entryStartDatePicker.presentsCalendarOverlay = true
         }
-        versionLabel.stringValue = Version.pretty
     }
     
     private static func createDisclosure(state: NSButton.StateValue)  -> ButtonWithClosure {
