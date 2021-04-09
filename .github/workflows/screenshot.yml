@@ -18,13 +18,12 @@ jobs:
             fi
     - name: Install xcparse
       run: brew install chargepoint/xcparse/xcparse
-    - Name: Save current time zone
+    - name: Save current time zone
       # Save the current time zone.
       # systemsetup returns e.g. "Time Zone: US/New_York", and we just
       # want the "US/New_York" bit.
       id: initial
-      run: 'echo "::set-output name=timezone::@$(sudo systemsetup -gettimezone | cut -d ' ' -f 3)"'
-            
+      run: 'echo "::set-output name=timezone::@$(sudo systemsetup -gettimezone | cut -d " " -f 3)"'
     - name: Set time zone
       run: |
             # Find a time zone such that it's 6 or 7pm.
