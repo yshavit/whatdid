@@ -49,6 +49,10 @@ extension XCTestCase {
         XCTestCase.log(message)
     }
     
+    func wait<T: Equatable>(until block: () -> T, equals expected: T) {
+        wait(for: "element to equal expected", until: {block() == expected})
+    }
+    
     func wait(for description: String, timeout: TimeInterval = 30, until condition: () -> Bool) {
         XCTestCase.wait(for: description, until: condition)
     }

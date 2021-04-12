@@ -9,29 +9,33 @@ class GoalsTest: AppUITestBase {
         group("ptn") {
             clickStatusMenu()
             let ptnGoals = wait(for: .ptn).groups["Goals for today"]
-            XCTAssertEqual([], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+            wait(
+                until: {ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.title})},
+                equals: [])
             clickStatusMenu()
             waitForTransition(of: .ptn, toIsVisible: false)
         }
         group("daily report") {
             clickStatusMenu(with: .maskAlternate)
             let goalsReport = wait(for: .dailyEnd).groups["Today's Goals"]
-            XCTAssertEqual(
-                ["No goals for today."],
-                goalsReport.staticTexts.allElementsBoundByIndex.map({$0.stringValue}))
+            wait(
+                until: {goalsReport.staticTexts.allElementsBoundByIndex.map({$0.stringValue})},
+                equals: ["No goals for today."])
             XCTAssertEqual([], goalsReport.checkBoxes.allElementsBoundByIndex.map({$0.title}))
 
             openWindow!.typeKey(.downArrow) // date picker is selected by default, so this goes 1 month earlier
-            XCTAssertEqual(
-                ["No goals for this time range."],
-                goalsReport.staticTexts.allElementsBoundByIndex.map({$0.stringValue}))
+            wait(
+                until: {goalsReport.staticTexts.allElementsBoundByIndex.map({$0.stringValue})},
+                equals: ["No goals for this time range."])
             XCTAssertEqual([], goalsReport.checkBoxes.allElementsBoundByIndex.map({$0.title}))
             clickStatusMenu()
         }
         group("goals prompt") {
             let goals = openMorningGoals()
             group("validate initial") {
-                XCTAssertEqual([""], goals.textFields.allElementsBoundByIndex.map({$0.stringValue}))
+                wait(
+                    until: {goals.textFields.allElementsBoundByIndex.map({$0.stringValue})},
+                    equals: [""])
                 XCTAssertEqual("Dismiss without setting goals", goals.buttons.allElementsBoundByIndex.last?.title)
             }
         }

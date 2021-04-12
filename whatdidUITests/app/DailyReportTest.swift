@@ -213,12 +213,12 @@ class DailyReportTest: AppUITestBase {
             let (shortTaskElem, longTaskElem) = group("Open project and task") {() -> (XCUIElement, XCUIElement) in
                 let dailyReportWindow = app.windows[WindowType.dailyEnd.windowTitle].firstMatch
                 let shortProject = HierarchicalEntryLevel(ancestor: dailyReportWindow, scope: "Project", label: "short project")
-                shortProject.disclosure.click()
+                shortProject.disclosure.click(using: .frame())
                 wait(for: "project to open", until: {dailyReportWindow.groups.count > 0})
                 
                 let tasksForProject = dailyReportWindow.groups["Tasks for \"short project\""]
                 let task = HierarchicalEntryLevel(ancestor: tasksForProject, scope: "Task", label: "short task")
-                task.disclosure.click()
+                task.disclosure.click(using: .frame())
                 wait(for: "task details to open", until: {tasksForProject.groups.staticTexts.count == 4})
                 
                 let taskDetails = tasksForProject.groups["Details for short task"]
