@@ -129,7 +129,7 @@ class UITestBase: XCTestCase {
             return
         }
         app.activate()
-        if !app.wait(for: .runningForeground, timeout: 15) {
+        if !app.wait(for: .runningForeground, timeout: 30) {
             log("Timed out waiting to run in foreground. Will try to continue. Current state: \(app.state.rawValue)")
         }
     }
@@ -139,6 +139,6 @@ class UITestBase: XCTestCase {
         PtnViewControllerTest.app = app
         app.launchEnvironment = env
         app.launch()
-        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 15))
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
     }
 }
