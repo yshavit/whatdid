@@ -12,14 +12,8 @@ class ExpandableTextField: NSView, NSTextFieldDelegate {
     var goalHook: ((String) -> Void)?
     
     private static func createAddButton() -> NSButton {
-        let button: NSButton
-        if let image = NSImage(named: NSImage.touchBarAddDetailTemplateName) {
-            button = NSButton(image: image, target: nil, action: nil)
-            button.isBordered = false
-        } else {
-            button = NSButton(title: "+⃣", target: self, action: nil)
-            button.bezelStyle = .texturedRounded
-        }
+        let button = NSButton(title: "+⃣", target: self, action: nil)
+        button.isBordered = false
         button.controlSize = .small
         button.toolTip = "Add new goal"
         button.setAccessibilityEnabled(true)

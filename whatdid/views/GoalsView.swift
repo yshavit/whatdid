@@ -106,7 +106,7 @@ class GoalsView: NSView, NSAccessibilityGroup {
         
         // set up our first hstack, and then start looping
         createRow()
-        currentRow.addArrangedSubview(NSTextField(labelWithAttributedString: NSAttributedString(string: "Goals for today", attributes: [
+        currentRow.addArrangedSubview(NSTextField(labelWithAttributedString: NSAttributedString(string: "Goals", attributes: [
             .foregroundColor: NSColor.placeholderTextColor,
             .font: GoalsView.small_control_font
         ])))
