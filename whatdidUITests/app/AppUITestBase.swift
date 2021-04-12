@@ -278,38 +278,14 @@ class AppUITestBase: UITestBase {
             return ["headerText": headerLabel, "durationText": durationLabel, "disclosure": disclosure, "indicator": indicatorBar]
         }
         
-        func clickDisclosure(until element: XCUIElement, _ existence: Existence) {
+        func clickDisclosure(until element: XCUIElement, isVisible expectedVisibility: Bool) {
             XCTContext.runActivity(named: "Click \(disclosure.simpleDescription)") {context in
                 context.add(XCTAttachment(screenshot: ancestor.screenshot()))
                 disclosure.click()
-                wait(for: "element to \(existence.asVerb)") {
-                    switch existence {
-                    case .exists:
-                        return element.exists
-                    case .isVisible:
-                        return element.isVisible
-                    case .doesNotExist:
-                        return !element.exists
-                    }
+                wait(for: "element to \(expectedVisibility ? "be visible" : "not be visible")") {
+                    return element.isVisible == expectedVisibility
                 }
                 context.add(XCTAttachment(screenshot: ancestor.screenshot()))
-            }
-        }
-    }
-    
-    enum Existence {
-        case exists
-        case isVisible
-        case doesNotExist
-        
-        var asVerb: String {
-            switch self {
-            case .exists:
-                return "exist"
-            case .isVisible:
-                return "be visible"
-            case .doesNotExist:
-                return "not exist"
             }
         }
     }

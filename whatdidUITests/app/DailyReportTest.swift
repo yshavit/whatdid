@@ -77,8 +77,8 @@ class DailyReportTest: AppUITestBase {
                 }
             }
             group("Check tasks for \"project a\"") {
-                XCTAssertFalse(tasksForA.exists)
-                projectA.clickDisclosure(until: tasksForA, .isVisible)
+                XCTAssertFalse(tasksForA.isVisible)
+                projectA.clickDisclosure(until: tasksForA, isVisible: true)
             }
             for task in ["task 1", "task 2"] {
                 group("Check \(task)'s visibility") {
@@ -98,8 +98,8 @@ class DailyReportTest: AppUITestBase {
                     }
                 }
                 group("Details") {
-                    XCTAssertFalse(task1Details.exists)
-                    task1.clickDisclosure(until: task1Details, .isVisible)
+                    XCTAssertFalse(task1Details.isVisible)
+                    task1.clickDisclosure(until: task1Details, isVisible: true)
                     XCTAssertEqual(
                         [
                             "1:15am - 1:27am (12m):",
@@ -111,10 +111,10 @@ class DailyReportTest: AppUITestBase {
                 }
             }
             group("Task 1 stays expanded if project a folds") {
-                projectA.clickDisclosure(until: task1Details, .doesNotExist)
+                projectA.clickDisclosure(until: task1Details, isVisible: false)
                 log("Sleeping for a bit to let things stabilize")
                 sleep(2) // Clicking too quickly in a row can break this test
-                projectA.clickDisclosure(until: task1Details, .isVisible)
+                projectA.clickDisclosure(until: task1Details, isVisible: true)
             }
         }
     }

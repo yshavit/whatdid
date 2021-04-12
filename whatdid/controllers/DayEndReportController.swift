@@ -278,6 +278,7 @@ class DayEndReportController: NSViewController {
         wrapper.wantsLayer = true
         wrapper.layer?.masksToBounds = true
         wrapper.addSubview(details)
+        wrapper.widthAnchor.constraint(equalTo: details.widthAnchor).isActive = true
         let zeroHeight = wrapper.heightAnchor.constraint(equalToConstant: 0)
         let contentHeight = wrapper.heightAnchor.constraint(equalTo: details.heightAnchor)
         

@@ -7,6 +7,8 @@ class UITestBase: XCTestCase {
     private static var app : XCUIApplication?
     /// A point within the status menu item. Access this via `var statusItemPoint`, which calculates it if needed.
     private static var _statusItemPoint: CGPoint?
+    /// Whether we should restart the app at setup, if it's already running
+    private static var shouldRestartApp = false
     
     var app: XCUIApplication {
         UITestBase.app!
@@ -86,6 +88,14 @@ class UITestBase: XCTestCase {
     
     final override func setUp() {
         continueAfterFailure = false
+        if UITestBase.shouldRestartApp {
+            if let app = UITestBase.app {
+                app.terminate()
+                UITestBase.app = nil
+            }
+            UITestBase.shouldRestartApp = false
+        }
+        
         if UITestBase.app == nil {
             UITestBase.launch(withEnv: startupEnv(suppressTutorial: true))
         }
@@ -107,8 +117,7 @@ class UITestBase: XCTestCase {
         } else {
             log("ERROR: couldn't find app, so won't call uiTearDown!")
         }
-        XCUIApplication().terminate()
-        UITestBase.app = nil
+        UITestBase.shouldRestartApp = true
         let now = Date()
         log("Failed at \(now.utcTimestamp) (\(now.timestamp(at: TimeZone(identifier: "US/Eastern")!)))")
         super.recordFailure(withDescription: description, inFile: filePath, atLine: lineNumber, expected: expected)
