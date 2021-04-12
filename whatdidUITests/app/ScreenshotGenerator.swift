@@ -72,11 +72,11 @@ class ScreenshotGenerator: AppUITestBase {
             let testInfraTasks = report.groups["Tasks for \"test infrastructure\""]
             group("expand 'test infrastructure' project") {
                 let testInfraProject = HierarchicalEntryLevel(ancestor: report, scope: "Project", label: "test infrastructure")
-                testInfraProject.clickDisclosure(until: testInfraTasks, .isVisible)
+                testInfraProject.clickDisclosure(until: testInfraTasks, isVisible: true)
             }
             group("expand details for design doc task") {
                 let designDocTask = HierarchicalEntryLevel(ancestor: report, scope: "Task", label: "design doc")
-                designDocTask.clickDisclosure(until: testInfraTasks.groups["Details for design doc"], .isVisible)
+                designDocTask.clickDisclosure(until: testInfraTasks.groups["Details for design doc"], isVisible: true)
             }
             screenshot(named: "daily report", of: report)
         }

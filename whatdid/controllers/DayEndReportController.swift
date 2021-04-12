@@ -17,18 +17,16 @@ class DayEndReportController: NSViewController {
     @IBOutlet weak var goalsSummaryGroup: NSView!
     @IBOutlet weak var goalsSummaryStack: NSStackView!
     @IBOutlet weak var projectsScroll: NSScrollView!
-    @IBOutlet weak var projectsScrollHeight: NSLayoutConstraint!
     @IBOutlet weak var projectsContainer: NSStackView!
     @IBOutlet weak var entryStartDatePicker: NSDatePicker!
-    @IBOutlet weak var versionLabel: NSTextField!
-    
+    @IBOutlet weak var shockAbsorber: NSView!
+
     var scheduler: Scheduler = DefaultScheduler.instance
     
     override func awakeFromNib() {
         if #available(OSX 10.15.4, *) {
             entryStartDatePicker.presentsCalendarOverlay = true
         }
-        versionLabel.stringValue = Version.pretty
     }
     
     private static func createDisclosure(state: NSButton.StateValue)  -> ButtonWithClosure {
@@ -53,7 +51,6 @@ class DayEndReportController: NSViewController {
         entryStartDatePicker.dateValue = thisMorning(assumingNow: now)
         
         updateEntries()
-        resizeAndLayoutIfNeeded()
     }
     
     override func viewWillAppear() {
@@ -72,8 +69,8 @@ class DayEndReportController: NSViewController {
     }
     
     @IBAction func userChangedEntryStartDate(_ sender: Any) {
-        animate(
-            {
+        AnimationHelper.animate(
+            change: {
                 goalsSummaryStack.subviews.forEach { $0.removeFromSuperview() }
                 projectsContainer.subviews.forEach {$0.removeFromSuperview()}
                 let spinner = NSProgressIndicator()
@@ -83,11 +80,11 @@ class DayEndReportController: NSViewController {
                 spinner.style = .spinning
                 spinner.leadingAnchor.constraint(equalTo: projectsContainer.leadingAnchor).isActive = true
                 spinner.trailingAnchor.constraint(equalTo: projectsContainer.trailingAnchor).isActive = true
+                self.resizeAndLayoutIfNeeded()
             },
-            andThen: {
-                self.animate({ self.updateEntries() })
-            }
-        )
+            onComplete: {
+                AnimationHelper.animate(change: self.updateEntries)
+            })
     }
     
     private func updateGoals(since startTime: Date) {
@@ -132,6 +129,8 @@ class DayEndReportController: NSViewController {
         projects.forEach {project in
             // The vstack group for the whole project
             let projectVStack = NSStackView()
+            projectVStack.wantsLayer = true
+            projectVStack.useAutoLayout()
             projectsContainer.addArrangedSubview(projectVStack)
             projectVStack.spacing = 2
             projectVStack.orientation = .vertical
@@ -147,20 +146,22 @@ class DayEndReportController: NSViewController {
             // Tasks box
             let tasksBox = NSBox()
             tasksBox.useAutoLayout()
-            projectVStack.addArrangedSubview(tasksBox)
             tasksBox.setAccessibilityLabel("Tasks for \"\(project.name)\"")
             tasksBox.title = tasksBox.accessibilityLabel()!
             tasksBox.titlePosition = .noTitle
-            tasksBox.leadingAnchor.constraint(equalTo: projectVStack.leadingAnchor, constant: 3).isActive = true
-            tasksBox.trailingAnchor.constraint(equalTo: projectVStack.trailingAnchor, constant: -3).isActive = true
-            setUpDisclosureExpansion(disclosure: projectHeader.disclosure, details: tasksBox)
-            
             let tasksStack = NSStackView()
+            tasksStack.wantsLayer = true
+            tasksStack.useAutoLayout()
             tasksStack.spacing = 0
             tasksStack.orientation = .vertical
             tasksBox.contentView = tasksStack
+            tasksBox.anchorAllSides(to: tasksStack)
             
-            var previousDetailsBottomAnchor : NSLayoutYAxisAnchor?
+            let taskExpansion = setUpDisclosureExpansion(disclosure: projectHeader.disclosure, add: tasksBox, to: projectVStack)
+            projectVStack.addArrangedSubview(taskExpansion)
+            tasksBox.leadingAnchor.constraint(equalTo: projectVStack.leadingAnchor, constant: 3).isActive = true
+            tasksBox.trailingAnchor.constraint(equalTo: projectVStack.trailingAnchor, constant: -3).isActive = true
+            
             project.forEach {task in
                 let taskHeader = ExpandableProgressBar(
                     addTo: tasksStack,
@@ -170,7 +171,6 @@ class DayEndReportController: NSViewController {
                     outOf: allProjectsTotalTime)
                 taskHeader.progressBar.leadingAnchor.constraint(equalTo: projectHeader.progressBar.leadingAnchor).isActive = true
                 taskHeader.progressBar.trailingAnchor.constraint(equalTo: projectHeader.progressBar.trailingAnchor).isActive = true
-                previousDetailsBottomAnchor?.constraint(equalTo: taskHeader.topView.topAnchor, constant: -5).isActive = true
                 
                 let taskDetailsGrid = NSGridView(views: [])
                 taskDetailsGrid.columnSpacing = 4
@@ -182,26 +182,26 @@ class DayEndReportController: NSViewController {
                 taskDetailsGridBox.title = taskDetailsGridBox.accessibilityLabel()!
                 taskDetailsGridBox.titlePosition = .noTitle
                 taskDetailsGridBox.contentView = taskDetailsGrid
-                tasksStack.addArrangedSubview(taskDetailsGridBox)
                 
-                taskDetailsGridBox.leadingAnchor.constraint(equalTo: taskHeader.progressBar.leadingAnchor).isActive = true
-                taskDetailsGridBox.trailingAnchor.constraint(equalTo: taskHeader.progressBar.trailingAnchor).isActive = true
-                
-                previousDetailsBottomAnchor = taskDetailsGridBox.bottomAnchor
-                setUpDisclosureExpansion(disclosure: taskHeader.disclosure, details: taskDetailsGridBox) {state in
-                    // For some reason, especially long (in terms of vertical space) task notes can break the layout when they're hidden:
-                    // It shows up as a large vertial blank space in other tasks. Zeroing out the contents when hidden seems to fix that.
-                    if state == .off {
+                let taskExpansion = setUpDisclosureExpansion(
+                    disclosure: taskHeader.disclosure,
+                    add: taskDetailsGridBox,
+                    to: tasksStack,
+                    beforeShowing: {
+                        self.details(for: task, to: taskDetailsGrid, relativeTo: todayStart)
+                    },
+                    afterHiding: {
                         while taskDetailsGrid.numberOfRows > 0 {
                             taskDetailsGrid.removeRow(at: 0)
                         }
                         while taskDetailsGrid.numberOfColumns > 0 {
                             taskDetailsGrid.removeColumn(at: 0)
                         }
-                    } else {
-                        self.details(for: task, to: taskDetailsGrid, relativeTo: todayStart)
-                    }
-                }
+                        taskDetailsGrid.subviews.forEach({$0.removeFromSuperview()})
+                    })
+                tasksStack.addArrangedSubview(taskExpansion)
+                taskExpansion.leadingAnchor.constraint(equalTo: taskHeader.progressBar.leadingAnchor).isActive = true
+                taskExpansion.trailingAnchor.constraint(equalTo: taskHeader.progressBar.trailingAnchor).isActive = true
             }
         }
     }
@@ -243,51 +243,96 @@ class DayEndReportController: NSViewController {
             grid.addRow(with: fields)
         }
     }
-    
-    private func animate(_ action: () -> Void, duration: Double = 0.5, andThen: (() -> Void)? = nil) {
-        let originalWindowFrameOpt = self.view.window?.frame
-        let originalViewBounds = self.view.bounds
-        AnimationHelper.animate(
-            duration: duration,
-            change: {
-                action()
-                self.resizeAndLayoutIfNeeded()
-                
-                let newViewBounds = self.view.bounds
-                if let window = self.view.window, let originalWindowFrame = originalWindowFrameOpt {
-                    let deltaWidth = newViewBounds.width - originalViewBounds.width
-                    let deltaHeight = newViewBounds.height - originalViewBounds.height
-                    let newWindowFrame = NSRect(
-                        x: originalWindowFrame.minX,
-                        y: originalWindowFrame.minY - deltaHeight,
-                        width: originalWindowFrame.width + deltaWidth,
-                        height: originalWindowFrame.height + deltaHeight)
-                    window.setFrame(newWindowFrame, display: true)
-                }
-            },
-            onComplete: andThen)
-    }
-    
+
     private func resizeAndLayoutIfNeeded() {
         view.layoutSubtreeIfNeeded()
-        projectsScrollHeight.constant = projectsContainer.fittingSize.height
+        let shockAbsorberHeight = shockAbsorber.frame.height
+        growWindow(byY: -shockAbsorberHeight)
+    }
+    
+    private func growWindow(byY height: CGFloat) {
+        guard let window = view.window else {
+            NSLog("no window")
+            return
+        }
+        let originalViewBounds = window.frame
+        let newFrame = NSRect(
+            x: originalViewBounds.minX,
+            y: originalViewBounds.minY - height,
+            width: originalViewBounds.width,
+            height: originalViewBounds.height + height
+        )
+        window.setFrame(newFrame, display: true)
         view.layoutSubtreeIfNeeded()
     }
     
-    private func setUpDisclosureExpansion(disclosure: ButtonWithClosure, details: NSView, extraAction: ((NSButton.StateValue) -> Void)? = nil) {
-        disclosure.onPress {button in
-            self.animate({
-                details.isHidden = button.state == .off
-                if let requestedAction = extraAction {
-                    requestedAction(button.state)
-                }
-            })
+    private func setUpDisclosureExpansion(
+        disclosure: ButtonWithClosure,
+        add details: NSView,
+        to enclosing: NSView,
+        beforeShowing: @escaping Action = {},
+        afterHiding: @escaping Action = {})
+    -> NSView
+    {
+        let wrapper = NSView()
+        wrapper.wantsLayer = true
+        wrapper.layer?.masksToBounds = true
+        wrapper.addSubview(details)
+        wrapper.widthAnchor.constraint(equalTo: details.widthAnchor).isActive = true
+        let zeroHeight = wrapper.heightAnchor.constraint(equalToConstant: 0)
+        let contentHeight = wrapper.heightAnchor.constraint(equalTo: details.heightAnchor)
+        
+        func setConstraints(toShow: Bool) {
+            // We don't want to do e.g. `contentHeight.isActive = toShow` because we always want to deactivate
+            // the old constraint before activating the new one. Otherwise they can conflict, which causes one to
+            // get thrown out.
+            if toShow {
+                zeroHeight.isActive = false
+                contentHeight.isActive = true
+            } else {
+                contentHeight.isActive = false
+                zeroHeight.isActive = true
+            }
         }
         
-        details.isHidden = disclosure.state == .off
-        if let requestedAction = extraAction {
-            requestedAction(disclosure.state)
+        if disclosure.state == .on {
+            beforeShowing()
+            setConstraints(toShow: true)
+        } else {
+            afterHiding()
+            setConstraints(toShow: false)
         }
+        
+        disclosure.onPress {button in
+            if button.state == .on {
+                beforeShowing()
+                AnimationHelper.animate(
+                    change: {
+                        setConstraints(toShow: true)
+                        let currentHeight = self.view.frame.height
+                        let maxHeight = self.maxViewHeight.constant
+                        var growBy = details.fittingSize.height
+                        if (growBy + currentHeight) > maxHeight {
+                            growBy = maxHeight - currentHeight
+                        }
+                        self.growWindow(byY: growBy)
+                    },
+                    onComplete: {
+                        AnimationHelper.animate(duration: 0.2, change: self.resizeAndLayoutIfNeeded)
+                    })
+            } else {
+                AnimationHelper.animate(
+                    change: {
+                        setConstraints(toShow: false)
+                        self.growWindow(byY: -details.fittingSize.height)
+                    },
+                    onComplete: {
+                        afterHiding()
+                        AnimationHelper.animate(duration: 0.2, change: self.resizeAndLayoutIfNeeded)
+                    })
+            }
+        }
+        return wrapper
     }
     
     struct ExpandableProgressBar {

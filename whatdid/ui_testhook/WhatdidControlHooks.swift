@@ -84,12 +84,23 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
 
         divider()
         adder(hideStatusItem)
-        let useAnimationsButton = ButtonWithClosure(checkboxWithTitle: "Use animations", target: nil, action: nil)
-        useAnimationsButton.state = AnimationHelper.use_animations ? .on : .off
-        useAnimationsButton.onPress {button in
-            AnimationHelper.use_animations = button.state == .on
+        
+        let animationFactorStack = NSStackView(orientation: .horizontal)
+        let animationFactorField = NSTextField(string: AnimationHelper.animation_factor.description)
+        animationFactorField.target = self
+        animationFactorField.action = #selector(self.setAnimationFactor(_:))
+        (animationFactorField.cell as? NSTextFieldCell)?.sendsActionOnEndEditing = true
+        animationFactorStack.addArrangedSubview(NSTextField(labelWithString: "Animation factor"))
+        animationFactorStack.addArrangedSubview(animationFactorField)
+        adder(animationFactorStack)
+    }
+    
+    @objc private func setAnimationFactor(_ field: NSTextField) {
+        if let valueAsDouble = Double(field.stringValue) {
+            AnimationHelper.animation_factor = valueAsDouble
         }
-        adder(useAnimationsButton)
+        // whether the parse worked or not, display the normalized current value
+        field.stringValue = AnimationHelper.animation_factor.description
     }
     
     private func setUpActivator() {

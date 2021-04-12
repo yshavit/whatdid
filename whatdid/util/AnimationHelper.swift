@@ -6,27 +6,20 @@ struct AnimationHelper {
     private init() {}
     
     #if UI_TEST
-    static var use_animations = false
+    static var animation_factor = 0.0
     #endif
     
-    static func animate(duration: TimeInterval, change: Action, onComplete: Action? = nil) {
+    static func animate(duration: TimeInterval = 0.5, change: Action, onComplete: Action? = nil) {
+        let actualDuration: TimeInterval
         #if UI_TEST
-        if use_animations {
-            reallyAnimate(duration: duration, change: change, onComplete: onComplete)
-        } else {
-            change()
-            onComplete?()
-        }
+        actualDuration = duration * animation_factor
         #else
-        reallyAnimate(duration: duration, change: change, onComplete: onComplete)
+        actualDuration = duration
         #endif
-    }
-    
-    private static func reallyAnimate(duration: TimeInterval, change: Action, onComplete: Action? = nil) {
         NSAnimationContext.runAnimationGroup(
             {context in
                 context.allowsImplicitAnimation = true
-                context.duration = duration
+                context.duration = actualDuration
                 change()
             },
             completionHandler: onComplete)
