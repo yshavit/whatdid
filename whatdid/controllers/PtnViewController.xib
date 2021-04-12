@@ -13,7 +13,6 @@
                 <outlet property="noteField" destination="6A0-cK-Vnh" id="DMw-Er-dNX"/>
                 <outlet property="prefsButton" destination="tkS-gq-Cbs" id="I1H-5c-cWw"/>
                 <outlet property="projectField" destination="4Lo-U3-YED" id="7SV-al-VYn"/>
-                <outlet property="skipButton" destination="iu6-dS-Gze" id="AlI-GO-bb4"/>
                 <outlet property="snoozeButton" destination="yjZ-yA-5CH" id="kMR-QE-XYq"/>
                 <outlet property="snoozeExtraOptions" destination="2d3-tf-ady" id="sU1-Fq-fTJ"/>
                 <outlet property="taskField" destination="sxc-2C-mp9" id="Pro-Vo-fL6"/>
@@ -25,15 +24,12 @@
         <stackView identifier="topstack" distribution="fill" orientation="vertical" alignment="trailing" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HWg-YQ-y10" userLabel="Top Stack">
             <rect key="frame" x="0.0" y="0.0" width="873" height="185"/>
             <subviews>
-                <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xh1-hp-9GB" userLabel="Header stack">
-                    <rect key="frame" x="334" y="167" width="534" height="14"/>
+                <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xh1-hp-9GB" userLabel="Header stack">
+                    <rect key="frame" x="334" y="153" width="534" height="28"/>
                     <subviews>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="v8p-Bz-hcj" userLabel="Header text">
-                            <rect key="frame" x="-2" y="0.0" width="383" height="14"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="14" id="lDT-uo-0Zh"/>
-                            </constraints>
-                            <textFieldCell key="cell" lineBreakMode="clipping" title="What have you been working on for the last {DURATION} (since {TIME})?" id="MHs-V5-IyC">
+                            <rect key="frame" x="-2" y="0.0" width="326" height="28"/>
+                            <textFieldCell key="cell" title="What have you been working on for the last {DURATION} (since {TIME})?" id="MHs-V5-IyC">
                                 <font key="font" metaFont="label" size="11"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -41,10 +37,62 @@
                             <accessibility identifier="durationheader"/>
                         </textField>
                         <customView verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="maZ-n4-VKP" userLabel="Spacer">
-                            <rect key="frame" x="379" y="4" width="141" height="10"/>
+                            <rect key="frame" x="328" y="4" width="50" height="24"/>
+                        </customView>
+                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="HC6-YQ-v0e" userLabel="Snooze buttonopts">
+                            <rect key="frame" x="384" y="14" width="130" height="14"/>
+                            <subviews>
+                                <button identifier="snoozebutton" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yjZ-yA-5CH" userLabel="Snooze button">
+                                    <rect key="frame" x="0.0" y="-1" width="130" height="15"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="130" id="kfD-55-owX"/>
+                                    </constraints>
+                                    <buttonCell key="cell" type="roundRect" title="snooze" bezelStyle="roundedRect" alignment="left" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ojt-yE-tly">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="menu" size="9"/>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="snoozeButtonPressed:" target="-2" id="GfF-m3-O9M"/>
+                                    </connections>
+                                </button>
+                                <popUpButton identifier="snoozeopts" translatesAutoresizingMaskIntoConstraints="NO" id="2d3-tf-ady" userLabel="Snooze options">
+                                    <rect key="frame" x="113" y="0.0" width="17" height="14"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" secondItem="2d3-tf-ady" secondAttribute="height" multiplier="1.25:1" id="B6H-b1-avb"/>
+                                    </constraints>
+                                    <popUpButtonCell key="cell" type="square" bezelStyle="shadowlessSquare" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="arrowAtCenter" id="XN4-G0-EmL">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="menu"/>
+                                        <menu key="menu" id="e29-UZ-3Z2">
+                                            <items>
+                                                <menuItem state="on" hidden="YES" id="ntA-xD-jFV" userLabel="snooze"/>
+                                                <menuItem title="+30" id="Dfs-KT-zJY" userLabel="+30"/>
+                                                <menuItem title="+1h" id="S09-6Y-I7d" userLabel="+1h"/>
+                                                <menuItem title="+1h30" id="BbM-Gt-GCN" userLabel="+1h30"/>
+                                                <menuItem isSeparatorItem="YES" id="Fju-ZH-G90"/>
+                                                <menuItem title="until tomorrow" id="qvY-Zm-z6P">
+                                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                                </menuItem>
+                                            </items>
+                                        </menu>
+                                    </popUpButtonCell>
+                                    <connections>
+                                        <action selector="snoozeExtraOptionsSelected:" target="-2" id="XhT-pa-2bB"/>
+                                    </connections>
+                                </popUpButton>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="2d3-tf-ady" firstAttribute="trailing" secondItem="yjZ-yA-5CH" secondAttribute="trailing" id="8cv-jk-1jL"/>
+                                <constraint firstItem="yjZ-yA-5CH" firstAttribute="height" secondItem="HC6-YQ-v0e" secondAttribute="height" id="Fw3-26-Oi1"/>
+                                <constraint firstItem="yjZ-yA-5CH" firstAttribute="leading" secondItem="HC6-YQ-v0e" secondAttribute="leading" id="QeR-ux-jX5"/>
+                                <constraint firstItem="2d3-tf-ady" firstAttribute="height" secondItem="yjZ-yA-5CH" secondAttribute="height" id="dnN-n3-neA"/>
+                                <constraint firstItem="yjZ-yA-5CH" firstAttribute="top" secondItem="HC6-YQ-v0e" secondAttribute="top" id="eAN-5c-NCr"/>
+                                <constraint firstItem="2d3-tf-ady" firstAttribute="centerY" secondItem="yjZ-yA-5CH" secondAttribute="centerY" id="gfS-Sz-nWv"/>
+                                <constraint firstItem="yjZ-yA-5CH" firstAttribute="width" secondItem="HC6-YQ-v0e" secondAttribute="width" id="t7J-TH-NsM"/>
+                            </constraints>
                         </customView>
                         <button verticalHuggingPriority="750" horizontalCompressionResistancePriority="150" verticalCompressionResistancePriority="150" translatesAutoresizingMaskIntoConstraints="NO" id="tkS-gq-Cbs" userLabel="Prefs Button">
-                            <rect key="frame" x="520" y="0.0" width="14" height="14"/>
+                            <rect key="frame" x="520" y="14" width="14" height="14"/>
                             <constraints>
                                 <constraint firstAttribute="width" secondItem="tkS-gq-Cbs" secondAttribute="height" multiplier="1:1" id="8lS-9s-VYO"/>
                             </constraints>
@@ -60,10 +108,10 @@
                     </subviews>
                     <edgeInsets key="edgeInsets" left="0.0" right="0.0" top="0.0" bottom="4"/>
                     <constraints>
-                        <constraint firstItem="tkS-gq-Cbs" firstAttribute="height" secondItem="v8p-Bz-hcj" secondAttribute="height" id="en0-CZ-Kv6"/>
-                        <constraint firstItem="v8p-Bz-hcj" firstAttribute="height" secondItem="Xh1-hp-9GB" secondAttribute="height" id="xjb-0x-0tp"/>
+                        <constraint firstItem="tkS-gq-Cbs" firstAttribute="height" secondItem="HC6-YQ-v0e" secondAttribute="height" id="4OU-FP-Fbv"/>
                     </constraints>
                     <visibilityPriorities>
+                        <integer value="1000"/>
                         <integer value="1000"/>
                         <integer value="1000"/>
                         <integer value="1000"/>
@@ -72,10 +120,11 @@
                         <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
                     </customSpacing>
                 </stackView>
                 <stackView identifier="ptnstack" distribution="fill" orientation="horizontal" alignment="top" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BPo-6t-Flu" userLabel="PTN Stack">
-                    <rect key="frame" x="329" y="146" width="544" height="21"/>
+                    <rect key="frame" x="329" y="132" width="544" height="21"/>
                     <subviews>
                         <customView identifier="pcombo" verticalHuggingPriority="750" verticalCompressionResistancePriority="850" translatesAutoresizingMaskIntoConstraints="NO" id="4Lo-U3-YED" userLabel="Project combo" customClass="AutoCompletingField" customModule="whatdid" customModuleProvider="target">
                             <rect key="frame" x="5" y="0.0" width="120" height="21"/>
@@ -146,95 +195,6 @@
                         <real value="3.4028234663852886e+38"/>
                     </customSpacing>
                 </stackView>
-                <stackView identifier="optionsstack" distribution="fill" orientation="horizontal" alignment="top" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ers-BA-ciA" userLabel="PTN Options Stack">
-                    <rect key="frame" x="329" y="132" width="544" height="14"/>
-                    <subviews>
-                        <button identifier="breakbutton" verticalHuggingPriority="850" translatesAutoresizingMaskIntoConstraints="NO" id="iu6-dS-Gze">
-                            <rect key="frame" x="5" y="-1" width="69" height="15"/>
-                            <buttonCell key="cell" type="roundRect" title="Skip session" bezelStyle="roundedRect" alignment="left" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kyc-yB-AnY">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="menu" size="9"/>
-                            </buttonCell>
-                            <connections>
-                                <action selector="skipButtonPressed:" target="-2" id="Q1F-EG-rGW"/>
-                            </connections>
-                        </button>
-                        <customView identifier="spacer" translatesAutoresizingMaskIntoConstraints="NO" id="6Yy-Wb-eC7" userLabel="Spacer">
-                            <rect key="frame" x="74" y="0.0" width="325" height="14"/>
-                            <constraints>
-                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="CiB-9s-9gX"/>
-                            </constraints>
-                        </customView>
-                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="HC6-YQ-v0e" userLabel="Snooze buttonopts">
-                            <rect key="frame" x="399" y="0.0" width="140" height="14"/>
-                            <subviews>
-                                <button identifier="snoozebutton" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yjZ-yA-5CH" userLabel="Snooze button">
-                                    <rect key="frame" x="0.0" y="-1" width="140" height="15"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" constant="140" id="kfD-55-owX"/>
-                                    </constraints>
-                                    <buttonCell key="cell" type="roundRect" title="snooze" bezelStyle="roundedRect" alignment="left" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ojt-yE-tly">
-                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="menu" size="9"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="snoozeButtonPressed:" target="-2" id="GfF-m3-O9M"/>
-                                    </connections>
-                                </button>
-                                <popUpButton identifier="snoozeopts" translatesAutoresizingMaskIntoConstraints="NO" id="2d3-tf-ady" userLabel="Snooze options">
-                                    <rect key="frame" x="123" y="0.0" width="17" height="14"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" secondItem="2d3-tf-ady" secondAttribute="height" multiplier="1.25:1" id="B6H-b1-avb"/>
-                                    </constraints>
-                                    <popUpButtonCell key="cell" type="square" bezelStyle="shadowlessSquare" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="arrowAtCenter" id="XN4-G0-EmL">
-                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="menu"/>
-                                        <menu key="menu" id="e29-UZ-3Z2">
-                                            <items>
-                                                <menuItem state="on" hidden="YES" id="ntA-xD-jFV" userLabel="snooze"/>
-                                                <menuItem title="+30" id="Dfs-KT-zJY" userLabel="+30"/>
-                                                <menuItem title="+1h" id="S09-6Y-I7d" userLabel="+1h"/>
-                                                <menuItem title="+1h30" id="BbM-Gt-GCN" userLabel="+1h30"/>
-                                                <menuItem isSeparatorItem="YES" id="Fju-ZH-G90"/>
-                                                <menuItem title="until tomorrow" id="qvY-Zm-z6P">
-                                                    <modifierMask key="keyEquivalentModifierMask"/>
-                                                </menuItem>
-                                            </items>
-                                        </menu>
-                                    </popUpButtonCell>
-                                    <connections>
-                                        <action selector="snoozeExtraOptionsSelected:" target="-2" id="XhT-pa-2bB"/>
-                                    </connections>
-                                </popUpButton>
-                            </subviews>
-                            <constraints>
-                                <constraint firstItem="2d3-tf-ady" firstAttribute="trailing" secondItem="yjZ-yA-5CH" secondAttribute="trailing" id="8cv-jk-1jL"/>
-                                <constraint firstItem="yjZ-yA-5CH" firstAttribute="height" secondItem="HC6-YQ-v0e" secondAttribute="height" id="Fw3-26-Oi1"/>
-                                <constraint firstItem="yjZ-yA-5CH" firstAttribute="leading" secondItem="HC6-YQ-v0e" secondAttribute="leading" id="QeR-ux-jX5"/>
-                                <constraint firstItem="2d3-tf-ady" firstAttribute="height" secondItem="yjZ-yA-5CH" secondAttribute="height" id="dnN-n3-neA"/>
-                                <constraint firstItem="yjZ-yA-5CH" firstAttribute="top" secondItem="HC6-YQ-v0e" secondAttribute="top" id="eAN-5c-NCr"/>
-                                <constraint firstItem="2d3-tf-ady" firstAttribute="centerY" secondItem="yjZ-yA-5CH" secondAttribute="centerY" id="gfS-Sz-nWv"/>
-                                <constraint firstItem="yjZ-yA-5CH" firstAttribute="width" secondItem="HC6-YQ-v0e" secondAttribute="width" id="t7J-TH-NsM"/>
-                            </constraints>
-                        </customView>
-                    </subviews>
-                    <edgeInsets key="edgeInsets" left="5" right="5" top="5" bottom="5"/>
-                    <constraints>
-                        <constraint firstItem="yjZ-yA-5CH" firstAttribute="top" secondItem="iu6-dS-Gze" secondAttribute="top" id="G2o-ma-nsE"/>
-                        <constraint firstItem="yjZ-yA-5CH" firstAttribute="bottom" secondItem="iu6-dS-Gze" secondAttribute="bottom" id="SBK-lP-2Ud"/>
-                        <constraint firstItem="6Yy-Wb-eC7" firstAttribute="height" secondItem="iu6-dS-Gze" secondAttribute="height" id="sWN-nm-myn"/>
-                    </constraints>
-                    <visibilityPriorities>
-                        <integer value="1000"/>
-                        <integer value="1000"/>
-                        <integer value="1000"/>
-                    </visibilityPriorities>
-                    <customSpacing>
-                        <real value="3.4028234663852886e+38"/>
-                        <real value="3.4028234663852886e+38"/>
-                        <real value="3.4028234663852886e+38"/>
-                    </customSpacing>
-                </stackView>
                 <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="tY4-8g-lbp">
                     <rect key="frame" x="329" y="125" width="544" height="9"/>
                     <constraints>
@@ -252,17 +212,14 @@
                 <constraint firstItem="3Mb-B7-qO9" firstAttribute="leading" secondItem="v8p-Bz-hcj" secondAttribute="leading" id="VFm-AQ-phk"/>
                 <constraint firstItem="3Mb-B7-qO9" firstAttribute="trailing" secondItem="tkS-gq-Cbs" secondAttribute="trailing" id="e6p-gR-2ta"/>
                 <constraint firstItem="tkS-gq-Cbs" firstAttribute="trailing" secondItem="6A0-cK-Vnh" secondAttribute="trailing" id="e7y-bj-ubu"/>
-                <constraint firstItem="iu6-dS-Gze" firstAttribute="leading" secondItem="4Lo-U3-YED" secondAttribute="leading" id="vRo-Vr-Jsr"/>
             </constraints>
             <visibilityPriorities>
                 <integer value="1000"/>
                 <integer value="1000"/>
                 <integer value="1000"/>
                 <integer value="1000"/>
-                <integer value="1000"/>
             </visibilityPriorities>
             <customSpacing>
-                <real value="3.4028234663852886e+38"/>
                 <real value="3.4028234663852886e+38"/>
                 <real value="3.4028234663852886e+38"/>
                 <real value="3.4028234663852886e+38"/>

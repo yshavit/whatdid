@@ -15,7 +15,6 @@ class PtnViewController: NSViewController {
     @IBOutlet weak var projectField: AutoCompletingField!
     @IBOutlet weak var taskField: AutoCompletingField!
     @IBOutlet weak var noteField: NSTextField!
-    @IBOutlet weak var skipButton: NSButton!
     @IBOutlet var goals: GoalsView!
     
     @IBOutlet weak var snoozeButton: NSButton!
@@ -106,6 +105,15 @@ class PtnViewController: NSViewController {
         setNotesPlaceholder()
         setUpSnoozeButton()
         updateHeaderText()
+        
+        if let window = view.window {
+            let currentFrame = window.frame
+            let topLeft = NSPoint(x: currentFrame.minX, y: currentFrame.maxY)
+            window.setFrame(
+                NSRect(origin: topLeft, size: view.fittingSize),
+                display: true)
+        }
+        
         grabFocus()
     }
     
@@ -312,11 +320,6 @@ class PtnViewController: NSViewController {
         }
     }
     
-    @IBAction func skipButtonPressed(_ sender: Any) {
-        AppDelegate.instance.model.setLastEntryDateToNow()
-        closeWindowAsync()
-    }
-    
     override func viewWillDisappear() {
         if let window = view.window {
             for sheet in window.sheets {
@@ -418,16 +421,6 @@ class PtnViewController: NSViewController {
                 ],
                 pointingTo: prefsButton,
                 atEdge: .minY),
-            .init(
-                title: "Skip a session",
-                text: [
-                    "Sometimes you're off the clock!",
-                    "Use this to tell Whatdid to just ignore the current session.",
-                    "(Tip: Use this sparingly! For most breaks, create a project called \"break\" so you "
-                        + "can keep track of how many breaks you take throughout the day.)"
-                ],
-                pointingTo: skipButton,
-                atEdge: .minX),
             .init(
                 title: "System icon",
                 text: [
