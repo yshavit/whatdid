@@ -215,10 +215,12 @@ class DailyReportTest: AppUITestBase {
                 let shortProject = HierarchicalEntryLevel(ancestor: dailyReportWindow, scope: "Project", label: "short project")
                 shortProject.disclosure.click(using: .frame())
                 wait(for: "project to open", until: {dailyReportWindow.groups.count > 0})
+                pauseToLetStabilize()
                 
                 let tasksForProject = dailyReportWindow.groups["Tasks for \"short project\""]
                 let task = HierarchicalEntryLevel(ancestor: tasksForProject, scope: "Task", label: "short task")
                 task.disclosure.click(using: .frame())
+                pauseToLetStabilize()
                 wait(for: "task details to open", until: {tasksForProject.groups.staticTexts.count == 4})
                 
                 let taskDetails = tasksForProject.groups["Details for short task"]
