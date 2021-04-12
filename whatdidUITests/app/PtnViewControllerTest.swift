@@ -171,7 +171,7 @@ class PtnViewControllerTest: AppUITestBase {
         group("Hot key grabs focus with PTN open") {
             // Assume from previous that window is visible but app is in background
             pressHotkeyShortcut()
-            XCTAssertTrue(app.wait(for: .runningForeground, timeout: 15))
+            XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
             group("Type text to sanity check focus") {
                 ptn.pcombo.textField.typeText("hello 1")
                 XCTAssertEqual("hello 1", ptn.pcombo.textField.stringValue)
@@ -181,11 +181,11 @@ class PtnViewControllerTest: AppUITestBase {
         group("Closing the menu resigns active") {
             clickStatusMenu() // close the app
             wait(for: "window to close", until: {openWindow == nil})
-            XCTAssertTrue(app.wait(for: .runningBackground, timeout: 15))
+            XCTAssertTrue(app.wait(for: .runningBackground, timeout: 30))
         }
         group("Hot key opens PTN with active and focus") {
             pressHotkeyShortcut()
-            XCTAssertTrue(app.wait(for: .runningForeground, timeout: 15))
+            XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
             group("Type text to check focus") {
                 ptn.pcombo.textField.typeText("hello 2")
                 XCTAssertEqual("hello 2", ptn.pcombo.textField.stringValue)
@@ -196,10 +196,10 @@ class PtnViewControllerTest: AppUITestBase {
             group("Close PTN") {
                 clickStatusMenu() // close the app
                 waitForTransition(of: .ptn, toIsVisible: false)
-                XCTAssertTrue(app.wait(for: .runningBackground, timeout: 15))
+                XCTAssertTrue(app.wait(for: .runningBackground, timeout: 30))
             }
             clickStatusMenu() // But do *not* do anything more than that to grab focus!
-            XCTAssertTrue(app.wait(for: .runningForeground, timeout: 15))
+            XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
             group("Type text to check focus") {
                 ptn.pcombo.textField.typeText("hello 3")
                 XCTAssertEqual("hello 3", ptn.pcombo.textField.stringValue)
