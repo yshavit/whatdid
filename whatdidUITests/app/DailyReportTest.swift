@@ -193,11 +193,16 @@ class DailyReportTest: AppUITestBase {
         group("Confirm that the report has the entry") {
             let dailyReportWindow = app.windows[WindowType.dailyEnd.windowTitle].firstMatch
             let project = HierarchicalEntryLevel(ancestor: dailyReportWindow, scope: "Project", label: longProjectName)
-            let firstVisibleElement = project.allElements.values.first(where: {$0.isVisible})
-            if let visible = firstVisibleElement {
-                log("found: \(visible.simpleDescription)")
+            let projectElements = project.allElements
+            let firstVisibleElement = projectElements.values.first(where: {$0.isVisible})
+            if firstVisibleElement == nil {
+                projectElements.forEach {name, element in
+                    group("info for \(name)") {
+                        log(element.debugDescription)
+                    }
+                }
+                XCTFail("Project not visible")
             }
-            XCTAssertNotNil(firstVisibleElement, "Project not visible")
         }
         group("Check that the window is still within the original bounds") {
             let dailyReportWindow = app.windows[WindowType.dailyEnd.windowTitle].firstMatch
