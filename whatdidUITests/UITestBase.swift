@@ -125,12 +125,12 @@ class UITestBase: XCTestCase {
     
     private static func activate() {
         guard let app = app else {
-            NSLog("ERROR: no app to activate")
+            XCTFail("ERROR: no app to activate")
             return
         }
-        app.activate()
-        if !app.wait(for: .runningForeground, timeout: 30) {
-            log("Timed out waiting to run in foreground. Will try to continue. Current state: \(app.state.rawValue)")
+        wait(for: "app to activate") {
+            app.activate()
+            return app.wait(for: .runningForeground, timeout: 3)
         }
     }
     

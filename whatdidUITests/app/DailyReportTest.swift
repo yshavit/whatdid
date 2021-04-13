@@ -193,11 +193,16 @@ class DailyReportTest: AppUITestBase {
         group("Confirm that the report has the entry") {
             let dailyReportWindow = app.windows[WindowType.dailyEnd.windowTitle].firstMatch
             let project = HierarchicalEntryLevel(ancestor: dailyReportWindow, scope: "Project", label: longProjectName)
-            let firstVisibleElement = project.allElements.values.first(where: {$0.isVisible})
-            if let visible = firstVisibleElement {
-                log("found: \(visible.simpleDescription)")
+            let projectElements = project.allElements
+            let firstVisibleElement = projectElements.values.first(where: {$0.isVisible})
+            if firstVisibleElement == nil {
+                projectElements.forEach {name, element in
+                    group("info for \(name)") {
+                        log(element.debugDescription)
+                    }
+                }
+                XCTFail("Project not visible")
             }
-            XCTAssertNotNil(firstVisibleElement, "Project not visible")
         }
         group("Check that the window is still within the original bounds") {
             let dailyReportWindow = app.windows[WindowType.dailyEnd.windowTitle].firstMatch
@@ -213,12 +218,14 @@ class DailyReportTest: AppUITestBase {
             let (shortTaskElem, longTaskElem) = group("Open project and task") {() -> (XCUIElement, XCUIElement) in
                 let dailyReportWindow = app.windows[WindowType.dailyEnd.windowTitle].firstMatch
                 let shortProject = HierarchicalEntryLevel(ancestor: dailyReportWindow, scope: "Project", label: "short project")
-                shortProject.disclosure.click()
+                shortProject.disclosure.click(using: .frame())
                 wait(for: "project to open", until: {dailyReportWindow.groups.count > 0})
+                pauseToLetStabilize()
                 
                 let tasksForProject = dailyReportWindow.groups["Tasks for \"short project\""]
                 let task = HierarchicalEntryLevel(ancestor: tasksForProject, scope: "Task", label: "short task")
-                task.disclosure.click()
+                task.disclosure.click(using: .frame())
+                pauseToLetStabilize()
                 wait(for: "task details to open", until: {tasksForProject.groups.staticTexts.count == 4})
                 
                 let taskDetails = tasksForProject.groups["Details for short task"]

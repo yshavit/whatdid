@@ -210,8 +210,10 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
                 activeWindow.endSheet(sheet, returnCode: .cancel)
             }
         }
-        NSApp.hide(self)
-        statusItem.button?.isHighlighted = false
+        DispatchQueue.main.async {
+            self.statusItem.button?.isHighlighted = false
+            NSApp.hide(self)
+        }
     }
 
     func schedule(_ contents: WindowContents) {

@@ -16,12 +16,17 @@ struct AnimationHelper {
         #else
         actualDuration = duration
         #endif
-        NSAnimationContext.runAnimationGroup(
-            {context in
-                context.allowsImplicitAnimation = true
-                context.duration = actualDuration
-                change()
-            },
-            completionHandler: onComplete)
+        if actualDuration == 0 {
+            change()
+            onComplete?()
+        } else {
+            NSAnimationContext.runAnimationGroup(
+                {context in
+                    context.allowsImplicitAnimation = true
+                    context.duration = actualDuration
+                    change()
+                },
+                completionHandler: onComplete)
+        }
     }
 }
