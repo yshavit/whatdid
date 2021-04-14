@@ -21,7 +21,7 @@ class DayEndReportController: NSViewController {
     @IBOutlet weak var projectsWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var entryStartDatePicker: NSDatePicker!
     @IBOutlet weak var shockAbsorber: NSView!
-    private var scrollVisibilityObservation: NSKeyValueObservation?
+    private var scrollBarHelper: ScrollBarHelper?
 
     var scheduler: Scheduler = DefaultScheduler.instance
     
@@ -29,16 +29,6 @@ class DayEndReportController: NSViewController {
         if #available(OSX 10.15.4, *) {
             entryStartDatePicker.presentsCalendarOverlay = true
         }
-        scrollVisibilityObservation = projectsScroll.verticalScroller?.observe(
-            \NSScroller.isHidden,
-            changeHandler: {scroller, change in
-                if scroller.isHidden {
-                    self.projectsWidthConstraint.constant = 0
-                } else {
-                    let width = NSScroller.scrollerWidth(for: scroller.controlSize, scrollerStyle: scroller.scrollerStyle)
-                    self.projectsWidthConstraint.constant = width
-                }
-            })
     }
     
     private static func createDisclosure(state: NSButton.StateValue)  -> ButtonWithClosure {
@@ -66,12 +56,27 @@ class DayEndReportController: NSViewController {
     }
     
     override func viewWillAppear() {
+        if let scroller = projectsScroll.verticalScroller {
+            scrollBarHelper = ScrollBarHelper(on: scroller) {shows in
+                if shows {
+                    let width = NSScroller.scrollerWidth(for: scroller.controlSize, scrollerStyle: scroller.scrollerStyle)
+                    self.projectsWidthConstraint.constant = width
+                } else {
+                    self.projectsWidthConstraint.constant = 0
+                }
+            }
+        }
+        
         if let window = view.window, let screen = window.screen {
             widthFitsOnScreen.constant = screen.frame.maxX - window.frame.minX
             widthFitsOnScreen.isActive = true
         } else {
             widthFitsOnScreen.isActive = false
         }
+    }
+    
+    override func viewWillDisappear() {
+        scrollBarHelper = nil
     }
     
     func thisMorning(assumingNow now: Date) -> Date {
