@@ -18,8 +18,10 @@ class DayEndReportController: NSViewController {
     @IBOutlet weak var goalsSummaryStack: NSStackView!
     @IBOutlet weak var projectsScroll: NSScrollView!
     @IBOutlet weak var projectsContainer: NSStackView!
+    @IBOutlet weak var projectsWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var entryStartDatePicker: NSDatePicker!
     @IBOutlet weak var shockAbsorber: NSView!
+    private var scrollVisibilityObservation: NSKeyValueObservation?
 
     var scheduler: Scheduler = DefaultScheduler.instance
     
@@ -27,6 +29,16 @@ class DayEndReportController: NSViewController {
         if #available(OSX 10.15.4, *) {
             entryStartDatePicker.presentsCalendarOverlay = true
         }
+        scrollVisibilityObservation = projectsScroll.verticalScroller?.observe(
+            \NSScroller.isHidden,
+            changeHandler: {scroller, change in
+                if scroller.isHidden {
+                    self.projectsWidthConstraint.constant = 0
+                } else {
+                    let width = NSScroller.scrollerWidth(for: scroller.controlSize, scrollerStyle: scroller.scrollerStyle)
+                    self.projectsWidthConstraint.constant = width
+                }
+            })
     }
     
     private static func createDisclosure(state: NSButton.StateValue)  -> ButtonWithClosure {
