@@ -16,7 +16,6 @@ class ScreenshotGenerator: AppUITestBase {
             }
         }
     }
-    
 
     func testPtnAndDailyReport() {
         let lastEntryEpochSeconds = group("set up entries") {() -> Int in

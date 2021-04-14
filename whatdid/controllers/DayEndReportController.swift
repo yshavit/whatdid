@@ -18,8 +18,10 @@ class DayEndReportController: NSViewController {
     @IBOutlet weak var goalsSummaryStack: NSStackView!
     @IBOutlet weak var projectsScroll: NSScrollView!
     @IBOutlet weak var projectsContainer: NSStackView!
+    @IBOutlet weak var projectsWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var entryStartDatePicker: NSDatePicker!
     @IBOutlet weak var shockAbsorber: NSView!
+    private var scrollBarHelper: ScrollBarHelper?
 
     var scheduler: Scheduler = DefaultScheduler.instance
     
@@ -54,12 +56,27 @@ class DayEndReportController: NSViewController {
     }
     
     override func viewWillAppear() {
+        if let scroller = projectsScroll.verticalScroller {
+            scrollBarHelper = ScrollBarHelper(on: scroller) {shows in
+                if shows {
+                    let width = NSScroller.scrollerWidth(for: scroller.controlSize, scrollerStyle: scroller.scrollerStyle)
+                    self.projectsWidthConstraint.constant = width
+                } else {
+                    self.projectsWidthConstraint.constant = 0
+                }
+            }
+        }
+        
         if let window = view.window, let screen = window.screen {
             widthFitsOnScreen.constant = screen.frame.maxX - window.frame.minX
             widthFitsOnScreen.isActive = true
         } else {
             widthFitsOnScreen.isActive = false
         }
+    }
+    
+    override func viewWillDisappear() {
+        scrollBarHelper = nil
     }
     
     func thisMorning(assumingNow now: Date) -> Date {
