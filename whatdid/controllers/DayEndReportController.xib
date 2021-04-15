@@ -24,10 +24,10 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <stackView wantsLayer="YES" distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qn8-JX-HeH" userLabel="Top">
-            <rect key="frame" x="0.0" y="0.0" width="400" height="98"/>
+            <rect key="frame" x="0.0" y="0.0" width="400" height="95"/>
             <subviews>
                 <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pKe-k9-zAn" userLabel="Header Stack">
-                    <rect key="frame" x="0.0" y="74" width="264" height="24"/>
+                    <rect key="frame" x="0.0" y="71" width="264" height="24"/>
                     <subviews>
                         <textField identifier="header_label" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-Lm-qUL" userLabel="Header">
                             <rect key="frame" x="-2" y="4" width="118" height="16"/>
@@ -68,10 +68,10 @@
                     </customSpacing>
                 </stackView>
                 <box verticalHuggingPriority="1000" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="hAT-mx-IFG">
-                    <rect key="frame" x="0.0" y="67" width="400" height="5"/>
+                    <rect key="frame" x="0.0" y="64" width="400" height="5"/>
                 </box>
                 <customView focusRingType="none" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="V55-nV-Y5s">
-                    <rect key="frame" x="0.0" y="49" width="400" height="16"/>
+                    <rect key="frame" x="0.0" y="46" width="400" height="16"/>
                     <subviews>
                         <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1RQ-eW-vGH" userLabel="Goals Summary Stack">
                             <rect key="frame" x="0.0" y="0.0" width="400" height="16"/>
@@ -103,10 +103,10 @@
                     </constraints>
                 </customView>
                 <box verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="h3O-9g-faO">
-                    <rect key="frame" x="0.0" y="42" width="400" height="5"/>
+                    <rect key="frame" x="0.0" y="39" width="400" height="5"/>
                 </box>
                 <scrollView wantsLayer="YES" verticalHuggingPriority="999" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LDw-zz-ziZ" userLabel="Projects scroll">
-                    <rect key="frame" x="0.0" y="24" width="400" height="16"/>
+                    <rect key="frame" x="0.0" y="25" width="400" height="16"/>
                     <clipView key="contentView" wantsLayer="YES" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vpo-4L-DGR" userLabel="Projects clip">
                         <rect key="frame" x="0.0" y="0.0" width="400" height="16"/>
                         <subviews>
@@ -169,6 +169,9 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                 </scrollView>
+                <box verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="xNZ-4N-Ext">
+                    <rect key="frame" x="0.0" y="22" width="400" height="5"/>
+                </box>
                 <customView verticalHuggingPriority="1" verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="dFU-a1-6Dj" userLabel="Shock Absorber">
                     <rect key="frame" x="0.0" y="0.0" width="163" height="20"/>
                     <constraints>
@@ -179,8 +182,11 @@
             <constraints>
                 <constraint firstItem="V55-nV-Y5s" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" id="9OU-Hb-fFQ"/>
                 <constraint firstItem="h3O-9g-faO" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" id="WB1-I0-7hD"/>
+                <constraint firstItem="LDw-zz-ziZ" firstAttribute="top" secondItem="h3O-9g-faO" secondAttribute="bottom" id="etz-QC-via"/>
+                <constraint firstItem="xNZ-4N-Ext" firstAttribute="top" secondItem="LDw-zz-ziZ" secondAttribute="bottom" id="g9c-ak-SAN"/>
                 <constraint firstItem="hAT-mx-IFG" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" id="nCY-3T-gJp"/>
                 <constraint firstItem="LDw-zz-ziZ" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" id="oDo-5Q-hjJ"/>
+                <constraint firstItem="xNZ-4N-Ext" firstAttribute="width" secondItem="h3O-9g-faO" secondAttribute="width" id="oGY-bb-pnj"/>
             </constraints>
             <visibilityPriorities>
                 <integer value="1000"/>
@@ -189,8 +195,10 @@
                 <integer value="1000"/>
                 <integer value="1000"/>
                 <integer value="1000"/>
+                <integer value="1000"/>
             </visibilityPriorities>
             <customSpacing>
+                <real value="3.4028234663852886e+38"/>
                 <real value="3.4028234663852886e+38"/>
                 <real value="3.4028234663852886e+38"/>
                 <real value="3.4028234663852886e+38"/>
