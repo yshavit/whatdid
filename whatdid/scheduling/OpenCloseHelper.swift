@@ -25,25 +25,25 @@ class OpenCloseHelper<T: Hashable & Comparable> {
         if openItem == nil {
             if (reason == .scheduled) && isSnoozed {
                 pendingOpens[item] = reason
-                NSLog("Deferring \(requestDesc) because of snooze")
+                wdlog(.debug, "Deferring %@ because of snooze", requestDesc)
             } else {
-                NSLog("Acting on \(requestDesc)")
+                wdlog(.debug, "Acting on %@", requestDesc)
                 doOpen(item, reason)
                 rescheduleOnClose = reason == .scheduled
             }
         } else if reason == .scheduled {
             if openItem == item {
                 rescheduleOnClose = true
-                NSLog("Ignoring \(requestDesc) because it is already open. Will reschedule it on close.")
+                wdlog(.debug, "Ignoring %@ because it is already open. Will reschedule it on close.", requestDesc)
             } else {
                 pendingOpens[item] = reason
-                NSLog("Deferring \(requestDesc) because another item is already open")
+                wdlog(.debug, "Deferring %@ because another item is already open", requestDesc)
             }
         } else {
             // If we're already open, we shouldn't be able to get a manual open; the UI should prevent that.
             // We should check that condition (as we just did) to be safe and to let us write comprehensive unit tests,
             // but really it's just a weird corner case.
-            NSLog("WARN Tried to open \(item) manually while \(openItem!) was already open")
+            wdlog(.warn, "Tried to open %@ manually while %@ was already open", s(item), s(openItem!))
         }
     }
     
@@ -71,7 +71,7 @@ class OpenCloseHelper<T: Hashable & Comparable> {
             rescheduleOnClose = false
             // Schedule even if we're snoozed; if we're still snoozed when the schedule hits, then
             // it'll enqueue itself
-            NSLog("OpenCloseHelper: scheduling the next \(item)")
+            wdlog(.debug, "OpenCloseHelper: scheduling the next ", s(item))
             scheduler(item)
         }
         if !isSnoozed {
@@ -82,7 +82,7 @@ class OpenCloseHelper<T: Hashable & Comparable> {
     private func doOpen(_ item: T, _ reason: OpenReason) {
         openItem = item
         if delegatingScheduler != nil {
-            NSLog("WARNING found non-nil DelegatingScheduler in OpenCloseHelper. Closing it.")
+            wdlog(.warn, "found non-nil DelegatingScheduler in OpenCloseHelper. Closing it.")
             delegatingScheduler?.close()
         }
         delegatingScheduler = DelegatingScheduler(delegateTo: underlyingScheduler)
@@ -92,7 +92,7 @@ class OpenCloseHelper<T: Hashable & Comparable> {
     private func pullFromPending() {
         if let deferredOpenKey = pendingOpens.keys.sorted().first {
             rescheduleOnClose = pendingOpens.removeValue(forKey: deferredOpenKey)! == .scheduled
-            NSLog("OpenCloseHelper: opening deferred \(deferredOpenKey), with next rescheduleOnClose = \(rescheduleOnClose)")
+            wdlog(.debug, "OpenCloseHelper: opening deferred %@, with next rescheduleOnClose = %d", s(deferredOpenKey), rescheduleOnClose)
             openItem = deferredOpenKey
             doOpen(deferredOpenKey, .scheduled)
         }
@@ -108,5 +108,9 @@ class OpenCloseHelper<T: Hashable & Comparable> {
             self.reason = reason
             self.scheduler = scheduler
         }
+    }
+    
+    private func s(_ item: T) -> String {
+        return String(describing: item)
     }
 }

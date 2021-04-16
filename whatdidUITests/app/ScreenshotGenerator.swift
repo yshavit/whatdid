@@ -117,7 +117,7 @@ class ScreenshotGenerator: AppUITestBase {
         screenshot.image.draw(at: .zero, from: sourceFrame, operation: .copy, fraction: 1.0)
         cropped.unlockFocus()
         
-        NSLog("taking screenshot")
+        log("taking screenshot")
         let attachment = XCTAttachment(image: cropped)
         attachment.lifetime = .keepAlways
         attachment.name = name.replacingOccurrences(of: " ", with: "-")

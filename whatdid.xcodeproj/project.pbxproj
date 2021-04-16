@@ -60,6 +60,8 @@
 		7EA6E22824BD6C5F004B9297 /* PtnViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */; };
 		7EAB5ECD24DA366600E18097 /* TimeUtilTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */; };
 		7EAD2A4B2626CBB100153A47 /* ScrollBarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAD2A4A2626CBB100153A47 /* ScrollBarHelper.swift */; };
+		7EAD2A6726291D1800153A47 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAD2A6626291D1800153A47 /* Logger.swift */; };
+		7EAD2A6D2629271800153A47 /* OSLogType+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAD2A6C2629271800153A47 /* OSLogType+Helpers.swift */; };
 		7EB57AA825187549009E85F5 /* NSApperance+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB57AA725187548009E85F5 /* NSApperance+Helpers.swift */; };
 		7EB7495B251699FD001C7DBC /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 7EB7495A251699FD001C7DBC /* KeyboardShortcuts */; };
 		7EB7495D25169A44001C7DBC /* GlobalShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB7495C25169A44001C7DBC /* GlobalShortcut.swift */; };
@@ -204,6 +206,8 @@
 		7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PtnViewController.xib; sourceTree = "<group>"; };
 		7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TimeUtilTest.swift; path = whatdidTests/scheduling/TimeUtilTest.swift; sourceTree = SOURCE_ROOT; };
 		7EAD2A4A2626CBB100153A47 /* ScrollBarHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollBarHelper.swift; sourceTree = "<group>"; };
+		7EAD2A6626291D1800153A47 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		7EAD2A6C2629271800153A47 /* OSLogType+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OSLogType+Helpers.swift"; sourceTree = "<group>"; };
 		7EB57AA725187548009E85F5 /* NSApperance+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSApperance+Helpers.swift"; sourceTree = "<group>"; };
 		7EB7495C25169A44001C7DBC /* GlobalShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalShortcut.swift; sourceTree = "<group>"; };
 		7EB7495E2516F9C7001C7DBC /* Prefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prefs.swift; sourceTree = "<group>"; };
@@ -448,6 +452,7 @@
 			children = (
 				7E88CC8D261EB5A900968F64 /* AnimationHelper.swift */,
 				7E30B46024C38D91003F3679 /* Atomic.swift */,
+				7EAD2A6626291D1800153A47 /* Logger.swift */,
 				7EB7495E2516F9C7001C7DBC /* Prefs.swift */,
 				7EAD2A4A2626CBB100153A47 /* ScrollBarHelper.swift */,
 				7EE0E73F24E4DF4A002D03F8 /* SubsequenceMatcher.swift */,
@@ -547,6 +552,7 @@
 				7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */,
 				7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */,
 				7EF884102610139B00170330 /* NSViewController+Helper.swift */,
+				7EAD2A6C2629271800153A47 /* OSLogType+Helpers.swift */,
 				7EE0E74724EA1ECD002D03F8 /* String+Helpers.swift */,
 				7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */,
 			);
@@ -847,7 +853,9 @@
 				7E9C5EBE260C09AA00D839C4 /* Goal+CoreDataProperties.swift in Sources */,
 				7E37A29124BFFFCB005BA1DF /* Project+CoreDataProperties.swift in Sources */,
 				7EF857A124E2420C00867832 /* Scheduler.swift in Sources */,
+				7EAD2A6D2629271800153A47 /* OSLogType+Helpers.swift in Sources */,
 				7EF58F8C2580F180002F9604 /* TutorialViewController.swift in Sources */,
+				7EAD2A6726291D1800153A47 /* Logger.swift in Sources */,
 				7EF884172610151A00170330 /* TypeAliases.swift in Sources */,
 				7E37A29024BFFFCB005BA1DF /* Project+CoreDataClass.swift in Sources */,
 				7E5EFA272619B14A00E7834D /* NSTextField+Helpers.swift in Sources */,

@@ -1,6 +1,11 @@
 // whatdid?
 #if UI_TEST
 import Cocoa
+import os
+
+// NOTE: This file gets compiled both in main whatdid and whatdidUITests.
+// The latter doesn't have access to `wdlog`, so we can't use that here.
+
 extension FlatEntry {
     
     static func deserialize(from json: String) -> [FlatEntry] {
@@ -13,11 +18,11 @@ extension FlatEntry {
             do {
                 return try decoder.decode([FlatEntry].self, from: jsonData)
             } catch {
-                NSLog("Error deserializing \(json): \(error)")
+                os_log(.error, "Error deserializing %@: %@", json, error as NSError)
                 return []
             }
         } else {
-            NSLog("Couldn't get UTF-8 data from string: \(json)")
+            os_log(.error, "Couldn't get UTF-8 data from string: %@", json)
             return []
         }
     }
@@ -36,7 +41,7 @@ extension FlatEntry {
             let jsonData = try encoder.encode(entries)
             return String(data: jsonData, encoding: .utf8)!
         } catch {
-            NSLog("failed to encode \(self): \(error)")
+            os_log(.error, "failed to encode entries: %@", String(describing: entries), error as NSError)
             return ""
         }
     }

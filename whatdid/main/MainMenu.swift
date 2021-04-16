@@ -48,6 +48,10 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
         static func < (lhs: MainMenu.WindowContents, rhs: MainMenu.WindowContents) -> Bool {
             return lhs.rawValue < rhs.rawValue
         }
+        
+        var description: String {
+            return String(describing: self)
+        }
     }
     
     func open(_ item: WindowContents, reason: OpenReason) {
@@ -61,7 +65,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
     private func whenPtnIsReady(_ block: @escaping (PtnViewController) -> Void, remainingAttempts: Int) {
         // It takes a few millis for the status item to get connected to the screen
         if remainingAttempts <= 0 {
-            NSLog("Took too long to find status item's screen. Giving up on showing initial content.")
+            wdlog(.error, "Took too long to find status item's screen. Giving up on showing initial content.")
         } else if statusItem.button?.window?.screen == nil {
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(1)) {
                 self.whenPtnIsReady(block, remainingAttempts: remainingAttempts - 1)
@@ -115,7 +119,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
         
         opener = OpenCloseHelper<WindowContents>(
             onOpen: {ctx in
-                NSLog("MainMenu handling \(ctx.reason) open request for \(ctx.item)")
+                wdlog(.debug, "MainMenu handling %@ open request for %@", ctx.reason.description, ctx.item.description)
                 self.doOpen(ctx.item, scheduler: ctx.scheduler)
                 if ctx.reason == .manual {
                     self.focus()
@@ -138,7 +142,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
     
     private func doOpen(_ contents: WindowContents, scheduler newScheduler: Scheduler) {
         guard let window = window else {
-            NSLog("no window to open")
+            wdlog(.error, "no window to open for MainMenu::doOpen")
             return
         }
         switch (contents) {
@@ -238,7 +242,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
             }
         }
         if let oldTask = scheduledTasks.updateValue(newTask, forKey: contents) {
-            NSLog("Replaced previously scheduled open for \(contents)")
+            wdlog(.debug, "Replaced previously scheduled open for %@", contents.description)
             oldTask.cancel()
         }
     }
@@ -251,7 +255,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
         if let (until: _, unsnoozeTask: task) = snoozed {
             task.cancel()
         }
-        NSLog("Snoozing until %@", AppDelegate.DEBUG_DATE_FORMATTER.string(from: date))
+        wdlog(.debug, "Snoozing until %@", AppDelegate.DEBUG_DATE_FORMATTER.string(from: date))
         opener.snooze()
         close()
         let task = DefaultScheduler.instance.schedule("unsnooze", after: date.timeIntervalSinceWhatdidNow, self.unSnooze)

@@ -62,6 +62,12 @@ class AppUITestBase: UITestBase {
     }
     
     override func uiTearDown() {
+        activate()
+        let logs = app.windows["UI Test Window"].textViews["uitestlogstream"].stringValue
+        let attachment = XCTAttachment(string: logs)
+        attachment.name = "logs for \(self.description)"
+        add(attachment)
+        
         clearPasteboardIfNeeded()
     }
     

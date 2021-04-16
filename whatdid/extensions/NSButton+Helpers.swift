@@ -25,7 +25,7 @@ extension NSButton {
         func cycleOnce() {
             let style = allStyles[i]
             i = (i + 1) % allStyles.count
-            NSLog("styling as: \(style.0)")
+            wdlog(.info, "styling as: %@", style.0)
             bezelStyle = style.1
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(1000), execute: cycleOnce)
         }

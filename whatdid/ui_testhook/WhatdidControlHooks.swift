@@ -93,6 +93,46 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
         animationFactorStack.addArrangedSubview(NSTextField(labelWithString: "Animation factor"))
         animationFactorStack.addArrangedSubview(animationFactorField)
         adder(animationFactorStack)
+        
+        divider()
+        adder(NSTextField(labelWithString: "Log messages:"))
+        let logFieldScroller = NSTextView.scrollableTextView()
+        adder(logFieldScroller)
+        let logField = logFieldScroller.documentView as! NSTextView
+        logField.setAccessibilityLabel("uitestlogstream")
+        
+        let logFont = NSFont.controlContentFont(ofSize: NSFont.systemFontSize(for: .mini))
+        logField.isEditable = false
+        logField.isSelectable = true
+        logField.backgroundColor = .textBackgroundColor
+        logField.isRichText = false
+        logFieldScroller.heightAnchor.constraint(equalToConstant: logFont.pointSize * 5).isActive = true
+        
+        let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+        paragraphStyle.headIndent = 10
+        
+        let logLineAttributes: [NSAttributedString.Key : Any] = [
+            .font: logFont,
+            .foregroundColor: NSColor.textColor,
+            .paragraphStyle: paragraphStyle
+        ]
+        let timeFormatter = DateFormatter()
+        timeFormatter.locale = Locale(identifier: "en_US_POSIX")
+        timeFormatter.dateFormat = "HH:mm"
+        globalLogHook =
+            LogHook(
+                add: {level, message in
+                    if let logStorage = logField.textStorage {
+                        let prefix = logField.string.isEmpty ? "" : "\n"
+                        let timestamp = timeFormatter.string(from: Date())
+                        let line = "\(prefix)\(timestamp) [\(level.asString)]: \(message)"
+                        logStorage.append(NSAttributedString(string: line, attributes: logLineAttributes))
+                        logField.scrollToEndOfDocument(nil)
+                    }
+                },
+                reset: {
+                    logField.textStorage?.mutableString.setString("")
+                })
     }
     
     @objc private func setAnimationFactor(_ field: NSTextField) {
@@ -185,7 +225,7 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
             case .off:
                 scheduler.now = date
             case let x:
-                NSLog("Unexpected state: \(x)")
+                wdlog(.warn, "Unexpected state: %d", x.rawValue)
             }
             
         } else {

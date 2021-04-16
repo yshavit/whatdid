@@ -173,11 +173,11 @@ class PrefsViewController: NSViewController {
             }
             dateComponents.calendar = calendarForDateTimePickers
             dateComponents.timeZone = calendarForDateTimePickers.timeZone
-            NSLog("Converting DateComponents to Date: \(dateComponents)")
+            wdlog(.debug, "Converting DateComponents to Date: %@", dateComponents.description)
             if let date = dateComponents.date {
                 picker.dateValue = date
             } else {
-                NSLog("Couldn't convert DateComponents to Date: \(dateComponents)")
+                wdlog(.warn, "Couldn't convert DateComponents to Date: %@", dateComponents.description)
             }
         }
         setTimePicker(dailyReportTime, to: Prefs.dailyReportTime)
@@ -253,7 +253,7 @@ class PrefsViewController: NSViewController {
         if let location = sender.toolTip, let url = URL(string: location) {
             NSWorkspace.shared.open(url)
         } else {
-            NSLog("invalid href: \(sender.toolTip ?? "<nil>")")
+            wdlog(.warn, "invalid href: %@", sender.toolTip ?? "<nil>")
         }
     }
     

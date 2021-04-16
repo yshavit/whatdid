@@ -14,7 +14,7 @@ class ManualTickScheduler: Scheduler {
     }
     
     @discardableResult func schedule(_ description: String, at date: Date, _ block: @escaping () -> Void) -> ScheduledTask {
-        NSLog("Scheduling \(description) at \(date) (t+\(date.timeIntervalSinceWhatdidNow))")
+        wdlog(.debug, "Scheduling %@ at %@ (t+%.0f)", description, date as NSDate, date.timeIntervalSinceWhatdidNow)
         if date == _now {
             enqueueAction(block)
             return NoopScheduledItem()
@@ -23,7 +23,7 @@ class ManualTickScheduler: Scheduler {
             events.append(WorkItem(id: uuid, fireAt: date, block: block))
             return ManualScheduledItem(parent: self, id: uuid)
         } else {
-            NSLog("ignoring event because it's in the past (\(date))")
+            wdlog(.warn, "ignoring event because it's in the past (%@)", date as NSDate)
             return NoopScheduledItem()
         }
     }

@@ -61,16 +61,16 @@ extension NSViewController {
                 let startNewSession: Bool
                 switch(response) {
                 case .OK:
-                    NSLog("Starting new session")
+                    wdlog(.debug, "Starting new session")
                     startNewSession = true
                 case .continue:
-                    NSLog("Continuing with existing session")
+                    wdlog(.debug, "Continuing with existing session")
                     startNewSession = false
                 case .abort:
-                    NSLog("Aborting window (probably because user closed it via status menu item)")
+                    wdlog(.debug, "Aborting window (probably because user closed it via status menu item)")
                     startNewSession = false
                 default:
-                    NSLog("Unexpected response: \(response.rawValue). Will start new session session.")
+                    wdlog(.warn, "Unexpected response: %@. Will start new session session.", response.rawValue)
                     startNewSession = false
                 }
                 if startNewSession {

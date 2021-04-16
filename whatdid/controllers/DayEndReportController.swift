@@ -44,7 +44,7 @@ class DayEndReportController: NSViewController {
         // Set the window's max height, using the golden ratio.
         if let screenHeight = view.window?.screen?.frame.height {
             maxViewHeight.constant = screenHeight * 0.61802903
-            NSLog("set max height to %.1f (screen height is %.1f)", maxViewHeight.constant, screenHeight)
+            wdlog(.debug, "set max height to %.1f (screen height is %.1f)", maxViewHeight.constant, screenHeight)
         }
         // Set up the date picker
         let now = scheduler.now
@@ -136,7 +136,7 @@ class DayEndReportController: NSViewController {
     
     private func updateEntries() {
         let since = entryStartDatePicker.dateValue
-        NSLog("Updating entries since %@", since as NSDate)
+        wdlog(.debug, "Updating entries since %@", since as NSDate)
         updateGoals(since: since)
         projectsContainer.subviews.forEach {$0.removeFromSuperview()}
         
@@ -269,7 +269,7 @@ class DayEndReportController: NSViewController {
     
     private func growWindow(byY height: CGFloat) {
         guard let window = view.window else {
-            NSLog("no window")
+            wdlog(.warn, "Asked to grow window, but there is no window")
             return
         }
         let originalViewBounds = window.frame

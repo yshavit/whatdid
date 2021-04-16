@@ -34,7 +34,7 @@ class SubsequenceMatcher {
             } else {
                 for range in matchedRanges {
                     if (range.location < 0) || (range.location + range.length > string.count) {
-                        NSLog("bad range: \(range) in \(string)")
+                        wdlog(.error, "bad range: %@ in %@", range.description, string)
                         return nil
                     }
                 }
