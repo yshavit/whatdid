@@ -126,7 +126,7 @@ struct HoursAndMinutes: PrefType {
     init(hours: Int, minutes: Int) {
         self.hours = hours
         if minutes < 0 || minutes > 59 {
-            NSLog("Invalid minutes for HoursAndMinutes: \(hours):\(minutes). Assuming minutes=00")
+            wdlog(.error, "Invalid minutes for HoursAndMinutes: %d:%d. Assuming minutes=00", hours, minutes)
             self.minutes = 0
         } else {
             self.minutes = minutes

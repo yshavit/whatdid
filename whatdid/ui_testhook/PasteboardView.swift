@@ -53,20 +53,20 @@ class PasteboardView: NSView {
             if let data = pasteboard.string(forType: .string) {
                 action?(data)
             } else {
-                NSLog("no string for pasteboard \(pasteboard.name.rawValue)")
+                wdlog(.warn, "no string for pasteboard %@", pasteboard.name.rawValue)
             }
             setUp(pasteboard: nil)
         } else {
             let new = NSPasteboard.withUniqueName()
             new.declareTypes([.string], owner: nil)
-            NSLog("created pasteboard: \(new.name.rawValue)")
+            wdlog(.debug, "created pasteboard: %@", new.name.rawValue)
             setUp(pasteboard: new)
         }
     }
 
     private func setUp(pasteboard: NSPasteboard?) {
         if let old = self.pasteboard {
-            NSLog("released pasteboard: \(old.name.rawValue)")
+            wdlog(.debug, "released pasteboard: %@", old.name.rawValue)
             old.releaseGlobally()
         }
         self.pasteboard = pasteboard

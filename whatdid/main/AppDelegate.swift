@@ -37,6 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         resetModel()
         kickOffInitialSchedules()
         resetAllPrefs()
+        globalLogHook.reset()
     }
     #endif
     
@@ -47,16 +48,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidFinishLaunching(_: Notification) {
-        NSLog("Starting whatdid with build %@", Version.pretty)
+        wdlog(.info, "Starting whatdid with build %@", Version.pretty)
         #if UI_TEST
         NSApp.setActivationPolicy(.regular) // so that the windows show up normally
-        NSLog("initializing UI test hooks")
+        wdlog(.info, "initializing UI test hooks")
         uiTestWindow = UiTestWindow()
         uiTestWindow.show()
         NSApp.setActivationPolicy(.regular) // UI tests can time out on launch() without this
         if let bundleId = Bundle.main.bundleIdentifier {
             oldPrefs = UserDefaults.standard.persistentDomain(forName: bundleId)
-            NSLog("Removing old preferences because this is a UI test. Saved \(oldPrefs?.count ?? 0) to restore later.")
+            wdlog(.info, "Removing old preferences because this is a UI test. Saved %d to restore later.", oldPrefs?.count ?? 0)
             UserDefaults.standard.setPersistentDomain([String: Any](), forName: bundleId)
         }
         #endif
@@ -100,10 +101,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         #if UI_TEST
         if let bundleId = Bundle.main.bundleIdentifier {
             if let toRestore = oldPrefs {
-                NSLog("Restoring old preferences")
+                wdlog(.info, "Restoring old preferences")
                 UserDefaults.standard.setPersistentDomain(toRestore, forName: bundleId)
             } else {
-                NSLog("No previous preferences to restore")
+                wdlog(.info, "No previous preferences to restore")
             }
         }
         #endif
@@ -124,7 +125,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         Prefs.$launchAtLogin.addListener {enabled in
             let success = SMLoginItemSetEnabled(launcherAppId as CFString, enabled)
-            NSLog("SMLoginItemSetEnabled -> \(enabled) \(success ? "successfully set" : "NOT set")")
+            wdlog(success ? .info : .warn, "SMLoginItemSetEnabled -> %d %@", enabled, success ? "successfully set" : "NOT set")
         }
 
         if isRunning {

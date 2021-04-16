@@ -27,7 +27,7 @@ class SystemClockScheduler: Scheduler {
     }
     
     @objc private func handleWakeup(_ notification: Notification) {
-        NSLog("Rescheduling \(pendingTasks.count) task(s)")
+        wdlog(.debug, "Rescheduling %d task(s)", pendingTasks.count)
         pendingTasks.values.forEach {$0.reschedule()}
     }
     
@@ -68,10 +68,10 @@ class SystemClockScheduler: Scheduler {
             cancelWorkItem()
             let timeLeft = deadline.timeIntervalSinceWhatdidNow
             if timeLeft <= 0 {
-                NSLog("Running \(description) immediately")
+                wdlog(.debug, "Running %@ immediately", description)
                 DispatchQueue.main.async(execute: runBlock)
             } else {
-                NSLog("Scheduling \(description) at \(deadline)")
+                wdlog(.debug, "Scheduling %@ at %@", description, deadline as NSDate)
                 workItem = DispatchWorkItem(qos: .utility, block: runBlock)
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + timeLeft, execute: workItem!)
             }

@@ -26,7 +26,7 @@ class DelegatingScheduler: Scheduler {
     
     @discardableResult func schedule(_ description: String, at: Date, _ block: @escaping () -> Void) -> ScheduledTask {
         guard isOpen else {
-            NSLog("Ignoring task because DelegatingScheduler has been closed")
+            wdlog(.debug, "Ignoring task because DelegatingScheduler has been closed")
             return NoopTask()
         }
         let work = createTrackingBlock(block)

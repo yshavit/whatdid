@@ -37,7 +37,7 @@ class ScrollBarHelper {
         case .overlay:
             scrollShows = false
         @unknown default:
-            NSLog("uknown value for NSScroller.preferredScrollerStyle: \(currentStyle.rawValue)")
+            wdlog(.warn, "uknown value for NSScroller.preferredScrollerStyle: %d", currentStyle.rawValue)
             scrollShows = true
         }
         handler(scrollShows && !scroller.isHidden)

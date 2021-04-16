@@ -48,7 +48,6 @@ class TimeUtil {
         var cal = Calendar.current
         cal.timeZone = tz ?? DefaultScheduler.instance.timeZone
         var result = cal.date(bySettingHour: hh, minute: mm, second: 00, of: now)
-        NSLog("Finding %@ time at %02d:%02d. Now=%@, initial result = %@", direction.rawValue, hh, mm, now.debugDescription, result.debugDescription)
         switch direction {
         case .previous:
             // We want a result < now, so if result > now, decrement it by a day

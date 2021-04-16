@@ -1,6 +1,7 @@
 // Taken from https://theswiftdev.com/how-to-launch-a-macos-app-at-login/
 
 import Cocoa
+import os
 
 extension Notification.Name {
     static let killLauncher = Notification.Name("killLauncher")
@@ -22,10 +23,10 @@ extension AppDelegate: NSApplicationDelegate {
         let isRunning = !runningApps.filter { $0.bundleIdentifier == mainAppIdentifier }.isEmpty
 
         if isRunning {
-            NSLog("whatdid launcher: whatdid is already running")
+            os_log(.info, "whatdid launcher: whatdid is already running")
             self.terminate()
         } else {
-            NSLog("whatdid launcher: will try to launch whatdid")
+            os_log(.info, "whatdid launcher: will try to launch whatdid")
             DistributedNotificationCenter.default().addObserver(self, selector: #selector(self.terminate), name: .killLauncher, object: mainAppIdentifier)
 
             let path = Bundle.main.bundlePath as NSString
@@ -37,13 +38,13 @@ extension AppDelegate: NSApplicationDelegate {
             components.append("whatdid") //main app name
 
             let newPath = NSString.path(withComponents: components)
-            NSLog("whatdid launcher about to launch: \(newPath)")
+            os_log(.info, "whatdid launcher about to launch: %@", newPath)
 
             NSWorkspace.shared.launchApplication(newPath)
         }
     }
     
     func applicationWillTerminate(_ notification: Notification) {
-        NSLog("whatdid launcher is exiting")
+        os_log(.info, "whatdid launcher is exiting")
     }
 }

@@ -55,7 +55,7 @@ class Model {
         }
         let localContainer = NSPersistentContainer(name: modelName, managedObjectModel: mom)
         if clearAllEntriesOnStartup {
-            NSLog("deleting all previous entries.")
+            wdlog(.info, "deleting all previous entries.")
             for store in localContainer.persistentStoreDescriptions {
                 if let url = store.url {
                     do {
@@ -64,14 +64,15 @@ class Model {
                         let siblingFiles = try FileManager.default.contentsOfDirectory(atPath: parentUrl.path)
                         let similarlyPrefixedFileUrls = siblingFiles.filter({ $0.hasPrefix(urlFileName) }).map(parentUrl.appendingPathComponent(_:))
                         for fileToDelete in similarlyPrefixedFileUrls {
-                            NSLog("will delete \(fileToDelete)")
+                            wdlog(.info, "will delete %@", fileToDelete as NSURL)
                             try FileManager.default.removeItem(at: fileToDelete)
                         }
                     } catch {
+                        wdlog(.error, "couldn't rm %@ and siblings: %@", url as NSURL, error as NSError)
                         fatalError("couldn't rm \(url) and siblings: \(error)")
                     }
                 } else {
-                    NSLog("No URL for store: \(store.debugDescription)")
+                    wdlog(.error, "No URL for store: %@", store.debugDescription)
                 }
             }
         }
@@ -108,7 +109,7 @@ class Model {
                 request.fetchLimit = 10
                 projects = try request.execute()
             } catch {
-                NSLog("couldn't load projects: %@", error as NSError)
+                wdlog(.error, "couldn't load projects: %@", error as NSError)
                 projects = []
             }
             results = projects.map({$0.project})
@@ -132,7 +133,7 @@ class Model {
                 request.fetchLimit = 10
                 tasks = try request.execute()
             } catch {
-                NSLog("couldn't load projects: %@", error as NSError)
+                wdlog(.error, "couldn't load projects: %@", error as NSError)
                 tasks = []
             }
             results = tasks.map({$0.task})
@@ -158,7 +159,7 @@ class Model {
                     )
                 })
             } catch {
-                NSLog("couldn't load projects: %@", error as NSError)
+                wdlog(.error, "couldn't load projects: %@", error as NSError)
                 results = []
             }
         }
@@ -169,12 +170,12 @@ class Model {
         var result: Session?
         container.viewContext.performAndWait {
             do {
-                NSLog("Creating new session")
+                wdlog(.debug, "Creating new session")
                 result = Session(context: container.viewContext)
                 result?.startTime = DefaultScheduler.instance.now
                 try container.viewContext.save()
             } catch {
-                NSLog("couldn't save session: %@", error as NSError)
+                wdlog(.error, "couldn't save session: %@", error as NSError)
             }
         }
         return result!
@@ -189,7 +190,7 @@ class Model {
                 request.fetchLimit = 1
                 result = try request.execute().first
             } catch {
-                NSLog("couldn't save session: %@", error as NSError)
+                wdlog(.error, "couldn't save session: %@", error as NSError)
             }
         }
         return result
@@ -220,7 +221,7 @@ class Model {
             do {
                 results = try request.execute().map(GoalDto.fromManaged(_:))
             } catch {
-                NSLog("couldn't lists goals since \(since): %@", error as NSError)
+                wdlog(.error, "couldn't lists goals since %@: %@", since as NSDate, error as NSError)
             }
         }
         results.sort()
@@ -241,7 +242,7 @@ class Model {
                 try container.viewContext.save()
                 result = GoalDto.fromManaged(goal)
             } catch {
-                NSLog("couldn't save goal: %@", error as NSError)
+                wdlog(.error, "couldn't save goal: %@", error as NSError)
             }
         }
         return result!
@@ -250,19 +251,19 @@ class Model {
     func save(goal: GoalDto) {
         container.performBackgroundTask {context in
             guard let objectId = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: goal.id) else {
-                NSLog("Error getting NSManagedObjectID for \(goal.id): %@")
+                wdlog(.error, "Error getting NSManagedObjectID for %@", goal.id as NSURL)
                 return
             }
             let managedObj = context.object(with: objectId)
             guard let managed = managedObj as? Goal else {
-                NSLog("object is not a Goal: %@", managedObj)
+                wdlog(.error, "object is not a Goal: %@", managedObj)
                 return
             }
             managed.completed = goal.completed
             do {
                 try context.save()
             } catch {
-                NSLog("Error saving entry: %@", error as NSError)
+                wdlog(.error, "Error saving entry: %@", error as NSError)
             }
         }
     }
@@ -294,13 +295,14 @@ class Model {
             entry.timeEntered = flatEntry.to
             
             do {
-                NSLog(
+                wdlog(
+                    .debug,
                     "Saving %@ (%@)",
                     flatEntry.description,
                     TimeUtil.daysHoursMinutes(for: flatEntry.to.timeIntervalSince1970 - flatEntry.from.timeIntervalSince1970))
                 try context.save()
             } catch {
-                NSLog("Error saving entry: %@", error as NSError)
+                wdlog(.error, "Error saving entry: %@", error as NSError)
             }
             callback()
             #if UI_TEST

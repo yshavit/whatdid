@@ -104,7 +104,7 @@ fileprivate class AutoCompletingFieldView: WhatdidTextField, NSTextViewDelegate,
             parent.nextKeyView
         }
         set(value) {
-            NSLog("Unexpected mutation of AutoCompletingFieldView.nextKeyView")
+            wdlog(.warn, "Unexpected mutation of AutoCompletingFieldView.nextKeyView")
         }
     }
     
@@ -113,7 +113,7 @@ fileprivate class AutoCompletingFieldView: WhatdidTextField, NSTextViewDelegate,
         if parent.popupManager.windowIsVisible, let window = window {
             let popup = parent.popupManager.window
             guard window.screen == popup.screen else {
-                NSLog("window screen and autocomplete popup screen were different")
+                wdlog(.warn, "window screen and autocomplete popup screen were different")
                 return
             }
             let myBoundsWithinWindow = convert(bounds, to: nil)
@@ -283,11 +283,11 @@ fileprivate class AutoCompletingFieldView: WhatdidTextField, NSTextViewDelegate,
         if popupManager.windowIsVisible {
             // Note: we shouldn't ever actually get here, but I'm putting it just in case.
             // If the popup is open, any click outside of it (including to this button) will close it.
-            NSLog("Unexpectedly saw button press while options popup was open on \(idForLogging)")
+            wdlog(.warn, "Unexpectedly saw button press while options popup was open on %@", idForLogging)
             popupManager.close()
         } else {
             if !(window?.makeFirstResponder(self) ?? false) {
-                NSLog("Couldn't make first responder: \(idForLogging)")
+                wdlog(.error, "Couldn't make first responder: %@", idForLogging)
             }
             showOptions()
         }
@@ -650,7 +650,7 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
                         if let editor = parent.textField.currentEditor() {
                             editor.insertNewline(nil) // send the action
                         } else {
-                            NSLog("Couldn't find editor")
+                            wdlog(.error, "Couldn't find editor in AutoCompletingField")
                         }
                         break
                     }
