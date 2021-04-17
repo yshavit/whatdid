@@ -27,7 +27,7 @@ jobs:
       if: ${{ failure() }}
       run: |
             mkdir "${{ runner.temp }}/export"
-            mv "$(readlink ${{ runner.temp }}/test-results/bundle)" "${{ runner.temp }}/export/failure-logs.xcresult"
+            mv "$(readlink ${{ runner.temp }}/test-results/bundle)" "${{ runner.temp }}/export/whatdid-uitest-failures-${{ github.run_number }}.xcresult"
     - name: Upload test artifacts
       if: ${{ failure() }}
       uses: actions/upload-artifact@v2
