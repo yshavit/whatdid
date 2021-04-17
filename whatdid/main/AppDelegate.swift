@@ -110,6 +110,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         #endif
     }
     
+    func applicationWillHide(_ notification: Notification) {
+        wdlog(.debug, "application will hide")
+    }
+    
+    func applicationDidHide(_ notification: Notification) {
+        wdlog(.debug, "application did hide")
+    }
+    
     func applicationDidBecomeActive(_ notification: Notification) {
         wdlog(.debug, "application became active")
     }
