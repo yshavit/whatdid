@@ -110,7 +110,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         #endif
     }
     
+    func applicationDidBecomeActive(_ notification: Notification) {
+        wdlog(.debug, "application became active")
+    }
+    
     func applicationDidResignActive(_ notification: Notification) {
+        wdlog(.debug, "application resigned active")
         let oldHooks = deactivationHooks.getAndSet([])
         oldHooks.forEach {hook in
             hook()
