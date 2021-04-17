@@ -27,21 +27,12 @@ jobs:
       if: ${{ failure() }}
       run: |
             mkdir "${{ runner.temp }}/export"
-
-            mkdir "${{ runner.temp }}/log-gather"
-            pushd "${{ runner.temp }}/log-gather"
-            sudo log collect --start ${{ steps.start_time.outputs.unixtime }} --output full.logarchive
-            log show --predicate "process = 'whatdid'" full.logarchive > whatdid-logs.txt
-            zip whatdid-logs.zip whatdid-logs.txt
-            mv whatdid-logs.zip "${{ runner.temp }}/export/"
-            popd
-
             mv "$(readlink ${{ runner.temp }}/test-results/bundle)" "${{ runner.temp }}/export/failure-logs.xcresult"
     - name: Upload test artifacts
       if: ${{ failure() }}
       uses: actions/upload-artifact@v2
       with:
-        name: run-${{ github.run_number }}-logs
+        name: whatdid-ui-tests-${{ github.run_number }}
         path: ${{ runner.temp }}/export
   unit-tests:
     runs-on: macos-latest
