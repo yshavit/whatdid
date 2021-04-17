@@ -79,7 +79,10 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
     
     override func close() {
         if windowShouldClose(window!) {
+            wdlog(.debug, "closing window")
             super.close()
+        } else {
+            wdlog(.debug, "canceling window close")
         }
     }
     
@@ -209,12 +212,14 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
     }
     
     func windowWillClose(_ notification: Notification) {
+        wdlog(.debug, "window will close")
         if let activeWindow = window {
             for sheet in activeWindow.sheets {
                 activeWindow.endSheet(sheet, returnCode: .cancel)
             }
         }
         DispatchQueue.main.async {
+            wdlog(.debug, "unhighlighting icon and hiding app")
             self.statusItem.button?.isHighlighted = false
             NSApp.hide(self)
         }

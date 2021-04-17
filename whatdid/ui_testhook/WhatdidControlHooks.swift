@@ -118,7 +118,7 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
         ]
         let timeFormatter = DateFormatter()
         timeFormatter.locale = Locale(identifier: "en_US_POSIX")
-        timeFormatter.dateFormat = "HH:mm:ss"
+        timeFormatter.dateFormat = "HH:mm:ss.SSS"
         globalLogHook =
             LogHook(
                 add: {level, message in

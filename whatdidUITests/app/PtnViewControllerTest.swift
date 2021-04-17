@@ -209,7 +209,7 @@ class PtnViewControllerTest: AppUITestBase {
         group("Clicking selects all") {
             group("Setup") {
                 ptn.pcombo.textField.click()
-                ptn.window.typeText("Project 1\tTask 1\tNotes 1")
+                ["Project 1\t", "Task 1\t", "Notes 1"].forEach(ptn.window.typeText)
             }
             group("Click in Task field") {
                 XCTAssertEqual("Task 1", ptn.tcombo.textField.stringValue)

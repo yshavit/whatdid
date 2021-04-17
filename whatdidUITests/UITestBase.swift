@@ -112,15 +112,17 @@ class UITestBase: XCTestCase {
     }
     
     final override func recordFailure(withDescription description: String, inFile filePath: String, atLine lineNumber: Int, expected: Bool) {
-        if UITestBase.app != nil {
-            uiTearDown()
-        } else {
-            log("ERROR: couldn't find app, so won't call uiTearDown!")
+        group("recordFailure") {
+            if UITestBase.app != nil {
+                uiTearDown()
+            } else {
+                log("ERROR: couldn't find app, so won't call uiTearDown!")
+            }
+            UITestBase.shouldRestartApp = true
+            let now = Date()
+            log("Failed at \(now.utcTimestamp) (\(now.timestamp(at: TimeZone(identifier: "US/Eastern")!)))")
+            super.recordFailure(withDescription: description, inFile: filePath, atLine: lineNumber, expected: expected)
         }
-        UITestBase.shouldRestartApp = true
-        let now = Date()
-        log("Failed at \(now.utcTimestamp) (\(now.timestamp(at: TimeZone(identifier: "US/Eastern")!)))")
-        super.recordFailure(withDescription: description, inFile: filePath, atLine: lineNumber, expected: expected)
     }
     
     private static func activate() {
