@@ -50,11 +50,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_: Notification) {
         wdlog(.info, "Starting whatdid with build %@", Version.pretty)
         #if UI_TEST
-        NSApp.setActivationPolicy(.regular) // so that the windows show up normally
         wdlog(.info, "initializing UI test hooks")
         uiTestWindow = UiTestWindow()
         uiTestWindow.show()
-        NSApp.setActivationPolicy(.regular) // UI tests can time out on launch() without this
+        NSApp.setActivationPolicy(.accessory)
         if let bundleId = Bundle.main.bundleIdentifier {
             oldPrefs = UserDefaults.standard.persistentDomain(forName: bundleId)
             wdlog(.info, "Removing old preferences because this is a UI test. Saved %d to restore later.", oldPrefs?.count ?? 0)
