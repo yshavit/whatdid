@@ -117,6 +117,14 @@ class TimeUtil {
         return calendar.dateComponents([.day], from: nowStart, to: thenStart).day ?? 0
     }
     
+    static func roundUp(_ date: Date, bufferedByMinute buffer: Int, toClosestMinute intervalMinutes: Int) -> Date {
+        let intervalSeconds = TimeInterval(intervalMinutes * 60)
+        let secondsSinceEpoch = date.timeIntervalSince1970 + TimeInterval(buffer * 60)
+        let intervalsSinceEpoch = secondsSinceEpoch / intervalSeconds
+        let intervalsRoundedUp = intervalsSinceEpoch.rounded(.up)
+        return Date(timeIntervalSince1970: intervalsRoundedUp * intervalSeconds)
+    }
+    
     enum TimeDirection : String {
         case previous
         case next

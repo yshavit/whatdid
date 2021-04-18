@@ -321,4 +321,26 @@ class PtnViewControllerTest: AppUITestBase {
             XCTAssertEqual("", ptn.tcombo.textField.stringValue) // changing pcombo should change tcombo
         }
     }
+
+    func testSkipSessionButton() {
+        group("Fast forward") {
+            setTimeUtc(h: 1, m: 00)
+            waitForTransition(of: .ptn, toIsVisible: true)
+        }
+        group("Skip a session") {
+            find(.ptn).buttons["Skip session"].click()
+            waitForTransition(of: .ptn, toIsVisible: false)
+        }
+        group("Make an entry") {
+            setTimeUtc(h: 1, m: 15)
+            findPtn().pcombo.textField.deleteText(andReplaceWith: "One\tTwo\tThree\r")
+        }
+        group("Validate") {
+            clickStatusMenu()
+            waitForTransition(of: .ptn, toIsVisible: true)
+            XCTAssertEqual(
+                [FlatEntry(from: date(h: 1, m: 00), to: date(h: 1, m: 15), project: "One", task: "Two", notes: "Three")],
+                entriesHook)
+        }
+    }
 }

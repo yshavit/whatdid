@@ -15,6 +15,7 @@
                 <outlet property="projectField" destination="4Lo-U3-YED" id="7SV-al-VYn"/>
                 <outlet property="snoozeButton" destination="yjZ-yA-5CH" id="kMR-QE-XYq"/>
                 <outlet property="snoozeExtraOptions" destination="2d3-tf-ady" id="sU1-Fq-fTJ"/>
+                <outlet property="snoozeUntilTomorrow" destination="qvY-Zm-z6P" id="q3v-bx-6bh"/>
                 <outlet property="taskField" destination="sxc-2C-mp9" id="Pro-Vo-fL6"/>
                 <outlet property="topStack" destination="HWg-YQ-y10" id="uHE-m7-vJd"/>
                 <outlet property="view" destination="HWg-YQ-y10" id="KfA-3s-tIh"/>
@@ -28,7 +29,7 @@
                     <rect key="frame" x="334" y="153" width="534" height="28"/>
                     <subviews>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="v8p-Bz-hcj" userLabel="Header text">
-                            <rect key="frame" x="-2" y="0.0" width="326" height="28"/>
+                            <rect key="frame" x="-2" y="0.0" width="376" height="28"/>
                             <textFieldCell key="cell" title="What have you been working on for the last {DURATION} (since {TIME})?" id="MHs-V5-IyC">
                                 <font key="font" metaFont="label" size="11"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -37,7 +38,7 @@
                             <accessibility identifier="durationheader"/>
                         </textField>
                         <customView verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="maZ-n4-VKP" userLabel="Spacer">
-                            <rect key="frame" x="328" y="4" width="50" height="24"/>
+                            <rect key="frame" x="378" y="4" width="0.0" height="24"/>
                         </customView>
                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="HC6-YQ-v0e" userLabel="Snooze buttonopts">
                             <rect key="frame" x="384" y="14" width="130" height="14"/>
@@ -67,8 +68,8 @@
                                             <items>
                                                 <menuItem state="on" hidden="YES" id="ntA-xD-jFV" userLabel="snooze"/>
                                                 <menuItem title="+30" id="Dfs-KT-zJY" userLabel="+30"/>
-                                                <menuItem title="+1h" id="S09-6Y-I7d" userLabel="+1h"/>
-                                                <menuItem title="+1h30" id="BbM-Gt-GCN" userLabel="+1h30"/>
+                                                <menuItem title="+60" id="S09-6Y-I7d" userLabel="I"/>
+                                                <menuItem title="+90" id="BbM-Gt-GCN" userLabel="+1h30"/>
                                                 <menuItem isSeparatorItem="YES" id="Fju-ZH-G90"/>
                                                 <menuItem title="until tomorrow" id="qvY-Zm-z6P">
                                                     <modifierMask key="keyEquivalentModifierMask"/>
