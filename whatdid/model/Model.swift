@@ -88,6 +88,7 @@ class Model {
     }()
     
     func setLastEntryDateToNow() {
+        wdlog(.info, "Skipping session")
         _lastEntryDate = DefaultScheduler.instance.now
     }
     

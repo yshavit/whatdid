@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="ConfirmViewController" customModule="whatdid" customModuleProvider="target">
+            <connections>
+                <outlet property="cancelButton" destination="fFA-jn-okU" id="7A5-1S-nGH"/>
+                <outlet property="detailsField" destination="xEc-Zk-K0c" id="eZG-Vo-TKt"/>
+                <outlet property="headerField" destination="cGX-M3-Ieh" id="cyi-Ry-9pc"/>
+                <outlet property="minHeightConstraint" destination="bCA-hJ-K7Y" id="bwK-yd-WuD"/>
+                <outlet property="proceedButton" destination="gYA-0o-MPz" id="F0k-jP-VTa"/>
+                <outlet property="view" destination="6vA-c9-69k" id="a0A-v2-ygZ"/>
+                <outlet property="widthConstraint" destination="3G6-9I-UpE" id="L1L-T4-AHk"/>
+            </connections>
+        </customObject>
+        <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="500" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6vA-c9-69k" userLabel="Top Stack">
+            <rect key="frame" x="0.0" y="0.0" width="333" height="91"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cGX-M3-Ieh">
+                    <rect key="frame" x="8" y="71" width="317" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" refusesFirstResponder="YES" allowsUndo="NO" title="Confirmation" id="ge8-mQ-8rZ">
+                        <font key="font" textStyle="headline" name=".SFNS-Bold"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="xEc-Zk-K0c">
+                    <rect key="frame" x="8" y="47" width="317" height="16"/>
+                    <textFieldCell key="cell" refusesFirstResponder="YES" allowsUndo="NO" title="Are you sure you want to do this?" id="ISj-Qk-xnR">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="Yxl-Bm-6Wu">
+                    <rect key="frame" x="10" y="36" width="323" height="5"/>
+                </box>
+                <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vGf-s4-XLm" userLabel="Buttons Stack">
+                    <rect key="frame" x="0.0" y="10" width="333" height="20"/>
+                    <subviews>
+                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="9wu-WI-FcK">
+                            <rect key="frame" x="0.0" y="15" width="237" height="5"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="5" id="xyr-wg-hGJ"/>
+                            </constraints>
+                        </customView>
+                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gYA-0o-MPz">
+                            <rect key="frame" x="238" y="-7" width="56" height="32"/>
+                            <buttonCell key="cell" type="push" title="Yes" bezelStyle="rounded" alignment="center" refusesFirstResponder="YES" borderStyle="border" inset="2" id="onb-PM-MOA">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="handleProceed:" target="-2" id="3PL-mS-Fjc"/>
+                            </connections>
+                        </button>
+                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fFA-jn-okU">
+                            <rect key="frame" x="288" y="-7" width="52" height="32"/>
+                            <buttonCell key="cell" type="push" title="No" bezelStyle="rounded" alignment="center" refusesFirstResponder="YES" borderStyle="border" inset="2" id="v1v-EP-RzV">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                                <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                            </buttonCell>
+                            <connections>
+                                <action selector="handleCancel:" target="-2" id="TP7-al-Z4F"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <visibilityPriorities>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                    </visibilityPriorities>
+                    <customSpacing>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                    </customSpacing>
+                </stackView>
+            </subviews>
+            <edgeInsets key="edgeInsets" left="10" right="10" top="4" bottom="10"/>
+            <constraints>
+                <constraint firstAttribute="width" constant="333" id="3G6-9I-UpE"/>
+                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="80" id="bCA-hJ-K7Y"/>
+                <constraint firstItem="vGf-s4-XLm" firstAttribute="trailing" secondItem="Yxl-Bm-6Wu" secondAttribute="trailing" id="vFj-IR-cZJ"/>
+            </constraints>
+            <visibilityPriorities>
+                <integer value="1000"/>
+                <integer value="1000"/>
+                <integer value="1000"/>
+                <integer value="1000"/>
+            </visibilityPriorities>
+            <customSpacing>
+                <real value="3.4028234663852886e+38"/>
+                <real value="3.4028234663852886e+38"/>
+                <real value="3.4028234663852886e+38"/>
+                <real value="3.4028234663852886e+38"/>
+            </customSpacing>
+            <point key="canvasLocation" x="37.5" y="92"/>
+        </stackView>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+    </objects>
+</document>

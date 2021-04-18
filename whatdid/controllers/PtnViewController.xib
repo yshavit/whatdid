@@ -74,6 +74,13 @@
                                                 <menuItem title="until tomorrow" id="qvY-Zm-z6P">
                                                     <modifierMask key="keyEquivalentModifierMask"/>
                                                 </menuItem>
+                                                <menuItem isSeparatorItem="YES" id="llj-na-JYd"/>
+                                                <menuItem title="Skip this session" id="rJf-mO-GWd">
+                                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                                    <connections>
+                                                        <action selector="handleSkipSessionButton:" target="-2" id="5PZ-ZC-krg"/>
+                                                    </connections>
+                                                </menuItem>
                                             </items>
                                         </menu>
                                     </popUpButtonCell>

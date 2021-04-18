@@ -235,6 +235,37 @@ class PtnViewController: NSViewController {
         }
     }
     
+    @IBAction func handleSkipSessionButton(_ sender: Any) {
+        if let window = view.window {
+            let confirm = ConfirmViewController()
+            let showConfirmation = confirm.prepareToAttach(to: window)
+            let duration = TimeUtil.daysHoursMinutes(
+                for: scheduler.timeInterval(since: AppDelegate.instance.model.lastEntryDate))
+            confirm.header = "Skip this session?"
+            confirm.detail = """
+            If you skip this session, the last \(duration) will not be recorded.
+
+            You cannot undo this action.
+
+            If you took a break, consider recording it as such. For example:
+            break / social media / looking at friends' pictures
+            """
+            confirm.proceedButtonText = "Skip session"
+            confirm.cancelButtonText = "Don't skip"
+            confirm.onProceed = skipSession
+            showConfirmation()
+        } else {
+            wdlog(.warn, "can't find window to post confirmation alert in skipSession. Will proceed with skipping session.")
+            skipSession()
+        }
+    }
+    
+    private func skipSession() {
+        AppDelegate.instance.model.setLastEntryDateToNow()
+        self.closeWindowAsync()
+    }
+    
+    
     @IBAction func preferenceButtonPressed(_ sender: NSButton) {
         if let viewWindow = view.window {
             let prefsWindow = NSWindow(contentRect: viewWindow.frame, styleMask: [.titled], backing: .buffered, defer: true)
