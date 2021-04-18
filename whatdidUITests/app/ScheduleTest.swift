@@ -148,7 +148,7 @@ class ScheduleTest: AppUITestBase {
         let (ptn, _) = openPtnAndGetButton()
         let snoozeOptions = openSnoozeOptions(on: ptn)
         let snoozeOptionLabels = snoozeOptions.allElementsBoundByIndex.map { $0.title }
-        XCTAssertEqual(["3:00 am", "3:30 am", "4:00 am", "", "9:00 am"], snoozeOptionLabels)
+        XCTAssertEqual(["3:00 am", "3:30 am", "4:00 am", "", "9:00 am", "", "Skip this session"], snoozeOptionLabels)
         ptn.menuItems["4:00 am"].click()
         
         // To go 03:29+0200, and the PTN should still be hidden
