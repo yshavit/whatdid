@@ -34,7 +34,12 @@ extension NSViewController {
             mainStack.orientation = .vertical
             mainStack.useAutoLayout()
             mainStack.edgeInsets = NSEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-            sheet.contentView = mainStack
+            
+            let controller = RefuseToCloseController()
+            controller.view = mainStack
+            sheet.contentViewController = controller
+            mainStack.widthAnchor.constraint(equalToConstant: window.frame.width).isActive = true
+            mainStack.heightAnchor.constraint(greaterThanOrEqualToConstant: window.frame.height).isActive = true
             
             let headerLabel = NSTextField(labelWithString: "It's been a while since you last checked in.")
             headerLabel.font = NSFont.boldSystemFont(ofSize: NSFont.labelFontSize * 1.25)
@@ -45,16 +50,20 @@ extension NSViewController {
             mainStack.addArrangedSubview(optionsStack)
             optionsStack.orientation = .horizontal
             optionsStack.widthAnchor.constraint(equalTo: mainStack.widthAnchor).isActive = true
-            optionsStack.addView(
-                ButtonWithClosure(label: "Start new session") {_ in
-                    window.endSheet(sheet, returnCode: .OK)
-                },
-                in: .center)
-            optionsStack.addView(
-                ButtonWithClosure(label: "Continue with current session") {_ in
-                    window.endSheet(sheet, returnCode: .continue)
-                },
-            in: .center)
+            
+            let newSession = ButtonWithClosure(label: "Start new session") {_ in
+                window.endSheet(sheet, returnCode: .OK)
+            }
+            optionsStack.addView(newSession, in: .center)
+            
+            let continueSession = ButtonWithClosure(label: "Continue with current session") {_ in
+                window.endSheet(sheet, returnCode: .continue)
+            }
+            optionsStack.addView(continueSession, in: .center)
+            controller.flasher = {
+                // TODO change this to flash the buttons
+                wdlog(.debug, "refusing to close while long-session prompt is open")
+            }
             
             window.makeFirstResponder(nil)
             window.beginSheet(sheet) {response in
@@ -81,5 +90,15 @@ extension NSViewController {
                 }
             }
         }
+    }
+}
+
+fileprivate class RefuseToCloseController: NSViewController, CloseConfirmer {
+    
+    var flasher = {}
+    
+    func requestClose(on: NSWindow) -> Bool {
+        flasher()
+        return false
     }
 }
