@@ -92,7 +92,9 @@ class ScheduleTest: AppUITestBase {
             // The default option is 7:30 pm, and the extra options start at 8:00 pm.
             let snoozeOptions = openSnoozeOptions(on: ptn)
             let snoozeOptionLabels = snoozeOptions.allElementsBoundByIndex.map { $0.title }
-            XCTAssertEqual(["3:30 am", "4:00 am", "4:30 am", "", "9:00 am"], snoozeOptionLabels)
+            XCTAssertEqual(
+                ["3:30 am", "4:00 am", "4:30 am", "", "9:00 am", "", "Skip this session"],
+                snoozeOptionLabels)
         }
         group("Check weekend snooze-until-tomorrow option") {
             // Jan 1 1970 was a Thursday, so let's go to Friday. Then, the "tomorrow" state
@@ -107,7 +109,9 @@ class ScheduleTest: AppUITestBase {
             group("Check options") {
                 let snoozeOptions = openSnoozeOptions(on: ptn)
                 let snoozeOptionLabels = snoozeOptions.allElementsBoundByIndex.map { $0.title }
-                XCTAssertEqual(["9:00 pm", "9:30 pm", "10:00 pm", "", "Monday at 9:00 am"], snoozeOptionLabels)
+                XCTAssertEqual(
+                    ["9:00 pm", "9:30 pm", "10:00 pm", "", "Monday at 9:00 am", "", "Skip this session"],
+                    snoozeOptionLabels)
             }
             group("Snooze until Monday") {
                 ptn.menuItems["Monday at 9:00 am"].click()
