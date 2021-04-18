@@ -67,9 +67,9 @@
                                         <menu key="menu" id="e29-UZ-3Z2">
                                             <items>
                                                 <menuItem state="on" hidden="YES" id="ntA-xD-jFV" userLabel="snooze"/>
-                                                <menuItem title="+30" id="Dfs-KT-zJY" userLabel="+30"/>
-                                                <menuItem title="+60" id="S09-6Y-I7d" userLabel="I"/>
-                                                <menuItem title="+90" id="BbM-Gt-GCN" userLabel="+1h30"/>
+                                                <menuItem title="tag:+30m" tag="30" id="Dfs-KT-zJY" userLabel="+30m"/>
+                                                <menuItem title="tag:+1h" tag="60" id="S09-6Y-I7d" userLabel="+1h"/>
+                                                <menuItem title="tag:+1h30m" tag="90" id="BbM-Gt-GCN" userLabel="+1h30m"/>
                                                 <menuItem isSeparatorItem="YES" id="Fju-ZH-G90"/>
                                                 <menuItem title="until tomorrow" id="qvY-Zm-z6P">
                                                     <modifierMask key="keyEquivalentModifierMask"/>

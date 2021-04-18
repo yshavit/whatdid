@@ -138,24 +138,26 @@ class PtnViewController: NSViewController {
             self.snoozeUntil = Date(timeIntervalSince1970: defaultSnoozeDate.timeIntervalSince1970)
             let refreshOptionsAt = defaultSnoozeDate.addingTimeInterval(-300)
             snoozeExtraOptions.isEnabled = true
-            for menuItem in snoozeExtraOptions.itemArray.filter({$0.title.starts(with: "+")}) {
-                if let plusMinutes = Int(menuItem.title) {
+            for menuItem in snoozeExtraOptions.itemArray {
+                let plusMinutes = menuItem.tag
+                if plusMinutes > 0 {
                     let optionSnoozeDate = defaultSnoozeDate.addingTimeInterval(TimeInterval(plusMinutes) * 60.0)
                     menuItem.title = TimeUtil.formatSuccinctly(date: optionSnoozeDate)
                     menuItem.representedObject = optionSnoozeDate
                 }
             }
+            
             let nextSessionHhMm = untilTomorrowSettings?.hhMm ?? Prefs.dayStartTime
             let nextSessionWeekends = untilTomorrowSettings?.includeWeekends ?? Prefs.daysIncludeWeekends
-            
-            let latestDate = snoozeExtraOptions.itemArray.compactMap({$0.representedObject as? Date}).last ?? defaultSnoozeDate
-            
+            let latestDate = snoozeExtraOptions.itemArray
+                .filter({$0.tag > 0})
+                .compactMap({$0.representedObject as? Date})
+                .last
+                ?? defaultSnoozeDate
             let nextSessionDate = nextSessionHhMm.map {hh, mm in
                 TimeUtil.dateForTime(.next, hh: hh, mm: mm, excludeWeekends: !nextSessionWeekends, assumingNow: latestDate)}
-            if let nextSessionItem = snoozeExtraOptions.lastItem {
-                nextSessionItem.title = TimeUtil.formatSuccinctly(date: nextSessionDate)
-                nextSessionItem.representedObject = nextSessionDate
-            }
+            snoozeUntilTomorrow.title = TimeUtil.formatSuccinctly(date: nextSessionDate)
+            snoozeUntilTomorrow.representedObject = nextSessionDate
             
             scheduler.schedule("Snooze options refresh", at: refreshOptionsAt, updateSnoozeButton)
         }
