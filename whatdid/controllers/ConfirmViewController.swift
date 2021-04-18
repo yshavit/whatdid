@@ -75,6 +75,7 @@ class ConfirmViewController: NSViewController {
         let confirmWindow = NSWindow(contentRect: window.frame, styleMask: [.titled], backing: .buffered, defer: true)
         confirmWindow.backgroundColor = NSColor.windowBackgroundColor
         confirmWindow.contentViewController = self
+        confirmWindow.initialFirstResponder = cancelButton
         widthConstraint.constant = window.frame.width
         minHeightConstraint.constant = window.frame.height
         return {

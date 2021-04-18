@@ -358,6 +358,32 @@ class PtnViewControllerTest: AppUITestBase {
                 "What have you been working on for the last 1h 0m (since 2:00 am)?",
                 find(.ptn).staticTexts["durationheader"].stringValue)
         }
+        
+        group("optional: Skip a session, cancel via keyboard") {
+            let sheet = pressSkipSessionButton(warningIncludes: "1h 0m")
+            let focusedElements = sheet.descendants(matching: .any)
+                .matching(NSPredicate(format: "hasKeyboardFocus = true"))
+                .allElementsBoundByIndex
+            if focusedElements.isEmpty {
+                log("No focused descendant. Keyboard navigation isn't set up on this system.")
+                sheet.typeKey(.escape)
+                wait(for: "sheet to go away", until: {!sheet.isVisible})
+                // Don't need to test more; we tested above.
+            } else {
+                XCTAssertEqual("Don't skip", sheet.focusedDescendant.title)
+                sheet.typeKey(.tab)
+                wait(for: "focus to switch 1", until: {sheet.focusedDescendant.title == "Skip session"})
+                sheet.typeKey(.tab)
+                wait(for: "focus to switch 2", until: {sheet.focusedDescendant.title == "Don't skip"})
+                sheet.typeKey(.space)
+                wait(for: "sheet to go away", until: {!sheet.isVisible})
+                sleepMillis(1000) // give the PTN a chance to go away if it's going to (it shouldn't)
+                XCTAssertEqual(
+                    "What have you been working on for the last 1h 0m (since 2:00 am)?",
+                    find(.ptn).staticTexts["durationheader"].stringValue)
+            }
+        }
+        
         group("Skip a session, cancel via button") {
             let sheet = pressSkipSessionButton(warningIncludes: "1h 0m")
             sheet.buttons["Don't skip"].click()
