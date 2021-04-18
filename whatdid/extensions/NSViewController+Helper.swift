@@ -51,17 +51,16 @@ extension NSViewController {
             optionsStack.orientation = .horizontal
             optionsStack.widthAnchor.constraint(equalTo: mainStack.widthAnchor).isActive = true
             
-            let newSession = ButtonWithClosure(label: "Start new session") {_ in
+            let newSessionButton = ButtonWithClosure(label: "Start new session") {_ in
                 window.endSheet(sheet, returnCode: .OK)
             }
-            optionsStack.addView(newSession, in: .center)
+            optionsStack.addView(newSessionButton, in: .center)
             
-            let continueSession = ButtonWithClosure(label: "Continue with current session") {_ in
+            let continueSessionButton = ButtonWithClosure(label: "Continue with current session") {_ in
                 window.endSheet(sheet, returnCode: .continue)
             }
-            optionsStack.addView(continueSession, in: .center)
+            optionsStack.addView(continueSessionButton, in: .center)
             controller.flasher = {
-                // TODO change this to flash the buttons
                 wdlog(.debug, "refusing to close while long-session prompt is open")
             }
             
