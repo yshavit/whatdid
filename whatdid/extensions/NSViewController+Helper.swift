@@ -80,7 +80,7 @@ extension NSViewController {
                     wdlog(.debug, "Aborting window (probably because user closed it via status menu item)")
                     startNewSession = false
                 default:
-                    wdlog(.warn, "Unexpected response: %@. Will start new session session.", response.rawValue)
+                    wdlog(.warn, "Unexpected response: %d. Will start new session session.", response.rawValue)
                     startNewSession = false
                 }
                 if startNewSession {

@@ -21,6 +21,9 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
         // in the opener logic.
         unSnooze()
         if let window = window {
+            for sheet in window.sheets {
+                window.endSheet(sheet)
+            }
             for _ in WindowContents.allCases {
                 _ = windowShouldClose(window)
             }
