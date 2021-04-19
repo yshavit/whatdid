@@ -59,10 +59,14 @@ class LongSessionPromptTest: AppUITestBase {
     func testDismissingWindowRetainsQuestion() {
         checkSessionReset(
             onPrompt: {
-                clickStatusMenu()
-                sleepMillis(1000) // give the PTN time to go away, if it was going to (it shouldn't)
-                XCTAssertEqual(.ptn, openWindowType)
-                handleLongSessionPrompt(on: .ptn, .continueWithCurrentSession)
+                group("try to dismiss via click") {
+                    clickStatusMenu()
+                    sleepMillis(1000) // give the PTN time to go away, if it was going to (it shouldn't)
+                    XCTAssertEqual(.ptn, openWindowType)
+                }
+                group("dismiss prompt") {
+                    handleLongSessionPrompt(on: .ptn, .continueWithCurrentSession)
+                }
             },
             expectDateFrom: date(h: 0, m: 00),
             to: date(h: 6, m: 00))

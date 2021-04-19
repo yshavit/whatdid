@@ -66,7 +66,7 @@ class SystemClockScheduler: Scheduler {
         
         func reschedule() {
             cancelWorkItem()
-            let timeLeft = deadline.timeIntervalSinceWhatdidNow
+            let timeLeft = deadline.timeIntervalSinceNow
             if timeLeft <= 0 {
                 wdlog(.debug, "Running %@ immediately", description)
                 DispatchQueue.main.async(execute: runBlock)

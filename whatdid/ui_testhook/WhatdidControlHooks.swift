@@ -90,6 +90,7 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
         animationFactorField.target = self
         animationFactorField.action = #selector(self.setAnimationFactor(_:))
         (animationFactorField.cell as? NSTextFieldCell)?.sendsActionOnEndEditing = true
+        animationFactorField.setAccessibilityLabel("uitestanimationfactor")
         animationFactorStack.addArrangedSubview(NSTextField(labelWithString: "Animation factor"))
         animationFactorStack.addArrangedSubview(animationFactorField)
         adder(animationFactorStack)

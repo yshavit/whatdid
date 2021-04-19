@@ -62,6 +62,8 @@ extension NSViewController {
             optionsStack.addView(continueSessionButton, in: .center)
             controller.flasher = {
                 wdlog(.debug, "refusing to close while long-session prompt is open")
+                flash(continueSessionButton)
+                flash(newSessionButton)
             }
             
             window.makeFirstResponder(nil)
@@ -100,4 +102,35 @@ fileprivate class RefuseToCloseController: NSViewController, CloseConfirmer {
         flasher()
         return false
     }
+}
+
+fileprivate func flash(_ button: NSButton, flashDuration: TimeInterval = 0.12, count: Int = 2) {
+    let originalTitle = button.attributedTitle
+    let highlightedTitle = NSMutableAttributedString(attributedString: originalTitle)
+    highlightedTitle.addAttribute(
+        .foregroundColor,
+        value: NSColor.controlAccentColor,
+        range: NSRange(location: 0, length: highlightedTitle.length))
+    
+    // Even in ui-test mode, we want to flash in realtime.
+    // We can't test the colors in a UI test, so we may as well get a visual that looks okay
+    // without being cumbersome.
+    let scheduler = SystemClockScheduler()
+    
+    func oneFlash(remaining: Int) {
+        if remaining > 0 {
+            button.attributedTitle = highlightedTitle
+            scheduler.schedule("flash #\(remaining)", after: flashDuration) {
+                button.attributedTitle = originalTitle
+                let nextRemaining = remaining - 1
+                if nextRemaining > 0 {
+                    scheduler.schedule("next flash", after: flashDuration) {
+                        oneFlash(remaining: nextRemaining)
+                    }
+                }
+            }
+        }
+    }
+    oneFlash(remaining: count)
+    
 }
