@@ -14,9 +14,7 @@ Just enter what you've been working on since the last time it asked you, and tha
 
 At the end of the day, _whatdid_ will tell you what you worked on:
 
-<div width="100%" align="center">
-<img src="images/daily-report.png" alt="end-of-day report" width="360" height="494">
-</div>
+![end-of-day report](images/daily-report.png)
 
 ## Where to get it
 
