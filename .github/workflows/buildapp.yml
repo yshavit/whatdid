@@ -15,13 +15,19 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+    - name: Verify Python version
+      run: python --version
     - name: Will upload artifact
       if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
       run: echo "should_upload_app=yes" >> "$GITHUB_ENV"
     - name: Pip install
       run: |
-        python3 -m pip install --upgrade pip
-        python3 -m pip install --upgrade biplist dmgbuild
+        python -m pip install --upgrade pip
+        python -m pip install --upgrade biplist dmgbuild
     - name: Build
       # To add the CERTIFICATES_P12 to GH secrets, do:
       # base64 -w 0 cert.p12
