@@ -61,7 +61,7 @@ class ScreenshotGenerator: AppUITestBase {
                 ptnHelper.pcombo.textField.click()
                 app.typeText("test\t")
                 app.typeText("desig") // incomplete
-                screenshot(named: "ptn autocomplete", of: ptn)
+                screenshot(named: "project-task-note", of: ptn)
             }
             checkForAndDismiss(window: .ptn)
         }

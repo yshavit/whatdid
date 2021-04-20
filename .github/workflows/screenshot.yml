@@ -16,6 +16,9 @@ jobs:
             if [ ! -z "$update_name" ]; then
                 sudo softwareupdate --ignore "$update_name"
             fi
+    - name: Set dark mode
+      run: |
+            sudo osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to true'
     - name: Install xcparse
       run: brew install chargepoint/xcparse/xcparse
     - name: Save current time zone
