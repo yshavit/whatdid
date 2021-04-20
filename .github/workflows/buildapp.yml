@@ -20,7 +20,8 @@ jobs:
       run: echo "should_upload_app=yes" >> "$GITHUB_ENV"
     - name: Pip install
       run: |
-        pip install pip install biplist dmgbuild
+        pip install pip install biplist
+        pip install pip install dmgbuild
         which dmgbuild
         dmgbuild --help
     - name: Pip verify
