@@ -55,7 +55,6 @@ class LongSessionPromptTest: AppUITestBase {
             to: date(h: 6, m: 00))
     }
     
-    /// see: [issue #201](https://github.com/yshavit/whatdid/issues/201)
     func testDismissingWindowRetainsQuestion() {
         checkSessionReset(
             onPrompt: {
