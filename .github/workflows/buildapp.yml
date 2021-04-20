@@ -18,7 +18,9 @@ jobs:
       if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
       run: echo "should_upload_app=yes" >> "$GITHUB_ENV"
     - name: Pip install
-      run: pip install pip install biplist dmgbuild
+      run: pip install pip install biplist dmgbuild && which dmgbuild
+    - name: Pip verify
+      run: dmgbuild --help
     - uses: actions/checkout@v2
     - name: Build
       # To add the CERTIFICATES_P12 to GH secrets, do:
