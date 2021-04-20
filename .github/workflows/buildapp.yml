@@ -17,6 +17,8 @@ jobs:
     - name: Will upload artifact
       if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
       run: echo "should_upload_app=yes" >> "$GITHUB_ENV"
+    - name: Pip install
+      run: pip install pip install biplist dmgbuild
     - uses: actions/checkout@v2
     - name: Build
       # To add the CERTIFICATES_P12 to GH secrets, do:
@@ -51,7 +53,6 @@ jobs:
           if xcrun altool --notarization-history 0 -u "${{ secrets.APPLE_ID }}" -p "${{ secrets.APPLE_PW }}" | grep -qE "${notarization_request}\s+success" ; then
             echo "Success. Stapling and re-zipping"
             xcrun stapler staple whatdid.app
-            ditto -c -k --keepParent whatdid.app whatdid.zip
             break
           elif [[ $(date +%s) -gt $timeout_at ]]; then
             echo "Timed out!"
@@ -63,12 +64,16 @@ jobs:
         done
       env:
         notarization_request: ${{ env.notarization_request }}
+    - name: Create DMG
+      run: |
+        pwd
+        dmgbuild -s buildscripts/dmgbuild_settings.py -D app=build/whatdid.app "Whatdid" Whatdid.dmg
     - name: Upload app
       uses: actions/upload-artifact@v2
       if: env.should_upload_app
       with:
-        name: whatdid.zip
-        path: build/whatdid.zip
+        name: Whatdid.dmg
+        path: build/Whatdid.dmg
     - name: Upload logs
       uses: actions/upload-artifact@v2
       if: env.should_upload_app
