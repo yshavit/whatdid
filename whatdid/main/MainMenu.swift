@@ -22,7 +22,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
         unSnooze()
         if let window = window {
             for sheet in window.sheets {
-                window.endSheet(sheet)
+                window.endSheet(sheet, returnCode: .cancel)
             }
             for _ in WindowContents.allCases {
                 _ = windowShouldClose(window)

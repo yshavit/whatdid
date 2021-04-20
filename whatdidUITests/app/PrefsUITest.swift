@@ -31,7 +31,7 @@ class PrefsUITest: AppUITestBase {
                     waitForTransition(of: .ptn, toIsVisible: true)
                 }
                 group("Open preferences back up") {
-                    prefsButton.click()
+                    prefsButton.click(using: .frame())
                     XCTAssertTrue(prefsSheet.isVisible)
                 }
             }
