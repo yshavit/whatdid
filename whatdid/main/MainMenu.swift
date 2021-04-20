@@ -21,6 +21,9 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
         // in the opener logic.
         unSnooze()
         if let window = window {
+            for sheet in window.sheets {
+                window.endSheet(sheet, returnCode: .cancel)
+            }
             for _ in WindowContents.allCases {
                 _ = windowShouldClose(window)
             }
@@ -87,10 +90,16 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
     }
     
     func windowShouldClose(_ sender: NSWindow) -> Bool {
-        if let closeConfirmer = contentViewController as? CloseConfirmer,
-           !closeConfirmer.requestClose(on: sender)
-        {
-            return false
+        if let window = window {
+            // Get all of the sheets (in top-to-bottom order), and then the current window.
+            // That means that whatever the user sees has first crack at refusing the close.
+            let allWindows = window.sheets + [window]
+            let allCloseConfirmers = allWindows.compactMap({$0.contentViewController as? CloseConfirmer})
+            for closeConfirmer in allCloseConfirmers {
+                if !closeConfirmer.requestClose(on: sender) {
+                    return false
+                }
+            }
         }
         cancelClose = false
         opener.didClose()

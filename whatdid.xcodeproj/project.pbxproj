@@ -42,6 +42,8 @@
 		7E7C384E24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */; };
 		7E7C384F24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */; };
 		7E7C385224DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C385124DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift */; };
+		7E7D006D262BFC08002D4CB5 /* ConfirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7D006B262BFC08002D4CB5 /* ConfirmViewController.swift */; };
+		7E7D006E262BFC08002D4CB5 /* ConfirmViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E7D006C262BFC08002D4CB5 /* ConfirmViewController.xib */; };
 		7E88CC8E261EB5A900968F64 /* AnimationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E88CC8D261EB5A900968F64 /* AnimationHelper.swift */; };
 		7E88F5AA2529AB46002B2F2E /* Int+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E88F5A92529AB46002B2F2E /* Int+Helpers.swift */; };
 		7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */; };
@@ -181,6 +183,8 @@
 		7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatEntry.swift; sourceTree = "<group>"; };
 		7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlatEntry+Serde.swift"; sourceTree = "<group>"; };
 		7E7C385124DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlatEntry+SerdeTest.swift"; sourceTree = "<group>"; };
+		7E7D006B262BFC08002D4CB5 /* ConfirmViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmViewController.swift; sourceTree = "<group>"; };
+		7E7D006C262BFC08002D4CB5 /* ConfirmViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfirmViewController.xib; sourceTree = "<group>"; };
 		7E88CC8D261EB5A900968F64 /* AnimationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationHelper.swift; sourceTree = "<group>"; };
 		7E88F5A92529AB46002B2F2E /* Int+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Helpers.swift"; sourceTree = "<group>"; };
 		7E8C04DA23714F0700A0C3A6 /* whatdid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = whatdid.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -501,6 +505,8 @@
 			isa = PBXGroup;
 			children = (
 				7E1EE6612612EEF1003314EE /* CloseConfirmer.swift */,
+				7E7D006B262BFC08002D4CB5 /* ConfirmViewController.swift */,
+				7E7D006C262BFC08002D4CB5 /* ConfirmViewController.xib */,
 				7E07C3B624D121770007FD23 /* DayEndReportController.swift */,
 				7E07C3B724D121770007FD23 /* DayEndReportController.xib */,
 				7EF883FA260D7DD400170330 /* DayStartController.swift */,
@@ -759,6 +765,7 @@
 				7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */,
 				7E970D6924DA84AF00F634AB /* UiTestWindow.xib in Resources */,
 				7EF883FD260D7DD400170330 /* DayStartController.xib in Resources */,
+				7E7D006E262BFC08002D4CB5 /* ConfirmViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -867,6 +874,7 @@
 				7EE0E74024E4DF4A002D03F8 /* SubsequenceMatcher.swift in Sources */,
 				7E970D6B24DA850D00F634AB /* UiTestWindow.swift in Sources */,
 				7E6C98D22503EF4900A712EB /* DelegatingScheduler.swift in Sources */,
+				7E7D006D262BFC08002D4CB5 /* ConfirmViewController.swift in Sources */,
 				7EB57AA825187549009E85F5 /* NSApperance+Helpers.swift in Sources */,
 				7E1EE6622612EEF1003314EE /* CloseConfirmer.swift in Sources */,
 				7EDA369524D6A95B00F5E368 /* TimeUtil.swift in Sources */,

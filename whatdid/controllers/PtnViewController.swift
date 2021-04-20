@@ -8,19 +8,20 @@ class PtnViewController: NSViewController {
     public static let CURRENT_TUTORIAL_VERSION = 0
 
     @IBOutlet var topStack: NSStackView!
-    
     @IBOutlet var headerText: NSTextField!
     
     @IBOutlet weak var prefsButton: NSButton!
     @IBOutlet weak var projectField: AutoCompletingField!
     @IBOutlet weak var taskField: AutoCompletingField!
     @IBOutlet weak var noteField: NSTextField!
+    
     @IBOutlet var goals: GoalsView!
     
     @IBOutlet weak var snoozeButton: NSButton!
     private var snoozeUntil : Date?
     @IBOutlet weak var snoozeExtraOptions: NSPopUpButton!
     private var snoozeOptionsUpdateSpinner: NSProgressIndicator?
+    @IBOutlet weak var snoozeUntilTomorrow: NSMenuItem!
     
     private var optionIsPressed = false
     
@@ -128,39 +129,35 @@ class PtnViewController: NSViewController {
             snoozeExtraOptions.isEnabled = false
             scheduler.schedule("Snooze options refresh", at: alreadySnoozedUntil, updateSnoozeButton)
         } else {
-            // Set up the snooze button. We'll have 4 options at half-hour increments, starting 10 minutes from now.
+            // Set up the snooze button to be now + 10 minutes, rounded up to the
+            // closest half-hour.
             // The 10 minutes is so that if it's currently 2:29:59, you won't be annoyed with a "snooze until 2:30" button.
-            let bufferMinutes = 10
-            let snoozeIntervalMinutes = 30.0
-            
-            let now = scheduler.now
-            var snoozeUntil = now.addingTimeInterval(TimeInterval(bufferMinutes * 60))
-            // Round it up (always up) to the nearest half-hour
-            let incrementInterval = Double(snoozeIntervalMinutes * 60.0)
-            snoozeUntil = Date(timeIntervalSince1970: (snoozeUntil.timeIntervalSince1970 / incrementInterval).rounded(.up) * incrementInterval)
+            let defaultSnoozeDate = TimeUtil.roundUp(scheduler.now, bufferedByMinute: 10, toClosestMinute: 30)
 
-            snoozeButton.title = "Snooze until \(TimeUtil.formatSuccinctly(date: snoozeUntil))   " // extra space for the pulldown option
-            self.snoozeUntil = Date(timeIntervalSince1970: snoozeUntil.timeIntervalSince1970)
-            let refreshOptionsAt = snoozeUntil.addingTimeInterval(-300)
-            var latestDate = snoozeUntil
+            snoozeButton.title = "Snooze until \(TimeUtil.formatSuccinctly(date: defaultSnoozeDate))   " // extra space for the pulldown option
+            self.snoozeUntil = Date(timeIntervalSince1970: defaultSnoozeDate.timeIntervalSince1970)
+            let refreshOptionsAt = defaultSnoozeDate.addingTimeInterval(-300)
             snoozeExtraOptions.isEnabled = true
-            for menuItem in snoozeExtraOptions.itemArray[1...] {
-                if menuItem.isSeparatorItem {
-                    break
+            for menuItem in snoozeExtraOptions.itemArray {
+                let plusMinutes = menuItem.tag
+                if plusMinutes > 0 {
+                    let optionSnoozeDate = defaultSnoozeDate.addingTimeInterval(TimeInterval(plusMinutes) * 60.0)
+                    menuItem.title = TimeUtil.formatSuccinctly(date: optionSnoozeDate)
+                    menuItem.representedObject = optionSnoozeDate
                 }
-                snoozeUntil.addTimeInterval(incrementInterval)
-                menuItem.title = TimeUtil.formatSuccinctly(date: snoozeUntil)
-                latestDate = Date(timeIntervalSince1970: snoozeUntil.timeIntervalSince1970)
-                menuItem.representedObject = latestDate
             }
+            
             let nextSessionHhMm = untilTomorrowSettings?.hhMm ?? Prefs.dayStartTime
             let nextSessionWeekends = untilTomorrowSettings?.includeWeekends ?? Prefs.daysIncludeWeekends
+            let latestDate = snoozeExtraOptions.itemArray
+                .filter({$0.tag > 0})
+                .compactMap({$0.representedObject as? Date})
+                .last
+                ?? defaultSnoozeDate
             let nextSessionDate = nextSessionHhMm.map {hh, mm in
                 TimeUtil.dateForTime(.next, hh: hh, mm: mm, excludeWeekends: !nextSessionWeekends, assumingNow: latestDate)}
-            if let nextSessionItem = snoozeExtraOptions.lastItem {
-                nextSessionItem.title = TimeUtil.formatSuccinctly(date: nextSessionDate)
-                nextSessionItem.representedObject = nextSessionDate
-            }
+            snoozeUntilTomorrow.title = TimeUtil.formatSuccinctly(date: nextSessionDate)
+            snoozeUntilTomorrow.representedObject = nextSessionDate
             
             scheduler.schedule("Snooze options refresh", at: refreshOptionsAt, updateSnoozeButton)
         }
@@ -237,6 +234,37 @@ class PtnViewController: NSViewController {
             wdlog(.error, "date not set up (was %@)", until.debugDescription)
         }
     }
+    
+    @IBAction func handleSkipSessionButton(_ sender: Any) {
+        if let window = view.window {
+            let confirm = ConfirmViewController()
+            let showConfirmation = confirm.prepareToAttach(to: window)
+            let duration = TimeUtil.daysHoursMinutes(
+                for: scheduler.timeInterval(since: AppDelegate.instance.model.lastEntryDate))
+            confirm.header = "Skip this session?"
+            confirm.detail = """
+            If you skip this session, the last \(duration) will not be recorded.
+
+            You cannot undo this action.
+
+            If you took a break, consider recording it as such. For example:
+            break / social media / looking at friends' pictures
+            """
+            confirm.proceedButtonText = "Skip session"
+            confirm.cancelButtonText = "Don't skip"
+            confirm.onProceed = skipSession
+            showConfirmation()
+        } else {
+            wdlog(.warn, "can't find window to post confirmation alert in skipSession. Will proceed with skipping session.")
+            skipSession()
+        }
+    }
+    
+    private func skipSession() {
+        AppDelegate.instance.model.setLastEntryDateToNow()
+        self.closeWindowAsync()
+    }
+    
     
     @IBAction func preferenceButtonPressed(_ sender: NSButton) {
         if let viewWindow = view.window {

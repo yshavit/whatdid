@@ -31,7 +31,7 @@ class PrefsUITest: AppUITestBase {
                     waitForTransition(of: .ptn, toIsVisible: true)
                 }
                 group("Open preferences back up") {
-                    prefsButton.click()
+                    prefsButton.click(using: .frame())
                     XCTAssertTrue(prefsSheet.isVisible)
                 }
             }
@@ -73,7 +73,9 @@ class PrefsUITest: AppUITestBase {
                         clickStatusMenu() // open ptn
                         snoozeOpts.click()
                         let snoozeOptionLabels = snoozeOptions.allElementsBoundByIndex.map { $0.title }
-                        XCTAssertEqual(["7:00 pm", "7:30 pm", "8:00 pm", "", "Monday at 9:00 am"], snoozeOptionLabels)
+                        XCTAssertEqual(
+                            ["7:00 pm", "7:30 pm", "8:00 pm", "", "Monday at 9:00 am", "", "Skip this session"],
+                            snoozeOptionLabels)
                         prefsButton.click() // once to dismiss the snooze options popup
                         sleepMillis(500)
                         prefsButton.click() // and then to actually click the prefs button
@@ -87,7 +89,9 @@ class PrefsUITest: AppUITestBase {
                     prefsSheet.buttons["Done"].click()
                     snoozeOpts.click()
                     let snoozeOptionLabels = snoozeOptions.allElementsBoundByIndex.map { $0.title }
-                    XCTAssertEqual(["7:00 pm", "7:30 pm", "8:00 pm", "", "tomorrow at 11:23 am"], snoozeOptionLabels)
+                    XCTAssertEqual(
+                        ["7:00 pm", "7:30 pm", "8:00 pm", "", "tomorrow at 11:23 am", "", "Skip this session"],
+                        snoozeOptionLabels)
                 }
                 group("Open preferences back up") {
                     prefsButton.click() // once to dismiss the snooze options popup

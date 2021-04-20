@@ -71,16 +71,21 @@ class AppUITestBase: UITestBase {
         clearPasteboardIfNeeded()
     }
     
+    private var uiHooksWindow: XCUIElement {
+        let mockedClockWindow = app.windows["UI Test Window"]
+        activate()
+        app.menuBars.statusItems["Focus Whatdid"].click()
+        mockedClockWindow.staticTexts.firstMatch.click()
+        return mockedClockWindow
+    }
+    
     /// Sets the mocked clock in UTC. If `deactivate` is true (default false), then this will set the mocked clock to set the time when the app deactivates, and then this method will activate
     /// the finder. Otherwise, `onSessionPrompt` governs what to do if the "start a new session?" prompt comes up.
     func setTimeUtc(d: Int = 0, h: Int = 0, m: Int = 0, s: Int = 0, deactivate: Bool = false, activateFirst: Bool = true) {
         group("setting time \(d)d \(h)h \(m)m \(s)s") {
             let epochSeconds = d * 86400 + h * 3600 + m * 60 + s
             let text = "\(epochSeconds)\r"
-            let mockedClockWindow = app.windows["UI Test Window"]
-            activate()
-            app.menuBars.statusItems["Focus Whatdid"].click()
-            mockedClockWindow.staticTexts.firstMatch.click()
+            let mockedClockWindow = uiHooksWindow
             let clockTicker = mockedClockWindow.textFields["uitestwindowclock"]
             if deactivate {
                 mockedClockWindow.checkBoxes["Defer until deactivation"].click()
@@ -101,9 +106,13 @@ class AppUITestBase: UITestBase {
         }
     }
     
+    func longSessionPromptQuery(on window: XCUIElement) -> XCUIElementQuery {
+        return window.sheets.matching(NSPredicate(format: "title = %@", "Start new session?"))
+    }
+    
     func checkThatLongSessionPrompt(on window: XCUIElement, exists: Bool) {
         wait(for: "long session prompt", until: {
-            let actual = window.sheets.matching(NSPredicate(format: "title = %@", "Start new session?")).count
+            let actual = longSessionPromptQuery(on: window).count
             let expected = exists ? 1 : 0
             return expected == actual
         })
@@ -203,6 +212,16 @@ class AppUITestBase: UITestBase {
             return nil
         }
         return WindowType.byTitle[openWindow.title]
+    }
+    
+    var animationFactor: Double {
+        get {
+            let asString = uiHooksWindow.textFields["uitestanimationfactor"].stringValue
+            return Double(asString)!
+        }
+        set (value) {
+            uiHooksWindow.textFields["uitestanimationfactor"].deleteText(andReplaceWith: "\(value)\r")
+        }
     }
     
     func type(into app: XCUIElement, _ entry: FlatEntry) {

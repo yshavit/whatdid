@@ -22,7 +22,6 @@ class TimeUtilTest: XCTestCase {
         XCTAssertEqual(TimeUtil.daysHoursMinutes(for: t), "1h 23m")
     }
     
-    
     func test_1d2h34m() {
         let t = secondsFor(days: 1) + secondsFor(hrs: 2) + secondsFor(mins: 34)
         XCTAssertEqual(TimeUtil.daysHoursMinutes(for: t), "1d 2h 34m")
@@ -146,6 +145,86 @@ class TimeUtilTest: XCTestCase {
             for: date(forIso8601: "2020-02-27T02:30:00"),
             assumingNow: date(forIso8601: "2020-02-29T22:00:00"))
     }
+    
+    func testRoundUp_given_0m_bufferedBy_10m_to_30m_expect_30m00s() {
+        runRoundUpTest()
+    }
+    
+    func testRoundUp_given_19m59s_bufferedBy_10m_to_30m_expect_30m00s() {
+        runRoundUpTest()
+    }
+    
+    func testRoundUp_given_20m_bufferedBy_10m_to_30m_expect_30m00s() {
+        runRoundUpTest()
+    }
+
+    func testRoundUp_given_20m01s_bufferedBy_10m_to_30m_expect_1h00m00s() {
+        runRoundUpTest()
+    }
+    
+    func testRoundUp_given_0m00s_bufferedBy_5m_to_15m_expect_15m00s() {
+        runRoundUpTest()
+    }
+    
+    func testRoundUp_given_10m00s_bufferedBy_5m_to_15m_expect_15m00s() {
+        runRoundUpTest()
+    }
+    
+    func testRoundUp_given_10m01s_bufferedBy_5m_to_15m_expect_30m00s() {
+        runRoundUpTest()
+    }
+    
+    /// This tests `TimeUtil.roundUp` by deriving data from the test method's name.
+    ///
+    /// This method expects the test name to include `given_<t>_bufferedBy_#_to_#_expect<t>`, where
+    /// `<t>` is of the form `#h#m#s`, with each component optional. For instance, `given_30m40s`.
+    /// The method will take the starting date as epoch + "given", and then pass it to `roundUp` with the specified buffer
+    /// and round-to. It then expects a date, specified similarly as epoch + "expect".
+    ///
+    /// For example, a test named:
+    ///
+    ///     testRoundUp_given_1h_bufferedBy_3m_to_4m_expect_5h6s
+    ///
+    /// would call
+    ///
+    ///     TimeUtil.roundUp(1970-01-01T00:01:00Z, bufferedByMinute: 3, toClosestMinute: 4)
+    ///
+    /// and expect a result of `1970-01-01T05:00:06Z`
+    private func runRoundUpTest() {
+        let testName = testRun!.test.name
+        var regex: NSRegularExpression?
+        do {
+            /// Creates an optional group that captures `\d` followed by `unit`, named `unit`.
+            func digits(_ unit: String) -> String {
+                return "(?:(?<\(unit)>\\d+)\(unit))?"
+            }
+            try regex = NSRegularExpression(pattern: "(?<key>[a-zA-Z]+)_" + digits("h") + digits("m") + digits("s"))
+        } catch {
+            XCTFail("bad regex: \(error)")
+        }
+        /// Find all instances of `foo_1h2m3s`, where the h/m/s components are all optional
+        var matches = [String : (hh:Int, mm:Int, ss:Int)]()
+        for match in regex!.matches(in: testName, range: name.fullNsRange()) {
+            let key = testName.substring(of: match.range(withName: "key"))!
+            let hh = testName.substring(of: match.range(withName: "h")) ?? "0"
+            let mm = testName.substring(of: match.range(withName: "m")) ?? "0"
+            let ss = testName.substring(of: match.range(withName: "s")) ?? "0"
+            matches[key] = (hh: Int(hh)!, mm: Int(mm)!, ss: Int(ss)!)
+        }
+        // Extract the test case from the matches
+        let given = matches["given"]!
+        let givenDate = date(hh: given.hh, mm: given.mm, ss: given.ss)
+        let bufferedBy = matches["bufferedBy"]!
+        let to = matches["to"]!
+        let expect = matches["expect"]!
+        
+        let actual = TimeUtil.roundUp(
+            givenDate,
+            bufferedByMinute: bufferedBy.mm,
+            toClosestMinute: to.mm)
+        let msg = "rounding \(given) + \(bufferedBy)m to \(to)m"
+        XCTAssertEqual(date(hh: expect.hh, mm: expect.mm, ss: expect.ss), actual, msg)
+    }
 
     private var usEastern: TimeZone {
        return TimeZone(identifier: "US/Eastern")!
@@ -159,6 +238,20 @@ class TimeUtilTest: XCTestCase {
         XCTAssertEqual(
             inGB,
             TimeUtil.formatSuccinctly(date: date, assumingNow: now, timeZone: TimeZone.utc, locale: Locale(identifier: "en_GB")))
+    }
+    
+    private func date(hh: Int = 0, mm: Int, ss: Int = 0) -> Date {
+        return Date(timeIntervalSince1970: secondsFor(hrs: hh) + secondsFor(mins: mm) + TimeInterval(ss))
+    }
+    
+    private func components(of date: Date) -> (hh: Int, mm: Int, ss: Int) {
+        var secondsRemaining = date.timeIntervalSince1970
+        let hours = Int(secondsRemaining / 3600.0)
+        secondsRemaining -= Double(hours) * 3600.0
+        let minutes = Int(secondsRemaining / 60.0)
+        secondsRemaining -= Double(minutes) * 60.0
+        XCTAssertEqual(secondsRemaining, secondsRemaining.rounded(), "test failure: seconds wasn't whole for some reason")
+        return (hh: hours, mm: minutes, ss: Int(secondsRemaining))
     }
     
     private func date(forIso8601 string: String) -> Date {
@@ -178,5 +271,15 @@ class TimeUtilTest: XCTestCase {
     
     private func secondsFor(days: Int) -> TimeInterval {
         return secondsFor(hrs: days * 24) // assume 24-hour days
+    }
+}
+
+fileprivate extension String {
+    func substring(of range: NSRange) -> String? {
+        guard let stringRange = Range(range, in: self) else {
+            return nil
+        }
+        let asSubstring = self[stringRange.lowerBound..<stringRange.upperBound]
+        return String(asSubstring)
     }
 }

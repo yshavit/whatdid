@@ -55,14 +55,17 @@ class LongSessionPromptTest: AppUITestBase {
             to: date(h: 6, m: 00))
     }
     
-    /// see: [issue #201](https://github.com/yshavit/whatdid/issues/201)
     func testDismissingWindowRetainsQuestion() {
         checkSessionReset(
             onPrompt: {
-                clickStatusMenu()
-                waitForTransition(of: .ptn, toIsVisible: false)
-                clickStatusMenu()
-                waitForTransition(of: .ptn, toIsVisible: true)
+                group("try to dismiss via click") {
+                    clickStatusMenu()
+                    sleepMillis(1000) // give the PTN time to go away, if it was going to (it shouldn't)
+                    XCTAssertEqual(.ptn, openWindowType)
+                }
+                group("dismiss prompt") {
+                    handleLongSessionPrompt(on: .ptn, .continueWithCurrentSession)
+                }
             },
             expectDateFrom: date(h: 0, m: 00),
             to: date(h: 6, m: 00))

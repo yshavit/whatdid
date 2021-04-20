@@ -321,4 +321,90 @@ class PtnViewControllerTest: AppUITestBase {
             XCTAssertEqual("", ptn.tcombo.textField.stringValue) // changing pcombo should change tcombo
         }
     }
+
+    func testSkipSessionButton() {
+        func pressSkipSessionButton(warningIncludes: String) -> XCUIElement {
+            let ptn = find(.ptn)
+            group("click skip-session") {
+                let snoozeOptsButton = ptn.menuButtons["snoozeopts"] // note: menuButtons != buttons!
+                snoozeOptsButton.click()
+                let skipOption = snoozeOptsButton.menuItems["Skip this session"]
+                wait(for: "snooze options", until: {skipOption.exists})
+                skipOption.click()
+            }
+            return group("wait for sheet") {() -> XCUIElement in
+                wait(for: "PTN sheet", until: {ptn.sheets.count > 0})
+                let sheet = ptn.sheets.element(boundBy: 0)
+                XCTAssertTrue(
+                    sheet.staticTexts.allElementsBoundByIndex.contains(where: {$0.stringValue.contains(warningIncludes)}))
+                return sheet
+            }
+        }
+        
+        group("Fast forward one hour") {
+            setTimeUtc(h: 1, m: 00)
+            waitForTransition(of: .ptn, toIsVisible: true)
+            XCTAssertEqual(
+                "What have you been working on for the last 1h 0m (since 2:00 am)?",
+                find(.ptn).staticTexts["durationheader"].stringValue)
+        }
+        
+        group("Skip a session, cancel via escape") {
+            let sheet = pressSkipSessionButton(warningIncludes: "1h 0m")
+            sheet.typeKey(.escape)
+            wait(for: "sheet to go away", until: {!sheet.isVisible})
+            sleepMillis(1000) // give the PTN a chance to go away if it's going to (it shouldn't)
+            XCTAssertEqual(
+                "What have you been working on for the last 1h 0m (since 2:00 am)?",
+                find(.ptn).staticTexts["durationheader"].stringValue)
+        }
+        
+        group("optional: Skip a session, cancel via keyboard") {
+            let sheet = pressSkipSessionButton(warningIncludes: "1h 0m")
+            let focusedElements = sheet.descendants(matching: .any)
+                .matching(NSPredicate(format: "hasKeyboardFocus = true"))
+                .allElementsBoundByIndex
+            if focusedElements.isEmpty {
+                log("No focused descendant. Keyboard navigation isn't set up on this system.")
+                sheet.typeKey(.escape)
+                wait(for: "sheet to go away", until: {!sheet.isVisible})
+                // Don't need to test more; we tested above.
+            } else {
+                XCTAssertEqual("Don't skip", sheet.focusedDescendant.title)
+                sheet.typeKey(.tab)
+                wait(for: "focus to switch 1", until: {sheet.focusedDescendant.title == "Skip session"})
+                sheet.typeKey(.tab)
+                wait(for: "focus to switch 2", until: {sheet.focusedDescendant.title == "Don't skip"})
+                sheet.typeKey(.space)
+                wait(for: "sheet to go away", until: {!sheet.isVisible})
+                sleepMillis(1000) // give the PTN a chance to go away if it's going to (it shouldn't)
+                XCTAssertEqual(
+                    "What have you been working on for the last 1h 0m (since 2:00 am)?",
+                    find(.ptn).staticTexts["durationheader"].stringValue)
+            }
+        }
+        
+        group("Skip a session, cancel via button") {
+            let sheet = pressSkipSessionButton(warningIncludes: "1h 0m")
+            sheet.buttons["Don't skip"].click()
+            wait(for: "sheet to go away", until: {!sheet.isVisible})
+            sleepMillis(1000) // give the PTN a chance to go away if it's going to (it shouldn't)
+            XCTAssertEqual(
+                "What have you been working on for the last 1h 0m (since 2:00 am)?",
+                find(.ptn).staticTexts["durationheader"].stringValue)
+        }
+        group("Skip a session, confirm skip") {
+            let sheet = pressSkipSessionButton(warningIncludes: "1h 0m")
+            sheet.buttons["Skip session"].click()
+            wait(for: "sheet to go away", until: {!sheet.isVisible})
+            waitForTransition(of: .ptn, toIsVisible: false)
+        }
+        group("Reopen PTN and confirm new duration") {
+            clickStatusMenu()
+            let ptn = wait(for: .ptn)
+            XCTAssertEqual(
+                "What have you been working on for the last 0m (since 3:00 am)?",
+                ptn.staticTexts["durationheader"].stringValue)
+        }
+    }
 }
