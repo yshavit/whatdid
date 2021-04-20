@@ -77,7 +77,7 @@ jobs:
         pwd
         ls -lh
         ls -lh build/
-        dmgbuild -s buildscripts/dmgbuild_settings.py -D app=build/whatdid.app "Whatdid" Whatdid.dmg
+        dmgbuild -s buildscripts/dmgbuild_settings.py -D app=build/whatdid.app "Whatdid" build/Whatdid.dmg
     - name: Upload app
       uses: actions/upload-artifact@v2
       if: env.should_upload_app
