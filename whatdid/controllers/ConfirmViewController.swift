@@ -53,7 +53,7 @@ class ConfirmViewController: NSViewController {
     }
     
     @objc private func handleButton(_ button: NSButton) {
-        wdlog(.debug, "handling button: %@", button.title)
+        wdlog(.debug, "handling button: %{public}@", button.title)
     }
 
     @IBAction func handleProceed(_ sender: Any) {

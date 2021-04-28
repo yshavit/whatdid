@@ -131,7 +131,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
         
         opener = OpenCloseHelper<WindowContents>(
             onOpen: {ctx in
-                wdlog(.debug, "MainMenu handling %@ open request for %@", ctx.reason.description, ctx.item.description)
+                wdlog(.debug, "MainMenu handling %{public}@ open request for %{public}@", ctx.reason.description, ctx.item.description)
                 self.doOpen(ctx.item, scheduler: ctx.scheduler)
                 if ctx.reason == .manual {
                     self.focus()
@@ -256,7 +256,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
             }
         }
         if let oldTask = scheduledTasks.updateValue(newTask, forKey: contents) {
-            wdlog(.debug, "Replaced previously scheduled open for %@", contents.description)
+            wdlog(.debug, "Replaced previously scheduled open for %{public}@", contents.description)
             oldTask.cancel()
         }
     }
@@ -269,7 +269,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
         if let (until: _, unsnoozeTask: task) = snoozed {
             task.cancel()
         }
-        wdlog(.debug, "Snoozing until %@", AppDelegate.DEBUG_DATE_FORMATTER.string(from: date))
+        wdlog(.debug, "Snoozing until %{public}@", AppDelegate.DEBUG_DATE_FORMATTER.string(from: date))
         opener.snooze()
         close()
         let task = DefaultScheduler.instance.schedule("unsnooze", after: date.timeIntervalSinceWhatdidNow, self.unSnooze)

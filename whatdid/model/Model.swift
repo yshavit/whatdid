@@ -222,7 +222,7 @@ class Model {
             do {
                 results = try request.execute().map(GoalDto.fromManaged(_:))
             } catch {
-                wdlog(.error, "couldn't lists goals since %@: %@", since as NSDate, error as NSError)
+                wdlog(.error, "couldn't lists goals since %{public}@: %@", since as NSDate, error as NSError)
             }
         }
         results.sort()

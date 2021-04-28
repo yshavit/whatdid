@@ -68,10 +68,10 @@ class SystemClockScheduler: Scheduler {
             cancelWorkItem()
             let timeLeft = deadline.timeIntervalSinceNow
             if timeLeft <= 0 {
-                wdlog(.debug, "Running %@ immediately", description)
+                wdlog(.debug, "Running %{public}@ immediately", description)
                 DispatchQueue.main.async(execute: runBlock)
             } else {
-                wdlog(.debug, "Scheduling %@ at %@", description, deadline as NSDate)
+                wdlog(.debug, "Scheduling %{public}@ at %{public}@", description, deadline as NSDate)
                 workItem = DispatchWorkItem(qos: .utility, block: runBlock)
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + timeLeft, execute: workItem!)
             }

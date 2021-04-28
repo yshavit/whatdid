@@ -48,7 +48,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidFinishLaunching(_: Notification) {
-        wdlog(.info, "Starting whatdid with build %@", Version.pretty)
+        wdlog(.info, "Starting whatdid with build %{public}@", Version.pretty)
         #if UI_TEST
         wdlog(.info, "initializing UI test hooks")
         uiTestWindow = UiTestWindow()
@@ -137,7 +137,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         Prefs.$launchAtLogin.addListener {enabled in
             let success = SMLoginItemSetEnabled(launcherAppId as CFString, enabled)
-            wdlog(success ? .info : .warn, "SMLoginItemSetEnabled -> %d %@", enabled, success ? "successfully set" : "NOT set")
+            wdlog(success ? .info : .warn, "SMLoginItemSetEnabled -> %d, success=%d", enabled, success)
         }
 
         if isRunning {

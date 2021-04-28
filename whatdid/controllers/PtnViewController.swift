@@ -231,7 +231,7 @@ class PtnViewController: NSViewController {
         if let date = until as? Date {
             hooks?.snooze(until: date)
         } else {
-            wdlog(.error, "date not set up (was %@)", until.debugDescription)
+            wdlog(.error, "date not set up (was %{public}@)", until.debugDescription)
         }
     }
     
