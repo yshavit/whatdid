@@ -14,16 +14,14 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
+    - name: Will upload artifact
+      if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
+      run: echo "should_upload_app=yes" >> "$GITHUB_ENV"
     - uses: actions/checkout@v2
     - name: Set up Python 3.7
       uses: actions/setup-python@v2
       with:
         python-version: 3.7
-    - name: Verify Python version
-      run: python --version
-    - name: Will upload artifact
-      if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
-      run: echo "should_upload_app=yes" >> "$GITHUB_ENV"
     - name: Pip install
       run: |
         python -m pip install --upgrade pip
@@ -82,7 +80,7 @@ jobs:
       with:
         name: Whatdid.dmg
         path: build/Whatdid.dmg
-    - name: Upload logs
+    - name: Upload packaging logs
       uses: actions/upload-artifact@v2
       if: env.should_upload_app
       with:
