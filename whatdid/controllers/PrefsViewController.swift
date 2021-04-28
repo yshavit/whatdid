@@ -173,11 +173,11 @@ class PrefsViewController: NSViewController {
             }
             dateComponents.calendar = calendarForDateTimePickers
             dateComponents.timeZone = calendarForDateTimePickers.timeZone
-            wdlog(.debug, "Converting DateComponents to Date: %@", dateComponents.description)
+            wdlog(.debug, "Converting DateComponents to Date: %{public}@", dateComponents.description)
             if let date = dateComponents.date {
                 picker.dateValue = date
             } else {
-                wdlog(.warn, "Couldn't convert DateComponents to Date: %@", dateComponents.description)
+                wdlog(.warn, "Couldn't convert DateComponents to Date: %{public}@", dateComponents.description)
             }
         }
         setTimePicker(dailyReportTime, to: Prefs.dailyReportTime)

@@ -283,11 +283,11 @@ fileprivate class AutoCompletingFieldView: WhatdidTextField, NSTextViewDelegate,
         if popupManager.windowIsVisible {
             // Note: we shouldn't ever actually get here, but I'm putting it just in case.
             // If the popup is open, any click outside of it (including to this button) will close it.
-            wdlog(.warn, "Unexpectedly saw button press while options popup was open on %@", idForLogging)
+            wdlog(.warn, "Unexpectedly saw button press while options popup was open on %{public}@", idForLogging)
             popupManager.close()
         } else {
             if !(window?.makeFirstResponder(self) ?? false) {
-                wdlog(.error, "Couldn't make first responder: %@", idForLogging)
+                wdlog(.error, "Couldn't make first responder: %{public}@", idForLogging)
             }
             showOptions()
         }

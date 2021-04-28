@@ -25,7 +25,7 @@ class OpenCloseHelper<T: Hashable & Comparable> {
         if openItem == nil {
             if (reason == .scheduled) && isSnoozed {
                 pendingOpens[item] = reason
-                wdlog(.debug, "Deferring %@ because of snooze", requestDesc)
+                wdlog(.debug, "Deferring %{public}@ because of snooze", requestDesc)
             } else {
                 wdlog(.debug, "Acting on %@", requestDesc)
                 doOpen(item, reason)
@@ -43,7 +43,7 @@ class OpenCloseHelper<T: Hashable & Comparable> {
             // If we're already open, we shouldn't be able to get a manual open; the UI should prevent that.
             // We should check that condition (as we just did) to be safe and to let us write comprehensive unit tests,
             // but really it's just a weird corner case.
-            wdlog(.warn, "Tried to open %@ manually while %@ was already open", s(item), s(openItem!))
+            wdlog(.warn, "Tried to open %{public}@ manually while %{public}@ was already open", s(item), s(openItem!))
         }
     }
     
@@ -71,7 +71,7 @@ class OpenCloseHelper<T: Hashable & Comparable> {
             rescheduleOnClose = false
             // Schedule even if we're snoozed; if we're still snoozed when the schedule hits, then
             // it'll enqueue itself
-            wdlog(.debug, "OpenCloseHelper: scheduling the next ", s(item))
+            wdlog(.debug, "OpenCloseHelper: scheduling the next %{public}@", s(item))
             scheduler(item)
         }
         if !isSnoozed {
@@ -92,7 +92,7 @@ class OpenCloseHelper<T: Hashable & Comparable> {
     private func pullFromPending() {
         if let deferredOpenKey = pendingOpens.keys.sorted().first {
             rescheduleOnClose = pendingOpens.removeValue(forKey: deferredOpenKey)! == .scheduled
-            wdlog(.debug, "OpenCloseHelper: opening deferred %@, with next rescheduleOnClose = %d", s(deferredOpenKey), rescheduleOnClose)
+            wdlog(.debug, "OpenCloseHelper: opening deferred %{public}@, with next rescheduleOnClose = %d", s(deferredOpenKey), rescheduleOnClose)
             openItem = deferredOpenKey
             doOpen(deferredOpenKey, .scheduled)
         }

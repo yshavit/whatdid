@@ -34,7 +34,7 @@ class SubsequenceMatcher {
             } else {
                 for range in matchedRanges {
                     if (range.location < 0) || (range.location + range.length > string.count) {
-                        wdlog(.error, "bad range: %@ in %@", range.description, string)
+                        wdlog(.error, "bad range: %{public}@ in string of length %d", range.description, string.count)
                         return nil
                     }
                 }
