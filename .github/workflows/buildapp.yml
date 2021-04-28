@@ -34,6 +34,8 @@ jobs:
       run: |
         ./buildscripts/add-osx-cert.sh
         xcodebuild -scheme whatdid-release build archive -archivePath build/whatdid
+        pwd
+        ls -lh build/
       env:
         CERTIFICATES_P12: ${{ secrets.CERTIFICATES_P12 }}
         CERTIFICATES_P12_PASSWORD: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
@@ -75,7 +77,6 @@ jobs:
     - name: Create DMG
       run: |
         pwd
-        ls -lh
         ls -lh build/
         dmgbuild -s buildscripts/dmgbuild_settings.py -D app=build/whatdid.app "Whatdid" build/Whatdid.dmg
     - name: Upload app
