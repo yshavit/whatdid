@@ -5,10 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:
-    inputs:
-      stamp:
-        description: Enter "yes" to stamp this build after notarization.
+  workflow_dispatch: {}
 
 jobs:
   build:
@@ -48,7 +45,7 @@ jobs:
         notarization_request=$(jq <notarization-results.json -r '."notarization-upload".RequestUUID')
         echo "notarization_request=${notarization_request}" >> "$GITHUB_ENV"
     - name: Wait for notarization and stamp app
-      if: env.should_upload_app && github.event.inputs.stamp == 'yes'
+      if: env.should_upload_app
       run: |
         set -e -o pipefail
         cd build
