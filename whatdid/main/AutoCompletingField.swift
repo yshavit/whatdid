@@ -737,7 +737,7 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
             addSubview(labelPadding)
             labelPadding.anchorAllSides(to: self)
             
-            label = NSTextField(labelWithString: "")
+            label = NSTextFieldWithContinuationLine(wrappingLabelWithString: "")
             label.cell!.setAccessibilityRole(.textField)
             label.useAutoLayout()
             labelPadding.addSubview(label)
@@ -758,12 +758,12 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
                 return label.stringValue
             }
             set(value) {
-                label.stringValue = value
+                label.attributedStringValue = getAttributedString(for: value)
             }
         }
-        
+
         func setMatches(_ matched: [NSRange]) {
-            let attributedLabel = NSMutableAttributedString(string: stringValue)
+            let attributedLabel = getAttributedString(for: stringValue)
             matched.forEach {range in
                 attributedLabel.addAttributes(
                     [
@@ -775,6 +775,14 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
                     range: range)
             }
             label.attributedStringValue = attributedLabel
+        }
+        
+        func getAttributedString(for string: String) -> NSMutableAttributedString {
+            let s = NSMutableAttributedString(string: string)
+            let p = NSMutableParagraphStyle()
+            p.headIndent = (label.font?.pointSize ?? NSFont.systemFontSize) / 2
+            s.addAttribute(.paragraphStyle, value: p, range: NSMakeRange(0, s.length))
+            return s
         }
         
         var isSelected: Bool {
@@ -805,5 +813,34 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
                 highlightOverlay.isHidden = true
             }
         }
+    }
+    
+    class NSTextFieldWithContinuationLine: NSTextField {
+        
+        private static let padding = CGFloat(4.0)
+        
+        override func draw(_ dirtyRect: NSRect) {
+            super.draw(dirtyRect)
+            let myFrame = alignmentRect(forFrame: bounds)
+            
+            let top = myFrame.minY + firstBaselineOffsetFromTop * 1.25
+            let bottom = myFrame.maxY - lastBaselineOffsetFromBottom
+            
+            
+            if top < bottom {
+                if let context = NSGraphicsContext.current {
+                    context.cgContext.saveGState()
+                    
+                    context.cgContext.setStrokeColor(NSColor.controlShadowColor.cgColor)
+                    NSBezierPath.strokeLine(
+                        from: NSPoint(x: NSTextFieldWithContinuationLine.padding, y: top),
+                        to: NSPoint(x: NSTextFieldWithContinuationLine.padding, y: bottom))
+                    
+                    
+                    context.cgContext.restoreGState()
+                }
+            }
+        }
+        
     }
 }
