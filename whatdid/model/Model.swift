@@ -107,7 +107,6 @@ class Model {
                     .init(key: "lastUsed", ascending: false),
                     .init(key: "project", ascending: true)
                 ]
-                request.fetchLimit = 10
                 projects = try request.execute()
             } catch {
                 wdlog(.error, "couldn't load projects: %@", error as NSError)
@@ -131,7 +130,6 @@ class Model {
                     .init(key: "task", ascending: true)
                 ]
                 request.predicate = NSPredicate(format: "project.project = %@", project)
-                request.fetchLimit = 10
                 tasks = try request.execute()
             } catch {
                 wdlog(.error, "couldn't load projects: %@", error as NSError)
