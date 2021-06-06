@@ -17,15 +17,23 @@ class ScrollBarHelper {
     ///
     /// This init also registers a notification listener that will only be removed at deinit, so make sure to remove your reference
     /// to this instance when you're done with it.
-    init(on scroller: NSScroller, handler: @escaping (Bool) -> Void) {
+    init(on scroller: NSScroller, handler: @escaping (CGFloat) -> Void) {
+        func onOffHandler(_ isShown: Bool) {
+            if isShown {
+                let width = NSScroller.scrollerWidth(for: scroller.controlSize, scrollerStyle: scroller.scrollerStyle)
+                handler(width)
+            } else {
+                handler(0)
+            }
+        }
         observationRef = scroller.observe(
             \NSScroller.isHidden,
-            changeHandler: {scroller, _ in ScrollBarHelper.handle(on: scroller, handler) })
+            changeHandler: {scroller, _ in ScrollBarHelper.handle(on: scroller, onOffHandler) })
         notificationRef = NotificationCenter.default.addObserver(
             forName: NSScroller.preferredScrollerStyleDidChangeNotification,
             object: nil,
             queue: OperationQueue.main,
-            using: {_ in ScrollBarHelper.handle(on: scroller, handler)})
+            using: {_ in ScrollBarHelper.handle(on: scroller, onOffHandler)})
     }
     
     private static func handle(on scroller: NSScroller, _ handler: @escaping (Bool) -> Void) {

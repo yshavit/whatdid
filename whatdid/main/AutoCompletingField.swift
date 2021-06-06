@@ -335,11 +335,14 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
     static let HEIGHT_FROM_BOTTOM_OF_FIELD: CGFloat = 2
     static let GROUPING_LABEL_TAG = 1
     private var activeEventMonitors = [Any?]()
+    private var scrollBarHelper: ScrollBarHelper?
     private let optionsPopup: NSPanel
     private let parent: AutoCompletingField
+    private var docViewHorizontalConstraint: NSLayoutConstraint!
     private var matchedSectionSeparators = [NSView]()
     private let mainStack: NSStackView
     private var setWidth: ((CGFloat) -> Void)!
+    private var declaredWidth: CGFloat = 100 // any ol' number will do; we'll set this in show()
     var scrollView: NSScrollView!
     
     init(parent: AutoCompletingField) {
@@ -383,11 +386,22 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
         // Also create a constraint for the width, which we'll set as we open the popup.
         scroll.contentView.heightAnchor.constraint(lessThanOrEqualTo: mainStack.heightAnchor).isActive = true
         scroll.heightAnchor.constraint(lessThanOrEqualToConstant: 150).isActive = true
-        let widthConstraint = scroll.contentView.widthAnchor.constraint(equalToConstant: 100) // any ol' value will do
-        widthConstraint.isActive = true
-        setWidth = { widthConstraint.constant = $0 } // ha, a mutable constant!
+        docViewHorizontalConstraint = mainStack.widthAnchor.constraint(equalToConstant: declaredWidth)
+        docViewHorizontalConstraint.isActive = true
+        docViewHorizontalConstraint.priority = .required
+        docViewHorizontalConstraint.identifier = "DOC WIDTH"
+        
+        let scrollWidthConstraint = scroll.widthAnchor.constraint(equalToConstant: declaredWidth)
+        scrollWidthConstraint.isActive = true
+        scrollWidthConstraint.priority = .required
+        scrollWidthConstraint.identifier = "SCROLL WIDTH"
+        
+        setWidth = {
+            scrollWidthConstraint.constant = $0
+            self.declaredWidth = $0
+            self.docViewHorizontalConstraint.constant = $0
+        }
 
-        scroll.contentView.widthAnchor.constraint(lessThanOrEqualTo: mainStack.widthAnchor).isActive = true
         optionsPopup.contentView = scroll
         optionsPopup.level = .popUpMenu
         optionsPopup.setAccessibilityChildren(nil)
@@ -572,6 +586,7 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
         guard !windowIsVisible else {
             return
         }
+        setUpScrollBarHelpers()
         setWidth(minWidth)
         var popupOrigin = atTopLeft
         popupOrigin.y -= (optionsPopup.frame.height + PopupManager.HEIGHT_FROM_BOTTOM_OF_FIELD)
@@ -592,7 +607,16 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
             })
     }
     
+    private func setUpScrollBarHelpers() {
+        if let scroller = scrollView.verticalScroller {
+            scrollBarHelper = ScrollBarHelper(on: scroller) {
+                self.docViewHorizontalConstraint.constant = self.declaredWidth - $0
+            }
+        }
+    }
+    
     func windowWillClose(_ notification: Notification) {
+        scrollBarHelper = nil
         optionFields.forEach { $0.isSelected = false }
         activeEventMonitors.compactMap{$0}.forEach { NSEvent.removeMonitor($0) }
         activeEventMonitors.removeAll()

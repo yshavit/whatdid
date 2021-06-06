@@ -57,13 +57,8 @@ class DayEndReportController: NSViewController {
     
     override func viewWillAppear() {
         if let scroller = projectsScroll.verticalScroller {
-            scrollBarHelper = ScrollBarHelper(on: scroller) {shows in
-                if shows {
-                    let width = NSScroller.scrollerWidth(for: scroller.controlSize, scrollerStyle: scroller.scrollerStyle)
-                    self.projectsWidthConstraint.constant = width
-                } else {
-                    self.projectsWidthConstraint.constant = 0
-                }
+            scrollBarHelper = ScrollBarHelper(on: scroller) {
+                self.projectsWidthConstraint.constant = $0
             }
         }
         
