@@ -6,8 +6,6 @@ class DayStartController: NSViewController, NSTextFieldDelegate, CloseConfirmer 
     
     @IBOutlet var saveButton: NSButton!
     @IBOutlet var goals: NSStackView!
-    @IBOutlet var goalPrototype: NSStackView!
-    private var goalTemplate: Data!
     private var saveButtonOriginalText: String?
     /// tri-value bool; nil means "prompt"
     private var saveGoalsOnExit: Bool?
