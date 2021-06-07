@@ -5,10 +5,12 @@ import Cocoa
 class DayStartController: NSViewController, NSTextFieldDelegate, CloseConfirmer {
     
     @IBOutlet var saveButton: NSButton!
+    @IBOutlet weak var saveButtonTip: NSTextField!
     @IBOutlet var goals: NSStackView!
     private var saveButtonOriginalText: String?
     /// tri-value bool; nil means "prompt"
     private var saveGoalsOnExit: Bool?
+    private var commandStateListener: Any?
     
     var scheduler: Scheduler = DefaultScheduler.instance
     
@@ -31,6 +33,12 @@ class DayStartController: NSViewController, NSTextFieldDelegate, CloseConfirmer 
     }
     
     override func viewWillAppear() {
+        // Listen for modifier flags, and set the save button's key-equivalent to the enter key iff the Command button is pressed
+        commandStateListener = NSEvent.addLocalMonitorForEvents(matching: .flagsChanged) {event in
+            let commandKeyDown = (event.modifierFlags.contains(.command))
+            self.saveButton.keyEquivalent = ((commandKeyDown && self.hasGoalsToSave) ? "\r" : "")
+            return event
+        }
         setSaveButtonText()
         setUpNewSessionPrompt(
             scheduler: scheduler,
@@ -39,6 +47,10 @@ class DayStartController: NSViewController, NSTextFieldDelegate, CloseConfirmer 
     }
     
     override func viewWillDisappear() {
+        if let listenerToRemove = commandStateListener {
+            NSEvent.removeMonitor(listenerToRemove)
+            commandStateListener = nil
+        }
         let model = AppDelegate.instance.model
         let _ = model.createNewSession()
         if let shouldSave = saveGoalsOnExit {
@@ -91,7 +103,7 @@ class DayStartController: NSViewController, NSTextFieldDelegate, CloseConfirmer 
             let isKeyDown = (event.type == .keyDown)
             let isEnterKey = (event.keyCode == 36)
             let commandKeyPressed = event.modifierFlags.contains(.command)
-            if isKeyDown && isEnterKey && commandKeyPressed {
+            if isKeyDown && isEnterKey && commandKeyPressed && (saveButton.keyEquivalent == "\r") {
                 saveButton(self)
                 return true
             }
@@ -119,12 +131,19 @@ class DayStartController: NSViewController, NSTextFieldDelegate, CloseConfirmer 
         return goalEntries.last != entry
     }
     
+    private var hasGoalsToSave: Bool {
+        goalEntries.contains(where: {!$0.goalText.isEmpty})
+    }
+    
     private func setSaveButtonText() {
-        if goalEntries.contains(where: {!$0.goalText.isEmpty}) {
+        let showSaveText = hasGoalsToSave
+        if showSaveText {
             saveButton.title = saveButtonOriginalText ?? "Save"
         } else {
             saveButton.title = "Dismiss without setting goals"
+            saveButton.keyEquivalent = ""
         }
+        saveButtonTip.isHidden = !showSaveText
     }
     
     private class GoalEntryField: NSStackView {
