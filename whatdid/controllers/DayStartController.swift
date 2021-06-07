@@ -86,6 +86,19 @@ class DayStartController: NSViewController, NSTextFieldDelegate, CloseConfirmer 
             onComplete: field.grabFocus)
     }
     
+    func control(_ control: NSControl, textView: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
+        if let event = NSApp.currentEvent {
+            let isKeyDown = (event.type == .keyDown)
+            let isEnterKey = (event.keyCode == 36)
+            let commandKeyPressed = event.modifierFlags.contains(.command)
+            if isKeyDown && isEnterKey && commandKeyPressed {
+                saveButton(self)
+                return true
+            }
+        }
+        return false
+    }
+    
     func controlTextDidChange(_ obj: Notification) {
         setSaveButtonText()
     }
