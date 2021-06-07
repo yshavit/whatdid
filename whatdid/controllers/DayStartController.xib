@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="DayStartController" customModule="whatdid" customModuleProvider="target">
             <connections>
-                <outlet property="goalPrototype" destination="HL2-Gf-03K" id="J4w-FP-Wlp"/>
-                <outlet property="goalTemplate" destination="HL2-Gf-03K" id="tMq-Ss-X1i"/>
                 <outlet property="goals" destination="p1s-lm-L9X" id="eto-I6-JeK"/>
                 <outlet property="saveButton" destination="wyH-3V-01x" id="lwH-5U-zb7"/>
+                <outlet property="saveButtonTip" destination="eeb-WL-rG5" id="Eg1-oR-zmW"/>
                 <outlet property="view" destination="Yo6-oc-a46" id="h41-Uh-71X"/>
             </connections>
         </customObject>
@@ -75,16 +74,40 @@
                     <rect key="frame" x="140" y="30" width="96" height="5"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                 </box>
-                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wyH-3V-01x">
-                    <rect key="frame" x="1" y="1" width="64" height="32"/>
-                    <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WPJ-ka-FdT">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="saveButton:" target="-2" id="Bue-J0-RMq"/>
-                    </connections>
-                </button>
+                <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ywk-ef-BNh">
+                    <rect key="frame" x="8" y="8" width="129" height="20"/>
+                    <subviews>
+                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wyH-3V-01x">
+                            <rect key="frame" x="-7" y="-7" width="64" height="32"/>
+                            <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WPJ-ka-FdT">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="saveButton:" target="-2" id="Bue-J0-RMq"/>
+                            </connections>
+                        </button>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eeb-WL-rG5">
+                            <rect key="frame" x="56" y="5" width="75" height="11"/>
+                            <textFieldCell key="cell" lineBreakMode="clipping" title="⌘-Enter to save" id="5Li-AO-gb4">
+                                <font key="font" metaFont="miniSystem"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="eeb-WL-rG5" firstAttribute="centerY" secondItem="wyH-3V-01x" secondAttribute="centerY" id="EWf-rh-7ty"/>
+                    </constraints>
+                    <visibilityPriorities>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                    </visibilityPriorities>
+                    <customSpacing>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                    </customSpacing>
+                </stackView>
             </subviews>
             <edgeInsets key="edgeInsets" left="8" right="8" top="8" bottom="8"/>
             <constraints>

@@ -79,6 +79,32 @@ class GoalsTest: AppUITestBase {
         }
     }
     
+    func testCommandEnter() {
+        let goals = openMorningGoals()
+        
+        group("first goal") {
+            goals.textFields.element(boundBy: 0).typeText("first\r")
+            XCTAssertEqual(2, goals.textFields.count)
+            XCTAssertEqual("Save", goals.buttons.allElementsBoundByIndex.last?.title)
+        }
+        group("second goal") {
+            goals.textFields.element(boundBy: 1).typeText("second")
+            XCTAssertEqual(2, goals.textFields.count)
+            XCTAssertEqual("Save", goals.buttons.allElementsBoundByIndex.last?.title)
+            goals.typeKey(.enter, modifierFlags: .command)
+        }
+        group("confirm goals closed") {
+            waitForTransition(of: .morningGoals, toIsVisible: false)
+        }
+        group("goals are in PTN") {
+            clickStatusMenu()
+            waitForTransition(of: .ptn, toIsVisible: true)
+            let ptnGoals = openWindow!.groups["Goals for today"]
+            XCTAssertEqual(["first", "second"], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.title}))
+            XCTAssertEqual([false, false], ptnGoals.checkBoxes.allElementsBoundByIndex.map({$0.value as? Bool}))
+        }
+    }
+    
     /// Multiple goals, and rm'ing them as well.
     func testEditingMultipleGoals() {
         let goals = openMorningGoals()
