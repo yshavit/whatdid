@@ -203,6 +203,34 @@ class GoalsTest: AppUITestBase {
         }
     }
     
+    func testGoalsInPtnLayout() {
+        let goalsLabelWidthFresh = group("open ptn") {() -> CGFloat in
+            let ptn = openPtn().window
+            let goalsBar = findGoalsBar(within: ptn)
+            return goalsBar.staticTexts["Goals"].frame.width
+        }
+        let goalsLabelWidthAfterAdding = group("add goals") {() -> CGFloat in
+            let goalsBar = findGoalsBar(within: find(.ptn))
+            goalsBar.buttons["Add new goal"].click()
+            goalsBar.children(matching: .textField).element.typeText(
+                "the quick brown fox jumped over the lazy dog "
+                    + "the quick brown fox jumped over the\r")
+            goalsBar.buttons["Add new goal"].click()
+            goalsBar.children(matching: .textField).element.typeText("a\r")
+            return goalsBar.staticTexts["Goals"].frame.width
+        }
+        XCTAssertClose(goalsLabelWidthAfterAdding, goalsLabelWidthFresh, within: 2.0)
+        print("fresh: \(goalsLabelWidthFresh)")
+        print("after adding: \(goalsLabelWidthAfterAdding)")
+        let goalsLabelWidthAfterReopening = group("close and re-open ptn") {() -> CGFloat in
+            checkForAndDismiss(window: .ptn)
+            let ptn = openPtn().window
+            let goalsBar = findGoalsBar(within: ptn)
+            return goalsBar.staticTexts["Goals"].frame.width
+        }
+        XCTAssertClose(goalsLabelWidthAfterReopening, goalsLabelWidthFresh, within: 2.0)
+    }
+    
     func testGoalAddedLaterInDay() {
         let goals = openMorningGoals()
         group("first goal") {
@@ -213,7 +241,7 @@ class GoalsTest: AppUITestBase {
         let goalsBar = group("goal right on border") {() -> XCUIElement in
             setTimeUtc(h: 08, m: 00)
             let ptn = wait(for: .ptn)
-            let goalsBar = ptn.children(matching: .group).matching(identifier: "Goals for today").element
+            let goalsBar = findGoalsBar(within: ptn)
             goalsBar.buttons["Add new goal"].click()
             goalsBar.children(matching: .textField).element.typeText("goal 2\r")
             return goalsBar
@@ -450,6 +478,10 @@ class GoalsTest: AppUITestBase {
             clickStatusMenu()
             handleLongSessionPrompt(on: .ptn, .startNewSession)
         }
+    }
+    
+    private func findGoalsBar(within element: XCUIElement) -> XCUIElement {
+        return element.children(matching: .group).matching(identifier: "Goals for today").element
     }
 
 }
