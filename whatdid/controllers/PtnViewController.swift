@@ -125,7 +125,9 @@ class PtnViewController: NSViewController {
         }
         snoozeButton.isEnabled = true
         if let alreadySnoozedUntil = hooks?.snoozedUntil {
-            snoozeButton.title = "Snoozing until \(TimeUtil.formatSuccinctly(date: alreadySnoozedUntil))..."
+            snoozeButton.attributedTitle = NSAttributedString(
+                string: "Snoozing until \(TimeUtil.formatSuccinctly(date: alreadySnoozedUntil))",
+                attributes: [.foregroundColor: NSColor.red])
             snoozeExtraOptions.isEnabled = false
             scheduler.schedule("Snooze options refresh", at: alreadySnoozedUntil, updateSnoozeButton)
         } else {
