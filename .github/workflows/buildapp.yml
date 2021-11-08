@@ -11,14 +11,22 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
-    - name: Will upload artifact
-      if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
-      run: echo "should_upload_app=yes" >> "$GITHUB_ENV"
     - uses: actions/checkout@v2
     - name: Set up Python 3.7
       uses: actions/setup-python@v2
       with:
         python-version: 3.7
+    - name: Check whether should upload artifact
+      if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
+      run: echo "should_upload_app=yes" >> "$GITHUB_ENV"
+    - name: Check whether should notarize
+      run: |
+        if [[ -n '${{ secrets.APPLE_ID}}' ]]; then
+          echo "should_notarize_app=yes" >> "$GITHUB_ENV"
+        fi
+    - name: Will notarize
+      if: env.should_notarize_app
+      run: echo "Will notarize app"
     - name: Pip install
       run: |
         python -m pip install --upgrade pip
@@ -32,11 +40,13 @@ jobs:
       env:
         CERTIFICATES_P12: ${{ secrets.CERTIFICATES_P12 }}
         CERTIFICATES_P12_PASSWORD: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
-    - name: Notarize and prepare artifacts for upload
-      if: env.should_upload_app
+    - name: Package
       run: |
         set -e -o pipefail
         xcodebuild -exportArchive -archivePath build/whatdid.xcarchive -exportPath build -exportOptionsPlist buildscripts/archive-export.plist
+    - name: Request notarization
+      if: env.should_upload_app && env.should_notarize_app
+      run: |
         cd build
         ditto -c -k --keepParent whatdid.app whatdid.zip
         mkdir logs
@@ -45,7 +55,7 @@ jobs:
         notarization_request=$(jq <notarization-results.json -r '."notarization-upload".RequestUUID')
         echo "notarization_request=${notarization_request}" >> "$GITHUB_ENV"
     - name: Wait for notarization and stamp app
-      if: env.should_upload_app
+      if: env.should_upload_app && env.should_notarize_app
       run: |
         set -e -o pipefail
         cd build
@@ -79,7 +89,7 @@ jobs:
         path: build/Whatdid.dmg
     - name: Upload packaging logs
       uses: actions/upload-artifact@v2
-      if: env.should_upload_app
+      if: env.should_upload_app && env.should_notarize_app
       with:
         name: packaging-logs
         path: build/logs
