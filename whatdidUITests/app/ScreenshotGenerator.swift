@@ -126,7 +126,7 @@ class ScreenshotGenerator: AppUITestBase {
     
     func readEntries() -> [FlatEntry] {
         let realNow = Date() // note! Unlike most of the UI test dates, this is actual, real, wall-clock-now.
-        let cal = DefaultScheduler.instance.calendar
+        let cal = Calendar.current
         let lastMidnight = cal.date(bySettingHour: 00, minute: 00, second: 00, of: realNow)!
         var lastEntryEnd: Date? = nil
         
@@ -184,7 +184,7 @@ class ScreenshotGenerator: AppUITestBase {
     }
     
     func duplicateToTomorrow(_ entries: [FlatEntry]) -> [FlatEntry] {
-        let cal = DefaultScheduler.instance.calendar
+        let cal = Calendar.current
         let yesterdayEntries = entries.map { e in
             return FlatEntry(
                 from: cal.date(byAdding: .day, value: -1, to: e.from)!,
