@@ -169,8 +169,8 @@
 		7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeZone+Helpers.swift"; sourceTree = "<group>"; };
 		7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockSchedulerTest.swift; sourceTree = "<group>"; };
 		7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextField+Helpers.swift"; sourceTree = "<group>"; };
-		7E611953277984E700C67E0D /* ExtraStringHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExtraStringHelpers.swift; path = ../../../../Documents/ExtraStringHelpers.swift; sourceTree = "<group>"; };
-		7E6119552779856C00C67E0D /* ExtraStringHelpersTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExtraStringHelpersTest.swift; path = ../../../../Documents/ExtraStringHelpersTest.swift; sourceTree = "<group>"; };
+		7E611953277984E700C67E0D /* ExtraStringHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExtraStringHelpers.swift; path = ExtraStringHelpers.swift; sourceTree = "<group>"; };
+		7E6119552779856C00C67E0D /* ExtraStringHelpersTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExtraStringHelpersTest.swift; path = ExtraStringHelpersTest.swift; sourceTree = "<group>"; };
 		7E64F02A24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIElementQuery+Helpers.swift"; sourceTree = "<group>"; };
 		7E6C98D12503EF4900A712EB /* DelegatingScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelegatingScheduler.swift; sourceTree = "<group>"; };
 		7E6C98D32503F5C600A712EB /* DelegatingSchedulerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelegatingSchedulerTest.swift; sourceTree = "<group>"; };
