@@ -50,8 +50,9 @@ class DayEndReportController: NSViewController {
         let now = scheduler.now
         entryStartDatePicker.timeZone = scheduler.timeZone // mostly useful for UI tests, which use a fake tz
         entryStartDatePicker.maxDate = now
-        entryStartDatePicker.dateValue = thisMorning(assumingNow: now)
-        
+        entryStartDatePicker.dateValue = Prefs.dayStartTime.map {hh, mm in
+            TimeUtil.dateForTime(.previous, hh: hh, mm: mm, assumingNow: now)
+        }
         updateEntries()
     }
     
@@ -72,12 +73,6 @@ class DayEndReportController: NSViewController {
     
     override func viewWillDisappear() {
         scrollBarHelper = nil
-    }
-    
-    func thisMorning(assumingNow now: Date) -> Date {
-        Prefs.dayStartTime.map {hh, mm in
-            return TimeUtil.dateForTime(.previous, hh: hh, mm: mm, assumingNow: now)
-        }
     }
     
     @IBAction func userChangedEntryStartDate(_ sender: Any) {
@@ -147,7 +142,6 @@ class DayEndReportController: NSViewController {
         
         let projects = Model.GroupedProjects(from: AppDelegate.instance.model.listEntries(from: start, to: end))
         let allProjectsTotalTime = projects.totalTime
-        let todayStart = thisMorning(assumingNow: scheduler.now)
         projects.forEach {project in
             // The vstack group for the whole project
             let projectVStack = NSStackView()
@@ -210,7 +204,7 @@ class DayEndReportController: NSViewController {
                     add: taskDetailsGridBox,
                     to: tasksStack,
                     beforeShowing: {
-                        self.details(for: task, to: taskDetailsGrid, relativeTo: todayStart)
+                        self.details(for: task, to: taskDetailsGrid, relativeTo: start)
                     },
                     afterHiding: {
                         while taskDetailsGrid.numberOfRows > 0 {
