@@ -9,6 +9,7 @@ class DummyScheduler: Scheduler {
     private var tasks = [DummyScheduledTask]()
     let now = Date()
     let timeZone = TimeZone.current
+    let calendar = Calendar.current
     
     func runAllScheduled() {
         for task in tasks {

@@ -194,7 +194,7 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
     }
     
     func populateJsonFlatEntryField() {
-        let entries = AppDelegate.instance.model.listEntries(since: Date.distantPast)
+        let entries = AppDelegate.instance.model.listEntries(from: Date.distantPast, to: Date.distantFuture)
         entriesField.stringValue = FlatEntry.serialize(entries)
     }
     
@@ -205,7 +205,7 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
     private func setEntriesViaJson(string: String) {
         let entries = FlatEntry.deserialize(from: string)
         AppDelegate.instance.resetModel()
-        entries.forEach {AppDelegate.instance.model.add($0, andThen: {})}
+        entries.reversed().forEach {AppDelegate.instance.model.add($0, andThen: {})}
     }
     
     func controlTextDidEndEditing(_ obj: Notification) {

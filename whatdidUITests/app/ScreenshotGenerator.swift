@@ -19,7 +19,7 @@ class ScreenshotGenerator: AppUITestBase {
 
     func testPtnAndDailyReport() {
         let lastEntryEpochSeconds = group("set up entries") {() -> Int in
-            entriesHook = readEntries()
+            entriesHook = duplicateToTomorrow(readEntries())
             let lastEntry = entriesHook.last!
             return Int(lastEntry.to.timeIntervalSince1970)
         }
@@ -126,7 +126,7 @@ class ScreenshotGenerator: AppUITestBase {
     
     func readEntries() -> [FlatEntry] {
         let realNow = Date() // note! Unlike most of the UI test dates, this is actual, real, wall-clock-now.
-        let cal = Calendar.current
+        let cal = DefaultScheduler.instance.calendar
         let lastMidnight = cal.date(bySettingHour: 00, minute: 00, second: 00, of: realNow)!
         var lastEntryEnd: Date? = nil
         
@@ -181,6 +181,20 @@ class ScreenshotGenerator: AppUITestBase {
             return failAndReturn(with: "invalid data in resource")
         }
         return string
+    }
+    
+    func duplicateToTomorrow(_ entries: [FlatEntry]) -> [FlatEntry] {
+        let cal = DefaultScheduler.instance.calendar
+        let yesterdayEntries = entries.map { e in
+            return FlatEntry(
+                from: cal.date(byAdding: .day, value: -1, to: e.from)!,
+                to: cal.date(byAdding: .day, value: -1, to: e.to)!,
+                project: e.project.rot13,
+                task: e.task.rot13,
+                notes: e.notes?.rot13)
+        }
+        let combined = yesterdayEntries + entries
+        return combined
     }
     
     func failAndReturn<T>(with message: String) -> T {

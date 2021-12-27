@@ -99,43 +99,53 @@ class DayEndReportController: NSViewController {
             })
     }
     
-    private func updateGoals(since startTime: Date) {
+    private func updateGoals(from startDate: Date, to endDate: Date) {
         goalsSummaryStack.subviews.forEach { $0.removeFromSuperview() }
-        
-        let oneDayView = startTime >= Prefs.dayStartTime.map {hh, mm in TimeUtil.dateForTime(.previous, hh: hh, mm: mm)}
-        let goals = AppDelegate.instance.model.listGoals(since: startTime)
+        let goals = AppDelegate.instance.model.listGoals(from: startDate, to: endDate)
+        let isTodayView = startDate == Prefs.dayStartTime.map {hh, mm in TimeUtil.dateForTime(.previous, hh: hh, mm: mm)}
         let completed = goals.filter({$0.isCompleted}).count
         
         let summaryText: String
         if goals.isEmpty {
-            summaryText = oneDayView ? "No goals for today." : "No goals for this time range."
+            summaryText = isTodayView ? "No goals for today." : "No goals for this day."
         } else {
             summaryText = "Completed \(completed.pluralize("goal", "goals")) out of \(goals.count)."
         }
         goalsSummaryStack.addArrangedSubview(NSTextField(labelWithString: summaryText))
         
-        if !goals.isEmpty {
-            if oneDayView {
-                goals.map(GoalsView.from(_:)).forEach(goalsSummaryStack.addArrangedSubview(_:))
-            } else {
-                goalsSummaryStack.addArrangedSubview(NSTextField(labelWithAttributedString: NSAttributedString(
-                    string: "(not listing them, because you selected more than one day)",
-                    attributes: [
-                        NSAttributedString.Key.font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
-                        NSAttributedString.Key.obliqueness: 0.15
-                    ]
-                )))
+        goals.map(GoalsView.from(_:)).forEach(goalsSummaryStack.addArrangedSubview(_:))
+    }
+    
+    private var reportEndpoints: (Date, Date) {
+        get {
+            let pickedDate = entryStartDatePicker.dateValue
+            let (tryStart, tryEnd) = Prefs.dayStartTime.map {hh, mm -> (Date?, Date?) in
+                let cal = DefaultScheduler.instance.calendar
+                guard let start = cal.date(bySettingHour: hh, minute: mm, second: 00, of: pickedDate) else {
+                    wdlog(.warn, "Can't get start of day from %@", pickedDate as NSDate)
+                    return (nil, nil)
+                }
+                let end = cal.date(byAdding: .day, value: 1, to: start)
+                if end == nil {
+                    wdlog(.warn, "Can't add 1 day to %@", start as NSDate)
+                }
+                return (start, end)
             }
+            // If we can't get good start/end times, just use the picker's time for start, and +24h for end
+            let start = tryStart ?? pickedDate
+            let end = tryEnd ?? start.addingTimeInterval(86400)
+            return (start, end)
         }
     }
     
     private func updateEntries() {
-        let since = entryStartDatePicker.dateValue
-        wdlog(.debug, "Updating entries since %@", since as NSDate)
-        updateGoals(since: since)
+        let (start, end) = reportEndpoints
+        wdlog(.debug, "Updating entries from %@ to %@", start as NSDate, end as NSDate)
+        
+        updateGoals(from: start, to: end)
         projectsContainer.subviews.forEach {$0.removeFromSuperview()}
         
-        let projects = Model.GroupedProjects(from: AppDelegate.instance.model.listEntries(since: since))
+        let projects = Model.GroupedProjects(from: AppDelegate.instance.model.listEntries(from: start, to: end))
         let allProjectsTotalTime = projects.totalTime
         let todayStart = thisMorning(assumingNow: scheduler.now)
         projects.forEach {project in

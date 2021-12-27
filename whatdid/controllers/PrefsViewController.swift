@@ -156,7 +156,7 @@ class PrefsViewController: NSViewController {
     
     @IBOutlet var globalShortcutHolder: NSView!
     
-    let calendarForDateTimePickers = Calendar.current // doesn't actually matter what it is, so long as it's consistent
+    let calendarForDateTimePickers = DefaultScheduler.instance.calendar
     
     private func setUpGeneralPanel() {
         let recorder = KeyboardShortcuts.RecorderCocoa(for: .grabFocus)

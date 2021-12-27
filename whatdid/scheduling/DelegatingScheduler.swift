@@ -19,6 +19,10 @@ class DelegatingScheduler: Scheduler {
         delegate.timeZone
     }
     
+    var calendar: Calendar {
+        delegate.calendar
+    }
+    
     /// The number of tasks currently being tracked by this scheduler. Intended for testing (to ensure there are no memory leaks).
     var tasksCount: Int {
         return tasks.count

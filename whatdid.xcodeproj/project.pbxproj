@@ -27,6 +27,8 @@
 		7E51DA09250BF5C60088864F /* TimeZone+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */; };
 		7E579F702503E2920055D9F6 /* SystemClockSchedulerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */; };
 		7E5EFA272619B14A00E7834D /* NSTextField+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */; };
+		7E611954277984E700C67E0D /* ExtraStringHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E611953277984E700C67E0D /* ExtraStringHelpers.swift */; };
+		7E6119562779856C00C67E0D /* ExtraStringHelpersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6119552779856C00C67E0D /* ExtraStringHelpersTest.swift */; };
 		7E64F02B24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E64F02A24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift */; };
 		7E6C98D22503EF4900A712EB /* DelegatingScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6C98D12503EF4900A712EB /* DelegatingScheduler.swift */; };
 		7E6C98D42503F5C600A712EB /* DelegatingSchedulerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6C98D32503F5C600A712EB /* DelegatingSchedulerTest.swift */; };
@@ -167,6 +169,8 @@
 		7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeZone+Helpers.swift"; sourceTree = "<group>"; };
 		7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockSchedulerTest.swift; sourceTree = "<group>"; };
 		7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextField+Helpers.swift"; sourceTree = "<group>"; };
+		7E611953277984E700C67E0D /* ExtraStringHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExtraStringHelpers.swift; path = ../../../../Documents/ExtraStringHelpers.swift; sourceTree = "<group>"; };
+		7E6119552779856C00C67E0D /* ExtraStringHelpersTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExtraStringHelpersTest.swift; path = ../../../../Documents/ExtraStringHelpersTest.swift; sourceTree = "<group>"; };
 		7E64F02A24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIElementQuery+Helpers.swift"; sourceTree = "<group>"; };
 		7E6C98D12503EF4900A712EB /* DelegatingScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelegatingScheduler.swift; sourceTree = "<group>"; };
 		7E6C98D32503F5C600A712EB /* DelegatingSchedulerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelegatingSchedulerTest.swift; sourceTree = "<group>"; };
@@ -579,6 +583,8 @@
 				7E6F2E6C24F38D9E008874FE /* XCTestCase+Helpers.swift */,
 				7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */,
 				7E64F02A24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift */,
+				7E611953277984E700C67E0D /* ExtraStringHelpers.swift */,
+				7E6119552779856C00C67E0D /* ExtraStringHelpersTest.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -907,6 +913,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7EF58FA22584972F002F9604 /* UITestCommonConsts.swift in Sources */,
+				7E6119562779856C00C67E0D /* ExtraStringHelpersTest.swift in Sources */,
 				7EDD2BC62616EFCB005E6A4B /* TutorialTest.swift in Sources */,
 				7EF8B9FD2616BCEF00834866 /* AppUITestBase.swift in Sources */,
 				7EEF62E2261964C700528000 /* PrefsUITest.swift in Sources */,
@@ -917,6 +924,7 @@
 				7E64F02B24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift in Sources */,
 				7EF8BA072616C77A00834866 /* GoalsTest.swift in Sources */,
 				7E8C04FA23714F0800A0C3A6 /* ComponentUITests.swift in Sources */,
+				7E611954277984E700C67E0D /* ExtraStringHelpers.swift in Sources */,
 				7E1F9060250C5CC500992B7F /* TimeZone+Helpers.swift in Sources */,
 				7EBE61F124DD2739000B2CB3 /* PtnViewControllerTest.swift in Sources */,
 				7E6F2E6D24F38D9E008874FE /* XCTestCase+Helpers.swift in Sources */,
