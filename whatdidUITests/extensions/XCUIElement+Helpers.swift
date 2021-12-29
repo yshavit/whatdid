@@ -65,12 +65,11 @@ extension XCUIElement {
         switch method {
         case .builtin:
             click()
-        case .frame(let xInlay, let yInlay):
+        case .frame(let xInlay, let yInlay, let xExtraOffset, let yExtraOffset):
             let myFrame = frame
             let point = CGPoint(
-                x: myFrame.minX + (frame.width * xInlay),
-                y: myFrame.minY + (frame.height * yInlay))
-            
+                x: myFrame.minX + (frame.width * xInlay) + xExtraOffset,
+                y: myFrame.minY + (frame.height * yInlay) + yExtraOffset)
             XCTestCase.clickEvent(.leftMouseDown, at: point, with: [])
             XCTestCase.clickEvent(.leftMouseUp, at: point, with: [])
         }
@@ -163,7 +162,7 @@ enum ElementClickMethod {
     /// The events are at a point that's `xInlay`% into the frame by width, and `yInlay`% by height.
     /// For instance, to click right in the middle (the default), use `(0.5, 0.5)`. To click near the top-left
     /// of the element, you might do smoething like (0.1, 0.1).
-    case frame(xInlay: CGFloat=0.5, yInlay: CGFloat=0.5)
+    case frame(xInlay: CGFloat=0.5, yInlay: CGFloat=0.5, xExtraOffset: CGFloat=0, yExtraOffset: CGFloat=0)
 }
 
 extension XCUIElement.ElementType {

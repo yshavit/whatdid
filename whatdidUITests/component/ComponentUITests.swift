@@ -163,6 +163,110 @@ class ComponentUITests: XCTestCase {
             createdLabels.allElementsBoundByIndex.map({$0.label}))
     }
     
+    func testDateRangePicker() {
+        use("DateRangePicker")
+        func checkReportedRange(from: String, to: String, diff: String) {
+            XCTAssertEqual(
+                from,
+                testWindow.staticTexts["result_start"].stringValue)
+            XCTAssertEqual(
+                to,
+                testWindow.staticTexts["result_end"].stringValue)
+            XCTAssertEqual(
+                diff,
+                testWindow.staticTexts["result_diff"].stringValue)
+        }
+        let pickerLocations = group("calibrate picker coordinates") { () -> [(CoordinateInfo, YearMonthDay)] in
+            testWindow.checkBoxes["show_calendar_calibration"].click()
+            let pickerLocations = findDatePickerBoxes(in: testWindow.datePickers["calendar_calibration"])
+            testWindow.checkBoxes["show_calendar_calibration"].click()
+            return pickerLocations
+        }
+        
+        let pickerButton = testWindow.popUpButtons["picker"]
+        group("initial state") {
+            checkReportedRange(from: "1969-12-31T09:00:00+02:00", to: "1970-01-01T09:00:00+02:00", diff: "1d 0h 0m")
+            XCTAssertEqual("today", pickerButton.stringValue)
+        }
+        group("initial selection") {
+            pickerButton.click()
+            XCTAssertEqual(
+                ["today", "yesterday", "custom"],
+                pickerButton.menuItems.allElementsBoundByIndex.map({$0.title}))
+        }
+        
+        // Note: because of how we find the coordinate + YMDs, we assume no month-boundaries.
+        // That is, the YYYY and MM are the same, and only the day increments.
+        // We'll also assume everything is in December, for simplicity.
+        group("pick one custom day") {
+            let datePicker = pickerButton.datePickers.firstMatch
+            pickerButton.menuItems["custom"].click()
+            wait(for: "date picker to show", until: { datePicker.isVisible })
+            let (coordinate, ymd) = pickerLocations[0]
+            coordinate.click(in: datePicker)
+            checkReportedRange(
+                from: "\(ymd.asDashedString)T09:00:00+02:00",
+                to: "\(ymd.withAdditional(days: 1).asDashedString)T09:00:00+02:00",
+                diff: "1d 0h 0m")
+            XCTAssertEqual("Dec \(ymd.day)", pickerButton.stringValue)
+        }
+        group("pick two days") {
+            let datePicker = pickerButton.datePickers.firstMatch
+            pickerButton.click()
+            pickerButton.menuItems["custom"].click()
+            wait(for: "date picker to show", until: { datePicker.isVisible })
+            let (coordinate1, ymd) = pickerLocations[0]
+            let (coordinate2, _) = pickerLocations[1]
+            coordinate1.click(in: datePicker, thenDragTo: coordinate2)
+            checkReportedRange(
+                from: "\(ymd.asDashedString)T09:00:00+02:00",
+                to: "\(ymd.withAdditional(days: 2).asDashedString)T09:00:00+02:00",
+                diff: "2d 0h 0m")
+            XCTAssertEqual("Dec \(ymd.day) and Dec \(ymd.day + 1)", pickerButton.stringValue)
+        }
+        group("pick three days") {
+            let datePicker = pickerButton.datePickers.firstMatch
+            pickerButton.click()
+            pickerButton.menuItems["custom"].click()
+            wait(for: "date picker to show", until: { datePicker.isVisible })
+            let (coordinate1, ymd) = pickerLocations[0]
+            let (coordinate2, _) = pickerLocations[2]
+            coordinate1.click(in: datePicker, thenDragTo: coordinate2)
+            checkReportedRange(
+                from: "\(ymd.asDashedString)T09:00:00+02:00",
+                to: "\(ymd.withAdditional(days: 3).asDashedString)T09:00:00+02:00",
+                diff: "3d 0h 0m")
+            XCTAssertEqual("Dec \(ymd.day) through Dec \(ymd.day + 2)", pickerButton.stringValue)
+        }
+        group("pick today") {
+            let datePicker = pickerButton.datePickers.firstMatch
+            pickerButton.click()
+            pickerButton.menuItems["today"].click()
+            sleepMillis(1500)
+            XCTAssertFalse(datePicker.isVisible)
+            checkReportedRange(
+                from: "1969-12-31T09:00:00+02:00",
+                to: "1970-01-01T09:00:00+02:00",
+                diff: "1d 0h 0m")
+            XCTAssertEqual("today", pickerButton.stringValue)
+        }
+        group("pick yesterday") {
+            let datePicker = pickerButton.datePickers.firstMatch
+            pickerButton.click()
+            pickerButton.menuItems["yesterday"].click()
+            sleepMillis(1500)
+            XCTAssertFalse(datePicker.isVisible)
+            checkReportedRange(
+                from: "1969-12-30T09:00:00+02:00",
+                to: "1969-12-31T09:00:00+02:00",
+                diff: "1d 0h 0m")
+            XCTAssertEqual("yesterday", pickerButton.stringValue)
+        }
+        // TODO:
+        // 1: use the date picker to pick today and yesterday; confirm that the pickerButton.stringValue says "today".
+        // 2: use the date picker to select a range including today/yesterday, and confirm the pickerButton.stringValue
+    }
+    
     func testAutocompleteEmptyOptions() {
         use("Autocomplete")
         let optionsDefinition = testWindow.textFields["test_defineoptions"]

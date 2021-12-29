@@ -24,6 +24,7 @@
 		7E37A29C24C0293E005BA1DF /* Task+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29824C0293E005BA1DF /* Task+CoreDataClass.swift */; };
 		7E37A29D24C0293E005BA1DF /* Task+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */; };
 		7E4778F024F8F177007BAE8C /* AutocompleteFieldHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4778EF24F8F177007BAE8C /* AutocompleteFieldHelper.swift */; };
+		7E4CD510277C4B9600C83D7D /* DatePickerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4CD50F277C4B9600C83D7D /* DatePickerUtils.swift */; };
 		7E51DA09250BF5C60088864F /* TimeZone+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */; };
 		7E579F702503E2920055D9F6 /* SystemClockSchedulerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */; };
 		7E5EFA272619B14A00E7834D /* NSTextField+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */; };
@@ -51,6 +52,7 @@
 		7E8C04FA23714F0800A0C3A6 /* ComponentUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04F923714F0800A0C3A6 /* ComponentUITests.swift */; };
 		7E947C292779AAA200E882BE /* ExtraStringHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E947C272779AAA200E882BE /* ExtraStringHelpers.swift */; };
 		7E947C2A2779AAA200E882BE /* ExtraStringHelpersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E947C282779AAA200E882BE /* ExtraStringHelpersTest.swift */; };
+		7E947C2C2779AF6F00E882BE /* DateRangePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E947C2B2779AF6F00E882BE /* DateRangePicker.swift */; };
 		7E970D6924DA84AF00F634AB /* UiTestWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E970D6824DA84AF00F634AB /* UiTestWindow.xib */; };
 		7E970D6B24DA850D00F634AB /* UiTestWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E970D6A24DA850D00F634AB /* UiTestWindow.swift */; };
 		7E9C5EAE2606BDFB00D839C4 /* GoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C5EAD2606BDFB00D839C4 /* GoalsView.swift */; };
@@ -166,6 +168,7 @@
 		7E37A29824C0293E005BA1DF /* Task+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7E4778EF24F8F177007BAE8C /* AutocompleteFieldHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteFieldHelper.swift; sourceTree = "<group>"; };
+		7E4CD50F277C4B9600C83D7D /* DatePickerUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerUtils.swift; sourceTree = "<group>"; };
 		7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeZone+Helpers.swift"; sourceTree = "<group>"; };
 		7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockSchedulerTest.swift; sourceTree = "<group>"; };
 		7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextField+Helpers.swift"; sourceTree = "<group>"; };
@@ -202,6 +205,7 @@
 		7E8C04FB23714F0800A0C3A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E947C272779AAA200E882BE /* ExtraStringHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtraStringHelpers.swift; sourceTree = "<group>"; };
 		7E947C282779AAA200E882BE /* ExtraStringHelpersTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtraStringHelpersTest.swift; sourceTree = "<group>"; };
+		7E947C2B2779AF6F00E882BE /* DateRangePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRangePicker.swift; sourceTree = "<group>"; };
 		7E970D6824DA84AF00F634AB /* UiTestWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UiTestWindow.xib; sourceTree = "<group>"; };
 		7E970D6A24DA850D00F634AB /* UiTestWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UiTestWindow.swift; sourceTree = "<group>"; };
 		7E9C5EAD2606BDFB00D839C4 /* GoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsView.swift; sourceTree = "<group>"; };
@@ -545,6 +549,7 @@
 				7EDA368E24D54EA300F5E368 /* FlippedView.swift */,
 				7E9C5EAD2606BDFB00D839C4 /* GoalsView.swift */,
 				7ECAF0DE250D75B70004647E /* WhatdidTextField.swift */,
+				7E947C2B2779AF6F00E882BE /* DateRangePicker.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -618,6 +623,7 @@
 			isa = PBXGroup;
 			children = (
 				7E8C04F923714F0800A0C3A6 /* ComponentUITests.swift */,
+				7E4CD50F277C4B9600C83D7D /* DatePickerUtils.swift */,
 			);
 			path = component;
 			sourceTree = "<group>";
@@ -883,6 +889,7 @@
 				7E7D006D262BFC08002D4CB5 /* ConfirmViewController.swift in Sources */,
 				7EB57AA825187549009E85F5 /* NSApperance+Helpers.swift in Sources */,
 				7E1EE6622612EEF1003314EE /* CloseConfirmer.swift in Sources */,
+				7E947C2C2779AF6F00E882BE /* DateRangePicker.swift in Sources */,
 				7EDA369524D6A95B00F5E368 /* TimeUtil.swift in Sources */,
 				7E37A29D24C0293E005BA1DF /* Task+CoreDataProperties.swift in Sources */,
 				7EF58FA12584972F002F9604 /* UITestCommonConsts.swift in Sources */,
@@ -933,6 +940,7 @@
 				7E7C385224DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift in Sources */,
 				7EDDFF5F250097F20027E91A /* Date+Helpers.swift in Sources */,
 				7EF8B9E926158E2200834866 /* UITestBase.swift in Sources */,
+				7E4CD510277C4B9600C83D7D /* DatePickerUtils.swift in Sources */,
 				7EEF62D426195C3800528000 /* DailyReportTest.swift in Sources */,
 				7EC1FC38261AA9160095388F /* ScreenshotGenerator.swift in Sources */,
 			);

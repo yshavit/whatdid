@@ -16,6 +16,7 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
         add(MainComponent())
         add(AutocompleteComponent())
         add(ButtonWithClosureComponent())
+        add(DateRangePickerComponent())
         add(GoalsViewComponent())
     }
     
@@ -125,6 +126,76 @@ fileprivate class AutocompleteComponent: TestComponent {
     @objc private func setAutocompleterOptions(_ sender: NSTextField) {
         let options = sender.stringValue.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces)}
         autocompleField.options = options
+    }
+}
+
+fileprivate class DateRangePickerComponent: TestComponent {
+    func build(adder: (NSView) -> Void) {
+        let picker = DateRangePicker()
+        picker.controlSize = .small
+        picker.setAccessibilityIdentifier("picker")
+        
+        let fromText = NSTextField(labelWithString: "FROM")
+        fromText.setAccessibilityIdentifier("result_start")
+        let toText = NSTextField(labelWithString: "TO")
+        toText.setAccessibilityIdentifier("result_end")
+        let diff = NSTextField(labelWithString: "DIFF")
+        diff.setAccessibilityIdentifier("result_diff")
+        adder(picker)
+        adder(fromText)
+        adder(toText)
+        adder(diff)
+        picker.onDateSelection {from, to in
+            let formatter = ISO8601DateFormatter()
+            formatter.timeZone = DefaultScheduler.instance.timeZone
+            fromText.stringValue = formatter.string(from: from)
+            toText.stringValue = formatter.string(from: to)
+            diff.stringValue = TimeUtil.daysHoursMinutes(for: to.timeIntervalSince(from))
+        }
+        adder(createCalendarCalibrationHelper())
+    }
+    
+    private func createCalendarCalibrationHelper() -> NSView {
+        let picker = ReportingNSDatePicker()
+        picker.timeZone = DefaultScheduler.instance.timeZone
+        picker.datePickerStyle = .clockAndCalendar
+        picker.datePickerElements = .yearMonthDay
+        picker.datePickerMode = .single
+        picker.setAccessibilityIdentifier("calendar_calibration")
+        picker.dateValue = Prefs.dayStartTime.map {hh, mm in
+            TimeUtil.dateForTime(.previous, hh: hh, mm: mm)
+        }
+        picker.maxDate = picker.dateValue
+        
+        let popover = NSPopover()
+        popover.contentViewController = NSViewController()
+        popover.contentViewController?.view = picker
+        popover.behavior = .applicationDefined
+        popover.contentSize = picker.intrinsicContentSize
+        
+        let toggleButton = ButtonWithClosure(checkboxWithTitle: "Show dummy calendar", target: nil, action: nil)
+        toggleButton.setAccessibilityIdentifier("show_calendar_calibration")
+        toggleButton.onPress {me in
+            if me.state == .on {
+                popover.show(relativeTo: NSRect.zero, of: toggleButton, preferredEdge: .maxY)
+            } else {
+                popover.close()
+            }
+        }
+        return toggleButton
+    }
+    
+    private class ReportingNSDatePicker: NSDatePicker {
+        
+        override func accessibilityValue() -> Any? {
+            var calendar = DefaultScheduler.instance.calendar
+            calendar.timeZone = DefaultScheduler.instance.timeZone
+            
+            let yy = calendar.component(.year, from: dateValue)
+            let mm = calendar.component(.month, from: dateValue)
+            let dd = calendar.component(.day, from: dateValue)
+            return "\(yy)-\(mm)-\(dd)"
+        }
     }
 }
 
