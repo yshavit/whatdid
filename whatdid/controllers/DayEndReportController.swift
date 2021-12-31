@@ -96,18 +96,42 @@ class DayEndReportController: NSViewController {
     private func updateGoals(from startDate: Date, to endDate: Date) {
         goalsSummaryStack.subviews.forEach { $0.removeFromSuperview() }
         let goals = AppDelegate.instance.model.listGoals(from: startDate, to: endDate)
-        let isTodayView = startDate == Prefs.dayStartTime.map {hh, mm in TimeUtil.dateForTime(.previous, hh: hh, mm: mm)}
+        let isMultiDayView = TimeUtil.daysBetween(now: startDate, andDate: endDate) != 1
         let completed = goals.filter({$0.isCompleted}).count
         
         let summaryText: String
         if goals.isEmpty {
-            summaryText = isTodayView ? "No goals for today." : "No goals for this day."
+            if isMultiDayView {
+                summaryText = "No goals for this date range."
+            } else {
+                let thisMorning = Prefs.dayStartTime.map {hh, mm in TimeUtil.dateForTime(.previous, hh: hh, mm: mm)}
+                if startDate == thisMorning {
+                    summaryText = "No goals for today."
+                } else {
+                    let yesterdayMorning = DefaultScheduler.instance.calendar.date(byAdding: .day, value: -1, to: thisMorning)
+                    if startDate == yesterdayMorning {
+                        summaryText = "No goals for yesterday."
+                    } else {
+                        summaryText = "No goals for this day."
+                    }
+                }
+            }
         } else {
             summaryText = "Completed \(completed.pluralize("goal", "goals")) out of \(goals.count)."
         }
         goalsSummaryStack.addArrangedSubview(NSTextField(labelWithString: summaryText))
         
-        goals.map(GoalsView.from(_:)).forEach(goalsSummaryStack.addArrangedSubview(_:))
+        if isMultiDayView && !goals.isEmpty {
+            goalsSummaryStack.addArrangedSubview(NSTextField(labelWithAttributedString: NSAttributedString(
+                string: "(not listing them, because you selected more than one day)",
+                attributes: [
+                    NSAttributedString.Key.font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
+                    NSAttributedString.Key.obliqueness: 0.15
+                ]
+            )))
+        } else {
+            goals.map(GoalsView.from(_:)).forEach(goalsSummaryStack.addArrangedSubview(_:))
+        }
     }
     
     private func updateEntries(start: Date, end: Date) {

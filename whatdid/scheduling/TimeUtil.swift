@@ -109,9 +109,11 @@ class TimeUtil {
         return result
     }
     
-    static func daysBetween(now: Date, andDate then: Date, using timeZone: TimeZone) -> Int {
+    static func daysBetween(now: Date, andDate then: Date, using timeZone: TimeZone? = nil) -> Int {
         var calendar = DefaultScheduler.instance.calendar
-        calendar.timeZone = timeZone
+        if let timeZone = timeZone {
+            calendar.timeZone = timeZone
+        }
         let nowStart = calendar.startOfDay(for: now)
         let thenStart = calendar.startOfDay(for: then)
         return calendar.dateComponents([.day], from: nowStart, to: thenStart).day ?? 0
