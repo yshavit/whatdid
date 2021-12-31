@@ -2,6 +2,7 @@
 
 import Cocoa
 
+@IBDesignable
 class DateRangePicker: NSView {
     
     private static let MODE_ONE_DAY = "single day"
@@ -11,7 +12,7 @@ class DateRangePicker: NSView {
     private let modePicker = NSPopUpButton()
     private let datePicker = NSDatePicker()
     private let popover = NSPopover()
-    private var handlers = [(from: Date, to: Date) -> Void]()
+    private var handlers = [(from: Date, to: Date, because: UpdateReason) -> Void]()
     private var thisMorning: Date = Prefs.dayStartTime.map {hh, mm in
         TimeUtil.dateForTime(.previous, hh: hh, mm: mm)
     }
@@ -39,7 +40,10 @@ class DateRangePicker: NSView {
                 cell.removeItem(at: 3)
             }
         }
-        modePicker.bezelStyle = .inline
+        notifyingCell.arrowPosition = .noArrow
+        modePicker.bezelStyle = .roundRect // roundRect, textureRounded
+        modePicker.focusRingType = .none
+        
         modePicker.target = self
         modePicker.action = #selector(self.changeMode(_:))
         
@@ -55,12 +59,15 @@ class DateRangePicker: NSView {
         datePicker.target = self
         datePicker.action = #selector(self.pickDate(_:))
         
-        if #available(macOS 10.15.4, *) {
-            datePicker.presentsCalendarOverlay = true
-        }
-        
         topStack.addArrangedSubview(modePicker)
+        onDateSelection(self.updateMenuItemsFor(start:end:because:))
         prepareToShow()
+    }
+    
+    override func prepareForInterfaceBuilder() {
+        doInit()
+        prepareToShow()
+        invalidateIntrinsicContentSize()
     }
     
     override func setAccessibilityIdentifier(_ accessibilityIdentifier: String?) {
@@ -73,7 +80,7 @@ class DateRangePicker: NSView {
         }
         datePicker.maxDate = thisMorning
         datePicker.dateValue = thisMorning
-        onDateSelection(self.updateMenuItemsFor(start:end:))
+        notifyHandlers(because: .prepareToShow)
     }
 
     /// Registers a handler to get notifications about date selections.
@@ -83,13 +90,16 @@ class DateRangePicker: NSView {
     ///
     /// For example, if the user selected a single day, then the `from` argument is the morning of that day, and the `to`
     /// argument is the following morning.
-    func onDateSelection(_ handler: @escaping (_ from: Date, _ to: Date) -> Void) {
+    func onDateSelection(_ handler: @escaping (_ from: Date, _ to: Date, _ because: UpdateReason) -> Void) {
         handlers.append(handler)
         let (start, end) = startAndEndDates
-        handler(start, end)
+        handler(start, end, .initial)
     }
     
-    private func updateMenuItemsFor(start: Date, end: Date) {
+    private func updateMenuItemsFor(start: Date, end: Date, because reason: UpdateReason) {
+        if reason == .initial {
+            return
+        }
         let cal = DefaultScheduler.instance.calendar
         let tomorrowMorning = cal.date(byAdding: .day, value: 1, to: thisMorning)
         let yesterdayMorning = cal.date(byAdding: .day, value: -1, to: thisMorning)
@@ -140,12 +150,12 @@ class DateRangePicker: NSView {
         if selected == "today" {
             datePicker.dateValue = thisMorning
             datePicker.timeInterval = 0
-            notifyHandlers()
+            notifyHandlers(because: .userAction)
         } else if (selected == "yesterday") {
             let yesterday = DefaultScheduler.instance.calendar.date(byAdding: .day, value: -1, to: thisMorning)!
             datePicker.dateValue = yesterday
             datePicker.timeInterval = 0
-            notifyHandlers()
+            notifyHandlers(because: .userAction)
         }
         if selected == "custom" {
             popover.contentViewController?.view.layoutSubtreeIfNeeded()
@@ -154,10 +164,10 @@ class DateRangePicker: NSView {
         }
     }
     
-    private func notifyHandlers() {
+    private func notifyHandlers(because reason: UpdateReason) {
         let (start, end) = startAndEndDates
         for handler in handlers {
-            handler(start, end)
+            handler(start, end, reason)
         }
     }
     
@@ -178,7 +188,7 @@ class DateRangePicker: NSView {
         guard NSApp.currentEvent?.type == .leftMouseUp else {
             return
         }
-        notifyHandlers()
+        notifyHandlers(because: .userAction)
     }
     
     private class NotifyingNSPopUpButtonCell: NSPopUpButtonCell {
@@ -190,4 +200,10 @@ class DateRangePicker: NSView {
             super.attachPopUp(withFrame: cellFrame, in: controlView)
         }
     }
+}
+
+enum UpdateReason {
+    case initial
+    case prepareToShow
+    case userAction
 }

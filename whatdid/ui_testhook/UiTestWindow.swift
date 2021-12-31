@@ -145,7 +145,7 @@ fileprivate class DateRangePickerComponent: TestComponent {
         adder(fromText)
         adder(toText)
         adder(diff)
-        picker.onDateSelection {from, to in
+        picker.onDateSelection {from, to, _ in
             let formatter = ISO8601DateFormatter()
             formatter.timeZone = DefaultScheduler.instance.timeZone
             fromText.stringValue = formatter.string(from: from)

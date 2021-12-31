@@ -9,7 +9,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="DayEndReportController" customModule="whatdid" customModuleProvider="target">
             <connections>
-                <outlet property="entryStartDatePicker" destination="I9K-te-jfd" id="Zma-bE-IER"/>
+                <outlet property="dateRangePicker" destination="4il-8J-dck" id="Fix-zI-Yx4"/>
                 <outlet property="goalsSummaryGroup" destination="V55-nV-Y5s" id="DxF-mT-cMT"/>
                 <outlet property="goalsSummaryStack" destination="1RQ-eW-vGH" id="L7V-FB-jCR"/>
                 <outlet property="maxViewHeight" destination="1ka-g6-16p" id="IdU-SA-mes"/>
@@ -23,40 +23,28 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <stackView identifier="top-v" wantsLayer="YES" distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" misplaced="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qn8-JX-HeH" userLabel="Top">
-            <rect key="frame" x="0.0" y="0.0" width="400" height="94"/>
+        <stackView identifier="top-v" wantsLayer="YES" distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qn8-JX-HeH" userLabel="Top">
+            <rect key="frame" x="0.0" y="0.0" width="400" height="99"/>
             <subviews>
-                <stackView identifier="header-h" distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pKe-k9-zAn" userLabel="Header Stack">
-                    <rect key="frame" x="0.0" y="79" width="202" height="24"/>
+                <stackView identifier="header-h" distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="500" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pKe-k9-zAn" userLabel="Header Stack">
+                    <rect key="frame" x="0.0" y="79" width="218" height="20"/>
                     <subviews>
                         <textField identifier="header_label" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-Lm-qUL" userLabel="Header">
-                            <rect key="frame" x="-2" y="4" width="114" height="16"/>
+                            <rect key="frame" x="-2" y="0.0" width="114" height="16"/>
                             <textFieldCell key="cell" lineBreakMode="clipping" identifier="header_cell" title="Task overview for:" id="jJc-W3-EKA" userLabel="Header cell">
                                 <font key="font" usesAppearanceFont="YES"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="findHighlightColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>
-                        <datePicker verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="I9K-te-jfd">
-                            <rect key="frame" x="118" y="0.0" width="87" height="28"/>
-                            <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="578-tE-w1E">
-                                <font key="font" metaFont="menu" size="11"/>
-                                <date key="date" timeIntervalSinceReferenceDate="-595929600">
-                                    <!--1982-02-12 16:00:00 +0000-->
-                                </date>
-                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            </datePickerCell>
-                            <connections>
-                                <action selector="userChangedEntryStartDate:" target="-2" id="cm8-Xo-4Od"/>
-                            </connections>
-                        </datePicker>
+                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="4il-8J-dck" customClass="DateRangePicker" customModule="whatdid" customModuleProvider="target">
+                            <rect key="frame" x="118" y="0.0" width="100" height="16"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="16" placeholder="YES" id="XKx-Xi-Ukw"/>
+                            </constraints>
+                        </customView>
                     </subviews>
-                    <constraints>
-                        <constraint firstItem="I9K-te-jfd" firstAttribute="top" secondItem="pKe-k9-zAn" secondAttribute="top" id="7LI-9h-9I1"/>
-                        <constraint firstItem="I9K-te-jfd" firstAttribute="centerY" secondItem="wxD-Lm-qUL" secondAttribute="centerY" id="tdI-ii-dPG"/>
-                        <constraint firstAttribute="bottom" secondItem="I9K-te-jfd" secondAttribute="bottom" id="zz6-qP-ZbY"/>
-                    </constraints>
+                    <edgeInsets key="edgeInsets" left="0.0" right="0.0" top="4" bottom="0.0"/>
                     <visibilityPriorities>
                         <integer value="1000"/>
                         <integer value="1000"/>

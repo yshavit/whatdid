@@ -19,15 +19,19 @@ class DayEndReportController: NSViewController {
     @IBOutlet weak var projectsScroll: NSScrollView!
     @IBOutlet weak var projectsContainer: NSStackView!
     @IBOutlet weak var projectsWidthConstraint: NSLayoutConstraint!
-    @IBOutlet weak var entryStartDatePicker: NSDatePicker!
+    @IBOutlet weak var dateRangePicker: DateRangePicker!
     @IBOutlet weak var shockAbsorber: NSView!
     private var scrollBarHelper: ScrollBarHelper?
 
     var scheduler: Scheduler = DefaultScheduler.instance
     
     override func awakeFromNib() {
-        if #available(OSX 10.15.4, *) {
-            entryStartDatePicker.presentsCalendarOverlay = true
+        dateRangePicker.onDateSelection {startDate, endDate, reason in
+            if reason == .userAction {
+                self.updateGoalsAnimated(start: startDate, end: endDate)
+            } else {
+                self.updateEntries(start: startDate, end: endDate)
+            }
         }
     }
     
@@ -46,14 +50,7 @@ class DayEndReportController: NSViewController {
             maxViewHeight.constant = screenHeight * 0.61802903
             wdlog(.debug, "set max height to %.1f (screen height is %.1f)", maxViewHeight.constant, screenHeight)
         }
-        // Set up the date picker
-        let now = scheduler.now
-        entryStartDatePicker.timeZone = scheduler.timeZone // mostly useful for UI tests, which use a fake tz
-        entryStartDatePicker.maxDate = now
-        entryStartDatePicker.dateValue = Prefs.dayStartTime.map {hh, mm in
-            TimeUtil.dateForTime(.previous, hh: hh, mm: mm, assumingNow: now)
-        }
-        updateEntries()
+        dateRangePicker.prepareToShow()
     }
     
     override func viewWillAppear() {
@@ -75,7 +72,7 @@ class DayEndReportController: NSViewController {
         scrollBarHelper = nil
     }
     
-    @IBAction func userChangedEntryStartDate(_ sender: Any) {
+    private func updateGoalsAnimated(start: Date, end: Date) {
         AnimationHelper.animate(
             change: {
                 goalsSummaryStack.subviews.forEach { $0.removeFromSuperview() }
@@ -90,7 +87,9 @@ class DayEndReportController: NSViewController {
                 self.resizeAndLayoutIfNeeded()
             },
             onComplete: {
-                AnimationHelper.animate(change: self.updateEntries)
+                AnimationHelper.animate {
+                    self.updateEntries(start: start, end: end)
+                }
             })
     }
     
@@ -111,30 +110,7 @@ class DayEndReportController: NSViewController {
         goals.map(GoalsView.from(_:)).forEach(goalsSummaryStack.addArrangedSubview(_:))
     }
     
-    private var reportEndpoints: (Date, Date) {
-        get {
-            let pickedDate = entryStartDatePicker.dateValue
-            let (tryStart, tryEnd) = Prefs.dayStartTime.map {hh, mm -> (Date?, Date?) in
-                let cal = DefaultScheduler.instance.calendar
-                guard let start = cal.date(bySettingHour: hh, minute: mm, second: 00, of: pickedDate) else {
-                    wdlog(.warn, "Can't get start of day from %@", pickedDate as NSDate)
-                    return (nil, nil)
-                }
-                let end = cal.date(byAdding: .day, value: 1, to: start)
-                if end == nil {
-                    wdlog(.warn, "Can't add 1 day to %@", start as NSDate)
-                }
-                return (start, end)
-            }
-            // If we can't get good start/end times, just use the picker's time for start, and +24h for end
-            let start = tryStart ?? pickedDate
-            let end = tryEnd ?? start.addingTimeInterval(86400)
-            return (start, end)
-        }
-    }
-    
-    private func updateEntries() {
-        let (start, end) = reportEndpoints
+    private func updateEntries(start: Date, end: Date) {
         wdlog(.debug, "Updating entries from %@ to %@", start as NSDate, end as NSDate)
         
         updateGoals(from: start, to: end)
