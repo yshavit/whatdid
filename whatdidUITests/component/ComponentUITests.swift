@@ -229,24 +229,24 @@ class ComponentUITests: XCTestCase {
                     let (coordinate1, _) = pickerLocations[0]
                     let (coordinate2, _) = pickerLocations[2]
                     coordinate1.click(in: rangePicker, thenDragTo: coordinate2)
-                    return rangePicker.getImage()
+                    return rangePicker.getImage(andAddTo: self, withName: "target image")
                 }
                 let (middleDayCoordinate, middleDayYmd) = pickerLocations[1]
                 group("pick middle day") {
                     middleDayCoordinate.click(in: rangePicker)
-                    XCTAssertNotEqual(rangeScreenshot, rangePicker.getImage())
+                    XCTAssertNotEqual(rangeScreenshot, rangePicker.getImage(andAddTo: self))
                 }
                 group("set endpoints") {
                     startPicker.typeIntoDatePicker(day: middleDayYmd.day - 1)
                     endPicker.typeIntoDatePicker(day: middleDayYmd.day + 1)
                 }
                 group("check ranges before clicking okay") {
-                    XCTAssertEqual(rangeScreenshot, rangePicker.getImage())
+                    XCTAssertEqual(rangeScreenshot, rangePicker.getImage(andAddTo: self))
                     checkReportedDateRange(from: middleDayYmd, to: middleDayYmd, diff: "0m")
                 }
                 group("check ranges after clicking okay") {
                     applyButton.click()
-                    XCTAssertEqual(rangeScreenshot, rangePicker.getImage())
+                    XCTAssertEqual(rangeScreenshot, rangePicker.getImage(andAddTo: self))
                     checkReportedDateRange(
                         from: middleDayYmd.withAdditional(days: -1),
                         to: middleDayYmd.withAdditional(days: 1),

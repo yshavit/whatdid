@@ -178,8 +178,28 @@ extension XCUIElement {
         print(header)
     }
     
-    func getImage() -> Data {
-        return self.screenshot().pngRepresentation
+    /// Return a `Data` object representing the element's screenshot.
+    ///
+    /// The intention is to treat this as an opaque object that you can use to compare with `XCTAssertEquals`.
+    func getImage(andAddTo target: XCTActivity, withName name: String? = nil) -> Data {
+        let screenshot = screenshot()
+        let nsImage = screenshot.image
+        
+        let attachment = XCTAttachment(image: nsImage)
+        attachment.name = "screenshot of \(name ?? elementType.description)"
+        target.add(attachment)
+        
+        let cgImage = nsImage.cgImage(forProposedRect: nil, context: nil, hints: nil)
+        let imageRep = NSBitmapImageRep(cgImage: cgImage!)
+        imageRep.size = nsImage.size
+        let data = imageRep.representation(using: .png, properties: [:])!
+        
+        // In case there's a failure, attach the raw bytes as well, for better analysis.
+        let dataAttachment = XCTAttachment(data: data)
+        dataAttachment.name = "\(name ?? elementType.description).png"
+        target.add(dataAttachment)
+        
+        return data
     }
 }
 
