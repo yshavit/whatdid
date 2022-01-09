@@ -9,7 +9,7 @@ func findDatePickerBoxes(in picker: XCUIElement) -> [(CoordinateInfo, YearMonthD
     var prevYmd = YearMonthDay.parse(from: picker.value as? String)!
     results.append((firstCoordinate, prevYmd))
     
-    for dx in stride(from: 0, to: picker.frame.width, by: 5) {
+    for dx in stride(from: 0, to: picker.frame.width, by: 10) {
         let coordinate = firstCoordinate.withAbsoluteOffset(dx: dx, dy: 0)
         coordinate.click(in: picker)
         let currYmd = YearMonthDay.parse(from: picker.value as? String)!
@@ -63,6 +63,19 @@ struct YearMonthDay: Equatable {
     
     var asDashedString: String {
         return "\(year)-\(month)-\(day)"
+    }
+    
+    var asDate: Date {
+        return DateComponents(
+            calendar: Calendar.current,
+            timeZone: .utc,
+            year: year,
+            month: month,
+            day: day,
+            hour: 7, // start of day is 9am athens time, or 7am UTC
+            minute: 0,
+            second: 0
+        ).date!
     }
     
     func withAdditional(years: Int = 0, months: Int = 0, days: Int = 0) -> YearMonthDay {

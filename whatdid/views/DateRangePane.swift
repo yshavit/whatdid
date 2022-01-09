@@ -50,18 +50,22 @@ class DateRangePane: NSView {
         rangeDatePicker.datePickerStyle = .clockAndCalendar
         rangeDatePicker.datePickerMode = .range
         rangeDatePicker.action = #selector(self.rangeDatePickerAction(_:))
+        rangeDatePicker.setAccessibilityIdentifier("range_picker")
         
         startDatePicker.datePickerStyle = .textField
         startDatePicker.action = #selector(self.endpointPickerChanged(_:))
+        startDatePicker.setAccessibilityIdentifier("start_date_picker")
         
         endDatePicker.datePickerStyle = .textField
         endDatePicker.action = #selector(self.endpointPickerChanged(_:))
+        endDatePicker.setAccessibilityIdentifier("end_date_picker")
         
         if #available(macOS 10.15.4, *) {
             startDatePicker.presentsCalendarOverlay = true
             endDatePicker.presentsCalendarOverlay = true
         }
         let okButton = NSButton(title: "ok", target: self, action: #selector(self.submit(_:)))
+        okButton.setAccessibilityIdentifier("apply_range_button")
         
         okButton.controlSize = .small
         [startDatePicker, endDatePicker].forEach {$0.font = NSFont.labelFont(ofSize: NSFont.systemFontSize(for: .small))}
@@ -83,7 +87,7 @@ class DateRangePane: NSView {
         okCell.xPlacement = .trailing
         
         disclosure.detailsView = stepperGrid
-        disclosure.title = "details"
+        disclosure.title = "start/end dates"
         disclosure.controlSize = .small
         disclosure.onToggle = {expanded in
             if expanded {
@@ -92,6 +96,7 @@ class DateRangePane: NSView {
                 self.window?.makeFirstResponder(windowView)
             }
         }
+        disclosure.setAccessibilityIdentifier("toggle_endpoint_pickers")
         
         let vStack = NSStackView(orientation: .vertical)
         vStack.alignment = .leading
@@ -151,7 +156,7 @@ class DateRangePane: NSView {
     
     private func notifyHandler() {
         let startDate = startDatePicker.dateValue
-        let endDate = startDatePicker.dateValue
+        let endDate = endDatePicker.dateValue
         // some sanity checking of invariants
         if startDatePicker.timeInterval != 0 {
             wdlog(.warn, "Start date picker had interval %f", startDatePicker.timeInterval)

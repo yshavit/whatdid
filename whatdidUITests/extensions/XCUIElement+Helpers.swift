@@ -38,6 +38,35 @@ extension XCUIElement {
         return value as! Bool
     }
     
+    var datePickerValue: Date {
+        XCTAssertEqual(XCUIElement.ElementType.datePicker, elementType)
+        let asString = stringValue
+        
+        let asStringFullRange = NSRange(location: 0, length: asString.lengthOfBytes(using: .utf8))
+        let regex = try! NSRegularExpression(pattern: #"Unsafe value, description '([^']+)'"#)
+        guard let match = regex.firstMatch(in: asString, options: [], range: asStringFullRange) else {
+            XCTFail("stringValue didn't match expected datePicker regex: \(asString)")
+            let blank: Date? = nil
+            return blank!
+        }
+        let isoMatchRange = Range(match.range(at: 1), in: asString)!
+        let resultString = String(asString[isoMatchRange])
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss ZZZZZ"
+        let result = formatter.date(from: resultString)
+        return result!
+    }
+    
+    func typeIntoDatePicker(year: Int? = nil, month: Int? = nil, day: Int? = nil) {
+        XCTAssertEqual(XCUIElement.ElementType.datePicker, elementType)
+        // Assume pickers have components MM/DD/YYYY, and that clicking into 0.1x gets to the MM component.
+        click(using: .frame(xInlay: 0.1, yInlay: 0.5))
+        func str(_ value: Int?) -> String {
+            return value.map(String.init) ?? ""
+        }
+        typeText("\(str(month))\t\(str(day))\t\(str(year))\r")
+    }
+    
     func backtab() {
         typeKey(.tab, modifierFlags: .shift)
     }
@@ -147,6 +176,10 @@ extension XCUIElement {
         print(header)
         lines.forEach { print($0) }
         print(header)
+    }
+    
+    func getImage() -> Data {
+        return self.screenshot().pngRepresentation
     }
 }
 

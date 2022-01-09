@@ -75,11 +75,17 @@ class DisclosureWithLabel: NSView {
         }
         
         let hstack = NSStackView(orientation: .horizontal)
+        hstack.spacing = 2
         hstack.alignment = .centerY
         hstack.addArrangedSubview(disclosureButton)
         hstack.addArrangedSubview(labelButton)
+        
         addSubview(hstack)
         hstack.anchorAllSides(to: self)
+    }
+
+    override func setAccessibilityIdentifier(_ accessibilityIdentifier: String?) {
+        disclosureButton.setAccessibilityIdentifier(accessibilityIdentifier)
     }
     
     override func prepareForInterfaceBuilder() {

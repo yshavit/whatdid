@@ -16,8 +16,8 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
         add(MainComponent())
         add(AutocompleteComponent())
         add(ButtonWithClosureComponent())
-        add(DateRangePickerComponent())
         add(DateRangePaneComponent())
+        add(DateRangePickerComponent())
         add(GoalsViewComponent())
     }
     
@@ -130,29 +130,16 @@ fileprivate class AutocompleteComponent: TestComponent {
     }
 }
 
-fileprivate class DateRangePickerComponent: TestComponent {
-    func build(adder: (NSView) -> Void) {
-        let picker = DateRangePicker()
-        picker.setAccessibilityIdentifier("picker")
-        
-        let fromText = NSTextField(labelWithString: "FROM")
-        fromText.setAccessibilityIdentifier("result_start")
-        let toText = NSTextField(labelWithString: "TO")
-        toText.setAccessibilityIdentifier("result_end")
-        let diff = NSTextField(labelWithString: "DIFF")
-        diff.setAccessibilityIdentifier("result_diff")
-        adder(picker)
-        adder(fromText)
-        adder(toText)
-        adder(diff)
-        picker.onDateSelection {from, to, _ in
-            let formatter = ISO8601DateFormatter()
-            formatter.timeZone = DefaultScheduler.instance.timeZone
-            fromText.stringValue = formatter.string(from: from)
-            toText.stringValue = formatter.string(from: to)
-            diff.stringValue = TimeUtil.daysHoursMinutes(for: to.timeIntervalSince(from))
-        }
+fileprivate class DateRangePaneComponent: TestComponent {
+    func build(adder: @escaping (NSView) -> Void) {
+        let pane = DateRangePane()
+        adder(pane)
+        let separator = NSBox()
+        separator.boxType = .separator
+        pane.onChange = createDateRangeValidators(to: adder)
+        adder(separator)
         adder(createCalendarCalibrationHelper())
+        pane.prepareToShow()
     }
     
     private func createCalendarCalibrationHelper() -> NSView {
@@ -199,11 +186,36 @@ fileprivate class DateRangePickerComponent: TestComponent {
     }
 }
 
-fileprivate class DateRangePaneComponent: TestComponent {
-    func build(adder: @escaping (NSView) -> Void) {
-        let pane = DateRangePane()
-        pane.prepareToShow()
-        adder(pane)
+fileprivate class DateRangePickerComponent: TestComponent {
+    func build(adder: (NSView) -> Void) {
+        let picker = DateRangePicker()
+        picker.setAccessibilityIdentifier("picker")
+        
+        adder(picker)
+        let dateUpdater = createDateRangeValidators(to: adder)
+        picker.onDateSelection {from, to, _ in
+            dateUpdater(from, to)
+        }
+    }
+}
+
+fileprivate func createDateRangeValidators(to adder: (NSView) -> Void) -> ((Date, Date) -> Void) {
+    let fromText = NSTextField(labelWithString: "FROM")
+    fromText.setAccessibilityIdentifier("result_start")
+    let toText = NSTextField(labelWithString: "TO")
+    toText.setAccessibilityIdentifier("result_end")
+    let diff = NSTextField(labelWithString: "DIFF")
+    diff.setAccessibilityIdentifier("result_diff")
+    adder(fromText)
+    adder(toText)
+    adder(diff)
+    
+    return {from, to in
+        let formatter = ISO8601DateFormatter()
+        formatter.timeZone = DefaultScheduler.instance.timeZone
+        fromText.stringValue = formatter.string(from: from)
+        toText.stringValue = formatter.string(from: to)
+        diff.stringValue = TimeUtil.daysHoursMinutes(for: to.timeIntervalSince(from))
     }
 }
 
