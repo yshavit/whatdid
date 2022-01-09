@@ -17,6 +17,7 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
         add(AutocompleteComponent())
         add(ButtonWithClosureComponent())
         add(DateRangePickerComponent())
+        add(DateRangePaneComponent())
         add(GoalsViewComponent())
     }
     
@@ -196,6 +197,14 @@ fileprivate class DateRangePickerComponent: TestComponent {
             let dd = calendar.component(.day, from: dateValue)
             return "\(yy)-\(mm)-\(dd)"
         }
+    }
+}
+
+fileprivate class DateRangePaneComponent: TestComponent {
+    func build(adder: @escaping (NSView) -> Void) {
+        let pane = DateRangePane()
+        pane.prepareToShow()
+        adder(pane)
     }
 }
 

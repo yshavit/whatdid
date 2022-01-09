@@ -17,8 +17,11 @@ class ButtonWithClosure: NSButton {
         return result
     }
     
-    func onPress(_ handler: @escaping (NSButton) -> Void) {
+    func onPress(sendInitialState: Bool = false, _ handler: @escaping (NSButton) -> Void) {
         handlers.append(handler)
+        if (sendInitialState) {
+            handler(self)
+        }
     }
     
 }

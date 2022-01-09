@@ -25,6 +25,8 @@
 		7E37A29D24C0293E005BA1DF /* Task+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */; };
 		7E4778F024F8F177007BAE8C /* AutocompleteFieldHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4778EF24F8F177007BAE8C /* AutocompleteFieldHelper.swift */; };
 		7E4CD510277C4B9600C83D7D /* DatePickerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4CD50F277C4B9600C83D7D /* DatePickerUtils.swift */; };
+		7E4EB8E327868AAC001234F0 /* DateRangePane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4EB8E227868AAC001234F0 /* DateRangePane.swift */; };
+		7E4EB8E5278A4724001234F0 /* DisclosureWithLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4EB8E4278A4724001234F0 /* DisclosureWithLabel.swift */; };
 		7E51DA09250BF5C60088864F /* TimeZone+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */; };
 		7E579F702503E2920055D9F6 /* SystemClockSchedulerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */; };
 		7E5EFA272619B14A00E7834D /* NSTextField+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */; };
@@ -169,6 +171,8 @@
 		7E37A29924C0293E005BA1DF /* Task+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7E4778EF24F8F177007BAE8C /* AutocompleteFieldHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteFieldHelper.swift; sourceTree = "<group>"; };
 		7E4CD50F277C4B9600C83D7D /* DatePickerUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerUtils.swift; sourceTree = "<group>"; };
+		7E4EB8E227868AAC001234F0 /* DateRangePane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRangePane.swift; sourceTree = "<group>"; };
+		7E4EB8E4278A4724001234F0 /* DisclosureWithLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclosureWithLabel.swift; sourceTree = "<group>"; };
 		7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeZone+Helpers.swift"; sourceTree = "<group>"; };
 		7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockSchedulerTest.swift; sourceTree = "<group>"; };
 		7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextField+Helpers.swift"; sourceTree = "<group>"; };
@@ -550,6 +554,8 @@
 				7E9C5EAD2606BDFB00D839C4 /* GoalsView.swift */,
 				7ECAF0DE250D75B70004647E /* WhatdidTextField.swift */,
 				7E947C2B2779AF6F00E882BE /* DateRangePicker.swift */,
+				7E4EB8E227868AAC001234F0 /* DateRangePane.swift */,
+				7E4EB8E4278A4724001234F0 /* DisclosureWithLabel.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -842,6 +848,7 @@
 				7EE4E39824E2523F00552AAF /* SystemClockScheduler.swift in Sources */,
 				7EAD2A4B2626CBB100153A47 /* ScrollBarHelper.swift in Sources */,
 				7EEF324624EA542D002E217A /* NSRange+Helpers.swift in Sources */,
+				7E4EB8E327868AAC001234F0 /* DateRangePane.swift in Sources */,
 				7EA4D3DE261AC9F300EEBF17 /* PasteboardView.swift in Sources */,
 				7EFEE80223B16EA6002928A2 /* PtnViewController.swift in Sources */,
 				7EE0E74A24EA22E7002D03F8 /* NSView+Helpers.swift in Sources */,
@@ -856,6 +863,7 @@
 				7ECF97A724F1D50100DBF1BF /* NSControl+Helper.swift in Sources */,
 				7EE0E74624E8899E002D03F8 /* AutoCompletingField.swift in Sources */,
 				7EF8579324E094D100867832 /* OpenCloseHelper.swift in Sources */,
+				7E4EB8E5278A4724001234F0 /* DisclosureWithLabel.swift in Sources */,
 				7EF883EB260C7D9900170330 /* ExpandableTextField.swift in Sources */,
 				7E51DA09250BF5C60088864F /* TimeZone+Helpers.swift in Sources */,
 				7EB7495F2516F9C7001C7DBC /* Prefs.swift in Sources */,
