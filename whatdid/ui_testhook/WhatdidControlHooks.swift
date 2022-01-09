@@ -82,6 +82,12 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
         adder(deferButton)
         adder(printUtc)
         adder(printLocal)
+        let tzField = NSTextField(labelWithString: DefaultScheduler.instance.calendar.timeZone.identifier)
+        tzField.setAccessibilityIdentifier("time_zone_identifier")
+        let tzStack = NSStackView(orientation: .horizontal)
+        tzStack.addArrangedSubview(NSTextField(labelWithString: "time zone:"))
+        tzStack.addArrangedSubview(tzField)
+        adder(tzStack)
         
         divider()
         adder(entriesField)

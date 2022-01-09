@@ -309,12 +309,6 @@ class ComponentUITests: XCTestCase {
             checkReportedDateRange(from: "1969-12-31T09:00:00+02:00", to: "1970-01-01T09:00:00+02:00", diff: "1d 0h 0m")
             XCTAssertEqual("today", pickerButton.stringValue)
         }
-//        group("initial selection") {
-//            pickerButton.click()
-//            XCTAssertEqual(
-//                ["today", "yesterday", "custom"],
-//                pickerButton.menuItems.allElementsBoundByIndex.map({$0.title}))
-//        }
         
         func pickCustomRange(fromDay: Int, toDay: Int) {
             if pickerButton.menuItems.count == 0 {

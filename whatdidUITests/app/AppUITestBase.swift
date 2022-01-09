@@ -43,6 +43,7 @@ class AppUITestBase: UITestBase {
     }
     
     private static var focusMenuItemPoint: CGPoint?
+    private static var _uiHookTimeZone: TimeZone?
     
     override func uiSetUp() {
         activate()
@@ -77,6 +78,27 @@ class AppUITestBase: UITestBase {
         app.menuBars.statusItems["Focus Whatdid"].click()
         mockedClockWindow.staticTexts.firstMatch.click()
         return mockedClockWindow
+    }
+    
+    var uiHookTimeZone: TimeZone {
+        if AppUITestBase._uiHookTimeZone == nil {
+            let tzId = uiHooksWindow.staticTexts["time_zone_identifier"].stringValue
+            AppUITestBase._uiHookTimeZone = TimeZone(identifier: tzId)!
+        }
+        return AppUITestBase._uiHookTimeZone!
+    }
+    
+    func athensTime(_ year: Int, _ month: Int, _ day: Int, t hour: Int, _ minute: Int, _ second: Int) -> Date {
+        return DateComponents(
+            calendar: Calendar.current,
+            timeZone: uiHookTimeZone,
+            year: year,
+            month: month,
+            day: day,
+            hour: hour,
+            minute: minute,
+            second: second
+        ).date!
     }
     
     /// Sets the mocked clock in UTC. If `deactivate` is true (default false), then this will set the mocked clock to set the time when the app deactivates, and then this method will activate

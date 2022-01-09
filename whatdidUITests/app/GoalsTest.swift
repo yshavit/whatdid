@@ -15,18 +15,29 @@ class GoalsTest: AppUITestBase {
             clickStatusMenu()
             waitForTransition(of: .ptn, toIsVisible: false)
         }
-        group("daily report") {
+        group("no goals for today") {
             clickStatusMenu(with: .maskAlternate)
             let goalsReport = wait(for: .dailyEnd).groups["Today's Goals"]
             wait(
                 until: {goalsReport.staticTexts.allElementsBoundByIndex.map({$0.stringValue})},
                 equals: ["No goals for today."])
             XCTAssertEqual([], goalsReport.checkBoxes.allElementsBoundByIndex.map({$0.title}))
-
-            openWindow!.typeKey(.downArrow) // date picker is selected by default, so this goes 1 month earlier
+        }
+        group("no goals in past month") {
+            let reportWindow = find(.dailyEnd)
+            reportWindow.popUpButtons["today"].click()
+            reportWindow.menuItems["custom"].click()
+            
+            let dateRangePopover = reportWindow.popovers.firstMatch
+            wait(for: "custom picker to load", until: { dateRangePopover.disclosureTriangles["toggle_endpoint_pickers"].isVisible })
+            dateRangePopover.disclosureTriangles["toggle_endpoint_pickers"].click()
+            dateRangePopover.datePickers["start_date_picker"].typeIntoDatePicker(month: 11)
+            dateRangePopover.buttons["apply_range_button"].click()
+            
+            let goalsReport = reportWindow.groups["Today's Goals"]
             wait(
                 until: {goalsReport.staticTexts.allElementsBoundByIndex.map({$0.stringValue})},
-                equals: ["No goals for this time range."])
+                equals: ["No goals for this date range."])
             XCTAssertEqual([], goalsReport.checkBoxes.allElementsBoundByIndex.map({$0.title}))
             clickStatusMenu()
         }
@@ -325,10 +336,14 @@ class GoalsTest: AppUITestBase {
         group("verify historical report") {
             // The date picker is already active, so just tab to its date field
             let window = find(.dailyEnd)
-            // click on the first element of the dd/mm/yyyy picker, and then tab to the year
-            window.datePickers.element.click(using: .frame(xInlay: 0.1))
-            window.typeText("\t\t")
-            window.typeKey(.downArrow)
+            
+            window.popUpButtons["today"].click()
+            window.menuItems["custom"].click()
+            let dateRangePopover = window.popovers.firstMatch
+            wait(for: "custom picker to load", until: { dateRangePopover.disclosureTriangles["toggle_endpoint_pickers"].isVisible })
+            dateRangePopover.disclosureTriangles["toggle_endpoint_pickers"].click()
+            dateRangePopover.datePickers["start_date_picker"].typeIntoDatePicker(year: 1968)
+            dateRangePopover.buttons["apply_range_button"].click()
 
             let goalsReport = window.groups["Today's Goals"]
             XCTAssertEqual(
