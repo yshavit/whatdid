@@ -10,7 +10,7 @@ class DateRangePicker: NSView {
     
     private let topStack = NSStackView(orientation: .horizontal)
     private let modePicker = NSPopUpButton()
-    private let datePicker = NSDatePicker()
+    private let dateRangePane = DateRangePane()
     private let popover = NSPopover()
     private var handlers = [(from: Date, to: Date, because: UpdateReason) -> Void]()
     private var thisMorning: Date = Prefs.dayStartTime.map {hh, mm in
@@ -47,17 +47,12 @@ class DateRangePicker: NSView {
         modePicker.target = self
         modePicker.action = #selector(self.changeMode(_:))
         
-        popover.contentViewController = NSViewController()
-        popover.contentViewController?.view = datePicker
+        popover.contentViewController = NonFocusingNSViewController()
+        popover.contentViewController?.view = dateRangePane
         popover.behavior = .semitransient
-        
-        datePicker.datePickerStyle = .clockAndCalendar
-        datePicker.datePickerElements = .yearMonthDay
-        datePicker.datePickerMode = .range
-        datePicker.calendar = DefaultScheduler.instance.calendar
-        datePicker.timeZone = DefaultScheduler.instance.timeZone
-        datePicker.target = self
-        datePicker.action = #selector(self.pickDate(_:))
+        dateRangePane.onChange = {_, _ in
+            self.notifyHandlers(because: .userAction)
+        }
         
         topStack.addArrangedSubview(modePicker)
         onDateSelection(self.updateMenuItemsFor(start:end:because:))
@@ -78,8 +73,6 @@ class DateRangePicker: NSView {
         thisMorning = Prefs.dayStartTime.map {hh, mm in
             TimeUtil.dateForTime(.previous, hh: hh, mm: mm)
         }
-        datePicker.maxDate = thisMorning
-        datePicker.dateValue = thisMorning
         notifyHandlers(because: .prepareToShow)
     }
 
@@ -135,31 +128,20 @@ class DateRangePicker: NSView {
         self.popover.close()
     }
     
-    var controlSize: NSControl.ControlSize {
-        get {
-            modePicker.controlSize
-        }
-        set (value) {
-            modePicker.controlSize = value
-            datePicker.controlSize = value
-        }
-    }
-    
     @objc private func changeMode(_ sender: NSPopUpButton) {
         let selected = sender.selectedItem?.title
         if selected == "today" {
-            datePicker.dateValue = thisMorning
-            datePicker.timeInterval = 0
+            dateRangePane.dateRange = (thisMorning, thisMorning)
             notifyHandlers(because: .userAction)
         } else if (selected == "yesterday") {
             let yesterday = DefaultScheduler.instance.calendar.date(byAdding: .day, value: -1, to: thisMorning)!
-            datePicker.dateValue = yesterday
-            datePicker.timeInterval = 0
+            dateRangePane.dateRange = (yesterday, yesterday)
             notifyHandlers(because: .userAction)
         }
         if selected == "custom" {
             popover.contentViewController?.view.layoutSubtreeIfNeeded()
-            popover.contentSize = datePicker.intrinsicContentSize
+            popover.contentSize = dateRangePane.intrinsicContentSize
+            dateRangePane.prepareToShow()
             popover.show(relativeTo: NSRect.zero, of: sender, preferredEdge: .maxX)
         }
     }
@@ -172,8 +154,7 @@ class DateRangePicker: NSView {
     }
     
     private var startAndEndDates: (Date, Date) {
-        let pickedStart = datePicker.dateValue
-        let pickedEnd = pickedStart.addingTimeInterval(datePicker.timeInterval)
+        let (pickedStart, pickedEnd) = dateRangePane.dateRange
         // The pickedEnd is the morning of whatever the last day the user picked. But we want to cover that full day,
         // so the actual end range is the *following* morning.
         // For example, let's say I picked March 14 (just that one day). In that case, pickedStart and pickedEnd are both

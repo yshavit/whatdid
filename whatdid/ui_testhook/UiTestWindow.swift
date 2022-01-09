@@ -133,7 +133,6 @@ fileprivate class AutocompleteComponent: TestComponent {
 fileprivate class DateRangePickerComponent: TestComponent {
     func build(adder: (NSView) -> Void) {
         let picker = DateRangePicker()
-        picker.controlSize = .small
         picker.setAccessibilityIdentifier("picker")
         
         let fromText = NSTextField(labelWithString: "FROM")

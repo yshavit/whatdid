@@ -14,6 +14,20 @@ class DateRangePane: NSView {
     private let endDatePicker = NSDatePicker()
     
     var onChange: (Date, Date) -> Void = {_, _ in }
+    
+    var dateRange: (Date, Date) {
+        get {
+            (startDatePicker.dateValue, endDatePicker.dateValue)
+        }
+        set (value) {
+            var (newStart, newEnd) = value
+            newEnd = max(newStart, newEnd)
+            startDatePicker.dateValue = newStart
+            endDatePicker.dateValue = newEnd
+            rangeDatePicker.dateValue = newStart
+            rangeDatePicker.timeInterval = newEnd.timeIntervalSince(newStart)
+        }
+    }
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -71,6 +85,13 @@ class DateRangePane: NSView {
         disclosure.detailsView = stepperGrid
         disclosure.title = "details"
         disclosure.controlSize = .small
+        disclosure.onToggle = {expanded in
+            if expanded {
+                self.window?.makeFirstResponder(self.startDatePicker)
+            } else if let windowView = self.window?.contentView {
+                self.window?.makeFirstResponder(windowView)
+            }
+        }
         
         let vStack = NSStackView(orientation: .vertical)
         vStack.alignment = .leading
@@ -81,6 +102,7 @@ class DateRangePane: NSView {
         
         addSubview(vStack)
         vStack.anchorAllSides(to: self)
+        vStack.setHuggingPriority(.required, for: .vertical)
         prepareToShow()
     }
     
@@ -98,6 +120,7 @@ class DateRangePane: NSView {
             picker.dateValue = thisMorning
             picker.maxDate = thisMorning
         }
+        disclosure.isShowingDetails = false
     }
     
     @objc private func rangeDatePickerAction(_ sender: NSDatePicker) {
@@ -130,6 +153,12 @@ class DateRangePane: NSView {
         let startDate = startDatePicker.dateValue
         let endDate = startDatePicker.dateValue
         // some sanity checking of invariants
+        if startDatePicker.timeInterval != 0 {
+            wdlog(.warn, "Start date picker had interval %f", startDatePicker.timeInterval)
+        }
+        if endDatePicker.timeInterval != 0 {
+            wdlog(.warn, "End date picker had interval %f", endDatePicker.timeInterval)
+        }
         if startDate != rangeDatePicker.dateValue {
             wdlog(.warn, "Start date picker was %@, but range picker's start was %@",
                   startDate as NSDate,

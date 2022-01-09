@@ -14,6 +14,7 @@
 		7E1EE6622612EEF1003314EE /* CloseConfirmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1EE6612612EEF1003314EE /* CloseConfirmer.swift */; };
 		7E1F9060250C5CC500992B7F /* TimeZone+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */; };
 		7E2159E625301BFE00EE5A11 /* MainLauncher.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E2159E525301BFE00EE5A11 /* MainLauncher.xib */; };
+		7E235E03278A968800253DD8 /* NonFocusingNSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E235E02278A968800253DD8 /* NonFocusingNSViewController.swift */; };
 		7E30B46124C38D91003F3679 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E30B46024C38D91003F3679 /* Atomic.swift */; };
 		7E37A27424BFF676005BA1DF /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A27224BFF676005BA1DF /* Model.xcdatamodeld */; };
 		7E37A29024BFFFCB005BA1DF /* Project+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A28C24BFFFCB005BA1DF /* Project+CoreDataClass.swift */; };
@@ -160,6 +161,7 @@
 		7E1C2F5024CE43C40070D8CD /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
 		7E1EE6612612EEF1003314EE /* CloseConfirmer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseConfirmer.swift; sourceTree = "<group>"; };
 		7E2159E525301BFE00EE5A11 /* MainLauncher.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainLauncher.xib; sourceTree = "<group>"; };
+		7E235E02278A968800253DD8 /* NonFocusingNSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonFocusingNSViewController.swift; sourceTree = "<group>"; };
 		7E30B46024C38D91003F3679 /* Atomic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
 		7E37A27324BFF676005BA1DF /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		7E37A28C24BFFFCB005BA1DF /* Project+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -529,6 +531,7 @@
 				7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */,
 				7EF58F8A2580F180002F9604 /* TutorialViewController.swift */,
 				7EF58F8B2580F180002F9604 /* TutorialViewController.xib */,
+				7E235E02278A968800253DD8 /* NonFocusingNSViewController.swift */,
 			);
 			path = controllers;
 			sourceTree = "<group>";
@@ -841,6 +844,7 @@
 				7EDDFF5E250097B30027E91A /* Date+Helpers.swift in Sources */,
 				7E37A29524C00266005BA1DF /* Model.swift in Sources */,
 				7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */,
+				7E235E03278A968800253DD8 /* NonFocusingNSViewController.swift in Sources */,
 				7EDA368F24D54EA300F5E368 /* FlippedView.swift in Sources */,
 				7EB7495D25169A44001C7DBC /* GlobalShortcut.swift in Sources */,
 				7EF857A324E242AB00867832 /* ManualTickScheduler.swift in Sources */,

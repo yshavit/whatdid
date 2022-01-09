@@ -10,6 +10,8 @@ class DisclosureWithLabel: NSView {
     private let labelButton = NSButton(title: "Show", target: nil, action: nil)
     private var _detailsView: NSView?
     private var _labelText = ""
+    
+    var onToggle: (Bool) -> Void = {_ in }
 
     var detailsView: NSView? {
         get {
@@ -41,7 +43,13 @@ class DisclosureWithLabel: NSView {
     }
     
     var isShowingDetails: Bool {
-        disclosureButton.state == .on
+        get {
+            disclosureButton.state == .on
+        }
+        set (value) {
+            disclosureButton.state = value ? .on : .off
+            updateViews()
+        }
     }
 
     override init(frame frameRect: NSRect) {
@@ -60,6 +68,7 @@ class DisclosureWithLabel: NSView {
         
         labelButton.isBordered = false
         labelButton.bezelStyle = .regularSquare
+        labelButton.refusesFirstResponder = true
         [labelButton, disclosureButton].forEach {b in
             b.target = self
             b.action = #selector(handleClick(_:))
@@ -87,8 +96,19 @@ class DisclosureWithLabel: NSView {
     
     private func updateViews() {
         let detailIsShowing = isShowingDetails
+        let wasHidingDetails = detailsView?.isHidden ?? false
         detailsView?.isHidden = !detailIsShowing
         let verb = detailIsShowing ? "Hide" : "Show"
         labelButton.title = _labelText.isEmpty ? verb : "\(verb) \(_labelText)"
+        
+        onToggle(detailIsShowing)
+        let isHidingDetails = detailsView?.isHidden ?? false
+        // The onToggle must have re-flipped us. Make the toggle state reflects that.
+        disclosureButton.state = isHidingDetails ? .off : .on
+        
+        if isHidingDetails != wasHidingDetails, let window = self.window, let contentView = window.contentView {
+            // This is the expected case
+            window.setContentSize(contentView.fittingSize)
+        }
     }
 }
