@@ -16,7 +16,7 @@ class GoalsTest: AppUITestBase {
             waitForTransition(of: .ptn, toIsVisible: false)
         }
         group("no goals for today") {
-            clickStatusMenu(with: .maskAlternate)
+            clickStatusMenu(with: .option)
             let goalsReport = wait(for: .dailyEnd).groups["Today's Goals"]
             wait(
                 until: {goalsReport.staticTexts.allElementsBoundByIndex.map({$0.stringValue})},
@@ -278,7 +278,7 @@ class GoalsTest: AppUITestBase {
             waitForTransition(of: .ptn, toIsVisible: false)
         }
         group("validate in daily report") {
-            clickStatusMenu(with: .maskAlternate)
+            clickStatusMenu(with: .option)
             let dailyReport = wait(for: .dailyEnd)
             XCTAssertEqual(
                 ["goal 1", "goal 2", "goal 3 🔸"],

@@ -42,23 +42,13 @@ class AppUITestBase: UITestBase {
         datePicker.click(using: .frame(xInlay: 1.0/6))
     }
     
-    private static var focusMenuItemPoint: CGPoint?
     private static var _uiHookTimeZone: TimeZone?
     
     override func uiSetUp() {
         activate()
-        let clickPoint: CGPoint
-        if let p = AppUITestBase.focusMenuItemPoint {
-            clickPoint = p
-        } else {
-            let focusMenuItem = XCUIApplication().menuBars.children(matching: .statusItem)["Focus Whatdid"]
-            focusMenuItem.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
-            AppUITestBase.focusMenuItemPoint = CGEvent(source: nil)?.location
-            XCTAssertNotNil(AppUITestBase.focusMenuItemPoint)
-            clickPoint = AppUITestBase.focusMenuItemPoint!
+        XCUIElement.perform(withKeyModifiers: .option) {
+            app.menuBars.statusItems["Focus Whatdid"].click()
         }
-        leftClick("focus/reset menu item", at: clickPoint, with: .maskAlternate)
-        leftClick("", at: clickPoint, with: []) // for some reason, we need this to flush out the maskAlternate
         wait(for: "window to close", until: {openWindow == nil})
     }
     

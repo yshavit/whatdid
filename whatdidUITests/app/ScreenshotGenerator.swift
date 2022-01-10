@@ -66,7 +66,7 @@ class ScreenshotGenerator: AppUITestBase {
             checkForAndDismiss(window: .ptn)
         }
         group("daily report") {
-            clickStatusMenu(with: .maskAlternate)
+            clickStatusMenu(with: .option)
             let report = wait(for: .dailyEnd)
             let testInfraTasks = report.groups["Tasks for \"test infrastructure\""]
             group("expand 'test infrastructure' project") {

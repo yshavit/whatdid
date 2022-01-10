@@ -59,7 +59,7 @@ class DailyReportTest: AppUITestBase {
             entriesHook = entries.get()
         }
         group("bring up daily report") {
-            clickStatusMenu(with: .maskAlternate)
+            clickStatusMenu(with: .option)
             waitForTransition(of: .dailyEnd, toIsVisible: true)
         }
         group("Spot check on project a") {
@@ -136,7 +136,7 @@ class DailyReportTest: AppUITestBase {
             ]
         }
         group("check report") {
-            clickStatusMenu(with: .maskAlternate)
+            clickStatusMenu(with: .option)
             waitForTransition(of: .dailyEnd, toIsVisible: true)
             
             let allLabels = Set(find(.dailyEnd).scrollViews.staticTexts.allElementsBoundByIndex.map { $0.label })
@@ -162,7 +162,7 @@ class DailyReportTest: AppUITestBase {
             entriesHook = manyEntries.get(endingAtSecondsSince1970: 0)
         }
         group("bring up daily report") {
-            clickStatusMenu(with: .maskAlternate)
+            clickStatusMenu(with: .option)
             waitForTransition(of: .dailyEnd, toIsVisible: true)
         }
         let dailyReport = find(.dailyEnd)

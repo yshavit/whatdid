@@ -36,19 +36,14 @@ class UITestBase: XCTestCase {
         return CGEvent(source: nil)!.location
     }
     
-    func clickStatusMenu(with flags: CGEventFlags = []) {
+    func clickStatusMenu(with modifiers: XCUIElement.KeyModifierFlags = []) {
         // In headless mode (or whatever GH actions uses), I can't just use the XCUIElement's `click()`
         // when the app is in the background. Instead, I fetched the status item's location during setUp, and
         // now directly post the click events to it.
         group("Click status menu") {
-            leftClick("status menu", at: UITestBase.statusItemPoint, with: flags)
-        }
-    }
-    
-    func leftClick(_ description: String, at point: CGPoint, with flags: CGEventFlags = []) {
-        group("Click \(description)") {
-            clickEvent(.leftMouseDown, at: point, with: flags)
-            clickEvent(.leftMouseUp, at: point, with: flags)
+            XCUIElement.perform(withKeyModifiers: modifiers) {
+                app.menuBars.children(matching: .statusItem).element(boundBy: 0).click()
+            }
         }
     }
     
