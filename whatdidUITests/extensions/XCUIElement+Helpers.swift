@@ -95,12 +95,9 @@ extension XCUIElement {
         case .builtin:
             click()
         case .frame(let xInlay, let yInlay, let xExtraOffset, let yExtraOffset):
-            let myFrame = frame
-            let point = CGPoint(
-                x: myFrame.minX + (frame.width * xInlay) + xExtraOffset,
-                y: myFrame.minY + (frame.height * yInlay) + yExtraOffset)
-            XCTestCase.clickEvent(.leftMouseDown, at: point, with: [])
-            XCTestCase.clickEvent(.leftMouseUp, at: point, with: [])
+            coordinate(withNormalizedOffset: CGVector(dx: xInlay, dy: yInlay))
+                .withOffset(CGVector(dx: xExtraOffset, dy: yExtraOffset))
+                .tap()
         }
     }
     
