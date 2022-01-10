@@ -163,6 +163,256 @@ class ComponentUITests: XCTestCase {
             createdLabels.allElementsBoundByIndex.map({$0.label}))
     }
     
+    func testDateRangePane() {
+        use("DateRangePane")
+        
+        let pickerLocations = group("calibrate picker coordinates") { () -> [(CoordinateInfo, YearMonthDay)] in
+            testWindow.checkBoxes["show_calendar_calibration"].click()
+            let pickerLocations = findDatePickerBoxes(in: testWindow.datePickers["calendar_calibration"])
+            testWindow.checkBoxes["show_calendar_calibration"].click()
+            return pickerLocations
+        }
+        
+        // First, some simple stuff with the endpoint-selectors disclosure closed
+        let rangePicker = testWindow.datePickers["range_picker"]
+        let startPicker = testWindow.datePickers["start_date_picker"]
+        let endPicker = testWindow.datePickers["end_date_picker"]
+        let applyButton = testWindow.buttons["apply_range_button"]
+        group("with endpoint selectors closed") {
+            group("single date in range picker") {
+                let (coordinate, ymd) = pickerLocations[0]
+                coordinate.click(in: rangePicker)
+                checkReportedDateRange(from: ymd, to: ymd, diff: "0m")
+            }
+            group("two dates in range picker") {
+                let (coordinate1, ymd1) = pickerLocations[0]
+                let (coordinate2, _) = pickerLocations[1]
+                coordinate1.click(in: rangePicker, thenDragTo: coordinate2)
+                checkReportedDateRange(from: ymd1, to: ymd1.withAdditional(days: 1), diff: "1d 0h 0m")
+            }
+        }
+        group("open endpoint pickers") {
+            group("endpoint pickers not initially visible") {
+                XCTAssertFalse(startPicker.isVisible)
+                XCTAssertFalse(endPicker.isVisible)
+            }
+            group("show endpoint pickers") {
+                testWindow.disclosureTriangles["toggle_endpoint_pickers"].click()
+                wait(for: "date pickers", until: { startPicker.isVisible })
+                XCTAssertTrue(endPicker.isVisible)
+            }
+        }
+        group("with endpoint selectors open") {
+            group("select middle date in range picker") {
+                let origReported = getReportedDateRange()
+                let (coordinate, ymd) = pickerLocations[1]
+                
+                // Click in the range picker. The reported values shouldn't have changed yet, but the endpoint pickers should
+                coordinate.click(in: rangePicker)
+                checkReportedDateRange(from: origReported.from, to: origReported.to, diff: origReported.diff)
+                XCTAssertEqual(ymd.asDate, startPicker.datePickerValue)
+                XCTAssertEqual(ymd.asDate, endPicker.datePickerValue)
+                
+                // Click the apply button. Confirm the new values, and that they're different from the old
+                // (being different from the old doesn't check the prod code, really; it's a validation on the test itself, to
+                // protect against an accidental no-op check.)
+                applyButton.click()
+                let newReported = checkReportedDateRange(from: ymd, to: ymd, diff: "0m")
+                XCTAssertNotEqual(origReported, newReported)
+                // Endpoint pickers should be unchanged
+                XCTAssertEqual(ymd.asDate, startPicker.datePickerValue)
+                XCTAssertEqual(ymd.asDate, endPicker.datePickerValue)
+            }
+            
+            group("set endpoints individually") {
+                let rangeScreenshot = group("get screenshot from range") { () -> Data in
+                    let (coordinate1, _) = pickerLocations[0]
+                    let (coordinate2, _) = pickerLocations[2]
+                    coordinate1.click(in: rangePicker, thenDragTo: coordinate2)
+                    return rangePicker.getImage(andAddTo: self, withName: "target image")
+                }
+                let (middleDayCoordinate, middleDayYmd) = pickerLocations[1]
+                group("pick middle day") {
+                    middleDayCoordinate.click(in: rangePicker)
+                    XCTAssertNotEqual(rangeScreenshot, rangePicker.getImage(andAddTo: self))
+                }
+                group("set endpoints") {
+                    startPicker.typeIntoDatePicker(day: middleDayYmd.day - 1)
+                    endPicker.typeIntoDatePicker(day: middleDayYmd.day + 1)
+                }
+                group("check ranges before clicking okay") {
+                    XCTAssertEqual(rangeScreenshot, rangePicker.getImage(andAddTo: self))
+                    checkReportedDateRange(from: middleDayYmd, to: middleDayYmd, diff: "0m")
+                }
+                group("check ranges after clicking okay") {
+                    applyButton.click()
+                    XCTAssertEqual(rangeScreenshot, rangePicker.getImage(andAddTo: self))
+                    checkReportedDateRange(
+                        from: middleDayYmd.withAdditional(days: -1),
+                        to: middleDayYmd.withAdditional(days: 1),
+                        diff: "2d 0h 0m")
+                }
+            }
+            
+            group("endpoints invert range") {
+                // start after end, or end before start
+                let (coordinate1, ymd1) = pickerLocations[0]
+                let (coordinate2, ymd2) = pickerLocations[1]
+                let (coordinate3, ymd3) = pickerLocations[2]
+                
+                group("set end before start") {
+                    // If we set the end before the range's start, then start == end
+                    group("select days 2-3") {
+                        coordinate2.click(in: rangePicker, thenDragTo: coordinate3)
+                        XCTAssertEqual(ymd2.asDate, startPicker.datePickerValue)
+                        XCTAssertEqual(ymd3.asDate, endPicker.datePickerValue)
+                    }
+                    group("pick end as day 1") {
+                        endPicker.typeIntoDatePicker(day: ymd1.day)
+                        XCTAssertEqual(ymd1.asDate, startPicker.datePickerValue)
+                        XCTAssertEqual(ymd1.asDate, endPicker.datePickerValue)
+                    }
+                }
+                group("set start after end") {
+                    // If we set the start after the range's end, then start == end
+                    group("select days 1-2") {
+                        coordinate1.click(in: rangePicker, thenDragTo: coordinate2)
+                        XCTAssertEqual(ymd1.asDate, startPicker.datePickerValue)
+                        XCTAssertEqual(ymd2.asDate, endPicker.datePickerValue)
+                    }
+                    group("pick start as day 3") {
+                        startPicker.typeIntoDatePicker(day: ymd3.day)
+                        XCTAssertEqual(ymd3.asDate, startPicker.datePickerValue)
+                        XCTAssertEqual(ymd3.asDate, endPicker.datePickerValue)
+                    }
+                }
+            }
+        }
+    }
+    
+    /// Checks the DateRangerPicker, which is a popdown menu button for "today/yesterday/custom."
+    ///
+    /// The custom view uses DateRangePane, which we test above. To simplify this test:
+    ///    1. We'll assume that this uses a DateRangePane (the accessibility IDs we use will implicitly verify that)
+    ///    2. We'll only set the DateRangePane's options via its individual endpoint pickers (not the range selector)
+    ///
+    /// While the DateRangePane's start and end are literally what the user picks (ie, they can be the same for a single-day range), the DateRangePicker
+    /// always represents a Date range for which we should pick data. This means that its endpoint is actually the visible endpoint plus 1 day. For example,
+    /// if you selected a single day of 2021-01-09, then the range is from 2021-01-09T09:00:00 to 2021-01-10T09:00:00.
+    ///
+    /// This test assumes "today" starts at 1969-12-31T09:00:00+02:00.
+    func testDateRangePicker() {
+        use("DateRangePicker")
+        
+        let pickerButton = testWindow.popUpButtons["picker"]
+        group("initial state") {
+            checkReportedDateRange(from: "1969-12-31T09:00:00+02:00", to: "1970-01-01T09:00:00+02:00", diff: "1d 0h 0m")
+            XCTAssertEqual("today", pickerButton.stringValue)
+        }
+        
+        func pickCustomRange(fromDay: Int, toDay: Int) {
+            if pickerButton.menuItems.count == 0 {
+                pickerButton.click()
+            }
+            XCTAssertEqual(
+                ["today", "yesterday", "custom"],
+                pickerButton.menuItems.allElementsBoundByIndex.map({$0.title}))
+            let datePicker = pickerButton.datePickers.firstMatch
+            pickerButton.menuItems["custom"].click()
+            wait(for: "date picker to show", until: { datePicker.isVisible })
+            pickerButton.disclosureTriangles["toggle_endpoint_pickers"].click()
+            
+            testWindow.datePickers["start_date_picker"].typeIntoDatePicker(day: fromDay)
+            testWindow.datePickers["end_date_picker"].typeIntoDatePicker(day: toDay)
+            testWindow.buttons["apply_range_button"].click()
+            
+            wait(for: "date picker to hide", until: { !datePicker.isVisible })
+        }
+        
+        group("pick yesterday") {
+            pickerButton.click()
+            pickerButton.menuItems["yesterday"].click()
+            checkReportedDateRange(
+                from: "1969-12-30T09:00:00+02:00",
+                to: "1969-12-31T09:00:00+02:00",
+                diff: "1d 0h 0m")
+            XCTAssertEqual("yesterday", pickerButton.stringValue)
+        }
+        group("pick today") {
+            pickerButton.click()
+            pickerButton.menuItems["today"].click()
+            checkReportedDateRange(
+                from: "1969-12-31T09:00:00+02:00",
+                to: "1970-01-01T09:00:00+02:00",
+                diff: "1d 0h 0m")
+            XCTAssertEqual("today", pickerButton.stringValue)
+        }
+        group("pick yesterday as custom") {
+            pickCustomRange(fromDay: 30, toDay: 30)
+            checkReportedDateRange(
+                from: "1969-12-30T09:00:00+02:00",
+                to: "1969-12-31T09:00:00+02:00",
+                diff: "1d 0h 0m")
+            XCTAssertEqual("yesterday", pickerButton.stringValue)
+        }
+        group("pick today as custom") {
+            pickCustomRange(fromDay: 31, toDay: 31)
+            checkReportedDateRange(
+                from: "1969-12-31T09:00:00+02:00",
+                to: "1970-01-01T09:00:00+02:00",
+                diff: "1d 0h 0m")
+            XCTAssertEqual("today", pickerButton.stringValue)
+        }
+        group("one custom day") {
+            pickCustomRange(fromDay: 13, toDay: 13)
+            checkReportedDateRange(
+                from: "1969-12-13T09:00:00+02:00",
+                to: "1969-12-14T09:00:00+02:00",
+                diff: "1d 0h 0m")
+            XCTAssertEqual("Dec 13", pickerButton.stringValue)
+        }
+        group("two custom days") {
+            pickCustomRange(fromDay: 13, toDay: 14)
+            checkReportedDateRange(
+                from: "1969-12-13T09:00:00+02:00",
+                to: "1969-12-15T09:00:00+02:00",
+                diff: "2d 0h 0m")
+            XCTAssertEqual("Dec 13 and Dec 14", pickerButton.stringValue)
+        }
+        group("three custom days") {
+            pickCustomRange(fromDay: 13, toDay: 15)
+            checkReportedDateRange(
+                from: "1969-12-13T09:00:00+02:00",
+                to: "1969-12-16T09:00:00+02:00",
+                diff: "3d 0h 0m")
+            XCTAssertEqual("Dec 13 through Dec 15", pickerButton.stringValue)
+        }
+        group("range ending yesterday") {
+            pickCustomRange(fromDay: 13, toDay: 30)
+            checkReportedDateRange(
+                from: "1969-12-13T09:00:00+02:00",
+                to: "1969-12-31T09:00:00+02:00",
+                diff: "18d 0h 0m")
+            XCTAssertEqual("Dec 13 through yesterday", pickerButton.stringValue)
+        }
+        group("range ending today") {
+            pickCustomRange(fromDay: 13, toDay: 31)
+            checkReportedDateRange(
+                from: "1969-12-13T09:00:00+02:00",
+                to: "1970-01-01T09:00:00+02:00",
+                diff: "19d 0h 0m")
+            XCTAssertEqual("Dec 13 through today", pickerButton.stringValue)
+        }
+        group("yesterday and today") {
+            pickCustomRange(fromDay: 30, toDay: 31)
+            checkReportedDateRange(
+                from: "1969-12-30T09:00:00+02:00",
+                to: "1970-01-01T09:00:00+02:00",
+                diff: "2d 0h 0m")
+            XCTAssertEqual("yesterday and today", pickerButton.stringValue)
+        }
+    }
+    
     func testAutocompleteEmptyOptions() {
         use("Autocomplete")
         let optionsDefinition = testWindow.textFields["test_defineoptions"]
@@ -509,4 +759,34 @@ class ComponentUITests: XCTestCase {
         }
     }
     
+    private struct ReportedDateRange: Equatable {
+        let from: String
+        let to: String
+        let diff: String
+    }
+    
+    private func getReportedDateRange() -> ReportedDateRange {
+        return ReportedDateRange(
+            from: testWindow.staticTexts["result_start"].stringValue,
+            to: testWindow.staticTexts["result_end"].stringValue,
+            diff: testWindow.staticTexts["result_diff"].stringValue
+        )
+    }
+    
+    @discardableResult
+    private func checkReportedDateRange(from: String, to: String, diff: String) -> ReportedDateRange {
+        let actual = getReportedDateRange()
+        XCTAssertEqual(from, actual.from)
+        XCTAssertEqual(to, actual.to)
+        XCTAssertEqual(diff, actual.diff)
+        return actual
+    }
+    
+    @discardableResult
+    private func checkReportedDateRange(from: YearMonthDay, to: YearMonthDay, diff: String) -> ReportedDateRange {
+        return checkReportedDateRange(
+            from: "\(from.asDashedString)T09:00:00+02:00",
+            to: "\(to.asDashedString)T09:00:00+02:00",
+            diff: diff)
+    }
 }

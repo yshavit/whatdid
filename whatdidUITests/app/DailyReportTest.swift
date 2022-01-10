@@ -16,7 +16,7 @@ class DailyReportTest: AppUITestBase {
                 .add(project: "project b", task: "task 1", notes: "fizz", minutes: 5)
                 .add(project: "project c", task: "task 2", notes: "fuzz", minutes: 10)
             let _ = openPtn()
-            entriesHook = entries.get(startingAtSecondsSince1970: secondsIn24Hrs)
+            entriesHook = entries.get(endingAtSecondsSince1970: secondsIn24Hrs)
         }
         group("report opens while PTN is already open") {
             setTimeUtc(d: 1, h: 0, m: 0)
@@ -35,7 +35,7 @@ class DailyReportTest: AppUITestBase {
                 .add(project: "project a", task: "task 1", notes: "back to first", minutes: 5)
                 .add(project: "project b", task: "task 1", notes: "fizz", minutes: 5)
                 .add(project: "project c", task: "task 2", notes: "fuzz", minutes: 10)
-            entriesHook = entries.get(startingAtSecondsSince1970: secondsIn24Hrs)
+            entriesHook = entries.get(endingAtSecondsSince1970: secondsIn24Hrs)
         }
         group("fast-forward to just before daily report") {
             setTimeUtc(h: 15, m: 59)
@@ -59,7 +59,7 @@ class DailyReportTest: AppUITestBase {
             entriesHook = entries.get()
         }
         group("bring up daily report") {
-            clickStatusMenu(with: .maskAlternate)
+            clickStatusMenu(with: .option)
             waitForTransition(of: .dailyEnd, toIsVisible: true)
         }
         group("Spot check on project a") {
@@ -119,6 +119,39 @@ class DailyReportTest: AppUITestBase {
         }
     }
     
+    func testTimeBoundaries() {
+        group("initialize the data") {
+            /// We want four items:
+            /// - right before today
+            /// - the first second of today
+            /// - the last second of today
+            /// - right after today
+            /// In Athens time, it's currently 2am on 1/1/1970. So, this morning started 9am on Dec 31.
+            /// And tomorrow morning is at 9am on 1/1/1970 (in just 7 hours)
+            entriesHook = [
+                FlatEntry(from: athensTime(1969, 12, 31, t: 08, 59, 59), to: athensTime(1969, 12, 31, t: 09, 00, 00), project: "aaa", task: "a", notes: "a"),
+                FlatEntry(from: athensTime(1969, 12, 31, t: 09, 00, 00), to: athensTime(1969, 12, 31, t: 09, 00, 01), project: "bbb", task: "b", notes: "b"),
+                FlatEntry(from: athensTime(1970, 01, 01, t: 09, 00, 00), to: athensTime(1970, 01, 01, t: 09, 00, 01), project: "ccc", task: "c", notes: "c"),
+                FlatEntry(from: athensTime(1970, 01, 01, t: 09, 00, 01), to: athensTime(1970, 01, 01, t: 09, 00, 02), project: "ddd", task: "d", notes: "d"),
+            ]
+        }
+        group("check report") {
+            clickStatusMenu(with: .option)
+            waitForTransition(of: .dailyEnd, toIsVisible: true)
+            
+            let allLabels = Set(find(.dailyEnd).scrollViews.staticTexts.allElementsBoundByIndex.map { $0.label })
+            
+            log("Found \(allLabels.count) labels:")
+            for label in allLabels.sorted() {
+                log("- \(label)")
+            }
+            XCTAssertFalse(allLabels.contains("Project \"aaa\""))
+            XCTAssertTrue(allLabels.contains("Project \"bbb\""))
+            XCTAssertTrue(allLabels.contains("Project \"ccc\""))
+            XCTAssertFalse(allLabels.contains("Project \"ddd\""))
+        }
+    }
+    
     /// Create lots of projects, such that we need to scroll to see them all
     func testDailyReportScrollBar() {
         group("Initalize the data") {
@@ -126,10 +159,10 @@ class DailyReportTest: AppUITestBase {
             for i in 1...25 {
                 manyEntries.add(project: "project \(i)", task: "only task", notes: "", minutes: Double(i))
             }
-            entriesHook = manyEntries.get(startingAtSecondsSince1970: secondsIn24Hrs)
+            entriesHook = manyEntries.get(endingAtSecondsSince1970: 0)
         }
         group("bring up daily report") {
-            clickStatusMenu(with: .maskAlternate)
+            clickStatusMenu(with: .option)
             waitForTransition(of: .dailyEnd, toIsVisible: true)
         }
         let dailyReport = find(.dailyEnd)
@@ -186,9 +219,9 @@ class DailyReportTest: AppUITestBase {
             // Our current date is 1/2/1970 00:00:00, and the report starts at the 7am before that. We want the previous day's,
             // which goes from 12/31/1969 07:00:00 to 1/1/1970 00:00:00.
             let dailyReportWindow = app.windows[WindowType.dailyEnd.windowTitle].firstMatch
-            XCTAssertTrue(dailyReportWindow.datePickers.firstMatch.hasFocus) // sanity check
-            dailyReportWindow.typeKey(.tab) // tab to the date portion, then arrowdown to decrement it
-            dailyReportWindow.typeKey(.downArrow)
+            let button = dailyReportWindow.popUpButtons["today"]
+            button.click()
+            button.menuItems["yesterday"].click()
         }
         group("Confirm that the report has the entry") {
             let dailyReportWindow = app.windows[WindowType.dailyEnd.windowTitle].firstMatch
@@ -251,9 +284,9 @@ class DailyReportTest: AppUITestBase {
             return self
         }
         
-        func get(startingAtSecondsSince1970 start: Int = 0) -> [FlatEntry] {
+        func get(endingAtSecondsSince1970 end: Int = 0) -> [FlatEntry] {
             let totalInterval = _entries.map({$0.duration}).reduce(0, +)
-            var startTime = Date(timeIntervalSince1970: Double(start) - totalInterval)
+            var startTime = Date(timeIntervalSince1970: Double(end) - totalInterval)
             var flatEntries = [FlatEntry]()
             for e in _entries {
                 let from = startTime

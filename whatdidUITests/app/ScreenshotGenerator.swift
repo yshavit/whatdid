@@ -19,7 +19,7 @@ class ScreenshotGenerator: AppUITestBase {
 
     func testPtnAndDailyReport() {
         let lastEntryEpochSeconds = group("set up entries") {() -> Int in
-            entriesHook = readEntries()
+            entriesHook = duplicateToTomorrow(readEntries())
             let lastEntry = entriesHook.last!
             return Int(lastEntry.to.timeIntervalSince1970)
         }
@@ -66,7 +66,7 @@ class ScreenshotGenerator: AppUITestBase {
             checkForAndDismiss(window: .ptn)
         }
         group("daily report") {
-            clickStatusMenu(with: .maskAlternate)
+            clickStatusMenu(with: .option)
             let report = wait(for: .dailyEnd)
             let testInfraTasks = report.groups["Tasks for \"test infrastructure\""]
             group("expand 'test infrastructure' project") {
@@ -181,6 +181,20 @@ class ScreenshotGenerator: AppUITestBase {
             return failAndReturn(with: "invalid data in resource")
         }
         return string
+    }
+    
+    func duplicateToTomorrow(_ entries: [FlatEntry]) -> [FlatEntry] {
+        let cal = Calendar.current
+        let yesterdayEntries = entries.map { e in
+            return FlatEntry(
+                from: cal.date(byAdding: .day, value: -1, to: e.from)!,
+                to: cal.date(byAdding: .day, value: -1, to: e.to)!,
+                project: e.project.rot13,
+                task: e.task.rot13,
+                notes: e.notes?.rot13)
+        }
+        let combined = yesterdayEntries + entries
+        return combined
     }
     
     func failAndReturn<T>(with message: String) -> T {

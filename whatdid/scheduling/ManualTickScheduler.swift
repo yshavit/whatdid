@@ -45,6 +45,14 @@ class ManualTickScheduler: Scheduler {
         }
     }
     
+    var calendar: Calendar {
+        get {
+            var cal = Calendar.current
+            cal.timeZone = timeZone
+            return cal
+        }
+    }
+    
     var timeZone: TimeZone {
         get {
             // Some time zone that isn't UTC or mine (America/New_York).

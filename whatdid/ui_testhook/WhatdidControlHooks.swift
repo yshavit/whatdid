@@ -5,6 +5,7 @@ import Cocoa
 class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
     
     private static let deferCheckboxTitle = "Defer until deactivation"
+    private static let showUiConstraintsPrefsKey = "NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints"
     /// Note that this is super wide. We'll also set the alpha to 0, which effectively hides the item.
     /// This lets us take screenshots of it without it getting in the way; and the wideness means that if we
     /// order the icons as whatdid's being rightmost and then this directly left of it, then the screenshots won't include
@@ -19,6 +20,7 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
     private let entriesField: NSTextField
     private let pasteboardButton: PasteboardView
     private let hideStatusItem: NSButton
+    private let showConstraints: NSButton
     
     override init() {
         setter = NSTextField(string: "0")
@@ -44,6 +46,9 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
         // See comment on entriesField for why we can't set the target yet
         hideStatusItem = NSButton(checkboxWithTitle: "Hide 'Focus Whatdid' Status Item", target: nil, action: nil)
         
+        showConstraints = NSButton(checkboxWithTitle: "Show UI constraints", target: nil, action: nil)
+        showConstraints.state = UserDefaults.standard.bool(forKey: WhatdidControlHooks.showUiConstraintsPrefsKey) ? .on : .off
+        
         super.init()
         
         updateDate()
@@ -60,6 +65,9 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
         hideStatusItem.target = self
         hideStatusItem.action = #selector(self.toggleStatusItemVisibility(_:))
         
+        showConstraints.target = self
+        showConstraints.action = #selector(self.toggleShowUiConstraints(_:))
+        
         setUpActivator()
     }
     
@@ -74,6 +82,12 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
         adder(deferButton)
         adder(printUtc)
         adder(printLocal)
+        let tzField = NSTextField(labelWithString: DefaultScheduler.instance.calendar.timeZone.identifier)
+        tzField.setAccessibilityIdentifier("time_zone_identifier")
+        let tzStack = NSStackView(orientation: .horizontal)
+        tzStack.addArrangedSubview(NSTextField(labelWithString: "time zone:"))
+        tzStack.addArrangedSubview(tzField)
+        adder(tzStack)
         
         divider()
         adder(entriesField)
@@ -94,6 +108,7 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
         animationFactorStack.addArrangedSubview(NSTextField(labelWithString: "Animation factor"))
         animationFactorStack.addArrangedSubview(animationFactorField)
         adder(animationFactorStack)
+        adder(showConstraints)
         
         divider()
         adder(NSTextField(labelWithString: "Log messages:"))
@@ -178,8 +193,14 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
         
     }
     
+    @objc private func toggleShowUiConstraints(_ toggle: NSButton) {
+        let key = WhatdidControlHooks.showUiConstraintsPrefsKey
+        UserDefaults.standard.set(toggle.state == .on, forKey: key)
+        wdlog(.debug, "%@ is now %d", key, UserDefaults.standard.bool(forKey: key))
+    }
+    
     func populateJsonFlatEntryField() {
-        let entries = AppDelegate.instance.model.listEntries(since: Date.distantPast)
+        let entries = AppDelegate.instance.model.listEntries(from: Date.distantPast, to: Date.distantFuture)
         entriesField.stringValue = FlatEntry.serialize(entries)
     }
     
@@ -190,7 +211,7 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
     private func setEntriesViaJson(string: String) {
         let entries = FlatEntry.deserialize(from: string)
         AppDelegate.instance.resetModel()
-        entries.forEach {AppDelegate.instance.model.add($0, andThen: {})}
+        entries.reversed().forEach {AppDelegate.instance.model.add($0, andThen: {})}
     }
     
     func controlTextDidEndEditing(_ obj: Notification) {

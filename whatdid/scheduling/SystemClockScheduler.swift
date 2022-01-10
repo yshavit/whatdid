@@ -19,6 +19,10 @@ class SystemClockScheduler: Scheduler {
         return TimeZone.autoupdatingCurrent
     }
     
+    var calendar: Calendar {
+        return Calendar.current
+    }
+    
     func schedule(_ description: String, at date: Date, _ block: @escaping () -> Void) -> ScheduledTask {
         let task = SystemScheduledTask(description: description, at: date, block: block, parent: self)
         pendingTasks[task.uuid] = task

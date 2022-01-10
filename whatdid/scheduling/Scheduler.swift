@@ -5,6 +5,7 @@ import Foundation
 protocol Scheduler {
     var now: Date { get }
     var timeZone: TimeZone { get }
+    var calendar: Calendar { get }
     @discardableResult func schedule(_ description: String, at: Date, _ block: @escaping () -> Void) -> ScheduledTask
 }
 

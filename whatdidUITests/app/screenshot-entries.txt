@@ -1,4 +1,6 @@
-| 9:10  | general             | email               | morning email rounds                                              |
+| 08:59 | late night          | previous day's task | this item's time is (just barely) before the day's official start |
+| 09:01 | late night          | previous day's task | this is when that late night task ended                           |
+| 09:10 | general             | email               | morning email rounds                                              |
 | 09:22 | general             | email               | morning email rounds                                              |
 | 09:31 | website revamp      | new homepage        |                                                                   |
 | 09:41 | website revamp      | new homepage        |                                                                   |

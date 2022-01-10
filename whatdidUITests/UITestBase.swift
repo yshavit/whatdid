@@ -5,8 +5,6 @@ import XCTest
 class UITestBase: XCTestCase {
     
     private static var app : XCUIApplication?
-    /// A point within the status menu item. Access this via `var statusItemPoint`, which calculates it if needed.
-    private static var _statusItemPoint: CGPoint?
     /// Whether we should restart the app at setup, if it's already running
     private static var shouldRestartApp = false
     
@@ -18,55 +16,50 @@ class UITestBase: XCTestCase {
         UITestBase.activate()
     }
     
-    static var statusItemPoint: CGPoint {
-        get {
-            if let result = _statusItemPoint {
-                return result
-            } else {
-                activate()
-                _statusItemPoint = hoverToFindPoint(in: app!.menuBars.children(matching: .statusItem).element(boundBy: 0))
-                return _statusItemPoint!
-            }
-        }
-    }
-    
     static func hoverToFindPoint(in element: XCUIElement) -> CGPoint {
         // The 0.5 isn't necessary, but it positions the cursor in the middle of the item. Just looks nicer.
         element.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
         return CGEvent(source: nil)!.location
     }
     
-    func clickStatusMenu(with flags: CGEventFlags = []) {
+    func clickStatusMenu(with modifiers: XCUIElement.KeyModifierFlags = []) {
         // In headless mode (or whatever GH actions uses), I can't just use the XCUIElement's `click()`
         // when the app is in the background. Instead, I fetched the status item's location during setUp, and
         // now directly post the click events to it.
         group("Click status menu") {
-            leftClick("status menu", at: UITestBase.statusItemPoint, with: flags)
-        }
-    }
-    
-    func leftClick(_ description: String, at point: CGPoint, with flags: CGEventFlags = []) {
-        group("Click \(description)") {
-            clickEvent(.leftMouseDown, at: point, with: flags)
-            clickEvent(.leftMouseUp, at: point, with: flags)
+            let menuItem = app.menuBars.children(matching: .statusItem).element(boundBy: 0)
+            if (modifiers.isEmpty) {
+                menuItem.click()
+            } else {
+                XCUIElement.perform(withKeyModifiers: modifiers, block: menuItem.click)
+            }
         }
     }
     
     func dragStatusMenu(to newX: CGFloat) {
         group("Drag status menu") {
-            clickEvent(.leftMouseDown, at: UITestBase.statusItemPoint, with: .maskCommand)
-            clickEvent(.leftMouseUp, at: CGPoint(x: newX, y: UITestBase.statusItemPoint.y), with: [])
-            let oldPoint = UITestBase.statusItemPoint
-            // We dragged to the very edge of the screen, but the actual icon will
-            // be to the left of that (for instance, it can't be to the right of the clock).
-            // So, just invalidate our statusItemPoint cache, and we'll look it up as needed.
-            UITestBase._statusItemPoint = nil
+            let menuItem = app.menuBars.children(matching: .statusItem).element(boundBy: 0)
+            let originalCoordinate = menuItem.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            let originalCoordinateAbs = originalCoordinate.screenPoint
+            
+            let deltaToNewX = newX - originalCoordinateAbs.x
+            let newXCoordinate = originalCoordinate.withOffset(CGVector(dx: deltaToNewX, dy: 0))
+            
+            XCUIElement.perform(withKeyModifiers: .command) {
+                originalCoordinate.click(forDuration: 0.25, thenDragTo: newXCoordinate)
+            }
             
             addTeardownBlock {
                 self.group("Drag status menu back") {
-                    self.clickEvent(.leftMouseDown, at: UITestBase.statusItemPoint, with: .maskCommand)
-                    self.clickEvent(.leftMouseUp, at: oldPoint, with: [])
-                    UITestBase._statusItemPoint = oldPoint
+                    let currentCoordinate = menuItem.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+                    let currentCoordinateAbs = currentCoordinate.screenPoint
+                    let revertCoordinate = currentCoordinate.withOffset(CGVector(
+                        dx: originalCoordinateAbs.x - currentCoordinateAbs.x,
+                        dy: originalCoordinateAbs.y - currentCoordinateAbs.y)
+                    )
+                    XCUIElement.perform(withKeyModifiers: .command) {
+                        currentCoordinate.click(forDuration: 0.25, thenDragTo: revertCoordinate)
+                    }
                 }
             }
         }

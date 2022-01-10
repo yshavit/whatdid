@@ -19,15 +19,19 @@ class DayEndReportController: NSViewController {
     @IBOutlet weak var projectsScroll: NSScrollView!
     @IBOutlet weak var projectsContainer: NSStackView!
     @IBOutlet weak var projectsWidthConstraint: NSLayoutConstraint!
-    @IBOutlet weak var entryStartDatePicker: NSDatePicker!
+    @IBOutlet weak var dateRangePicker: DateRangePicker!
     @IBOutlet weak var shockAbsorber: NSView!
     private var scrollBarHelper: ScrollBarHelper?
 
     var scheduler: Scheduler = DefaultScheduler.instance
     
     override func awakeFromNib() {
-        if #available(OSX 10.15.4, *) {
-            entryStartDatePicker.presentsCalendarOverlay = true
+        dateRangePicker.onDateSelection {startDate, endDate, reason in
+            if reason == .userAction {
+                self.updateGoalsAnimated(start: startDate, end: endDate)
+            } else {
+                self.updateEntries(start: startDate, end: endDate)
+            }
         }
     }
     
@@ -46,13 +50,7 @@ class DayEndReportController: NSViewController {
             maxViewHeight.constant = screenHeight * 0.61802903
             wdlog(.debug, "set max height to %.1f (screen height is %.1f)", maxViewHeight.constant, screenHeight)
         }
-        // Set up the date picker
-        let now = scheduler.now
-        entryStartDatePicker.timeZone = scheduler.timeZone // mostly useful for UI tests, which use a fake tz
-        entryStartDatePicker.maxDate = now
-        entryStartDatePicker.dateValue = thisMorning(assumingNow: now)
-        
-        updateEntries()
+        dateRangePicker.prepareToShow()
     }
     
     override func viewWillAppear() {
@@ -74,13 +72,7 @@ class DayEndReportController: NSViewController {
         scrollBarHelper = nil
     }
     
-    func thisMorning(assumingNow now: Date) -> Date {
-        Prefs.dayStartTime.map {hh, mm in
-            return TimeUtil.dateForTime(.previous, hh: hh, mm: mm, assumingNow: now)
-        }
-    }
-    
-    @IBAction func userChangedEntryStartDate(_ sender: Any) {
+    private func updateGoalsAnimated(start: Date, end: Date) {
         AnimationHelper.animate(
             change: {
                 goalsSummaryStack.subviews.forEach { $0.removeFromSuperview() }
@@ -95,49 +87,61 @@ class DayEndReportController: NSViewController {
                 self.resizeAndLayoutIfNeeded()
             },
             onComplete: {
-                AnimationHelper.animate(change: self.updateEntries)
+                AnimationHelper.animate {
+                    self.updateEntries(start: start, end: end)
+                }
             })
     }
     
-    private func updateGoals(since startTime: Date) {
+    private func updateGoals(from startDate: Date, to endDate: Date) {
         goalsSummaryStack.subviews.forEach { $0.removeFromSuperview() }
-        
-        let oneDayView = startTime >= Prefs.dayStartTime.map {hh, mm in TimeUtil.dateForTime(.previous, hh: hh, mm: mm)}
-        let goals = AppDelegate.instance.model.listGoals(since: startTime)
+        let goals = AppDelegate.instance.model.listGoals(from: startDate, to: endDate)
+        let isMultiDayView = TimeUtil.daysBetween(now: startDate, andDate: endDate) != 1
         let completed = goals.filter({$0.isCompleted}).count
         
         let summaryText: String
         if goals.isEmpty {
-            summaryText = oneDayView ? "No goals for today." : "No goals for this time range."
+            if isMultiDayView {
+                summaryText = "No goals for this date range."
+            } else {
+                let thisMorning = Prefs.dayStartTime.map {hh, mm in TimeUtil.dateForTime(.previous, hh: hh, mm: mm)}
+                if startDate == thisMorning {
+                    summaryText = "No goals for today."
+                } else {
+                    let yesterdayMorning = DefaultScheduler.instance.calendar.date(byAdding: .day, value: -1, to: thisMorning)
+                    if startDate == yesterdayMorning {
+                        summaryText = "No goals for yesterday."
+                    } else {
+                        summaryText = "No goals for this day."
+                    }
+                }
+            }
         } else {
             summaryText = "Completed \(completed.pluralize("goal", "goals")) out of \(goals.count)."
         }
         goalsSummaryStack.addArrangedSubview(NSTextField(labelWithString: summaryText))
         
-        if !goals.isEmpty {
-            if oneDayView {
-                goals.map(GoalsView.from(_:)).forEach(goalsSummaryStack.addArrangedSubview(_:))
-            } else {
-                goalsSummaryStack.addArrangedSubview(NSTextField(labelWithAttributedString: NSAttributedString(
-                    string: "(not listing them, because you selected more than one day)",
-                    attributes: [
-                        NSAttributedString.Key.font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
-                        NSAttributedString.Key.obliqueness: 0.15
-                    ]
-                )))
-            }
+        if isMultiDayView && !goals.isEmpty {
+            goalsSummaryStack.addArrangedSubview(NSTextField(labelWithAttributedString: NSAttributedString(
+                string: "(not listing them, because you selected more than one day)",
+                attributes: [
+                    NSAttributedString.Key.font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
+                    NSAttributedString.Key.obliqueness: 0.15
+                ]
+            )))
+        } else {
+            goals.map(GoalsView.from(_:)).forEach(goalsSummaryStack.addArrangedSubview(_:))
         }
     }
     
-    private func updateEntries() {
-        let since = entryStartDatePicker.dateValue
-        wdlog(.debug, "Updating entries since %@", since as NSDate)
-        updateGoals(since: since)
+    private func updateEntries(start: Date, end: Date) {
+        wdlog(.debug, "Updating entries from %@ to %@", start as NSDate, end as NSDate)
+        
+        updateGoals(from: start, to: end)
         projectsContainer.subviews.forEach {$0.removeFromSuperview()}
         
-        let projects = Model.GroupedProjects(from: AppDelegate.instance.model.listEntries(since: since))
+        let projects = Model.GroupedProjects(from: AppDelegate.instance.model.listEntries(from: start, to: end))
         let allProjectsTotalTime = projects.totalTime
-        let todayStart = thisMorning(assumingNow: scheduler.now)
         projects.forEach {project in
             // The vstack group for the whole project
             let projectVStack = NSStackView()
@@ -200,7 +204,7 @@ class DayEndReportController: NSViewController {
                     add: taskDetailsGridBox,
                     to: tasksStack,
                     beforeShowing: {
-                        self.details(for: task, to: taskDetailsGrid, relativeTo: todayStart)
+                        self.details(for: task, to: taskDetailsGrid, relativeTo: start)
                     },
                     afterHiding: {
                         while taskDetailsGrid.numberOfRows > 0 {

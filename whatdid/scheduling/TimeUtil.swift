@@ -36,7 +36,7 @@ class TimeUtil {
     }
     
     static func sameDay(_ day1: Date, _ day2: Date) -> Bool {
-        let cal = Calendar.current
+        let cal = DefaultScheduler.instance.calendar
         return cal.component(.year, from: day1) == cal.component(.year, from: day2)
             && cal.component(.month, from: day1) == cal.component(.month, from: day2)
             && cal.component(.day, from: day1) == cal.component(.day, from: day2)
@@ -45,7 +45,7 @@ class TimeUtil {
     static func dateForTime(_ direction: TimeDirection, hh: Int, mm: Int, excludeWeekends: Bool = false, assumingNow: Date? = nil, withTimeZone tz: TimeZone? = nil) -> Date {
         let now = assumingNow ??
             DefaultScheduler.instance.now.addingTimeInterval(TimeInterval(direction.timeDelta))
-        var cal = Calendar.current
+        var cal = DefaultScheduler.instance.calendar
         cal.timeZone = tz ?? DefaultScheduler.instance.timeZone
         var result = cal.date(bySettingHour: hh, minute: mm, second: 00, of: now)
         switch direction {
@@ -109,9 +109,11 @@ class TimeUtil {
         return result
     }
     
-    static func daysBetween(now: Date, andDate then: Date, using timeZone: TimeZone) -> Int {
-        var calendar = NSCalendar.current
-        calendar.timeZone = timeZone
+    static func daysBetween(now: Date, andDate then: Date, using timeZone: TimeZone? = nil) -> Int {
+        var calendar = DefaultScheduler.instance.calendar
+        if let timeZone = timeZone {
+            calendar.timeZone = timeZone
+        }
         let nowStart = calendar.startOfDay(for: now)
         let thenStart = calendar.startOfDay(for: then)
         return calendar.dateComponents([.day], from: nowStart, to: thenStart).day ?? 0

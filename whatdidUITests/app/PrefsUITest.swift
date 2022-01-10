@@ -109,7 +109,12 @@ class PrefsUITest: AppUITestBase {
             prefsButton.click()
             wait(for: "prefernces sheet", until: {ptn.window.exists && ptn.window.sheets.count > 0})
             prefsSheet.buttons["Quit"].click()
-            wait(for: "app to exit", until: {app.state == .notRunning})
+            // app.state is updated asynchronously, so it may take a while to register
+            wait(for: "app to exit", timeout: 120, until: {
+                let state = app.state
+                log("saw state: \(state.rawValue)")
+                return state == .notRunning
+            })
        }
     }
 

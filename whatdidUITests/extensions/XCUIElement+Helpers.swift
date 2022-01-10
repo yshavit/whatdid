@@ -38,6 +38,35 @@ extension XCUIElement {
         return value as! Bool
     }
     
+    var datePickerValue: Date {
+        XCTAssertEqual(XCUIElement.ElementType.datePicker, elementType)
+        let asString = stringValue
+        
+        let asStringFullRange = NSRange(location: 0, length: asString.lengthOfBytes(using: .utf8))
+        let regex = try! NSRegularExpression(pattern: #"Unsafe value, description '([^']+)'"#)
+        guard let match = regex.firstMatch(in: asString, options: [], range: asStringFullRange) else {
+            XCTFail("stringValue didn't match expected datePicker regex: \(asString)")
+            let blank: Date? = nil
+            return blank!
+        }
+        let isoMatchRange = Range(match.range(at: 1), in: asString)!
+        let resultString = String(asString[isoMatchRange])
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss ZZZZZ"
+        let result = formatter.date(from: resultString)
+        return result!
+    }
+    
+    func typeIntoDatePicker(year: Int? = nil, month: Int? = nil, day: Int? = nil) {
+        XCTAssertEqual(XCUIElement.ElementType.datePicker, elementType)
+        // Assume pickers have components MM/DD/YYYY, and that clicking into 0.1x gets to the MM component.
+        click(using: .frame(xInlay: 0.1, yInlay: 0.5))
+        func str(_ value: Int?) -> String {
+            return value.map(String.init) ?? ""
+        }
+        typeText("\(str(month))\t\(str(day))\t\(str(year))\r")
+    }
+    
     func backtab() {
         typeKey(.tab, modifierFlags: .shift)
     }
@@ -65,14 +94,10 @@ extension XCUIElement {
         switch method {
         case .builtin:
             click()
-        case .frame(let xInlay, let yInlay):
-            let myFrame = frame
-            let point = CGPoint(
-                x: myFrame.minX + (frame.width * xInlay),
-                y: myFrame.minY + (frame.height * yInlay))
-            
-            XCTestCase.clickEvent(.leftMouseDown, at: point, with: [])
-            XCTestCase.clickEvent(.leftMouseUp, at: point, with: [])
+        case .frame(let xInlay, let yInlay, let xExtraOffset, let yExtraOffset):
+            coordinate(withNormalizedOffset: CGVector(dx: xInlay, dy: yInlay))
+                .withOffset(CGVector(dx: xExtraOffset, dy: yExtraOffset))
+                .tap()
         }
     }
     
@@ -149,6 +174,30 @@ extension XCUIElement {
         lines.forEach { print($0) }
         print(header)
     }
+    
+    /// Return a `Data` object representing the element's screenshot.
+    ///
+    /// The intention is to treat this as an opaque object that you can use to compare with `XCTAssertEquals`.
+    func getImage(andAddTo target: XCTActivity, withName name: String? = nil) -> Data {
+        let screenshot = screenshot()
+        let nsImage = screenshot.image
+        
+        let attachment = XCTAttachment(image: nsImage)
+        attachment.name = "screenshot of \(name ?? elementType.description)"
+        target.add(attachment)
+        
+        let cgImage = nsImage.cgImage(forProposedRect: nil, context: nil, hints: nil)
+        let imageRep = NSBitmapImageRep(cgImage: cgImage!)
+        imageRep.size = nsImage.size
+        let data = imageRep.representation(using: .png, properties: [:])!
+        
+        // In case there's a failure, attach the raw bytes as well, for better analysis.
+        let dataAttachment = XCTAttachment(data: data)
+        dataAttachment.name = "\(name ?? elementType.description).png"
+        target.add(dataAttachment)
+        
+        return data
+    }
 }
 
 enum ElementClickMethod {
@@ -163,7 +212,7 @@ enum ElementClickMethod {
     /// The events are at a point that's `xInlay`% into the frame by width, and `yInlay`% by height.
     /// For instance, to click right in the middle (the default), use `(0.5, 0.5)`. To click near the top-left
     /// of the element, you might do smoething like (0.1, 0.1).
-    case frame(xInlay: CGFloat=0.5, yInlay: CGFloat=0.5)
+    case frame(xInlay: CGFloat=0.5, yInlay: CGFloat=0.5, xExtraOffset: CGFloat=0, yExtraOffset: CGFloat=0)
 }
 
 extension XCUIElement.ElementType {

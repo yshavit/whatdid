@@ -16,7 +16,7 @@ class ModelTest: XCTestCase {
         for project in projects {
             XCTAssertEqual([sameTask], model.listTasks(project: project), "for project \"\(project)\"")
         }
-        XCTAssertEqual(entries.reversed(), model.listEntries(since: epoch(0)))
+        XCTAssertEqual(entries, model.listEntries(from: epoch(0), to: epoch(1000)))
     }
     
     func testProjectsAreDeduped() {
@@ -30,7 +30,7 @@ class ModelTest: XCTestCase {
         for project in projects {
             XCTAssertEqual(["two", "one"], model.listTasks(project: project), "for project \"\(project)\"")
         }
-        XCTAssertEqual(entries.reversed(), model.listEntries(since: epoch(0)))
+        XCTAssertEqual(entries, model.listEntries(from: epoch(0), to: epoch(1000)))
     }
 
     func testTasksAreDedupedWithinProject() {
@@ -45,7 +45,7 @@ class ModelTest: XCTestCase {
         for project in projects {
             XCTAssertEqual([sameTask], model.listTasks(project: project), "for project \"\(project)\"")
         }
-        XCTAssertEqual(entries.reversed(), model.listEntries(since: epoch(0)))
+        XCTAssertEqual(entries, model.listEntries(from: epoch(0), to: epoch(1000)))
     }
     
     private func add(_ entry: FlatEntry, to model: Model) -> FlatEntry {

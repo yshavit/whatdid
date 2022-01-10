@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="System colors introduced in macOS 10.13" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="DayEndReportController" customModule="whatdid" customModuleProvider="target">
             <connections>
-                <outlet property="entryStartDatePicker" destination="I9K-te-jfd" id="Zma-bE-IER"/>
+                <outlet property="dateRangePicker" destination="4il-8J-dck" id="Fix-zI-Yx4"/>
                 <outlet property="goalsSummaryGroup" destination="V55-nV-Y5s" id="DxF-mT-cMT"/>
                 <outlet property="goalsSummaryStack" destination="1RQ-eW-vGH" id="L7V-FB-jCR"/>
                 <outlet property="maxViewHeight" destination="1ka-g6-16p" id="IdU-SA-mes"/>
@@ -23,41 +23,28 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <stackView wantsLayer="YES" distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qn8-JX-HeH" userLabel="Top">
-            <rect key="frame" x="0.0" y="0.0" width="400" height="95"/>
+        <stackView identifier="top-v" wantsLayer="YES" distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qn8-JX-HeH" userLabel="Top">
+            <rect key="frame" x="0.0" y="0.0" width="400" height="99"/>
             <subviews>
-                <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pKe-k9-zAn" userLabel="Header Stack">
-                    <rect key="frame" x="0.0" y="71" width="264" height="24"/>
+                <stackView identifier="header-h" distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="500" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pKe-k9-zAn" userLabel="Header Stack">
+                    <rect key="frame" x="0.0" y="79" width="218" height="20"/>
                     <subviews>
                         <textField identifier="header_label" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-Lm-qUL" userLabel="Header">
-                            <rect key="frame" x="-2" y="4" width="118" height="16"/>
-                            <textFieldCell key="cell" lineBreakMode="clipping" identifier="header_cell" title="View entries since:" id="jJc-W3-EKA" userLabel="Header cell">
+                            <rect key="frame" x="-2" y="0.0" width="114" height="16"/>
+                            <textFieldCell key="cell" lineBreakMode="clipping" identifier="header_cell" title="Task overview for:" id="jJc-W3-EKA" userLabel="Header cell">
                                 <font key="font" usesAppearanceFont="YES"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="findHighlightColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>
-                        <datePicker verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="I9K-te-jfd">
-                            <rect key="frame" x="122" y="0.0" width="145" height="28"/>
-                            <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="578-tE-w1E">
-                                <font key="font" metaFont="menu" size="11"/>
-                                <date key="date" timeIntervalSinceReferenceDate="-595929600">
-                                    <!--1982-02-12 16:00:00 +0000-->
-                                </date>
-                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <datePickerElements key="datePickerElements" year="YES" month="YES" day="YES" hour="YES" minute="YES"/>
-                            </datePickerCell>
-                            <connections>
-                                <action selector="userChangedEntryStartDate:" target="-2" id="cm8-Xo-4Od"/>
-                            </connections>
-                        </datePicker>
+                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="4il-8J-dck" customClass="DateRangePicker" customModule="whatdid" customModuleProvider="target">
+                            <rect key="frame" x="118" y="0.0" width="100" height="16"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="16" placeholder="YES" id="XKx-Xi-Ukw"/>
+                            </constraints>
+                        </customView>
                     </subviews>
-                    <constraints>
-                        <constraint firstItem="I9K-te-jfd" firstAttribute="top" secondItem="pKe-k9-zAn" secondAttribute="top" id="7LI-9h-9I1"/>
-                        <constraint firstItem="I9K-te-jfd" firstAttribute="centerY" secondItem="wxD-Lm-qUL" secondAttribute="centerY" id="tdI-ii-dPG"/>
-                        <constraint firstAttribute="bottom" secondItem="I9K-te-jfd" secondAttribute="bottom" id="zz6-qP-ZbY"/>
-                    </constraints>
+                    <edgeInsets key="edgeInsets" left="0.0" right="0.0" top="4" bottom="0.0"/>
                     <visibilityPriorities>
                         <integer value="1000"/>
                         <integer value="1000"/>
@@ -68,10 +55,10 @@
                     </customSpacing>
                 </stackView>
                 <box verticalHuggingPriority="1000" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="hAT-mx-IFG">
-                    <rect key="frame" x="0.0" y="64" width="400" height="5"/>
+                    <rect key="frame" x="0.0" y="72" width="400" height="5"/>
                 </box>
-                <customView focusRingType="none" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="V55-nV-Y5s">
-                    <rect key="frame" x="0.0" y="46" width="400" height="16"/>
+                <customView identifier="goals-box" focusRingType="none" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="V55-nV-Y5s">
+                    <rect key="frame" x="0.0" y="54" width="400" height="16"/>
                     <subviews>
                         <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1RQ-eW-vGH" userLabel="Goals Summary Stack">
                             <rect key="frame" x="0.0" y="0.0" width="400" height="16"/>
@@ -103,17 +90,17 @@
                     </constraints>
                 </customView>
                 <box verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="h3O-9g-faO">
-                    <rect key="frame" x="0.0" y="39" width="400" height="5"/>
+                    <rect key="frame" x="0.0" y="47" width="400" height="5"/>
                 </box>
-                <scrollView wantsLayer="YES" verticalHuggingPriority="999" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LDw-zz-ziZ" userLabel="Projects scroll">
-                    <rect key="frame" x="0.0" y="25" width="400" height="16"/>
-                    <clipView key="contentView" wantsLayer="YES" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vpo-4L-DGR" userLabel="Projects clip">
+                <scrollView identifier="projects-scroll" wantsLayer="YES" verticalHuggingPriority="999" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LDw-zz-ziZ" userLabel="Projects scroll">
+                    <rect key="frame" x="0.0" y="29" width="400" height="16"/>
+                    <clipView key="contentView" identifier="projects-clip" wantsLayer="YES" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vpo-4L-DGR" userLabel="Projects clip">
                         <rect key="frame" x="0.0" y="0.0" width="400" height="16"/>
                         <subviews>
-                            <view wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W7j-r2-UD7" userLabel="Projects document" customClass="FlippedView" customModule="whatdid" customModuleProvider="target">
+                            <view identifier="projects-doc" wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W7j-r2-UD7" userLabel="Projects document" customClass="FlippedView" customModule="whatdid" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="400" height="16"/>
                                 <subviews>
-                                    <stackView wantsLayer="YES" distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UTB-GH-C4K" userLabel="Projects vstack">
+                                    <stackView identifier="projects-vstack" wantsLayer="YES" distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UTB-GH-C4K" userLabel="Projects vstack">
                                         <rect key="frame" x="0.0" y="0.0" width="400" height="16"/>
                                         <subviews>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SnG-M9-8Cz">
@@ -150,15 +137,15 @@
                         <color key="backgroundColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
                     <constraints>
-                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="16" id="1ka-g6-16p"/>
-                        <constraint firstAttribute="trailing" secondItem="W7j-r2-UD7" secondAttribute="trailing" constant="-1" id="Ggd-Ap-vRa"/>
-                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="12345" id="UB3-c9-V8z" userLabel="width fits on scren"/>
-                        <constraint firstItem="W7j-r2-UD7" firstAttribute="leading" secondItem="LDw-zz-ziZ" secondAttribute="leading" constant="1" id="aql-aV-OJW"/>
-                        <constraint firstAttribute="height" relation="lessThanOrEqual" secondItem="UTB-GH-C4K" secondAttribute="height" id="dDz-hE-Ybj"/>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="800" constant="350" id="gqZ-sZ-vJR"/>
-                        <constraint firstItem="W7j-r2-UD7" firstAttribute="height" secondItem="LDw-zz-ziZ" secondAttribute="height" priority="501" id="h6w-1E-UOk"/>
-                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="450" id="kCo-JN-Qur"/>
-                        <constraint firstAttribute="height" priority="800" constant="37" placeholder="YES" id="o6f-K3-YH7"/>
+                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="16" identifier="projects-height16" id="1ka-g6-16p"/>
+                        <constraint firstAttribute="trailing" secondItem="W7j-r2-UD7" secondAttribute="trailing" constant="-1" identifier="projects-trailing" id="Ggd-Ap-vRa"/>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="12345" identifier="project-width-huge" id="UB3-c9-V8z" userLabel="width fits on scren"/>
+                        <constraint firstItem="W7j-r2-UD7" firstAttribute="leading" secondItem="LDw-zz-ziZ" secondAttribute="leading" constant="1" identifier="projects-leading" id="aql-aV-OJW"/>
+                        <constraint firstAttribute="height" relation="lessThanOrEqual" secondItem="UTB-GH-C4K" secondAttribute="height" identifier="projects-height-lt-vstack" id="dDz-hE-Ybj"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="800" constant="350" identifier="projects-width-gt350" id="gqZ-sZ-vJR"/>
+                        <constraint firstItem="W7j-r2-UD7" firstAttribute="height" secondItem="LDw-zz-ziZ" secondAttribute="height" priority="501" identifier="projects-doc-height" id="h6w-1E-UOk"/>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="450" identifier="projects-width-lt450" id="kCo-JN-Qur"/>
+                        <constraint firstAttribute="height" priority="800" constant="37" placeholder="YES" identifier="projects-height37" id="o6f-K3-YH7"/>
                     </constraints>
                     <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="mcw-YE-dMv">
                         <rect key="frame" x="-100" y="-100" width="398" height="16"/>
@@ -172,7 +159,7 @@
                 <box verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="xNZ-4N-Ext">
                     <rect key="frame" x="0.0" y="22" width="400" height="5"/>
                 </box>
-                <customView verticalHuggingPriority="1" verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="dFU-a1-6Dj" userLabel="Shock Absorber">
+                <customView identifier="shock-absorber" verticalHuggingPriority="1" verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="dFU-a1-6Dj" userLabel="Shock Absorber">
                     <rect key="frame" x="0.0" y="0.0" width="163" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" placeholder="YES" id="cyu-Qz-RCd"/>
@@ -180,13 +167,11 @@
                 </customView>
             </subviews>
             <constraints>
-                <constraint firstItem="V55-nV-Y5s" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" id="9OU-Hb-fFQ"/>
-                <constraint firstItem="h3O-9g-faO" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" id="WB1-I0-7hD"/>
-                <constraint firstItem="LDw-zz-ziZ" firstAttribute="top" secondItem="h3O-9g-faO" secondAttribute="bottom" id="etz-QC-via"/>
-                <constraint firstItem="xNZ-4N-Ext" firstAttribute="top" secondItem="LDw-zz-ziZ" secondAttribute="bottom" id="g9c-ak-SAN"/>
-                <constraint firstItem="hAT-mx-IFG" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" id="nCY-3T-gJp"/>
-                <constraint firstItem="LDw-zz-ziZ" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" id="oDo-5Q-hjJ"/>
-                <constraint firstItem="xNZ-4N-Ext" firstAttribute="width" secondItem="h3O-9g-faO" secondAttribute="width" id="oGY-bb-pnj"/>
+                <constraint firstItem="V55-nV-Y5s" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" identifier="b" id="9OU-Hb-fFQ"/>
+                <constraint firstItem="h3O-9g-faO" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" identifier="c" id="WB1-I0-7hD"/>
+                <constraint firstItem="hAT-mx-IFG" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" identifier="a" id="nCY-3T-gJp"/>
+                <constraint firstItem="LDw-zz-ziZ" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" identifier="e" id="oDo-5Q-hjJ"/>
+                <constraint firstItem="xNZ-4N-Ext" firstAttribute="width" secondItem="h3O-9g-faO" secondAttribute="width" identifier="g" id="oGY-bb-pnj"/>
             </constraints>
             <visibilityPriorities>
                 <integer value="1000"/>

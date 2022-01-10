@@ -141,12 +141,16 @@ class Model {
         return results
     }
     
-    func listEntries(since: Date) -> [FlatEntry] {
+    func listEntries(from: Date, to: Date) -> [FlatEntry] {
         var results : [FlatEntry] = []
         container.viewContext.performAndWait {
             do {
                 let request = NSFetchRequest<Entry>(entityName: "Entry")
-                request.predicate = NSPredicate(format: "timeApproximatelyStarted >= %@", since as NSDate)
+                request.predicate = NSPredicate(
+                    format: "(timeApproximatelyStarted >= %@) AND (timeApproximatelyStarted <= %@)",
+                    from as NSDate,
+                    to as NSDate)
+                request.sortDescriptors = [.init(key: "timeApproximatelyStarted", ascending: true)]
                 let entries = try request.execute()
                 results = entries.map({entry in
                     FlatEntry(
@@ -212,15 +216,22 @@ class Model {
         return results
     }
     
-    func listGoals(since: Date) -> [GoalDto] {
+    func listGoals(from: Date, to: Date) -> [GoalDto] {
         var results = [GoalDto]()
         container.viewContext.performAndWait {
             let request = NSFetchRequest<Goal>(entityName: "Goal")
-            request.predicate = NSPredicate(format: "created >= %@", since as NSDate)
+            request.predicate = NSPredicate(
+                format: "(created >= %@) AND (created <= %@)",
+                from as NSDate,
+                to as NSDate)
             do {
                 results = try request.execute().map(GoalDto.fromManaged(_:))
             } catch {
-                wdlog(.error, "couldn't lists goals since %{public}@: %@", since as NSDate, error as NSError)
+                wdlog(.error,
+                      "couldn't lists goals from %{public}@ to %{public}@: %@",
+                      from as NSDate,
+                      to as NSDate,
+                      error as NSError)
             }
         }
         results.sort()

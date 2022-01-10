@@ -42,22 +42,13 @@ class AppUITestBase: UITestBase {
         datePicker.click(using: .frame(xInlay: 1.0/6))
     }
     
-    private static var focusMenuItemPoint: CGPoint?
+    private static var _uiHookTimeZone: TimeZone?
     
     override func uiSetUp() {
         activate()
-        let clickPoint: CGPoint
-        if let p = AppUITestBase.focusMenuItemPoint {
-            clickPoint = p
-        } else {
-            let focusMenuItem = XCUIApplication().menuBars.children(matching: .statusItem)["Focus Whatdid"]
-            focusMenuItem.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).hover()
-            AppUITestBase.focusMenuItemPoint = CGEvent(source: nil)?.location
-            XCTAssertNotNil(AppUITestBase.focusMenuItemPoint)
-            clickPoint = AppUITestBase.focusMenuItemPoint!
+        XCUIElement.perform(withKeyModifiers: .option) {
+            app.menuBars.statusItems["Focus Whatdid"].click()
         }
-        leftClick("focus/reset menu item", at: clickPoint, with: .maskAlternate)
-        leftClick("", at: clickPoint, with: []) // for some reason, we need this to flush out the maskAlternate
         wait(for: "window to close", until: {openWindow == nil})
     }
     
@@ -77,6 +68,27 @@ class AppUITestBase: UITestBase {
         app.menuBars.statusItems["Focus Whatdid"].click()
         mockedClockWindow.staticTexts.firstMatch.click()
         return mockedClockWindow
+    }
+    
+    var uiHookTimeZone: TimeZone {
+        if AppUITestBase._uiHookTimeZone == nil {
+            let tzId = uiHooksWindow.staticTexts["time_zone_identifier"].stringValue
+            AppUITestBase._uiHookTimeZone = TimeZone(identifier: tzId)!
+        }
+        return AppUITestBase._uiHookTimeZone!
+    }
+    
+    func athensTime(_ year: Int, _ month: Int, _ day: Int, t hour: Int, _ minute: Int, _ second: Int) -> Date {
+        return DateComponents(
+            calendar: Calendar.current,
+            timeZone: uiHookTimeZone,
+            year: year,
+            month: month,
+            day: day,
+            hour: hour,
+            minute: minute,
+            second: second
+        ).date!
     }
     
     /// Sets the mocked clock in UTC. If `deactivate` is true (default false), then this will set the mocked clock to set the time when the app deactivates, and then this method will activate
