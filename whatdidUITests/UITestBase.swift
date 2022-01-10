@@ -27,8 +27,11 @@ class UITestBase: XCTestCase {
         // when the app is in the background. Instead, I fetched the status item's location during setUp, and
         // now directly post the click events to it.
         group("Click status menu") {
-            XCUIElement.perform(withKeyModifiers: modifiers) {
-                app.menuBars.children(matching: .statusItem).element(boundBy: 0).click()
+            let menuItem = app.menuBars.children(matching: .statusItem).element(boundBy: 0)
+            if (modifiers.isEmpty) {
+                menuItem.click()
+            } else {
+                XCUIElement.perform(withKeyModifiers: modifiers, block: menuItem.click)
             }
         }
     }
