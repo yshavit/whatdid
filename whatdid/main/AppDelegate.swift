@@ -12,6 +12,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var _model = Model()
     @IBOutlet weak var mainMenu: MainMenu!
     private var deactivationHooks : Atomic<[() -> Void]> = Atomic(wrappedValue: [])
+    private var openWindows: Int = 0
     
     #if UI_TEST
     private var uiTestWindow: UiTestWindow!
@@ -109,8 +110,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         #endif
     }
     
-    func applicationWillHide(_ notification: Notification) {
-        wdlog(.debug, "application will hide")
+    func incrementWindowCounter() {
+        openWindows += 1
+    }
+    
+    func decrementWindowCounter() {
+        openWindows -= 1
+        let openWindows = openWindows
+        if openWindows <= 0 {
+            if openWindows < 0 {
+                wdlog(.warn, "AppDelegate.openWindows is negative! %d", openWindows)
+            }
+            NSApp.hide(self)
+        }
     }
     
     func applicationDidHide(_ notification: Notification) {

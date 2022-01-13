@@ -5,6 +5,7 @@ import KeyboardShortcuts
 
 class PrefsViewController: NSViewController {
     public static let SHOW_TUTORIAL = NSApplication.ModalResponse(27)
+    public static let CLOSE_PTN = NSApplication.ModalResponse(28)
     @Pref(key: "prefsview.openItem") private static var openTab = 0
     
     @IBOutlet private var outerVStackWidth: NSLayoutConstraint!
@@ -61,6 +62,54 @@ class PrefsViewController: NSViewController {
     dynamic var requireNotes: Bool {
         get { Prefs.requireNotes }
         set(value) { Prefs.requireNotes = value}
+    }
+    
+    @IBAction func handlePressExport(_ sender: Any) {
+        let selectedFormat = exportFormatPopup.selectedItem
+        guard let format = selectedFormat?.representedObject as? EntryExportFormat else {
+            wdlog(.error, "Couldn't determine file format to export as")
+            return
+        }
+        
+        let savePanel = NSSavePanel()
+        savePanel.title = "Export Whatdid Data"
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = DefaultScheduler.instance.timeZone
+        dateFormatter.dateFormat = "yyyy-mm-dd'T'HHmmssZ"
+        let now = dateFormatter.string(from: Date())
+        savePanel.nameFieldStringValue = "whatdid-export-\(now).\(format.fileExtension)"
+        
+        AppDelegate.instance.incrementWindowCounter()
+        endParentSheet(with: PrefsViewController.CLOSE_PTN)
+        
+        savePanel.begin { response in
+            defer {
+                AppDelegate.instance.decrementWindowCounter()
+            }
+            guard response == .OK else {
+                return
+            }
+            guard let url = savePanel.url else {
+                wdlog(.error, "couldn't find URL from save panel")
+                return
+            }
+            guard let output = OutputStream(url: url, append: false) else {
+                wdlog(.error, "couldn't open output stream for url=%@", savePanel.url?.path ?? "<unknown path>")
+                return
+            }
+            wdlog(.debug, "export: fetching projects")
+            let entries = AppDelegate.instance.model.listEntries(from: Date.distantPast, to: Date.distantFuture)
+            
+            wdlog(.debug, "preparing to write to stream")
+            output.open()
+            do {
+                try format.write(entries: entries, to: output)
+                wdlog(.info, "finished export to %@", url.path)
+            } catch {
+                wdlog(.error, "failed to export to %@: %@", url.path, error.localizedDescription)
+            }
+            output.close()
+        }
     }
     
     override func viewDidLoad() {
@@ -156,6 +205,8 @@ class PrefsViewController: NSViewController {
     
     @IBOutlet var globalShortcutHolder: NSView!
     
+    @IBOutlet weak var exportFormatPopup: NSPopUpButton!
+    
     let calendarForDateTimePickers = DefaultScheduler.instance.calendar
     
     private func setUpGeneralPanel() {
@@ -183,6 +234,12 @@ class PrefsViewController: NSViewController {
         setTimePicker(dailyReportTime, to: Prefs.dailyReportTime)
         setTimePicker(dayStartTimePicker, to: Prefs.dayStartTime)
         daysIncludeWeekends.state = Prefs.daysIncludeWeekends ? .on : .off
+        
+        exportFormatPopup.removeAllItems()
+        allEntryExportFormats.forEach { format in
+            exportFormatPopup.addItem(withTitle: format.name)
+            exportFormatPopup.lastItem?.representedObject = format
+        }
     }
     
     func getHhMm(for picker: NSDatePicker) -> HoursAndMinutes {

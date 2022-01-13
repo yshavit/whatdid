@@ -286,6 +286,9 @@ class PtnViewController: NSViewController {
                 if reason == PrefsViewController.SHOW_TUTORIAL {
                     self.showTutorial(forVersion: PtnViewController.CURRENT_TUTORIAL_VERSION)
                 }
+                if reason == PrefsViewController.CLOSE_PTN {
+                    self.closeWindowAsync()
+                }
                 self.setNotesPlaceholder()
                 self.setUpSnoozeButton(untilTomorrowSettings: prefsViewController.snoozeUntilTomorrowInfo)
             })

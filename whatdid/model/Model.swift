@@ -343,8 +343,8 @@ class Model {
             project?.add(flatEntry: entry)
         }
         
-        func forEach(_ block: (GroupedProject) -> Void) {
-            groupedProjects.values.map { ($0.totalTime, $0) }.sorted(by: { $0.0 > $1.0 }).map { $0.1 }.forEach(block)
+        func forEach(_ block: (GroupedProject) throws -> Void) rethrows {
+            try groupedProjects.values.map { ($0.totalTime, $0) }.sorted(by: { $0.0 > $1.0 }).map { $0.1 }.forEach(block)
         }
         
         var totalTime: TimeInterval {
@@ -371,9 +371,9 @@ class Model {
             task!.add(flatEntry: entry)
         }
         
-        func forEach(_ block: (GroupedTask) -> Void) {
+        func forEach(_ block: (GroupedTask) throws -> Void) rethrows {
             // first sort in descending totalTime order
-            groupedTasks.values.map { ($0.totalTime, $0) } . sorted(by: { $0.0 > $1.0 }) . map { $0.1 } . forEach(block)
+            try groupedTasks.values.map { ($0.totalTime, $0) } . sorted(by: { $0.0 > $1.0 }) . map { $0.1 } . forEach(block)
         }
         
         var totalTime: TimeInterval {
@@ -395,8 +395,8 @@ class Model {
             entries.append(entry)
         }
         
-        func forEach(_ block: (FlatEntry) -> Void) {
-            entries.sorted(by: {$0.from < $1.from}).forEach(block)
+        func forEach(_ block: (FlatEntry) throws -> Void) rethrows {
+            try entries.sorted(by: {$0.from < $1.from}).forEach(block)
         }
         
         var totalTime: TimeInterval {

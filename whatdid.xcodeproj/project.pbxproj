@@ -40,6 +40,9 @@
 		7E6FF1C3252D740F0071E58C /* WhatdidLauncher.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7E6FF19C252D71060071E58C /* WhatdidLauncher.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7E6FF1CA252D745C0071E58C /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E6FF1C9252D745C0071E58C /* ServiceManagement.framework */; };
 		7E75D0A0251D9A790002DBA0 /* ModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E75D09F251D9A790002DBA0 /* ModelTest.swift */; };
+		7E76A141278F99920017FAE9 /* EntryExportFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E76A140278F99920017FAE9 /* EntryExportFormats.swift */; };
+		7E76A143278FB4E70017FAE9 /* OutputStream+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E76A142278FB4E70017FAE9 /* OutputStream+Helpers.swift */; };
+		7E76A145279000440017FAE9 /* EntryExportFormatsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E76A144279000440017FAE9 /* EntryExportFormatsTest.swift */; };
 		7E7B7E6124F2F84000460BC3 /* NSStackView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7B7E6024F2F84000460BC3 /* NSStackView+Helpers.swift */; };
 		7E7C384B24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */; };
 		7E7C384C24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */; };
@@ -189,6 +192,9 @@
 		7E6FF1A6252D71080071E58C /* WhatdidLauncher.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WhatdidLauncher.entitlements; sourceTree = "<group>"; };
 		7E6FF1C9252D745C0071E58C /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		7E75D09F251D9A790002DBA0 /* ModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTest.swift; sourceTree = "<group>"; };
+		7E76A140278F99920017FAE9 /* EntryExportFormats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryExportFormats.swift; sourceTree = "<group>"; };
+		7E76A142278FB4E70017FAE9 /* OutputStream+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OutputStream+Helpers.swift"; sourceTree = "<group>"; };
+		7E76A144279000440017FAE9 /* EntryExportFormatsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryExportFormatsTest.swift; sourceTree = "<group>"; };
 		7E784C39253193AA00047EBF /* WhatdidLauncherRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WhatdidLauncherRelease.entitlements; sourceTree = "<group>"; };
 		7E7B7E6024F2F84000460BC3 /* NSStackView+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSStackView+Helpers.swift"; sourceTree = "<group>"; };
 		7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatEntry.swift; sourceTree = "<group>"; };
@@ -335,6 +341,7 @@
 				7E37A29424C00266005BA1DF /* Model.swift */,
 				7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */,
 				7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */,
+				7E76A140278F99920017FAE9 /* EntryExportFormats.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -375,6 +382,7 @@
 			isa = PBXGroup;
 			children = (
 				7E75D09F251D9A790002DBA0 /* ModelTest.swift */,
+				7E76A144279000440017FAE9 /* EntryExportFormatsTest.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -579,6 +587,7 @@
 				7EAD2A6C2629271800153A47 /* OSLogType+Helpers.swift */,
 				7EE0E74724EA1ECD002D03F8 /* String+Helpers.swift */,
 				7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */,
+				7E76A142278FB4E70017FAE9 /* OutputStream+Helpers.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -845,6 +854,7 @@
 				7E37A29524C00266005BA1DF /* Model.swift in Sources */,
 				7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */,
 				7E235E03278A968800253DD8 /* NonFocusingNSViewController.swift in Sources */,
+				7E76A143278FB4E70017FAE9 /* OutputStream+Helpers.swift in Sources */,
 				7EDA368F24D54EA300F5E368 /* FlippedView.swift in Sources */,
 				7EB7495D25169A44001C7DBC /* GlobalShortcut.swift in Sources */,
 				7EF857A324E242AB00867832 /* ManualTickScheduler.swift in Sources */,
@@ -892,6 +902,7 @@
 				7E5EFA272619B14A00E7834D /* NSTextField+Helpers.swift in Sources */,
 				7E9C5EBD260C09AA00D839C4 /* Goal+CoreDataClass.swift in Sources */,
 				7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */,
+				7E76A141278F99920017FAE9 /* EntryExportFormats.swift in Sources */,
 				7EF884112610139B00170330 /* NSViewController+Helper.swift in Sources */,
 				7E88CC8E261EB5A900968F64 /* AnimationHelper.swift in Sources */,
 				7E37A29A24C0293E005BA1DF /* Entry+CoreDataClass.swift in Sources */,
@@ -916,6 +927,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7EEF324824EA54AD002E217A /* NSRange+HelpersTest.swift in Sources */,
+				7E76A145279000440017FAE9 /* EntryExportFormatsTest.swift in Sources */,
 				7E6C98D62506B67F00A712EB /* DummyScheduler.swift in Sources */,
 				7EB7496125170ED6001C7DBC /* PrefsTest.swift in Sources */,
 				7E6C98D42503F5C600A712EB /* DelegatingSchedulerTest.swift in Sources */,
