@@ -9,6 +9,7 @@ on:
 
 jobs:
   ui-tests:
+    if: ${{ false }}  # see git commit
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
