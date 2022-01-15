@@ -9,7 +9,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="DayEndReportController" customModule="whatdid" customModuleProvider="target">
             <connections>
-                <outlet property="dateRangePicker" destination="4il-8J-dck" id="Fix-zI-Yx4"/>
+                <outlet property="dateRangePicker" destination="L2g-sp-iaD" id="r4E-nO-QlX"/>
                 <outlet property="goalsSummaryGroup" destination="V55-nV-Y5s" id="DxF-mT-cMT"/>
                 <outlet property="goalsSummaryStack" destination="1RQ-eW-vGH" id="L7V-FB-jCR"/>
                 <outlet property="maxViewHeight" destination="1ka-g6-16p" id="IdU-SA-mes"/>
@@ -27,7 +27,7 @@
             <rect key="frame" x="0.0" y="0.0" width="400" height="99"/>
             <subviews>
                 <stackView identifier="header-h" distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="500" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pKe-k9-zAn" userLabel="Header Stack">
-                    <rect key="frame" x="0.0" y="79" width="218" height="20"/>
+                    <rect key="frame" x="0.0" y="79" width="141" height="20"/>
                     <subviews>
                         <textField identifier="header_label" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-Lm-qUL" userLabel="Header">
                             <rect key="frame" x="-2" y="0.0" width="114" height="16"/>
@@ -37,12 +37,14 @@
                                 <color key="backgroundColor" name="findHighlightColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>
-                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="4il-8J-dck" customClass="DateRangePicker" customModule="whatdid" customModuleProvider="target">
-                            <rect key="frame" x="118" y="0.0" width="100" height="16"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="16" placeholder="YES" id="XKx-Xi-Ukw"/>
-                            </constraints>
-                        </customView>
+                        <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="L2g-sp-iaD" customClass="DateRangePicker" customModule="whatdid" customModuleProvider="target">
+                            <rect key="frame" x="118" y="-1" width="23" height="19"/>
+                            <popUpButtonCell key="cell" type="roundRect" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="djs-mP-Xas">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="cellTitle"/>
+                                <menu key="menu" id="I7d-9W-teY"/>
+                            </popUpButtonCell>
+                        </popUpButton>
                     </subviews>
                     <edgeInsets key="edgeInsets" left="0.0" right="0.0" top="4" bottom="0.0"/>
                     <visibilityPriorities>

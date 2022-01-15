@@ -338,6 +338,39 @@ class ComponentUITests: XCTestCase {
                 diff: "1d 0h 0m")
             XCTAssertEqual("yesterday", pickerButton.stringValue)
         }
+        group("clicking away from custom keeps selection on 'yesterday'") {
+            func menuItemsWithSelection() -> [String] {
+                return pickerButton.menuItems.allElementsBoundByIndex.map {item in
+                    var title = ""
+                    if item.isSelected {
+                        title += "* "
+                    }
+                    title += item.title
+                    return title
+                }
+            }
+            // Initiate expected state (from previous group)
+            XCTAssertEqual("yesterday", pickerButton.stringValue)
+            
+            // Click the button and open the custom range view
+            pickerButton.click()
+            XCTAssertEqual(["today", "* yesterday", "custom"], menuItemsWithSelection())
+            pickerButton.menuItems["custom"].click()
+            wait(for: "date picker to open", until: { pickerButton.datePickers.count > 0 })
+            XCTAssertEqual("custom", pickerButton.stringValue)
+            
+            // Click away to close the popover
+            testWindow.staticTexts["result_start"].click(using: .frame(xInlay: 0.01))
+            wait(for: "date picker to close", until: { pickerButton.datePickers.count == 0 })
+            sleepMillis(500) // give it a chance to stabilize
+            XCTAssertEqual("yesterday", pickerButton.stringValue)
+            
+            // Now click on the button again. The "yesterday" option should still be selected.
+            pickerButton.click()
+            XCTAssertEqual(["today", "* yesterday", "custom"], menuItemsWithSelection())
+            testWindow.staticTexts["result_start"].click(using: .frame(xInlay: 0.01))
+            wait(for: "menu options to close", until: { pickerButton.menuItems.count == 0 })
+        }
         group("pick today") {
             pickerButton.click()
             pickerButton.menuItems["today"].click()
@@ -386,6 +419,19 @@ class ComponentUITests: XCTestCase {
                 to: "1969-12-16T09:00:00+02:00",
                 diff: "3d 0h 0m")
             XCTAssertEqual("Dec 13 through Dec 15", pickerButton.stringValue)
+        }
+        group("popover keeps current custom selection") {
+            pickerButton.click()
+            XCTAssertEqual(
+                ["today", "yesterday", "custom"],
+                pickerButton.menuItems.allElementsBoundByIndex.map({$0.title}))
+            let datePicker = pickerButton.datePickers.firstMatch
+            pickerButton.menuItems["custom"].click()
+            wait(for: "date picker to show", until: { datePicker.isVisible })
+            pickerButton.disclosureTriangles["toggle_endpoint_pickers"].click()
+            
+            XCTAssertEqual("1969-12-13 07:00:00 +0000", testWindow.datePickers["start_date_picker"].datePickerValue.description)
+            XCTAssertEqual("1969-12-15 07:00:00 +0000", testWindow.datePickers["end_date_picker"].datePickerValue.description)
         }
         group("range ending yesterday") {
             pickCustomRange(fromDay: 13, toDay: 30)
