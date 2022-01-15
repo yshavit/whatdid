@@ -34,6 +34,8 @@
 	<true/>
 	<key>LSUIElement</key>
 	<true/>
+	<key>SUFeedURL</key>
+	<string>https://whatdid.yuvalshavit.com/appcast.xml</string>
 	<key>NSSupportsSuddenTermination</key>
 	<true/>
 </dict>
