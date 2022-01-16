@@ -1,14 +1,43 @@
 <?xml version="1.0" standalone="yes"?>
+
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+
     <channel>
+
         <title>whatdid</title>
+
         <item>
+
             <title>0.1</title>
-            <pubDate>Sat, 15 Jan 2022 17:01:23 -0500</pubDate>
-            <sparkle:version>2021.0612.203920</sparkle:version>
+
+            <pubDate>Sat, 15 Jan 2022 19:30:04 -0500</pubDate>
+
+            <sparkle:version>2022.0115.222846</sparkle:version>
+
             <sparkle:shortVersionString>0.1</sparkle:shortVersionString>
+
             <sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
-            <enclosure url="whatdid-2022.0115.214913.dmg" length="3997092" type="application/octet-stream"/>
+
+            <enclosure url="https://whatdid.yuvalshavit.com/Whatdid-2022.0115.222846.dmg" length="4910726" type="application/octet-stream"/>
+
         </item>
+
+        <item>
+
+            <title>0.1</title>
+
+            <pubDate>Sat, 15 Jan 2022 17:01:23 -0500</pubDate>
+
+            <sparkle:version>2021.0612.203920</sparkle:version>
+
+            <sparkle:shortVersionString>0.1</sparkle:shortVersionString>
+
+            <sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+
+            <enclosure url="whatdid-2022.0115.214913.dmg" length="3997092" type="application/octet-stream"/>
+
+        </item>
+
     </channel>
+
 </rss>
