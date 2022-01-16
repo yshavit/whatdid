@@ -68,12 +68,11 @@ class PrefsViewController: NSViewController {
     @IBInspectable
     dynamic var autoCheckUpdates: Bool {
         get {
-            false
+            AppDelegate.instance.updaterController.updater.automaticallyChecksForUpdates
         }
         set (value) {
-            wdlog(.info, "hi")
-            /* ignored */
-        } // TODO!
+            AppDelegate.instance.updaterController.updater.automaticallyChecksForUpdates = value
+        }
     }
     
     @IBAction func handlePressExport(_ sender: Any) {
