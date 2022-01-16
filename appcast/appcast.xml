@@ -8,7 +8,9 @@
             <sparkle:version>2022.0115.224800</sparkle:version>
             <sparkle:shortVersionString>0.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
-            <enclosure url="https://whatdid.yuvalshavit.com/Whatdid-2022.0115.224800.dmg" length="4910417" type="application/octet-stream"/>
+            <sparkle:releaseNotesLink>https://myproductwebsite.com/app/2.0.html</sparkle:releaseNotesLink>
+            <sparkle:releaseNotesLink>https://whatdid.yuvalshavit.com/release-notes/2022.0115.224800.html</sparkle:releaseNotesLink>
+            <enclosure url="https://whatdid.yuvalshavit.com/appcast/Whatdid-2022.0115.224800.dmg" length="4910417" type="application/octet-stream"/>
         </item>
         <item>
             <title>0.1</title>
@@ -16,7 +18,7 @@
             <sparkle:version>2022.0115.222846</sparkle:version>
             <sparkle:shortVersionString>0.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
-            <enclosure url="https://whatdid.yuvalshavit.com/Whatdid-2022.0115.222846.dmg" length="4910726" type="application/octet-stream"/>
+            <enclosure url="https://whatdid.yuvalshavit.com/appcast/Whatdid-2022.0115.222846.dmg" length="4910726" type="application/octet-stream"/>
         </item>
         <item>
             <title>0.1</title>
