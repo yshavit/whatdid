@@ -4,12 +4,19 @@
         <title>whatdid</title>
         <item>
             <title>0.1</title>
+            <pubDate>Sat, 15 Jan 2022 21:38:44 -0500</pubDate>
+            <sparkle:version>2022.0116.023244</sparkle:version>
+            <sparkle:shortVersionString>0.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+            <enclosure url="https://whatdid.yuvalshavit.com/appcast/Whatdid-2022.0116.023244.dmg" length="4912042" type="application/octet-stream" sparkle:edSignature="grjOz/iYY7dN2kJH22PxDMel5QzO5b8ROHCRDYV31cxEgo49biJ89S9nnkZ5WZHgClgXarSdMunduhMNp3vnDw=="/>
+        </item>
+        <item>
+            <title>0.1</title>
             <pubDate>Sat, 15 Jan 2022 19:38:14 -0500</pubDate>
             <sparkle:version>2022.0115.224800</sparkle:version>
             <sparkle:shortVersionString>0.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
-            <sparkle:releaseNotesLink>https://whatdid.yuvalshavit.com/release-notes/2022.0115.224800.html</sparkle:releaseNotesLink>
-            <enclosure url="https://whatdid.yuvalshavit.com/appcast/Whatdid-2022.0115.224800.dmg" length="4910417" type="application/octet-stream"/>
+            <enclosure url="https://whatdid.yuvalshavit.com/Whatdid-2022.0115.224800.dmg" length="4910417" type="application/octet-stream"/>
         </item>
         <item>
             <title>0.1</title>
@@ -17,7 +24,7 @@
             <sparkle:version>2022.0115.222846</sparkle:version>
             <sparkle:shortVersionString>0.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
-            <enclosure url="https://whatdid.yuvalshavit.com/appcast/Whatdid-2022.0115.222846.dmg" length="4910726" type="application/octet-stream"/>
+            <enclosure url="https://whatdid.yuvalshavit.com/Whatdid-2022.0115.222846.dmg" length="4910726" type="application/octet-stream"/>
         </item>
         <item>
             <title>0.1</title>
