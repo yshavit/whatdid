@@ -100,6 +100,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationWillTerminate(_ notification: Notification) {
+        wdlog(.info, "whatdid is shutting down")
         #if UI_TEST
         if let bundleId = Bundle.main.bundleIdentifier {
             if let toRestore = oldPrefs {

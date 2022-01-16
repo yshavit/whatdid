@@ -5,7 +5,6 @@ if [[ $(git status -s | wc -c) -ne 0 ]]; then
   sha="${sha}.dirty"
 fi
 now="$(/bin/date -u '+%Y.%m%d.%H%M%S')"
-now=1.2.3
 
 info_plist="$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH"
 target_plist="$TARGET_BUILD_DIR/$INFOPLIST_PATH"
