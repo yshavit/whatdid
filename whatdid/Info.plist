@@ -36,14 +36,11 @@
 	<true/>
 	<key>NSSupportsSuddenTermination</key>
 	<true/>
-	<key>SUFeedURL</key>
-	<string>https://whatdid.yuvalshavit.com/appcast/appcast.xml</string>
 	<key>SUEnableInstallerLauncherService</key>
 	<true/>
-	<key>com.apple.security.temporary-exception.mach-lookup.global-name</key>
-	<array>
-		<string>$(PRODUCT_BUNDLE_IDENTIFIER)-spks</string>
-		<string>$(PRODUCT_BUNDLE_IDENTIFIER)-spki</string>
-	</array>
+	<key>SUFeedURL</key>
+	<string>https://whatdid.yuvalshavit.com/appcast/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>+c3D0qE8WwVHoLX6rl2fTqniphIs/5s4UPW4D7w+KxQ=</string>
 </dict>
 </plist>
