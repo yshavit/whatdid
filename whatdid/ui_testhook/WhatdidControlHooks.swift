@@ -238,7 +238,7 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
             case .on:
                 deferButton.title = "Deferral pending"
                 deferButton.isEnabled = false
-                AppDelegate.instance.onDeactivation {
+                AppDelegate.instance.whenNotActive {
                     self.deferButton.title = WhatdidControlHooks.deferCheckboxTitle
                     self.deferButton.isEnabled = true
                     self.deferButton.state = .off

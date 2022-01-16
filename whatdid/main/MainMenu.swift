@@ -142,8 +142,12 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
         taskAdditionsPane.hooks = self
     }
     
+    var isOpen: Bool {
+        return window?.isVisible ?? false
+    }
+    
     @objc private func handleStatusItemPress() {
-        if window?.isVisible ?? false {
+        if isOpen {
             close()
         } else {
             let showWhat = NSEvent.modifierFlags.contains(.option)

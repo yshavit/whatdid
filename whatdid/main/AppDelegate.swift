@@ -6,7 +6,7 @@ import ServiceManagement
 import Sparkle
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
     public static let instance = NSApplication.shared.delegate as! AppDelegate
     public static let DEBUG_DATE_FORMATTER = ISO8601DateFormatter()
 
@@ -14,7 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var mainMenu: MainMenu!
     private var deactivationHooks : Atomic<[() -> Void]> = Atomic(wrappedValue: [])
     private var openWindows: Int = 0
-    let updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
+    let updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: UpdaterDelegate.instance, userDriverDelegate: nil)
     
     #if UI_TEST
     private var uiTestWindow: UiTestWindow!
@@ -44,9 +44,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     #endif
     
-    func onDeactivation(_ block: @escaping () -> Void) {
-        deactivationHooks.modifyInPlace {arr in
-            arr.append(block)
+    func whenNotActive(_ block: @escaping () -> Void) {
+        if NSApp.isActive {
+            deactivationHooks.modifyInPlace {arr in
+                arr.append(block)
+            }
+        } else {
+            block()
         }
     }
     
@@ -72,6 +76,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         setUpLauncher()
         // Kick off the various scheduled popups (PTN, day start, day end).
         kickOffInitialSchedules()
+        // Set up the updater
+        
     }
     
     private func kickOffInitialSchedules() {
@@ -171,6 +177,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
         return "\(maskAdjusted)\(keyAdjusted)"
+    }
+}
+
+private class UpdaterDelegate: NSObject, SPUUpdaterDelegate {
+    static let instance = UpdaterDelegate()
+    
+    func updater(_ updater: SPUUpdater, shouldPostponeRelaunchForUpdate item: SUAppcastItem, untilInvokingBlock installHandler: @escaping () -> Void) -> Bool {
+        
+        
+        if let mainWindow = AppDelegate.instance.mainMenu, mainWindow.isOpen {
+            AppDelegate.instance.whenNotActive(installHandler)
+            mainWindow.close()
+            return true
+        } else {
+            return false
+        }
     }
 }
 
