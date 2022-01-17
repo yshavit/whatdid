@@ -1,7 +1,111 @@
 #!/bin/bash
+set -euo pipefail
 
-echo "Found args:"
-echo "$@"
-echo
-echo "Env:"
-env
+function msg() {
+  echo >&2 "$@"
+}
+
+function err() {
+  msg "$@"
+  exit 1
+}
+
+if [[ -z "${APPCAST_PRIVATE_KEY+x}" ]]; then
+  err "Need to export APPCAST_PRIVATE_KEY"
+fi
+
+tag_name="${1-}"
+if [[ -z "$tag_name" ]]; then
+  err 'No arg given. Looking for $GITHUB_REF'
+fi
+if [[ "$tag_name" != "$(basename "$tag_name")" ]]; then
+  msg "Got tag name \"$tag_name\"."
+  tag_name="$(basename "$tag_name")"
+  msg "Shortening to: \"$tag_name\"."
+fi
+
+# Validate that we're in a clean git state
+git_status="$(git status 2>/dev/null | tail -n 1 || echo NOT_GIT)"
+pwd
+if [[ "$git_status" == NOT_GIT ]]; then
+  err "Must be in a git repo (or be its root)"
+elif [[ "$git_status" != 'nothing to commit, working tree clean' ]]; then
+  msg "repo has uncommited changes:"
+  msg
+  git status
+  msg
+  err "Commit them before running this script."
+fi
+
+# Fetch the tag info, and from there the workflow run.
+tag_ref="refs/tags/$tag_name"
+msg "Looking for tag: $tag_ref"
+git fetch origin "$tag_ref"
+tag_sha="$(git ls-remote -t origin | grep -F "$tag_ref" | cut -d$'\t' -f1)"
+if [[ -z "$tag_sha" ]]; then
+  err "Couldn't find git sha for tag \"$tag_sha\""
+fi
+msg "found sha for $tag_ref: $tag_sha"
+
+jq_filter="$(printf '.[] | select(.headSha == "%s") | .databaseId | @text' "$tag_sha")"
+msg "Using jq filter: $jq_filter"
+
+run_id="$(gh run list -w 'Build app' --json headSha,databaseId --jq "$jq_filter")"
+msg "Found run id: $run_id"
+
+# Download Whatdid.dmg to a tmp dir
+tmp_dir="$(mktemp -d)"
+msg "Downloading Whatdid.dmg to $tmp_dir"
+gh run download "$run_id" -n Whatdid.dmg -D "$tmp_dir"
+
+# Fetching release notes
+gh release view "$tag_name" --json body --jq '.body' > "$tmp_dir/release-notes.md"
+
+msg "Looking in Whatdid.dmg to find version"
+hdiutil attach -plist "$tmp_dir/Whatdid.dmg" > "$tmp_dir/hdiutil-attach-info.plist"
+mount_point="$(/usr/libexec/PlistBuddy -c 'Print :system-entities' "$tmp_dir/hdiutil-attach-info.plist" \
+  | grep mount-point | sed 's/ *mount-point = //')"
+whatdid_version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$mount_point/whatdid.app/Contents/Info.plist")"
+echo "found Whatdid.app with version $whatdid_version"
+hdiutil detach "$mount_point"
+
+git_branch_name="release-${whatdid_version}_$(date +%Y%m%dT%H%M%S)"
+git checkout -b "$git_branch_name"
+
+sparkle_dir="build_local/sparkle"
+mkdir -p "$sparkle_dir"
+generate_appcast="$sparkle_dir/bin/generate_appcast"
+if [[ ! -f "$sparkle_dir/bin/generate_appcast" ]]; then
+  msg "Building sparkle into $sparkle_dir"
+  (
+    cd "$sparkle_dir"
+    curl -LO 'https://github.com/sparkle-project/Sparkle/releases/download/2.0.0/Sparkle-for-Swift-Package-Manager.zip'
+    unzip Sparkle-for-Swift-Package-Manager.zip
+  )
+fi
+
+# Upload the dmg
+msg "Uploading Whatdid.dmg."
+clobber_opt=''
+if [[ -n "${CLOBBER_RELEASE_UPLOAD+x}" ]] ; then
+  clobber_opt=--clobber
+fi
+gh release upload "$tag_name" "$tmp_dir/Whatdid.dmg" $clobber_opt
+
+# Prepare the files and invoke generate_appcast
+mv "$tmp_dir/Whatdid.dmg" "appcast/Whatdid-$whatdid_version.dmg"
+mv "$tmp_dir/release-notes.md" "release-notes/Whatdid-$whatdid_version.md"
+# Stub out a dummy html doc in the appcast/ dir. This tricks generate_appcast into creating a <sparkle:releaseNotesLink> tag.
+# (The actual html page is generated from that .md file we just created.)
+echo '<body/>' > "appcast/Whatdid-$whatdid_version.html"
+# invoke generate_appcast
+"$generate_appcast" appcast -s "$(printenv APPCAST_PRIVATE_KEY)" --release-notes-url-prefix "https://whatdid.yuvalshavit.com/release-notes/"
+# delete that dummy html doc
+rm "appcast/Whatdid-$whatdid_version.html"
+
+# Create the PR
+git add .
+git commit -m "release $whatdid_version"
+git push -u origin "$git_branch_name"
+gh pr create --fill --base gh-pages
+
