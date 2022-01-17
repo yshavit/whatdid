@@ -1,0 +1,118 @@
+#!/bin/bash
+set -euo pipefail
+
+function msg() {
+  echo >&2 "$@"
+}
+
+function bulleted() {
+  bullet="${1:-• }"
+  sed "s/^/  ${bullet}/" >&2
+}
+
+# Validate args
+my_name="$(basename "$0")"
+if [[ $# -ne 2 ]]; then
+  msg "Usage: $my_name <zip file> <appcast dir>"
+  msg ""
+  msg "The zip file should contain a single file, Whatdid.dmg."
+  msg "This will then update the appcast dir you provide."
+  exit 1
+fi
+zip_path="$1"
+appcast_dir="$2"
+
+# Validate zip file
+zip_listing="$(zipinfo -1 "$zip_path" 2>/dev/null || echo '' | head -n 2)"
+if [[ -z "$zip_listing" ]]; then
+  msg "Couldn't unzip file: $zip_path."
+  msg "It does not appear to be a valid zip file."
+  exit 1
+elif [[ "$zip_listing" != Whatdid.dmg ]] ; then
+  msg "$zip_path must contain only a Whatdid.dmg. Instead, it contained:"
+  zipinfo -1 "$zip_path" | bulleted
+  exit 1
+fi
+
+# Validate destination
+if [[ ! -d "$appcast_dir" ]]; then
+  msg "$appcast_dir is not a directory"
+  exit 1
+fi
+(
+  cd "$appcast_dir"
+  git_status="$(git status 2>/dev/null | tail -n 1 || echo NOT_GIT)"
+  if [[ "$git_status" == NOT_GIT ]]; then
+    msg "$appcast_dir must be in a git repo (or be its root)"
+    exit 1
+  elif [[ "$git_status" != 'nothing to commit, working tree clean' ]]; then
+    msg "$appcast_dir has uncommited changes. Commit them before running this script."
+    git status | bulleted '  '
+    exit 1
+  fi
+)
+
+# Find the generate_appcast script
+gen_appcast="$(find ~/Library/Developer/Xcode/DerivedData -path '*/SourcePackages/artifacts/Sparkle/bin/generate_appcast')"
+if [[ -z "$gen_appcast" ]]; then
+  msg "Couldn't find generate_appcast"
+  exit 1
+elif [[ "$(wc -l <<< "$gen_appcast")" -gt 1 ]]; then
+  msg "Found too many candidates for generate_appcast:"
+  echo "$gen_appcast" | bulleted
+  exit 1
+fi
+
+# Get original appcast.xml
+appcast_xml_path="$appcast_dir/appcast.xml"
+original_appcast="$(cat "$appcast_xml_path" 2>/dev/null || echo)"
+
+# Extract Whatdid.dmg
+tmp_dir="$(mktemp -d)"
+tmp_name="Whatdid-appcast-tmp.$(uuidgen).dmg"
+msg "Unzipping Whatdid.dmg to $appcast_dir"
+unzip -d "$tmp_dir" "$zip_path" >/dev/null
+mv "$tmp_dir/Whatdid.dmg" "$appcast_dir/$tmp_name"
+rmdir "$tmp_dir" || msg "Couldn't rmdir $tmp_dir . Will proceed anyway."
+
+>&2 printf 'generate_appcast: '
+>&2 "$gen_appcast" "$appcast_dir"
+
+new_appcast="$(cat "$appcast_xml_path" 2>/dev/null || echo)"
+
+new_entries="$(diff  <(echo "$original_appcast") <(echo "$new_appcast") | grep '^>' | sed 's/> *//' || echo)"
+new_version="$(echo "$new_entries" | grep --fixed-strings '<sparkle:version>' | sed -E 's/.*>(.*)<.*/\1/' || echo)"
+if [[ -z "$new_version" ]]; then
+  msg "This version of Whatdid is already present in the appcast."
+  rm "$appcast_dir/$tmp_name"
+  # The generate_appcast script will have updated the xml with the new version. Restore it.
+  echo "$original_appcast" > "$appcast_xml_path" 
+  exit 1
+fi
+msg "Found new version: $new_version"
+
+# Rename the tmp file and tweak the xml
+new_name="Whatdid-${new_version}.dmg"
+mv "$appcast_dir/$tmp_name" "$appcast_dir/$new_name"
+py_script="""
+import sys
+look_for=sys.argv[1]
+replace_with=sys.argv[2]
+for l in sys.stdin:
+  l = l.rstrip('\n')
+  print(l.replace(look_for, replace_with))
+"""
+tmp_appcast_xml="$(mktemp)"
+python -c "$py_script" "$tmp_name" "$new_name" <"$appcast_xml_path" >"$tmp_appcast_xml"
+mv "$tmp_appcast_xml" "$appcast_xml_path"
+
+(
+  cd "$appcast_dir"
+  new_branch="add-${new_version}"
+  msg "Uploading new branch: $new_branch"
+  git checkout -b "$new_branch" >/dev/null
+  git add . >/dev/null
+  git commit -am "adding ${new_version} to appcast.xml" >/dev/null
+  git push -u origin "$new_branch"
+)
+

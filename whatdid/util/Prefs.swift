@@ -11,6 +11,7 @@ struct Prefs {
     @Pref(key: "launchAtLogin") static var launchAtLogin = false
     @Pref(key: "previouslyLaunchedVersion") static var tutorialVersion = -1
     @Pref(key: "requireNotes") static var requireNotes = false
+    @Pref(key: "startupMessages") static var startupMessages = [StartupMessage]()
 }
 
 @propertyWrapper
@@ -103,6 +104,33 @@ extension Int: PrefType {
     
     var asUserDefaultsValue: Any {
         self
+    }
+}
+
+extension Array: PrefType where Element == StartupMessage {
+    static func readUserDefaultsValue(key: String) -> Array<Element> {
+        guard let rawArray = UserDefaults.standard.array(forKey: key) else {
+            wdlog(.info, "reading Prefs<[StartupMessage]>: not an array")
+            return []
+        }
+        guard let asInts = rawArray as? [Int] else {
+            wdlog(.info, "reading Prefs<[StartupMessage]>: not an int array")
+            return []
+        }
+        return asInts.compactMap({StartupMessage(rawValue: $0)})
+    }
+    
+    static func writeUserDefaultsValue(key: String, value: Array<Element>) {
+        UserDefaults.standard.set(toNSArray(value), forKey: key)
+    }
+    
+    var asUserDefaultsValue: Any {
+        Array.toNSArray(self)
+    }
+    
+    static func toNSArray(_ list: [StartupMessage]) -> NSArray {
+        let unique = Set(list).compactMap({NSInteger($0.rawValue)})
+        return NSArray(array: unique)
     }
 }
 

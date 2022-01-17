@@ -2,6 +2,7 @@
 
 import Cocoa
 import KeyboardShortcuts
+import Sparkle
 
 class PrefsViewController: NSViewController {
     public static let SHOW_TUTORIAL = NSApplication.ModalResponse(27)
@@ -62,6 +63,16 @@ class PrefsViewController: NSViewController {
     dynamic var requireNotes: Bool {
         get { Prefs.requireNotes }
         set(value) { Prefs.requireNotes = value}
+    }
+
+    @IBInspectable
+    dynamic var autoCheckUpdates: Bool {
+        get {
+            AppDelegate.instance.updaterController.updater.automaticallyChecksForUpdates
+        }
+        set (value) {
+            AppDelegate.instance.updaterController.updater.automaticallyChecksForUpdates = value
+        }
     }
     
     @IBAction func handlePressExport(_ sender: Any) {
@@ -300,6 +311,9 @@ class PrefsViewController: NSViewController {
         githubShaInfo.isHidden = !NSEvent.modifierFlags.contains(.command)
     }
     
+    @IBAction func checkUpdateNow(_ sender: Any) {
+        AppDelegate.instance.updaterController.checkForUpdates(sender)
+    }
     
     //------------------------------------------------------------------
     // OTHER / COMMON
