@@ -22,6 +22,7 @@
             <sparkle:shortVersionString>0.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
             <enclosure url="https://whatdid.yuvalshavit.com/appcast/Whatdid-2022.0117.011328.dmg" length="4917979" type="application/octet-stream" sparkle:edSignature="ChX6CCCgdWwFO80ZBtfjKD8sVqOGFik+KuMhH4e7bdOsqGQX36YIEyhOBETrfpa+sLBdIOA8b+GBRPR/nKkbAg=="/>
+            <sparkle:releaseNotesLink>https://whatdid.yuvalshavit.com/release-notes/junk.html</sparkle:releaseNotesLink>
             <sparkle:deltas>
                 <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2022.0117.011328-2022.0116.023244.delta" sparkle:deltaFrom="2022.0116.023244" length="240984" type="application/octet-stream" sparkle:edSignature="xkvAKsQfo1RzPuKTLoVcJrMmx4Mg5zUJjlQ6zKq8m8ynYsD2zTrzVgpAtuuwsxUgqq8BjG1ID1kKD5OFjW30AA=="/>
             </sparkle:deltas>
