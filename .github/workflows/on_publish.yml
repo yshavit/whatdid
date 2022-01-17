@@ -1,0 +1,14 @@
+name: appcast
+
+on:
+  release:
+    types: [published, ]
+
+jobs:
+  appcast PR:
+    runs-on: ubuntu-latest
+    steps:
+    - name: echo out basic info
+      run: |
+        echo "Saw a release!"
+        echo "Release name: >{{ GITHUB_REF }}<"
