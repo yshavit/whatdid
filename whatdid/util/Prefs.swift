@@ -117,15 +117,20 @@ extension Array: PrefType where Element == StartupMessage {
             wdlog(.info, "reading Prefs<[StartupMessage]>: not an int array")
             return []
         }
-        return Set(asInts).compactMap({StartupMessage(rawValue: $0)})
+        return asInts.compactMap({StartupMessage(rawValue: $0)})
     }
     
     static func writeUserDefaultsValue(key: String, value: Array<Element>) {
-        UserDefaults.standard.set(Set(value.map({$0.rawValue})), forKey: key)
+        UserDefaults.standard.set(toNSArray(value), forKey: key)
     }
     
     var asUserDefaultsValue: Any {
-        map({$0.rawValue})
+        Array.toNSArray(self)
+    }
+    
+    static func toNSArray(_ list: [StartupMessage]) -> NSArray {
+        let unique = Set(list).compactMap({NSInteger($0.rawValue)})
+        return NSArray(array: unique)
     }
 }
 
