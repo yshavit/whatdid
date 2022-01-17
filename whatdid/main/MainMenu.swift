@@ -12,7 +12,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
     private var cancelClose = false
     private var snoozed: (until: Date, unsnoozeTask: ScheduledTask)?
     private var scheduledTasks = [WindowContents: ScheduledTask]()
-    
+
     #if UI_TEST
     func reset() {
         // Keep asking whether we should close, until the answer comes back yes. What this amounts to
@@ -144,6 +144,33 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
     
     var isOpen: Bool {
         return window?.isVisible ?? false
+    }
+    
+    func appStartedUp() {
+        let startupMessages = Prefs.startupMessages
+        Prefs.startupMessages = []
+        if !startupMessages.isEmpty, let mainMenuButton = statusItem.button {
+            whenPtnIsReady {_ in
+                let startupPopover = NSPopover()
+                let controller = NSViewController()
+                startupPopover.contentViewController = controller
+                let stack = NSStackView(orientation: .vertical)
+                stack.setHuggingPriority(.defaultHigh, for: .vertical)
+                stack.setHuggingPriority(.defaultHigh, for: .horizontal)
+                stack.edgeInsets = NSEdgeInsets(top: 10, left: 15, bottom: 10, right: 15)
+                startupMessages.forEach {
+                    stack.addArrangedSubview(NSTextField(labelWithString: $0.humanReadable))
+                }
+                stack.wantsLayer = true
+                stack.layer?.backgroundColor = NSColor.yellow.cgColor
+                controller.view = stack
+                startupPopover.show(relativeTo: NSRect(), of: mainMenuButton, preferredEdge: .maxY)
+                
+                DefaultScheduler.instance.schedule("hide startup message", after: 2) {
+                    startupPopover.close()
+                }
+            }
+        }
     }
     
     @objc private func handleStatusItemPress() {

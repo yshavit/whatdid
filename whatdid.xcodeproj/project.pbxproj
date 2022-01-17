@@ -82,6 +82,7 @@
 		7EB7496125170ED6001C7DBC /* PrefsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB7496025170ED6001C7DBC /* PrefsTest.swift */; };
 		7EBE61F124DD2739000B2CB3 /* PtnViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */; };
 		7EBE61F324DD28F2000B2CB3 /* XCUIElement+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */; };
+		7EC09CE42794E89800086334 /* StartupMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC09CE32794E89800086334 /* StartupMessage.swift */; };
 		7EC1FC38261AA9160095388F /* ScreenshotGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC1FC37261AA9160095388F /* ScreenshotGenerator.swift */; };
 		7ECAF0DD250C9C110004647E /* NSButton+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECAF0DC250C9C110004647E /* NSButton+Helpers.swift */; };
 		7ECAF0DF250D75B70004647E /* WhatdidTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECAF0DE250D75B70004647E /* WhatdidTextField.swift */; };
@@ -239,6 +240,7 @@
 		7EB7496025170ED6001C7DBC /* PrefsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsTest.swift; sourceTree = "<group>"; };
 		7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PtnViewControllerTest.swift; sourceTree = "<group>"; };
 		7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIElement+Helpers.swift"; sourceTree = "<group>"; };
+		7EC09CE32794E89800086334 /* StartupMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartupMessage.swift; sourceTree = "<group>"; };
 		7EC1FC37261AA9160095388F /* ScreenshotGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotGenerator.swift; sourceTree = "<group>"; };
 		7ECAF0DC250C9C110004647E /* NSButton+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSButton+Helpers.swift"; sourceTree = "<group>"; };
 		7ECAF0DE250D75B70004647E /* WhatdidTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatdidTextField.swift; sourceTree = "<group>"; };
@@ -486,6 +488,7 @@
 				7EE0E73F24E4DF4A002D03F8 /* SubsequenceMatcher.swift */,
 				7EF884162610151A00170330 /* TypeAliases.swift */,
 				7E1C2F5024CE43C40070D8CD /* Version.swift */,
+				7EC09CE32794E89800086334 /* StartupMessage.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -879,6 +882,7 @@
 				7EE4E39624E24A3F00552AAF /* WhatdidControlHooks.swift in Sources */,
 				7E9C5EBC260C09AA00D839C4 /* Session+CoreDataProperties.swift in Sources */,
 				7ECF97A724F1D50100DBF1BF /* NSControl+Helper.swift in Sources */,
+				7EC09CE42794E89800086334 /* StartupMessage.swift in Sources */,
 				7EE0E74624E8899E002D03F8 /* AutoCompletingField.swift in Sources */,
 				7EF8579324E094D100867832 /* OpenCloseHelper.swift in Sources */,
 				7E4EB8E5278A4724001234F0 /* DisclosureWithLabel.swift in Sources */,

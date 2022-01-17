@@ -77,7 +77,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
         // Kick off the various scheduled popups (PTN, day start, day end).
         kickOffInitialSchedules()
         // Set up the updater
-        
+        mainMenu.appStartedUp()
     }
     
     private func kickOffInitialSchedules() {
@@ -185,6 +185,7 @@ private class UpdaterDelegate: NSObject, SPUUpdaterDelegate {
     
     func updater(_ updater: SPUUpdater, shouldPostponeRelaunchForUpdate item: SUAppcastItem, untilInvokingBlock installHandler: @escaping () -> Void) -> Bool {
         
+        Prefs.startupMessages = Prefs.startupMessages + [.updated]
         
         if let mainWindow = AppDelegate.instance.mainMenu, mainWindow.isOpen {
             AppDelegate.instance.whenNotActive(installHandler)
