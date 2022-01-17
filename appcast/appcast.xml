@@ -4,6 +4,18 @@
         <title>whatdid</title>
         <item>
             <title>0.1</title>
+            <pubDate>Sun, 16 Jan 2022 20:50:11 -0500</pubDate>
+            <sparkle:version>2022.0117.014310</sparkle:version>
+            <sparkle:shortVersionString>0.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+            <enclosure url="https://whatdid.yuvalshavit.com/appcast/Whatdid-2022.0117.014310.dmg" length="4919796" type="application/octet-stream" sparkle:edSignature="+s0m2LK0daY87BQzG/kq4LF4vMJo8JJ8+wB1XRrpyuJK1Y1i7jMmMVr3rjValu+2BSzAkwLU77Cie4M5nWmbBA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2022.0117.014310-2022.0117.011328.delta" sparkle:deltaFrom="2022.0117.011328" length="176757" type="application/octet-stream" sparkle:edSignature="yL4v4kH70QZx9kpsYHbJxze0t6ftVq1+IpMrVhqqmQL1F8kdaVRWLdeq6L0Z/116NKUe/xivZLjiY+ldj+8uBA=="/>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2022.0117.014310-2022.0116.023244.delta" sparkle:deltaFrom="2022.0116.023244" length="244099" type="application/octet-stream" sparkle:edSignature="8lukAdXEyWz1JBeFFywQyTEKPl8pufa+VHlkLnL3rKRYSYmxWxoM7IEc6P9NLK41A3OrsH2gngFzjzGj35/8DQ=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>0.1</title>
             <pubDate>Sun, 16 Jan 2022 20:18:03 -0500</pubDate>
             <sparkle:version>2022.0117.011328</sparkle:version>
             <sparkle:shortVersionString>0.1</sparkle:shortVersionString>
