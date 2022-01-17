@@ -1,0 +1,39 @@
+name: on release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      release_ref:
+        description: "The git ref for a release, like \"refs/tags/v1.2.3\""
+        required: true
+      clobber_upload:
+        description: "If set to \"yes\", will add --clobber to the artifact upload."
+
+jobs:
+  create-appcast-pr:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: gh-pages
+    - name: run buildscripts/create_appcast_pr
+      run: |
+        set -e
+        if [[ "$SHOULD_CLOBBER" == yes ]]; then
+          export CLOBBER_RELEASE_UPLOAD=1
+          echo '::warning title=clobber_upload::Will clobber release artifact with new upload.'
+        elif [[ -n "$SHOULD_CLOBBER" ]]; then
+          echo "::error title=clobber_upload::clobber_upload is \"$SHOULD_CLOBBER\". Expected \"yes\" or nothing."
+          exit 1
+        fi
+        if [[ -n "$GITHUB_REF_INPUT" ]]; then
+          export GITHUB_REF="$GITHUB_REF_INPUT"
+        fi
+        ./buildscripts/create_appcast_pr "$GITHUB_REF"
+      env:
+        GITHUB_REF_INPUT: ${{ github.event.inputs.release_ref }}
+        APPCAST_PRIVATE_KEY: ${{ secrets.APPCAST_PRIVATE_KEY }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SHOULD_CLOBBER: ${{ github.event.inputs.clobber_upload }}
