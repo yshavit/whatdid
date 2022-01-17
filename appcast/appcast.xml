@@ -13,6 +13,7 @@
                 <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2022.0117.014310-2022.0117.011328.delta" sparkle:deltaFrom="2022.0117.011328" length="176757" type="application/octet-stream" sparkle:edSignature="yL4v4kH70QZx9kpsYHbJxze0t6ftVq1+IpMrVhqqmQL1F8kdaVRWLdeq6L0Z/116NKUe/xivZLjiY+ldj+8uBA=="/>
                 <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2022.0117.014310-2022.0116.023244.delta" sparkle:deltaFrom="2022.0116.023244" length="244099" type="application/octet-stream" sparkle:edSignature="8lukAdXEyWz1JBeFFywQyTEKPl8pufa+VHlkLnL3rKRYSYmxWxoM7IEc6P9NLK41A3OrsH2gngFzjzGj35/8DQ=="/>
             </sparkle:deltas>
+            <sparkle:releaseNotesLink>https://whatdid.yuvalshavit.com/release-notes/2022.0115.224800.html</sparkle:releaseNotesLink>
         </item>
         <item>
             <title>0.1</title>
