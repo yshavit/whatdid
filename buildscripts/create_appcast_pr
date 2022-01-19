@@ -59,7 +59,7 @@ msg "Downloading Whatdid.dmg to $tmp_dir"
 gh run download "$run_id" -n Whatdid.dmg -D "$tmp_dir"
 
 # Fetching release notes
-gh release view "$tag_name" --json body --jq '.body' > "$tmp_dir/release-notes.md"
+gh release view "$tag_name" --json body --jq '.body' | tr -d '\r' > "$tmp_dir/release-notes.md"
 
 msg "Looking in Whatdid.dmg to find version"
 hdiutil attach -plist "$tmp_dir/Whatdid.dmg" > "$tmp_dir/hdiutil-attach-info.plist"
