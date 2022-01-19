@@ -1,0 +1,15 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>whatdid</title>
+        <item>
+            <title>0.1</title>
+            <pubDate>Wed, 19 Jan 2022 07:57:23 +0000</pubDate>
+            <sparkle:version>2022.0119.074909</sparkle:version>
+            <sparkle:shortVersionString>0.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://whatdid.yuvalshavit.com/release-notes/Whatdid-2022.0119.074909.html</sparkle:releaseNotesLink>
+            <enclosure url="https://whatdid.yuvalshavit.com/appcast/Whatdid-2022.0119.074909.dmg" length="4922600" type="application/octet-stream" sparkle:edSignature="/SYp3QVV4RAjGGWOtZuvPlp+yFa3mqX3zMB7IGffh/T+r9lQ/bBUC9Y9FPy58TerWQB9A5NwwOsnPAk5r0zEAA=="/>
+        </item>
+    </channel>
+</rss>
