@@ -69,7 +69,8 @@ whatdid_version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$mount_p
 echo "found Whatdid.app with version $whatdid_version"
 hdiutil detach "$mount_point"
 
-git checkout -b "release-${whatdid_version}}__$(date +%Y%m%dT%H%M%S)"
+git_branch_name="release-${whatdid_version}}__$(date +%Y%m%dT%H%M%S)"
+git checkout -b "$git_branch_name"
 
 sparkle_dir="build_local/sparkle"
 mkdir -p "$sparkle_dir"
@@ -102,6 +103,6 @@ release_notes_url="https://whatdid.yuvalshavit.com/release-notes/$whatdid_versio
 # Create the PR
 git add .
 git commit -m "release $whatdid_version"
-git push -u origin "appcast-$whatdid_version"
-gh pr create --fill
+git push -u origin "$git_branch_name"
+gh pr create --fill --base gh-pages
 
