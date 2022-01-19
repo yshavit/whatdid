@@ -36,6 +36,7 @@ elif [[ "$git_status" != 'nothing to commit, working tree clean' ]]; then
   msg
   err "Commit them before running this script."
 fi
+git checkout -b 
 
 # Fetch the tag info, and from there the workflow run.
 tag_ref="refs/tags/$tag_name"
@@ -69,6 +70,8 @@ whatdid_version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$mount_p
 echo "found Whatdid.app with version $whatdid_version"
 hdiutil detach "$mount_point"
 
+git checkout -b "release-$whatdid_version__$(date +%Y%m%dT%H%M%S)"
+
 sparkle_dir="build_local/sparkle"
 mkdir -p "$sparkle_dir"
 generate_appcast="$sparkle_dir/bin/generate_appcast"
@@ -96,7 +99,7 @@ release_notes_url="https://whatdid.yuvalshavit.com/release-notes/$whatdid_versio
 
 # Generate the appcast
 eddsa_file="$(mktemp)"
-printenv APPCAST_PRIVATE_KEY > "$eddsa_file"
+printenv $APPCAST_PRIVATE_KEY > "$eddsa_file"
 "$generate_appcast" appcast -s "$eddsa_file"
 rm "$eddsa_file"
 
