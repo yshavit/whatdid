@@ -16,11 +16,12 @@ fi
 
 tag_name="${1-}"
 if [[ -z "$tag_name" ]]; then
-  msg 'No arg given. Looking for $GITHUB_REF'
-  tag_name="${GITHUB_REF-}"
-  if [[ -z "$tag_name" ]]; then
-    err "Didn't find \$GITHUB_REF, either. Exiting"
-  fi
+  err 'No arg given. Looking for $GITHUB_REF'
+fi
+if [[ "$tag_name" != "$(basename "$tag_name")" ]]; then
+  msg "Got tag name \"$tag_name\"."
+  tag_name="$(basename "$tag_name")"
+  msg "Shortening to: \"$tag_name\"."
 fi
 
 # Validate that we're in a clean git state
@@ -37,13 +38,14 @@ elif [[ "$git_status" != 'nothing to commit, working tree clean' ]]; then
 fi
 
 # Fetch the tag info, and from there the workflow run.
-msg "Looking for tag: $tag_name"
-git fetch origin "$tag_name"
-tag_sha="$(git ls-remote -t origin | grep -F "$tag_name" | cut -d$'\t' -f1)"
+tag_ref="ref/tags/$tag_name"
+msg "Looking for tag: $tag_ref"
+git fetch origin "$tag_ref"
+tag_sha="$(git ls-remote -t origin | grep -F "$tag_ref" | cut -d$'\t' -f1)"
 if [[ -z "$tag_sha" ]]; then
   err "Couldn't find git sha for tag \"$tag_sha\""
 fi
-msg "found sha for $tag_name: $tag_sha"
+msg "found sha for $tag_ref: $tag_sha"
 
 jq_filter="$(printf '.[] | select(.name == "Build app" and .headSha == "%s") | .databaseId | @text' "$tag_sha")"
 msg "Using jq filter: $jq_filter"
