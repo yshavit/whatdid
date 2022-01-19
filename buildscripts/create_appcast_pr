@@ -82,17 +82,18 @@ if [[ ! -f "$sparkle_dir/bin/generate_appcast" ]]; then
 fi
 
 # Upload the dmg
+msg "Uploading Whatdid.dmg."
 gh release upload "$tag_name" "$tmp_dir/Whatdid.dmg"
 
 # Prepare the files and invoke generate_appcast
-mv "$tmp_dir/Whatdid.dmg" "appcasts/Whatdid-$whatdid_version.dmg"
+mv "$tmp_dir/Whatdid.dmg" "appcast/Whatdid-$whatdid_version.dmg"
 mv "$tmp_dir/release-notes.md" "release-notes/$whatdid_version.md"
 release_notes_url="https://whatdid.yuvalshavit.com/release-notes/$whatdid_version.html"
 
 # Generate the appcast
 eddsa_file="$(mktemp)"
 printenv APPCAST_PRIVATE_KEY > "$eddsa_file"
-"$generate_appcast" appcasts -s "$eddsa_file"
+"$generate_appcast" appcast -s "$eddsa_file"
 rm "$eddsa_file"
 
 # Create the PR
