@@ -5,31 +5,44 @@ function msg() {
   echo >&2 "$@"
 }
 
+function err() {
+  msg "$@"
+  exit 1
+}
+
+if [[ -z "${APPCAST_PRIVATE_KEY+x}" ]]; then
+  err "Need to export APPCAST_PRIVATE_KEY"
+fi
+
 tag_name="${1-}"
 if [[ -z "$tag_name" ]]; then
   msg 'No arg given. Looking for $GITHUB_REF'
   tag_name="${GITHUB_REF-}"
   if [[ -z "$tag_name" ]]; then
-    msg "Didn't find \$GITHUB_REF, either. Exiting"
-    exit 1
+    err "Didn't find \$GITHUB_REF, either. Exiting"
   fi
 fi
 
 # Validate that we're in a clean git state
 git_status="$(git status 2>/dev/null | tail -n 1 || echo NOT_GIT)"
+pwd
 if [[ "$git_status" == NOT_GIT ]]; then
-  msg "$appcast_dir must be in a git repo (or be its root)"
-  exit 1
+  err "Must be in a git repo (or be its root)"
 elif [[ "$git_status" != 'nothing to commit, working tree clean' ]]; then
-  msg "$appcast_dir has uncommited changes. Commit them before running this script."
-  git status | bulleted '  '
-  exit 1
+  msg "repo has uncommited changes:"
+  msg
+  git status
+  msg
+  err "Commit them before running this script."
 fi
 
 # Fetch the tag info, and from there the workflow run.
 msg "Looking for tag: $tag_name"
 git fetch origin "$tag_name"
 tag_sha="$(git ls-remote -t origin | grep -F "$tag_name" | cut -d$'\t' -f1)"
+if [[ -z "$tag_sha" ]]; then
+  err "Couldn't find git sha for tag \"$tag_sha\""
+fi
 msg "found sha for $tag_name: $tag_sha"
 
 jq_filter="$(printf '.[] | select(.name == "Build app" and .headSha == "%s") | .databaseId | @text' "$tag_sha")"
@@ -74,12 +87,15 @@ mv "$tmp_dir/Whatdid.dmg" "appcasts/Whatdid-$whatdid_version.dmg"
 mv "$tmp_dir/release-notes.md" "release-notes/$whatdid_version.md"
 release_notes_url="https://whatdid.yuvalshavit.com/release-notes/$whatdid_version.html"
 
+# Generate the appcast
+eddsa_file="$(mktemp)"
+printenv APPCAST_PRIVATE_KEY > "$eddsa_file"
+"$generate_appcast" appcasts -s "$eddsa_file"
+rm "$eddsa_file"
+
 # Create the PR
-"$generate_appcast" appcasts
 git add .
 git commit -m "release $whatdid_version"
 git push -u origin "appcast-$whatdid_version"
 gh pr create --fill
-
-
 
