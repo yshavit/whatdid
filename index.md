@@ -1,5 +1,11 @@
 # whatdid
 
+Download Whatdid [here][download]!
+
+[download]: https://whatdid.yuvalshavit.com/Whatdid.dmg
+
+---
+
 ## "What did I do all day?"
 
 If you're like me, there are days you feel like you've worked and worked, and when the end of the day rolls around you
