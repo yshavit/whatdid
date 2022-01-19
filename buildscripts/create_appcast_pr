@@ -77,12 +77,12 @@ if [[ ! -f "$sparkle_dir/bin/generate_appcast" ]]; then
   (
     cd "$sparkle_dir"
     curl -LO 'https://github.com/sparkle-project/Sparkle/releases/download/2.0.0/Sparkle-for-Swift-Package-Manager.zip'
-    unzip Sparkle-for-Swift-Package-Manager.zip
+    unzip Sparkle-for-Swift-Package-Manager.zip 2>/dev/null
   )
 fi
 
 # Upload the dmg
-gh release upload "$tag_name" "appcasts/Whatdid-$whatdid_version.dmg"
+gh release upload "$tag_name" "$tmp_dir/$whatdid_version.dmg"
 
 # Prepare the files and invoke generate_appcast
 mv "$tmp_dir/Whatdid.dmg" "appcasts/Whatdid-$whatdid_version.dmg"
