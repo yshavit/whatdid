@@ -195,6 +195,10 @@ private class UpdaterDelegate: NSObject, SPUUpdaterDelegate {
             return false
         }
     }
+    
+    func allowedChannels(for updater: SPUUpdater) -> Set<String> {
+        return Set(["alpha"])
+    }
 }
 
 extension Notification.Name {
