@@ -83,7 +83,11 @@ fi
 
 # Upload the dmg
 msg "Uploading Whatdid.dmg."
-gh release upload "$tag_name" "$tmp_dir/Whatdid.dmg"
+clobber_opt=''
+if [[ -n "${CLOBBER_RELEASE_UPLOAD+x}" ]] ; then
+  clobber_opt=--clobber
+fi
+gh release upload "$tag_name" "$tmp_dir/Whatdid.dmg" $clobber_opt
 
 # Prepare the files and invoke generate_appcast
 mv "$tmp_dir/Whatdid.dmg" "appcast/Whatdid-$whatdid_version.dmg"
