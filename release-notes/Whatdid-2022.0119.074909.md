@@ -6,4 +6,6 @@ Relative to [v0.0.1][1], this release also adds the ability to export data. I fo
 
 [1]: https://github.com/yshavit/whatdid/releases/tag/v0.0.1-alpha.1
 
-**Full Changelog**: https://github.com/yshavit/whatdid/compare/v0.0.1-alpha.1...v0.1.0
+**Full Changelog**: [https://github.com/yshavit/whatdid/compare/v0.0.1-alpha.1...v0.1.0][2]
+
+[2]: https://github.com/yshavit/whatdid/compare/v0.0.1-alpha.1...v0.1.0
