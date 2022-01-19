@@ -82,7 +82,7 @@ if [[ ! -f "$sparkle_dir/bin/generate_appcast" ]]; then
 fi
 
 # Upload the dmg
-gh release upload "$tag_name" "$tmp_dir/$whatdid_version.dmg"
+gh release upload "$tag_name" "$tmp_dir/Whatdid.dmg"
 
 # Prepare the files and invoke generate_appcast
 mv "$tmp_dir/Whatdid.dmg" "appcasts/Whatdid-$whatdid_version.dmg"
