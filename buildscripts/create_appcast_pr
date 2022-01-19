@@ -67,7 +67,7 @@ mount_point="$(/usr/libexec/PlistBuddy -c 'Print :system-entities' "$tmp_dir/hdi
   | grep mount-point | sed 's/ *mount-point = //')"
 whatdid_version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$mount_point/whatdid.app/Contents/Info.plist")"
 echo "found Whatdid.app with version $whatdid_version"
-hdiutil detach "$tmp_dir/Whatdid.dmg"
+hdiutil detach "$mount_point"
 
 sparkle_dir="build_local/sparkle"
 mkdir -p "$sparkle_dir"
