@@ -36,7 +36,6 @@ elif [[ "$git_status" != 'nothing to commit, working tree clean' ]]; then
   msg
   err "Commit them before running this script."
 fi
-git checkout -b 
 
 # Fetch the tag info, and from there the workflow run.
 tag_ref="refs/tags/$tag_name"
