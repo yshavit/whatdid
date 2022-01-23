@@ -497,7 +497,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="550" height="148"/>
                                         <subviews>
                                             <stackView toolTip="https://github.com/yshavit/whatdid/" distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vRX-G9-MoD" userLabel="About VStack">
-                                                <rect key="frame" x="0.0" y="0.0" width="231" height="94"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="311" height="94"/>
                                                 <subviews>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WTv-mo-8cX">
                                                         <rect key="frame" x="-2" y="78" width="110" height="16"/>
@@ -601,7 +601,7 @@
                                                         </customSpacing>
                                                     </stackView>
                                                     <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Xc-BT-7Yr" userLabel="Updater stack">
-                                                        <rect key="frame" x="0.0" y="0.0" width="231" height="20"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="311" height="20"/>
                                                         <subviews>
                                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XCR-Xh-1RZ">
                                                                 <rect key="frame" x="-2" y="1" width="138" height="18"/>
@@ -623,12 +623,32 @@
                                                                     </connections>
                                                                 </buttonCell>
                                                             </button>
+                                                            <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="oJl-KT-ssS">
+                                                                <rect key="frame" x="237" y="0.0" width="5" height="20"/>
+                                                            </box>
+                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9BE-7P-c7T">
+                                                                <rect key="frame" x="246" y="1" width="65" height="18"/>
+                                                                <buttonCell key="cell" type="check" title="include alpha releases" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="7Tc-NW-Pfw">
+                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <binding destination="-2" name="value" keyPath="includeAlphaReleases" id="9qK-8p-gQu"/>
+                                                                </connections>
+                                                            </button>
                                                         </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="oJl-KT-ssS" firstAttribute="height" secondItem="8OA-UW-Usg" secondAttribute="height" id="IFb-rl-SqF"/>
+                                                        </constraints>
                                                         <visibilityPriorities>
+                                                            <integer value="1000"/>
+                                                            <integer value="1000"/>
                                                             <integer value="1000"/>
                                                             <integer value="1000"/>
                                                         </visibilityPriorities>
                                                         <customSpacing>
+                                                            <real value="3.4028234663852886e+38"/>
+                                                            <real value="3.4028234663852886e+38"/>
                                                             <real value="3.4028234663852886e+38"/>
                                                             <real value="3.4028234663852886e+38"/>
                                                         </customSpacing>
