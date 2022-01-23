@@ -197,7 +197,9 @@ private class UpdaterDelegate: NSObject, SPUUpdaterDelegate {
     }
     
     func allowedChannels(for updater: SPUUpdater) -> Set<String> {
-        return Set(["alpha"])
+        let s = Set(Prefs.updateChannels.map({$0.rawValue}))
+        wdlog(.debug, "Updater's allowed channels: [%@]", s.joined(separator: ", "))
+        return s
     }
 }
 

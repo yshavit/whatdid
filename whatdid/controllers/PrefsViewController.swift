@@ -75,6 +75,22 @@ class PrefsViewController: NSViewController {
         }
     }
     
+    @IBInspectable
+    dynamic var includeAlphaReleases: Bool {
+        get {
+            Prefs.updateChannels.contains(.alpha)
+        }
+        set (shouldIncludeAlphas) {
+            var newChannels = Prefs.updateChannels
+            if shouldIncludeAlphas {
+                newChannels.formUnion([.alpha])
+            } else {
+                newChannels.subtract([.alpha])
+            }
+            Prefs.updateChannels = newChannels
+        }
+    }
+    
     @IBAction func handlePressExport(_ sender: Any) {
         let selectedFormat = exportFormatPopup.selectedItem
         guard let format = selectedFormat?.representedObject as? EntryExportFormat else {
@@ -87,7 +103,7 @@ class PrefsViewController: NSViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = DefaultScheduler.instance.timeZone
         dateFormatter.dateFormat = "yyyy-mm-dd'T'HHmmssZ"
-        let now = dateFormatter.string(from: Date())
+        let now = dateFormatter.string(from: DefaultScheduler.instance.now)
         savePanel.nameFieldStringValue = "whatdid-export-\(now).\(format.fileExtension)"
         
         AppDelegate.instance.incrementWindowCounter()

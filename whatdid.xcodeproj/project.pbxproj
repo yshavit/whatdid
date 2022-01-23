@@ -86,6 +86,7 @@
 		7EC1FC38261AA9160095388F /* ScreenshotGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC1FC37261AA9160095388F /* ScreenshotGenerator.swift */; };
 		7ECAF0DD250C9C110004647E /* NSButton+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECAF0DC250C9C110004647E /* NSButton+Helpers.swift */; };
 		7ECAF0DF250D75B70004647E /* WhatdidTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECAF0DE250D75B70004647E /* WhatdidTextField.swift */; };
+		7ECE46A0279E092700AF884A /* UpdateChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECE469F279E092700AF884A /* UpdateChannel.swift */; };
 		7ECF97A724F1D50100DBF1BF /* NSControl+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECF97A624F1D50100DBF1BF /* NSControl+Helper.swift */; };
 		7EDA368F24D54EA300F5E368 /* FlippedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA368E24D54EA300F5E368 /* FlippedView.swift */; };
 		7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA369224D60FCD00F5E368 /* ButtonWithClosure.swift */; };
@@ -244,6 +245,7 @@
 		7EC1FC37261AA9160095388F /* ScreenshotGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotGenerator.swift; sourceTree = "<group>"; };
 		7ECAF0DC250C9C110004647E /* NSButton+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSButton+Helpers.swift"; sourceTree = "<group>"; };
 		7ECAF0DE250D75B70004647E /* WhatdidTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatdidTextField.swift; sourceTree = "<group>"; };
+		7ECE469F279E092700AF884A /* UpdateChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateChannel.swift; sourceTree = "<group>"; };
 		7ECF97A624F1D50100DBF1BF /* NSControl+Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSControl+Helper.swift"; sourceTree = "<group>"; };
 		7EDA368E24D54EA300F5E368 /* FlippedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlippedView.swift; sourceTree = "<group>"; };
 		7EDA369224D60FCD00F5E368 /* ButtonWithClosure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithClosure.swift; sourceTree = "<group>"; };
@@ -489,6 +491,7 @@
 				7EF884162610151A00170330 /* TypeAliases.swift */,
 				7E1C2F5024CE43C40070D8CD /* Version.swift */,
 				7EC09CE32794E89800086334 /* StartupMessage.swift */,
+				7ECE469F279E092700AF884A /* UpdateChannel.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -866,6 +869,7 @@
 				7EB7495D25169A44001C7DBC /* GlobalShortcut.swift in Sources */,
 				7EF857A324E242AB00867832 /* ManualTickScheduler.swift in Sources */,
 				7E7C384E24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */,
+				7ECE46A0279E092700AF884A /* UpdateChannel.swift in Sources */,
 				7EE4E39824E2523F00552AAF /* SystemClockScheduler.swift in Sources */,
 				7EAD2A4B2626CBB100153A47 /* ScrollBarHelper.swift in Sources */,
 				7EEF324624EA542D002E217A /* NSRange+Helpers.swift in Sources */,
