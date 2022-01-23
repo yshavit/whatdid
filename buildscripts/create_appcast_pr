@@ -50,13 +50,28 @@ msg "found sha for $tag_ref: $tag_sha"
 jq_filter="$(printf '.[] | select(.headSha == "%s") | .databaseId | @text' "$tag_sha")"
 msg "Using jq filter: $jq_filter"
 
-run_id="$(gh run list -w 'Build app' --json headSha,databaseId --jq "$jq_filter")"
-msg "Found run id: $run_id"
+build_run_id="$(gh run list -w 'Build app' --json headSha,databaseId --jq "$jq_filter")"
+msg "Found run id: $build_run_id"
 
 # Download Whatdid.dmg to a tmp dir
 tmp_dir="$(mktemp -d)"
 msg "Downloading Whatdid.dmg to $tmp_dir"
-gh run download "$run_id" -n Whatdid.dmg -D "$tmp_dir"
+gh run download "$build_run_id" -n Whatdid.dmg -D "$tmp_dir"
+
+# Also download the screenshots.
+# They'll be named like "screenshot-<int>" fromt the job's "friendly id", but I can't find
+# out how to list jobs for a given run in nice json. Instead, I'll look for the "ARTIFACTS"
+# section of the non-json output
+msg "Downloading screenshots"
+screenshot_run_id="$(gh run list -w 'Screenshot' --json headSha,databaseId --jq "$jq_filter")"
+screenshot_artifact="$(gh run view "$screenshot_run_id" | grep -A1 ARTIFACTS | tail -n1)"
+if [[ "$screenshot_artifact" != 'screenshots-'* ]]; then
+  msg "screenshot_artifact=>$screenshot_artifact<"
+  err "Couldn't find screenshots artifact."
+fi
+msg "found artifact: $screenshot_artifact"
+gh run download "$screenshot_run_id" -n "$screenshot_artifact" -D "$tmp_dir"
+mv "$tmp_dir/$screenshot_artifact/"* ./images
 
 # Fetching release notes
 gh release view "$tag_name" --json body --jq '.body' | tr -d '\r' > "$tmp_dir/release-notes.md"
@@ -97,9 +112,10 @@ fi
 gh release upload "$tag_name" "$tmp_dir/Whatdid.dmg" $clobber_opt
 
 # Prepare the files and invoke generate_appcast
-mkdir appcast
-mkdir release-notes
+mkdir -p appcast
+mkdir -p release-notes
 mv "$tmp_dir/Whatdid.dmg" "appcast/Whatdid-$whatdid_version.dmg"
+ln -fs "appcast/Whatdid-$whatdid_version.dmg" Whatdid.app
 mv "$tmp_dir/release-notes.md" "release-notes/Whatdid-$whatdid_version.md"
 # Stub out a dummy html doc in the appcast/ dir. This tricks generate_appcast into creating a <sparkle:releaseNotesLink> tag.
 # (The actual html page is generated from that .md file we just created.)
