@@ -87,7 +87,7 @@ class PrefsViewController: NSViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = DefaultScheduler.instance.timeZone
         dateFormatter.dateFormat = "yyyy-mm-dd'T'HHmmssZ"
-        let now = dateFormatter.string(from: Date())
+        let now = dateFormatter.string(from: DefaultScheduler.instance.now)
         savePanel.nameFieldStringValue = "whatdid-export-\(now).\(format.fileExtension)"
         
         AppDelegate.instance.incrementWindowCounter()
