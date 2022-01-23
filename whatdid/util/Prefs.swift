@@ -12,6 +12,7 @@ struct Prefs {
     @Pref(key: "previouslyLaunchedVersion") static var tutorialVersion = -1
     @Pref(key: "requireNotes") static var requireNotes = false
     @Pref(key: "startupMessages") static var startupMessages = [StartupMessage]()
+    @Pref(key: "updateChannels") static var updateChannels = Set<UpdateChannel>([])
 }
 
 @propertyWrapper
@@ -131,6 +132,31 @@ extension Array: PrefType where Element == StartupMessage {
     static func toNSArray(_ list: [StartupMessage]) -> NSArray {
         let unique = Set(list).compactMap({NSInteger($0.rawValue)})
         return NSArray(array: unique)
+    }
+}
+
+extension Set: PrefType where Element == UpdateChannel {
+    static func readUserDefaultsValue(key: String) -> Set<Element> {
+        guard let rawArray = UserDefaults.standard.array(forKey: key) else {
+            wdlog(.info, "reading Prefs<[StartupMessage]>: not an array")
+            return []
+        }
+        guard let asStrings = rawArray as? [String] else {
+            wdlog(.info, "reading Prefs<[StartupMessage]>: not an int array")
+            return []
+        }
+        let asEnumValues = asStrings.compactMap( {UpdateChannel(rawValue: $0) })
+        return Set(asEnumValues)
+    }
+    
+    static func writeUserDefaultsValue(key: String, value: Set<Element>) {
+        let asNsStrings = value.map({$0.rawValue})
+        let arr = NSArray(array: asNsStrings)
+        UserDefaults.standard.set(arr, forKey: key)
+    }
+    
+    var asUserDefaultsValue: Any {
+        NSArray(array: Array(self))
     }
 }
 
