@@ -22,6 +22,7 @@
             <sparkle:shortVersionString>0.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
             <enclosure url="https://whatdid.yuvalshavit.com/appcast/Whatdid-2022.0119.074909.dmg" length="4922600" type="application/octet-stream" sparkle:edSignature="/SYp3QVV4RAjGGWOtZuvPlp+yFa3mqX3zMB7IGffh/T+r9lQ/bBUC9Y9FPy58TerWQB9A5NwwOsnPAk5r0zEAA=="/>
+            <sparkle:releaseNotesLink>https://whatdid.yuvalshavit.com/release-notes/Whatdid-2022.0119.074909.html</sparkle:releaseNotesLink>
         </item>
     </channel>
 </rss>
