@@ -117,9 +117,13 @@ mkdir -p release-notes
 mv "$tmp_dir/Whatdid.dmg" "appcast/Whatdid-$whatdid_version.dmg"
 ln -fs "appcast/Whatdid-$whatdid_version.dmg" Whatdid.dmg
 mv "$tmp_dir/release-notes.md" "release-notes/Whatdid-$whatdid_version.md"
-# Stub out a dummy html doc in the appcast/ dir. This tricks generate_appcast into creating a <sparkle:releaseNotesLink> tag.
+# Stub out dummy html docs in the appcast/ dir. This tricks generate_appcast into creating a <sparkle:releaseNotesLink> tag.
 # (The actual html page is generated from that .md file we just created.)
-echo '<body/>' > "appcast/Whatdid-$whatdid_version.html"
+for note_file in release-notes/*.md ; do
+  html_name="$(basename "$note_file" | sed 's/\.md$/.html/')"
+  echo '<body/>' > "appcast/$html_name"
+done
+
 # invoke generate_appcast
 appcast_channel=''
 if [[ "$(gh release view "${tag_name}" --json isPrerelease --jq '.isPrerelease')" == true ]]; then
@@ -130,8 +134,11 @@ else
 fi
 "$generate_appcast" appcast -s "$(printenv APPCAST_PRIVATE_KEY)" \
   --release-notes-url-prefix "https://whatdid.yuvalshavit.com/release-notes/" $appcast_channel
-# delete that dummy html doc
-rm "appcast/Whatdid-$whatdid_version.html"
+# delete those dummy html files
+for note_file in release-notes/*.md ; do
+  html_name="$(basename "$note_file" | sed 's/\.md$/.html/')"
+  rm "appcast/$html_name"
+done
 
 # Create the PR
 git add .
