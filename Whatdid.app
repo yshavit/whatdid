@@ -1,0 +1,1 @@
+appcast/Whatdid-2022.0123.232458.dmg
