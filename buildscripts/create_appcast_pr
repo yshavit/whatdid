@@ -115,7 +115,7 @@ gh release upload "$tag_name" "$tmp_dir/Whatdid.dmg" $clobber_opt
 mkdir -p appcast
 mkdir -p release-notes
 mv "$tmp_dir/Whatdid.dmg" "appcast/Whatdid-$whatdid_version.dmg"
-ln -fs "appcast/Whatdid-$whatdid_version.dmg" Whatdid.app
+ln -fs "appcast/Whatdid-$whatdid_version.dmg" Whatdid.dmg
 mv "$tmp_dir/release-notes.md" "release-notes/Whatdid-$whatdid_version.md"
 # Stub out a dummy html doc in the appcast/ dir. This tricks generate_appcast into creating a <sparkle:releaseNotesLink> tag.
 # (The actual html page is generated from that .md file we just created.)
