@@ -63,7 +63,7 @@ gh run download "$build_run_id" -n Whatdid.dmg -D "$tmp_dir"
 # out how to list jobs for a given run in nice json. Instead, I'll look for the "ARTIFACTS"
 # section of the non-json output
 msg "Downloading screenshots"
-screenshot_run_id="$(gh run list -w 'Screenshot' --json headSha,databaseId --jq "$jq_filter")"
+screenshot_run_id="$(gh run list -w 'Screenshot' --json headSha,headBranch,databaseId --jq "$jq_filter")"
 screenshot_artifact="$(gh run view "$screenshot_run_id" | grep -A1 ARTIFACTS | tail -n1)"
 if [[ "$screenshot_artifact" != 'screenshots-'* ]]; then
   msg "screenshot_artifact=>$screenshot_artifact<"
