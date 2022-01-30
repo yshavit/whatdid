@@ -47,10 +47,10 @@ if [[ -z "$tag_sha" ]]; then
 fi
 msg "found sha for $tag_ref: $tag_sha"
 
-jq_filter="$(printf '.[] | select(.headSha == "%s") | .databaseId | @text' "$tag_sha")"
+jq_filter="$(printf '.[] | select(.headSha == "%s" and .headBranch == "main") | .databaseId | @text' "$tag_sha")"
 msg "Using jq filter: $jq_filter"
 
-build_run_id="$(gh run list -w 'Build app' --json headSha,databaseId --jq "$jq_filter")"
+build_run_id="$(gh run list -w 'Build app' --json headSha,headBranch,databaseId --jq "$jq_filter")"
 msg "Found run id: $build_run_id"
 
 # Download Whatdid.dmg to a tmp dir
