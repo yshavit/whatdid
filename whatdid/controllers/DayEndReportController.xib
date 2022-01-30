@@ -23,14 +23,14 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <stackView identifier="top-v" wantsLayer="YES" distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qn8-JX-HeH" userLabel="Top">
-            <rect key="frame" x="0.0" y="0.0" width="400" height="99"/>
+        <stackView identifier="top-v" wantsLayer="YES" distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" misplaced="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qn8-JX-HeH" userLabel="Top">
+            <rect key="frame" x="0.0" y="0.0" width="400" height="103"/>
             <subviews>
                 <stackView identifier="header-h" distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="500" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pKe-k9-zAn" userLabel="Header Stack">
-                    <rect key="frame" x="0.0" y="79" width="141" height="20"/>
+                    <rect key="frame" x="0.0" y="79" width="187" height="22"/>
                     <subviews>
                         <textField identifier="header_label" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-Lm-qUL" userLabel="Header">
-                            <rect key="frame" x="-2" y="0.0" width="114" height="16"/>
+                            <rect key="frame" x="-2" y="2" width="114" height="16"/>
                             <textFieldCell key="cell" lineBreakMode="clipping" identifier="header_cell" title="Task overview for:" id="jJc-W3-EKA" userLabel="Header cell">
                                 <font key="font" usesAppearanceFont="YES"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -45,13 +45,33 @@
                                 <menu key="menu" id="I7d-9W-teY"/>
                             </popUpButtonCell>
                         </popUpButton>
+                        <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="J7G-n5-tIA">
+                            <rect key="frame" x="147" y="0.0" width="5" height="18"/>
+                        </box>
+                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Tzb-6g-cBT">
+                            <rect key="frame" x="158" y="-1" width="29" height="19"/>
+                            <buttonCell key="cell" type="roundRect" title="Open in new window" bezelStyle="roundedRect" image="macwindow.on.rectangle" catalog="system" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Uuc-mI-XyP">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="cellTitle"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="openInNewWindow:" target="-2" id="rRL-k3-nEz"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <edgeInsets key="edgeInsets" left="0.0" right="0.0" top="4" bottom="0.0"/>
+                    <constraints>
+                        <constraint firstItem="J7G-n5-tIA" firstAttribute="height" secondItem="L2g-sp-iaD" secondAttribute="height" id="GFN-T4-VhH"/>
+                    </constraints>
                     <visibilityPriorities>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
                         <integer value="1000"/>
                         <integer value="1000"/>
                     </visibilityPriorities>
                     <customSpacing>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
                     </customSpacing>
@@ -196,4 +216,7 @@
             <point key="canvasLocation" x="-294.5" y="252.5"/>
         </stackView>
     </objects>
+    <resources>
+        <image name="macwindow.on.rectangle" catalog="system" width="20" height="16"/>
+    </resources>
 </document>

@@ -90,8 +90,8 @@ class TimeUtilTest: XCTestCase {
     // Check when the day component is the same, but it was a month ago. This is to make sure we're comparing components correctly.
     func test_formatSuccinct_oneMonthAgo() {
         checkFormatSuccinct(
-            inUS: "2:30 am on Jan 27",
-            inGB: "02:30 on 27 Jan",
+            inUS: "Jan 27 at 2:30 am",
+            inGB: "27 Jan at 02:30",
             for: date(forIso8601: "2020-01-27T02:30:00"),
             assumingNow: date(forIso8601: "2020-02-27T02:30:00"))
     }
@@ -124,8 +124,8 @@ class TimeUtilTest: XCTestCase {
     func test_formatSuccinct_nextWeek() {
         // note: 2020-02-27 was a Thursday; March 5 was the following Thursday
         checkFormatSuccinct(
-            inUS: "11:30 am on Mar 5",
-            inGB: "11:30 on 5 Mar",
+            inUS: "Mar 5 at 11:30 am",
+            inGB: "5 Mar at 11:30",
             for: date(forIso8601: "2020-03-05T11:30:00"),
             assumingNow: date(forIso8601: "2020-02-27T23:59:00"))
     }
@@ -140,8 +140,8 @@ class TimeUtilTest: XCTestCase {
     
     func test_formatSuccinct_beforeYesterday() {
         checkFormatSuccinct(
-            inUS: "2:30 am on Feb 27",
-            inGB: "02:30 on 27 Feb",
+            inUS: "Feb 27 at 2:30 am",
+            inGB: "27 Feb at 02:30",
             for: date(forIso8601: "2020-02-27T02:30:00"),
             assumingNow: date(forIso8601: "2020-02-29T22:00:00"))
     }

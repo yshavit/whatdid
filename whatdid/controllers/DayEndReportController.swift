@@ -351,6 +351,12 @@ class DayEndReportController: NSViewController {
         return wrapper
     }
     
+    @IBAction func openInNewWindow(_ sender: Any) {
+        let newWindow = LargeReportController(windowNibName: NSNib.Name("LargeReportController"))
+        newWindow.showWindow(sender)
+        closeWindowAsync()
+    }
+    
     struct ExpandableProgressBar {
         let topView: NSView
         let disclosure: ButtonWithClosure

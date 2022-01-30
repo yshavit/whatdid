@@ -131,7 +131,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
         
         opener = OpenCloseHelper<WindowContents>(
             onOpen: {ctx in
-                AppDelegate.instance.incrementWindowCounter()
+                AppDelegate.instance.windowOpened(self)
                 wdlog(.debug, "MainMenu handling %{public}@ open request for %{public}@", ctx.reason.description, ctx.item.description)
                 self.doOpen(ctx.item, scheduler: ctx.scheduler)
                 if ctx.reason == .manual {
@@ -262,7 +262,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
         DispatchQueue.main.async {
             wdlog(.debug, "unhighlighting icon and closing main window")
             self.statusItem.button?.isHighlighted = false
-            AppDelegate.instance.decrementWindowCounter()
+            AppDelegate.instance.windowClosed(self)
         }
     }
 

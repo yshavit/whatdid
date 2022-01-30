@@ -13,7 +13,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
     private var _model = Model()
     @IBOutlet weak var mainMenu: MainMenu!
     private var deactivationHooks : Atomic<[() -> Void]> = Atomic(wrappedValue: [])
-    private var openWindows: Int = 0
+    private var openWindows = [ObjectIdentifier:NSWindowController]()
     let updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: UpdaterDelegate.instance, userDriverDelegate: nil)
     
     #if UI_TEST
@@ -119,16 +119,25 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
         #endif
     }
     
-    func incrementWindowCounter() {
-        openWindows += 1
+    func windowOpened(_ window: NSWindowController) {
+        let objectId = ObjectIdentifier(window)
+        if objectId != ObjectIdentifier(mainMenu) {
+            // We opened a window other than the MainMenu one, so make us a temporary window
+            NSApp.setActivationPolicy(.regular)
+        }
+        openWindows[objectId] = window
     }
     
-    func decrementWindowCounter() {
-        openWindows -= 1
-        let openWindows = openWindows
-        if openWindows <= 0 {
-            if openWindows < 0 {
-                wdlog(.warn, "AppDelegate.openWindows is negative! %d", openWindows)
+    func windowClosed(_ window: NSWindowController) {
+        let old = openWindows.removeValue(forKey: ObjectIdentifier(window))
+        if old == nil {
+            wdlog(.warn, "registered a close for an unknown window controller")
+        }
+
+        if openWindows.isEmpty {
+            // windowOpened(_) may have put us into .regular mode; if so, switch back
+            if NSApp.activationPolicy() != .accessory {
+                NSApp.setActivationPolicy(.accessory)
             }
             NSApp.hide(self)
         }

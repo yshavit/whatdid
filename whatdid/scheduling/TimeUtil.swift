@@ -84,7 +84,7 @@ class TimeUtil {
         } else if daysApart > 1 && daysApart <= 6 {
             formatString = [.fromDate("EEEE"), .literal(" at "), .hourAndMinute]
         } else {
-            formatString = [.hourAndMinute, .literal(" on "), .fromDate("dMMM")]
+            formatString = [.fromDate("dMMM"), .literal(" at "), .hourAndMinute]
         }
         
         let formatter = DateFormatter()

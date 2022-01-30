@@ -39,6 +39,8 @@
 		7E6FF19F252D71060071E58C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6FF19E252D71060071E58C /* AppDelegate.swift */; };
 		7E6FF1C3252D740F0071E58C /* WhatdidLauncher.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7E6FF19C252D71060071E58C /* WhatdidLauncher.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7E6FF1CA252D745C0071E58C /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E6FF1C9252D745C0071E58C /* ServiceManagement.framework */; };
+		7E73C95827A66A0C007F87F0 /* LargeReportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E73C95627A66A0C007F87F0 /* LargeReportController.swift */; };
+		7E73C95927A66A0C007F87F0 /* LargeReportController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E73C95727A66A0C007F87F0 /* LargeReportController.xib */; };
 		7E75D0A0251D9A790002DBA0 /* ModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E75D09F251D9A790002DBA0 /* ModelTest.swift */; };
 		7E76A141278F99920017FAE9 /* EntryExportFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E76A140278F99920017FAE9 /* EntryExportFormats.swift */; };
 		7E76A143278FB4E70017FAE9 /* OutputStream+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E76A142278FB4E70017FAE9 /* OutputStream+Helpers.swift */; };
@@ -194,6 +196,8 @@
 		7E6FF1A5252D71080071E58C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E6FF1A6252D71080071E58C /* WhatdidLauncher.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WhatdidLauncher.entitlements; sourceTree = "<group>"; };
 		7E6FF1C9252D745C0071E58C /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
+		7E73C95627A66A0C007F87F0 /* LargeReportController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeReportController.swift; sourceTree = "<group>"; };
+		7E73C95727A66A0C007F87F0 /* LargeReportController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LargeReportController.xib; sourceTree = "<group>"; };
 		7E75D09F251D9A790002DBA0 /* ModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTest.swift; sourceTree = "<group>"; };
 		7E76A140278F99920017FAE9 /* EntryExportFormats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryExportFormats.swift; sourceTree = "<group>"; };
 		7E76A142278FB4E70017FAE9 /* OutputStream+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OutputStream+Helpers.swift"; sourceTree = "<group>"; };
@@ -548,6 +552,8 @@
 				7EF58F8A2580F180002F9604 /* TutorialViewController.swift */,
 				7EF58F8B2580F180002F9604 /* TutorialViewController.xib */,
 				7E235E02278A968800253DD8 /* NonFocusingNSViewController.swift */,
+				7E73C95627A66A0C007F87F0 /* LargeReportController.swift */,
+				7E73C95727A66A0C007F87F0 /* LargeReportController.xib */,
 			);
 			path = controllers;
 			sourceTree = "<group>";
@@ -804,6 +810,7 @@
 				7EA6E22824BD6C5F004B9297 /* PtnViewController.xib in Resources */,
 				7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */,
 				7E970D6924DA84AF00F634AB /* UiTestWindow.xib in Resources */,
+				7E73C95927A66A0C007F87F0 /* LargeReportController.xib in Resources */,
 				7EF883FD260D7DD400170330 /* DayStartController.xib in Resources */,
 				7E7D006E262BFC08002D4CB5 /* ConfirmViewController.xib in Resources */,
 			);
@@ -893,6 +900,7 @@
 				7EF883EB260C7D9900170330 /* ExpandableTextField.swift in Sources */,
 				7E51DA09250BF5C60088864F /* TimeZone+Helpers.swift in Sources */,
 				7EB7495F2516F9C7001C7DBC /* Prefs.swift in Sources */,
+				7E73C95827A66A0C007F87F0 /* LargeReportController.swift in Sources */,
 				7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */,
 				7ECAF0DD250C9C110004647E /* NSButton+Helpers.swift in Sources */,
 				7E07C3B824D121770007FD23 /* DayEndReportController.swift in Sources */,

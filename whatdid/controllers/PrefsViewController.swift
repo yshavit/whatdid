@@ -106,12 +106,16 @@ class PrefsViewController: NSViewController {
         let now = dateFormatter.string(from: DefaultScheduler.instance.now)
         savePanel.nameFieldStringValue = "whatdid-export-\(now).\(format.fileExtension)"
         
-        AppDelegate.instance.incrementWindowCounter()
+        // The NSSavePanel won't have a window controller until we call begin, but we need to
+        // increment the counter right away (or else the app will hide as soon as we end the sheet).
+        // So, create a dummy controller just to "hold the spot" as it were.
+        let dummyController = NSWindowController()
+        AppDelegate.instance.windowOpened(dummyController)
         endParentSheet(with: PrefsViewController.CLOSE_PTN)
         
         savePanel.begin { response in
             defer {
-                AppDelegate.instance.decrementWindowCounter()
+                AppDelegate.instance.windowClosed(dummyController)
             }
             guard response == .OK else {
                 return

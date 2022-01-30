@@ -8,7 +8,6 @@ class DateRangePicker: NSPopUpButton, NSPopoverDelegate {
     private static let MODE_ONE_DAY = "single day"
     private static let MODE_RANGE = "date range"
     
-    
     private let dateRangePane = DateRangePane()
     private var customDateRange: (Date, Date)?
     private let popover = NSPopover()
