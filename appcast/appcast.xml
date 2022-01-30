@@ -4,6 +4,20 @@
         <title>whatdid</title>
         <item>
             <title>0.1</title>
+            <pubDate>Sun, 30 Jan 2022 23:57:52 +0000</pubDate>
+            <sparkle:channel>alpha</sparkle:channel>
+            <sparkle:version>2022.0130.234301</sparkle:version>
+            <sparkle:shortVersionString>0.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://whatdid.yuvalshavit.com/release-notes/Whatdid-2022.0130.234301.html</sparkle:releaseNotesLink>
+            <enclosure url="https://whatdid.yuvalshavit.com/appcast/Whatdid-2022.0130.234301.dmg" length="4957110" type="application/octet-stream" sparkle:edSignature="+0Jkgs7tfpXqpp6MKiWidZjAOwA6vX917NF1pMXrRWf4yEZN9w/B7VXbJbivy3YhNY2t3fKzn4xOg9uAvsxGAQ=="/>
+            <sparkle:deltas>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2022.0130.234301-2022.0123.232458.delta" sparkle:deltaFrom="2022.0123.232458" length="350968" type="application/octet-stream" sparkle:edSignature="SA/kNl4AnOYAZKCe3E3AOyN1Qx8P7Hli2Pz6Ze0JGnzmwp4LpmUrqJO0L5hGvLmrNhlOs596pVrKoe1bz1xiAA=="/>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2022.0130.234301-2022.0119.074909.delta" sparkle:deltaFrom="2022.0119.074909" length="366713" type="application/octet-stream" sparkle:edSignature="rb512QLWNepC4INMpgbrvrllfXVMWgA2WkHqJIZhWMlRwJTOMK7OOQmFfs6iEVt/eF4mO2/+tTudG/kn1vYYCA=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>0.1</title>
             <pubDate>Mon, 24 Jan 2022 00:00:10 +0000</pubDate>
             <sparkle:channel>alpha</sparkle:channel>
             <sparkle:version>2022.0123.232458</sparkle:version>
