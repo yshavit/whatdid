@@ -9,9 +9,11 @@ class LargeReportController: NSWindowController, NSWindowDelegate, NSOutlineView
     @IBOutlet weak var dateRangePicker: DateRangePicker!
     
     static let timeCol = NSUserInterfaceItemIdentifier(rawValue: "timeCol")
+    static let dateCol = NSUserInterfaceItemIdentifier(rawValue: "dateCol")
     static let descriptionCol = NSUserInterfaceItemIdentifier(rawValue: "descriptionCol")
     
     private var entries = [Node]()
+    private var sorting = Sorting(by: .timeSpent, ascending: false)
     
     override func windowDidLoad() {
         super.windowDidLoad()
@@ -23,6 +25,7 @@ class LargeReportController: NSWindowController, NSWindowDelegate, NSOutlineView
             }
             self.loadEntries(fetchingDates: (start, end))
         }
+        tasksTreeView.sortDescriptors = [NSSortDescriptor(key: sorting.by.rawValue, ascending: sorting.ascending)]
     }
     
     override func showWindow(_ sender: Any?) {
@@ -57,7 +60,7 @@ class LargeReportController: NSWindowController, NSWindowDelegate, NSOutlineView
         } else {
             spinner = nil
         }
-        let ordering = projectAndTaskSortOrder()
+        let sorting = sorting
         let prevEntries = entries
         entries = []
         tasksTreeView.reloadData()
@@ -78,7 +81,7 @@ class LargeReportController: NSWindowController, NSWindowDelegate, NSOutlineView
             } else {
                 newEntriesUnsorted = prevEntries
             }
-            let entriesSorted = self.sort(entries: newEntriesUnsorted, by: ordering, progress: progressBar(total:processed:))
+            let entriesSorted = self.sort(entries: newEntriesUnsorted, by: sorting, progress: progressBar(total:processed:))
             DispatchQueue.main.async {
                 self.entries = entriesSorted
                 self.tasksTreeView.reloadData()
@@ -87,19 +90,6 @@ class LargeReportController: NSWindowController, NSWindowDelegate, NSOutlineView
                 }
                 self.setControlsEnabled(true)
             }
-        }
-    }
-    
-    private func projectAndTaskSortOrder() -> (Node, Node) -> Bool {
-        switch sortOptions.selectedItem?.title {
-        case "Most recent":
-            return {a, b in a.lastWorkedOn > b.lastWorkedOn}
-        case "Least recent":
-            return {a, b in a.lastWorkedOn < b.lastWorkedOn}
-        case "Least time":
-            return {a, b in a.timeSpent < b.timeSpent}
-        default: // including "Most time"
-            return {a, b in a.timeSpent > b.timeSpent}
         }
     }
     
@@ -146,6 +136,16 @@ class LargeReportController: NSWindowController, NSWindowDelegate, NSOutlineView
         switch tableColumn.identifier {
         case LargeReportController.timeCol:
             return NSTextField(labelWithString: TimeUtil.daysHoursMinutes(for: item.timeSpent))
+        case LargeReportController.dateCol:
+            let formatter = DateFormatter()
+            var formatComponents = "MMMddhma"
+            let cal = DefaultScheduler.instance.calendar
+            let currentYear = cal.component(.year, from: DefaultScheduler.instance.now)
+            if cal.component(.year, from: item.lastWorkedOn) != currentYear {
+                formatComponents = "yyyy" + formatComponents
+            }
+            formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: formatComponents, options: 0, locale: nil)
+            return NSTextField(labelWithString: formatter.string(from: item.lastWorkedOn))
         case LargeReportController.descriptionCol:
             return NSTextField(labelWithString: item.title)
         default:
@@ -153,24 +153,85 @@ class LargeReportController: NSWindowController, NSWindowDelegate, NSOutlineView
         }
     }
     
-    private func sort(entries: [Node], by newOrder: (Node, Node) -> Bool, progress: (Int, Int) -> Void) -> [Node] {
+    func outlineView(_ outlineView: NSOutlineView, sortDescriptorsDidChange oldDescriptors: [NSSortDescriptor]) {
+        let newSorting: Sorting?
+        
+        let newDescriptors = outlineView.sortDescriptors
+        if let firstDescriptor = newDescriptors.first {
+            if let descriptorKey = firstDescriptor.key, let descriptorSort = SortBy(rawValue: descriptorKey) {
+                newSorting = Sorting(by: descriptorSort, ascending: firstDescriptor.ascending)
+            } else {
+                wdlog(.warn, "Couldn't find sorting order from descriptor with key: %@.", firstDescriptor.key ?? "<nil>")
+                newSorting = nil
+            }
+            if newDescriptors.count > 1 {
+                wdlog(.warn, "Found multiple NSSortDescriptors. Using only the first one")
+            }
+        } else {
+            wdlog(.warn, "no new NSSortDescriptors provided.")
+            newSorting = nil
+        }
+        let resolvedSorting: Sorting
+        if let newSorting = newSorting {
+            resolvedSorting = newSorting
+        } else {
+            resolvedSorting = Sorting(by: .timeSpent, ascending: false)
+            wdlog(.warn, "using default sorting")
+        }
+        
+        // Set the menu title to the new sorting
+        let newMenuTitle = LargeReportController.sortMenuOptions.compactMap({menuTitle, sortOption in
+            return (sortOption == resolvedSorting) ? menuTitle : nil
+        }).first
+        if let newMenuTitle = newMenuTitle {
+            sortOptions.selectItem(withTitle: newMenuTitle)
+        } else {
+            wdlog(.error, "Couldn't find menu title for sorting: (by: %@, ascending: %@)", resolvedSorting.by.rawValue, resolvedSorting.ascending)
+        }
+        
+        // reload
+        sorting = resolvedSorting
+        loadEntries(fetchingDates: nil)
+    }
+    
+    private func sort(entries: [Node], by newOrder: Sorting, progress: (Int, Int) -> Void) -> [Node] {
         let totalElementsToSort = entries.count + entries.reduce(0, {prev, project in prev + project.children.count})
         var elementsSorted = 0
         progress(totalElementsToSort, elementsSorted)
         var newProjects = entries.map { project -> Node in
-            let newProject = Node(title: project.title, lastWorkedOn: project.lastWorkedOn, timeSpent: project.timeSpent, children: project.children.sorted(by: newOrder))
+            let newProject = Node(title: project.title, lastWorkedOn: project.lastWorkedOn, timeSpent: project.timeSpent, children: project.children.sorted(by: newOrder.areInAscendingOrder))
             elementsSorted += newProject.children.count
             progress(totalElementsToSort, elementsSorted)
             return newProject
         }
-        newProjects.sort(by: newOrder)
+        newProjects.sort(by: newOrder.areInAscendingOrder)
         elementsSorted += newProjects.count
         progress(totalElementsToSort, elementsSorted)
         return newProjects
     }
     
-    @IBAction func sortChanged(_ sender: Any) {
-        loadEntries(fetchingDates: nil)
+    private static let sortMenuOptions = [
+        "Oldest": Sorting(by: .lastDate, ascending: true),
+        "Newest": Sorting(by: .lastDate, ascending: false),
+        "Least time": Sorting(by: .timeSpent, ascending: true),
+        "Most time": Sorting(by: .timeSpent, ascending: false)
+    ]
+    
+    @IBAction func sortMenuChanged(_ sender: Any) {
+        let newSorting: Sorting?
+        if let titleOfSelectedItem = sortOptions.titleOfSelectedItem {
+            newSorting = LargeReportController.sortMenuOptions[titleOfSelectedItem]
+        } else {
+            newSorting = nil
+        }
+        let resolvedSorting: Sorting
+        if let newSorting = newSorting {
+            resolvedSorting = newSorting
+        } else {
+            resolvedSorting = Sorting(by: .timeSpent, ascending: false)
+        }
+        /// The next line will trigger `outlineView(_ outlineView:, sortDescriptorsDidChange)`
+        tasksTreeView.sortDescriptors = [NSSortDescriptor(key: resolvedSorting.by.rawValue, ascending: resolvedSorting.ascending)]
     }
     
     private func getEntries(from start: Date, to end: Date, progress: (Int, Int) -> Void) -> [Node] {
@@ -192,8 +253,8 @@ class LargeReportController: NSWindowController, NSWindowDelegate, NSOutlineView
                 var taskTime = 0.0
                 var taskLastWorkedOn = Date.distantPast
                 task.forEach { entry in
-                    let fromDesc = TimeUtil.formatSuccinctly(date: entry.from)
-                    let toDesc = TimeUtil.formatSuccinctly(date: entry.to, assumingNow: entry.from)
+                    let fromDesc = TimeUtil.formatSuccinctly(date: entry.from, assumingNow: entry.to)
+                    let toDesc = TimeUtil.formatSuccinctly(date: entry.to, assumingNow: entry.to)
                     var entryNotes = entry.notes?.trimmingCharacters(in: .whitespaces) ?? ""
                     if entryNotes.isEmpty {
                         entryNotes = "no notes entered"
@@ -221,5 +282,38 @@ class LargeReportController: NSWindowController, NSWindowDelegate, NSOutlineView
         let lastWorkedOn: Date
         let timeSpent: TimeInterval
         let children: [Node]
+    }
+    
+    private enum SortBy: String {
+        case timeSpent = "sortTime"
+        case lastDate = "sortLatest"
+    }
+    
+    private struct Sorting: Equatable {
+        let by: SortBy
+        let ascending: Bool
+        
+        func areInAscendingOrder(_ a: Node, _ b: Node) -> Bool {
+            switch by {
+            case .timeSpent:
+                return keysAreInAscendingOrder(a: a.timeSpent, b: b.timeSpent)
+            case .lastDate:
+                return keysAreInAscendingOrder(a: a.lastWorkedOn, b: b.lastWorkedOn)
+            }
+        }
+        
+        /// Returns whether [a, b] are in ascending order.
+        ///
+        /// From `sort(by:)`:
+        ///
+        /// "**areInIncreasingOrder**:
+        /// A predicate that returns true if its first argument should be ordered before its second argument"
+        private func keysAreInAscendingOrder<T: Comparable>(a: T, b: T) -> Bool {
+            if ascending {
+                return a < b
+            } else {
+                return a > b
+            }
+        }
     }
 }
