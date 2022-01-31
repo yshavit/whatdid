@@ -52,7 +52,7 @@ class LargeReportController: NSWindowController, NSWindowDelegate, NSOutlineView
             createSpinner.setContentHuggingPriority(.defaultLow, for: .horizontal)
             createSpinner.setContentHuggingPriority(.defaultLow, for: .vertical)
             createSpinner.widthAnchor.constraint(equalTo: tasksTreeView.widthAnchor).isActive = true
-            createSpinner.leadingAnchor.constraint(equalTo: tasksTreeView.leadingAnchor).isActive = true
+            createSpinner.centerXAnchor.constraint(equalTo: tasksTreeView.centerXAnchor).isActive = true
             createSpinner.centerYAnchor.constraint(equalTo: tasksTreeView.centerYAnchor).isActive = true
             if #available(macOS 11.0, *) {
                 createSpinner.controlSize = .large

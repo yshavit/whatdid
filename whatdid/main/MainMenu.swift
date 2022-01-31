@@ -159,7 +159,9 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
                 stack.setHuggingPriority(.defaultHigh, for: .horizontal)
                 stack.edgeInsets = NSEdgeInsets(top: 10, left: 15, bottom: 10, right: 15)
                 startupMessages.forEach {
-                    stack.addArrangedSubview(NSTextField(labelWithString: $0.humanReadable))
+                    let msg = NSTextField(labelWithString: $0.humanReadable)
+                    msg.drawsBackground = false
+                    stack.addArrangedSubview(msg)
                 }
                 stack.wantsLayer = true
                 stack.layer?.backgroundColor = NSColor.yellow.cgColor

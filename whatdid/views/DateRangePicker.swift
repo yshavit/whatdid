@@ -42,7 +42,6 @@ class DateRangePicker: NSPopUpButton, NSPopoverDelegate {
         } else {
             wdlog(.warn, "modePicker's cell was not NSPopUpButtonCell")
         }
-        bezelStyle = .roundRect // roundRect, textureRounded
         focusRingType = .none
         
         target = self

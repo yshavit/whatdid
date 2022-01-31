@@ -27,7 +27,7 @@
             <rect key="frame" x="0.0" y="0.0" width="400" height="103"/>
             <subviews>
                 <stackView identifier="header-h" distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="500" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pKe-k9-zAn" userLabel="Header Stack">
-                    <rect key="frame" x="0.0" y="79" width="187" height="22"/>
+                    <rect key="frame" x="0.0" y="79" width="299" height="22"/>
                     <subviews>
                         <textField identifier="header_label" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-Lm-qUL" userLabel="Header">
                             <rect key="frame" x="-2" y="2" width="114" height="16"/>
@@ -49,8 +49,8 @@
                             <rect key="frame" x="147" y="0.0" width="5" height="18"/>
                         </box>
                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Tzb-6g-cBT">
-                            <rect key="frame" x="158" y="-1" width="29" height="19"/>
-                            <buttonCell key="cell" type="roundRect" title="Open in new window" bezelStyle="roundedRect" image="macwindow.on.rectangle" catalog="system" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Uuc-mI-XyP">
+                            <rect key="frame" x="158" y="-1" width="141" height="19"/>
+                            <buttonCell key="cell" type="roundRect" title="open in new window ➚" bezelStyle="roundedRect" image="macwindow.on.rectangle" catalog="system" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Uuc-mI-XyP">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="cellTitle"/>
                             </buttonCell>
