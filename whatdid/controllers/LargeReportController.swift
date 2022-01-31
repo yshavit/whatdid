@@ -14,6 +14,8 @@ class LargeReportController: NSWindowController, NSWindowDelegate, NSOutlineView
     
     private var entries = [Node]()
     private var sorting = Sorting(by: .timeSpent, ascending: false)
+    var modelOverride: Model?
+    var loadDataAsynchronously = true
     
     override func windowDidLoad() {
         super.windowDidLoad()
@@ -64,10 +66,10 @@ class LargeReportController: NSWindowController, NSWindowDelegate, NSOutlineView
         let prevEntries = entries
         entries = []
         tasksTreeView.reloadData()
-        DispatchQueue.global().async {
+        run(on: DispatchQueue.global()) {
             func progressBar(total: Int, processed: Int) {
                 if let spinner = spinner {
-                    DispatchQueue.main.async {
+                    self.run(on: DispatchQueue.main) {
                         spinner.isIndeterminate = false
                         spinner.minValue = 0
                         spinner.maxValue = Double(total)
@@ -82,7 +84,7 @@ class LargeReportController: NSWindowController, NSWindowDelegate, NSOutlineView
                 newEntriesUnsorted = prevEntries
             }
             let entriesSorted = self.sort(entries: newEntriesUnsorted, by: sorting, progress: progressBar(total:processed:))
-            DispatchQueue.main.async {
+            self.run(on: DispatchQueue.main) {
                 self.entries = entriesSorted
                 self.tasksTreeView.reloadData()
                 if let spinner = spinner {
@@ -90,6 +92,14 @@ class LargeReportController: NSWindowController, NSWindowDelegate, NSOutlineView
                 }
                 self.setControlsEnabled(true)
             }
+        }
+    }
+    
+    private func run(on dispatchQueue: DispatchQueue, _ block: @escaping () -> Void) {
+        if loadDataAsynchronously {
+            dispatchQueue.async(execute: block)
+        } else {
+            block()
         }
     }
     
@@ -235,10 +245,7 @@ class LargeReportController: NSWindowController, NSWindowDelegate, NSOutlineView
     }
     
     private func getEntries(from start: Date, to end: Date, progress: (Int, Int) -> Void) -> [Node] {
-        func t(_ epochMinutes: Double) -> Date {
-            return Date(timeIntervalSince1970: TimeInterval(epochMinutes * 60.0))
-        }
-        let flatEntries = AppDelegate.instance.model.listEntries(from: start, to: end)
+        let flatEntries = (modelOverride ?? AppDelegate.instance.model).listEntries(from: start, to: end)
         let projects = Model.GroupedProjects(from: flatEntries)
         let totalEntries = flatEntries.count
         var processed  = 0
@@ -277,11 +284,13 @@ class LargeReportController: NSWindowController, NSWindowDelegate, NSOutlineView
         return projectNodes
     }
     
-    private struct Node {
+    struct Node {
         let title: String
         let lastWorkedOn: Date
         let timeSpent: TimeInterval
-        let children: [Node]
+        
+        /// We hide this from tests, because it's hidden from the user (everything else is visible, albeit with various formatting)
+        fileprivate let children: [Node]
     }
     
     private enum SortBy: String {

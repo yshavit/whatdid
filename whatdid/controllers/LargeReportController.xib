@@ -22,7 +22,7 @@
             <rect key="contentRect" x="437" y="421" width="706" height="298"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="875"/>
             <view key="contentView" horizontalHuggingPriority="1" verticalHuggingPriority="1" misplaced="YES" id="se5-gp-TjO">
-                <rect key="frame" x="0.0" y="0.0" width="720" height="298"/>
+                <rect key="frame" x="0.0" y="0.0" width="720" height="300"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZIY-aJ-KRQ" userLabel="Main VStack">
@@ -43,7 +43,7 @@
                                         <rect key="frame" x="95" y="-4" width="39" height="25"/>
                                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3KH-rR-swx">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                            <font key="font" metaFont="menu"/>
                                             <menu key="menu" id="jrf-Hr-Aoh"/>
                                         </popUpButtonCell>
                                     </popUpButton>
@@ -62,7 +62,7 @@
                                         <rect key="frame" x="290" y="-4" width="102" height="25"/>
                                         <popUpButtonCell key="cell" type="push" title="Most time" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="9P5-og-VJW" id="RpY-qq-fJs">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                            <font key="font" metaFont="menu"/>
                                             <menu key="menu" id="eCK-at-OSS">
                                                 <items>
                                                     <menuItem title="Most time" state="on" id="9P5-og-VJW"/>

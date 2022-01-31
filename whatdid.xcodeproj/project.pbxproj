@@ -41,6 +41,7 @@
 		7E6FF1CA252D745C0071E58C /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E6FF1C9252D745C0071E58C /* ServiceManagement.framework */; };
 		7E73C95827A66A0C007F87F0 /* LargeReportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E73C95627A66A0C007F87F0 /* LargeReportController.swift */; };
 		7E73C95927A66A0C007F87F0 /* LargeReportController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E73C95727A66A0C007F87F0 /* LargeReportController.xib */; };
+		7E73C95C27A78574007F87F0 /* LargeReportControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E73C95B27A78574007F87F0 /* LargeReportControllerTest.swift */; };
 		7E75D0A0251D9A790002DBA0 /* ModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E75D09F251D9A790002DBA0 /* ModelTest.swift */; };
 		7E76A141278F99920017FAE9 /* EntryExportFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E76A140278F99920017FAE9 /* EntryExportFormats.swift */; };
 		7E76A143278FB4E70017FAE9 /* OutputStream+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E76A142278FB4E70017FAE9 /* OutputStream+Helpers.swift */; };
@@ -198,6 +199,7 @@
 		7E6FF1C9252D745C0071E58C /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		7E73C95627A66A0C007F87F0 /* LargeReportController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeReportController.swift; sourceTree = "<group>"; };
 		7E73C95727A66A0C007F87F0 /* LargeReportController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LargeReportController.xib; sourceTree = "<group>"; };
+		7E73C95B27A78574007F87F0 /* LargeReportControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeReportControllerTest.swift; sourceTree = "<group>"; };
 		7E75D09F251D9A790002DBA0 /* ModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTest.swift; sourceTree = "<group>"; };
 		7E76A140278F99920017FAE9 /* EntryExportFormats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryExportFormats.swift; sourceTree = "<group>"; };
 		7E76A142278FB4E70017FAE9 /* OutputStream+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OutputStream+Helpers.swift"; sourceTree = "<group>"; };
@@ -388,6 +390,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		7E73C95A27A7853E007F87F0 /* controllers */ = {
+			isa = PBXGroup;
+			children = (
+				7E73C95B27A78574007F87F0 /* LargeReportControllerTest.swift */,
+			);
+			path = controllers;
+			sourceTree = "<group>";
+		};
 		7E75D09E251D9A500002DBA0 /* model */ = {
 			isa = PBXGroup;
 			children = (
@@ -448,6 +458,7 @@
 		7E8C04ED23714F0800A0C3A6 /* whatdidTests */ = {
 			isa = PBXGroup;
 			children = (
+				7E73C95A27A7853E007F87F0 /* controllers */,
 				7EF8B9D026157A0700834866 /* extensions */,
 				7E8C04F023714F0800A0C3A6 /* Info.plist */,
 				7E75D09E251D9A500002DBA0 /* model */,
@@ -947,6 +958,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7EEF324824EA54AD002E217A /* NSRange+HelpersTest.swift in Sources */,
+				7E73C95C27A78574007F87F0 /* LargeReportControllerTest.swift in Sources */,
 				7E76A145279000440017FAE9 /* EntryExportFormatsTest.swift in Sources */,
 				7E6C98D62506B67F00A712EB /* DummyScheduler.swift in Sources */,
 				7EB7496125170ED6001C7DBC /* PrefsTest.swift in Sources */,
