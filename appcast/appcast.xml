@@ -4,6 +4,21 @@
         <title>whatdid</title>
         <item>
             <title>0.1</title>
+            <pubDate>Mon, 31 Jan 2022 02:06:55 +0000</pubDate>
+            <sparkle:channel>alpha</sparkle:channel>
+            <sparkle:version>2022.0131.015610</sparkle:version>
+            <sparkle:shortVersionString>0.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://whatdid.yuvalshavit.com/release-notes/Whatdid-2022.0131.015610.html</sparkle:releaseNotesLink>
+            <enclosure url="https://whatdid.yuvalshavit.com/appcast/Whatdid-2022.0131.015610.dmg" length="4957308" type="application/octet-stream" sparkle:edSignature="f0udAhjOUBIoOkz18x/Fvp0oHnNWw2AivTNABdYX3uc9oD2QZ9twj1hXkF0hKFg40iQEu2h3hwkTEupKmCF5Dw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2022.0131.015610-2022.0130.234301.delta" sparkle:deltaFrom="2022.0130.234301" length="109108" type="application/octet-stream" sparkle:edSignature="UDuNdXYGJ/38pBvf8bhw1YyFnjKOtAaaz4RT0e/f67ppdDJOMGb6yCplkI1/lsYQT1ieR//04KnF8iM9ydUNDw=="/>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2022.0131.015610-2022.0123.232458.delta" sparkle:deltaFrom="2022.0123.232458" length="351111" type="application/octet-stream" sparkle:edSignature="7xBKItAonk/nFYJPOmUM3qNIHTpsxOhT88xtjc6+twG3qLpW4CuzryB8TbOEM1cyR06hiMfVKs02yRHDDBlRDA=="/>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2022.0131.015610-2022.0119.074909.delta" sparkle:deltaFrom="2022.0119.074909" length="367411" type="application/octet-stream" sparkle:edSignature="OmzHvWRt6cV0xPJZ1AE9WKtT0goX9E2RknHLjwiaix9pnTIFoT2m8sD4rY75DCLtVLDcarSUu0Bl+U5Y9ek/CA=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>0.1</title>
             <pubDate>Sun, 30 Jan 2022 23:57:52 +0000</pubDate>
             <sparkle:channel>alpha</sparkle:channel>
             <sparkle:version>2022.0130.234301</sparkle:version>
