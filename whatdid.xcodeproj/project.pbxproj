@@ -15,6 +15,9 @@
 		7E1F9060250C5CC500992B7F /* TimeZone+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */; };
 		7E2159E625301BFE00EE5A11 /* MainLauncher.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E2159E525301BFE00EE5A11 /* MainLauncher.xib */; };
 		7E235E03278A968800253DD8 /* NonFocusingNSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E235E02278A968800253DD8 /* NonFocusingNSViewController.swift */; };
+		7E305CE8282466B80086574C /* SimpleRandom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E305CE7282466B80086574C /* SimpleRandom.swift */; };
+		7E305CEE282471DE0086574C /* UInt32+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E305CED282471DE0086574C /* UInt32+Helpers.swift */; };
+		7E305CF0282472810086574C /* Unit32+HelpersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E305CEF282472810086574C /* Unit32+HelpersTest.swift */; };
 		7E30B46124C38D91003F3679 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E30B46024C38D91003F3679 /* Atomic.swift */; };
 		7E37A27424BFF676005BA1DF /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A27224BFF676005BA1DF /* Model.xcdatamodeld */; };
 		7E37A29024BFFFCB005BA1DF /* Project+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E37A28C24BFFFCB005BA1DF /* Project+CoreDataClass.swift */; };
@@ -171,6 +174,9 @@
 		7E1EE6612612EEF1003314EE /* CloseConfirmer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseConfirmer.swift; sourceTree = "<group>"; };
 		7E2159E525301BFE00EE5A11 /* MainLauncher.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainLauncher.xib; sourceTree = "<group>"; };
 		7E235E02278A968800253DD8 /* NonFocusingNSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonFocusingNSViewController.swift; sourceTree = "<group>"; };
+		7E305CE7282466B80086574C /* SimpleRandom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleRandom.swift; sourceTree = "<group>"; };
+		7E305CED282471DE0086574C /* UInt32+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UInt32+Helpers.swift"; sourceTree = "<group>"; };
+		7E305CEF282472810086574C /* Unit32+HelpersTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Unit32+HelpersTest.swift"; sourceTree = "<group>"; };
 		7E30B46024C38D91003F3679 /* Atomic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
 		7E37A27324BFF676005BA1DF /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		7E37A28C24BFFFCB005BA1DF /* Project+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -507,6 +513,7 @@
 				7E1C2F5024CE43C40070D8CD /* Version.swift */,
 				7EC09CE32794E89800086334 /* StartupMessage.swift */,
 				7ECE469F279E092700AF884A /* UpdateChannel.swift */,
+				7E305CE7282466B80086574C /* SimpleRandom.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -613,6 +620,7 @@
 				7EE0E74724EA1ECD002D03F8 /* String+Helpers.swift */,
 				7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */,
 				7E76A142278FB4E70017FAE9 /* OutputStream+Helpers.swift */,
+				7E305CED282471DE0086574C /* UInt32+Helpers.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -621,6 +629,7 @@
 			isa = PBXGroup;
 			children = (
 				7EEF324724EA54AD002E217A /* NSRange+HelpersTest.swift */,
+				7E305CEF282472810086574C /* Unit32+HelpersTest.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -920,6 +929,7 @@
 				7E37A27424BFF676005BA1DF /* Model.xcdatamodeld in Sources */,
 				7EE0E74824EA1ECD002D03F8 /* String+Helpers.swift in Sources */,
 				7E88F5AA2529AB46002B2F2E /* Int+Helpers.swift in Sources */,
+				7E305CEE282471DE0086574C /* UInt32+Helpers.swift in Sources */,
 				7E7C384B24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */,
 				7EE4E39A24E25C0200552AAF /* DefaultScheduler.swift in Sources */,
 				7E9C5EBE260C09AA00D839C4 /* Goal+CoreDataProperties.swift in Sources */,
@@ -933,6 +943,7 @@
 				7E5EFA272619B14A00E7834D /* NSTextField+Helpers.swift in Sources */,
 				7E9C5EBD260C09AA00D839C4 /* Goal+CoreDataClass.swift in Sources */,
 				7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */,
+				7E305CE8282466B80086574C /* SimpleRandom.swift in Sources */,
 				7E76A141278F99920017FAE9 /* EntryExportFormats.swift in Sources */,
 				7EF884112610139B00170330 /* NSViewController+Helper.swift in Sources */,
 				7E88CC8E261EB5A900968F64 /* AnimationHelper.swift in Sources */,
@@ -967,6 +978,7 @@
 				7E579F702503E2920055D9F6 /* SystemClockSchedulerTest.swift in Sources */,
 				7E75D0A0251D9A790002DBA0 /* ModelTest.swift in Sources */,
 				7EF8579524E0961E00867832 /* OpenCloseHelperTest.swift in Sources */,
+				7E305CF0282472810086574C /* Unit32+HelpersTest.swift in Sources */,
 				7EAB5ECD24DA366600E18097 /* TimeUtilTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
