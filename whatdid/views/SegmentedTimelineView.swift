@@ -37,7 +37,8 @@ class SegmentedTimelineView: NSView {
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         // Clear out the background
-        NSColor.white.setFill()
+        // TODO should consider adding an angled stripe pattern here, for missing segments
+        NSColor.windowBackgroundColor.setFill()
         NSBezierPath.fill(dirtyRect)
         NSBezierPath.defaultLineWidth = strokeWidth
         
@@ -49,6 +50,8 @@ class SegmentedTimelineView: NSView {
                 
                 var color = entry.project.hashToColor
                 if !isHighlighted {
+                    NSColor.white.setFill()
+                    NSBezierPath.fill(entryRectToDraw)
                     color = color.withAlphaComponent(0.85)
                 }
                 color.setFill()

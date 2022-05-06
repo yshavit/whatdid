@@ -259,7 +259,7 @@ fileprivate class SegmentedTimelineViewComponent: TestComponent {
         segmentedTimelineView.entries = [
             project("alpha", from: 4, to: 5),
             project("bravo", from: 5, to: 7),
-            project("alpha", from: 7, to: 9),
+            project("alpha", from: 8, to: 10),
         ]
         adder(segmentedTimelineView)
         segmentedTimelineView.autoresizingMask = [.height, .width]
