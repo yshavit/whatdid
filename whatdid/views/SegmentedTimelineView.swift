@@ -25,14 +25,31 @@ class SegmentedTimelineView: NSView {
         widthAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive = true
     }
     
-    var entries = [FlatEntry]() {
-        didSet {
-            entries.sort(by: { $0.from < $1.from })
-            mostRecentDate = entries.map({$0.to}).max()
-            updateTrackingAreas()
-        }
-    }
+    private var segments = [Segment]()
+    private var mostAncientDate: Date?
     private var mostRecentDate: Date?
+    
+    func setEntries(_ entries: [FlatEntry]) {
+        // group by project
+        let byProject = Dictionary(grouping: entries, by: {$0.project})
+        let segmentsByProject = byProject.mapValues(calculateSegments(from:))
+        segments = segmentsByProject.values.flatMap({$0})
+        mostAncientDate = segments.map({$0.start}).min()
+        mostRecentDate = segments.map({$0.end}).max()
+        updateTrackingAreas()
+    }
+    
+    private func calculateSegments(from entries: [FlatEntry]) -> [Segment] {
+        var segments = [Segment]()
+        for entry in entries {
+            if let current = segments.last, entry.from <= current.end {
+                current.end = entry.to
+            } else {
+                segments.append(Segment(from: entry))
+            }
+        }
+        return segments
+    }
 
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
@@ -103,8 +120,8 @@ class SegmentedTimelineView: NSView {
         toolTip = highlightedProjects.first
     }
     
-    private func forEntries(_ block: (FlatEntry, NSRect) -> Void) {
-        guard let mostRecentDate = mostRecentDate, let mostAncientDate = entries.first?.from else {
+    private func forEntries(_ block: (Segment, NSRect) -> Void) {
+        guard let mostRecentDate = mostRecentDate, let mostAncientDate = mostAncientDate else {
             wdlog(.debug, "No recent or ancient date; is \"entries\" empty?")
             return
         }
@@ -114,13 +131,25 @@ class SegmentedTimelineView: NSView {
             return intervalAsRatio * bounds.width
         }
         let bounds = bounds
-        for entry in entries {
+        for segment in segments {
             let entryRect = NSRect(
-                x: xPos(for: entry.from.timeIntervalSince(mostAncientDate)),
+                x: xPos(for: segment.start.timeIntervalSince(mostAncientDate)),
                 y: bounds.minY,
-                width: xPos(for: entry.to.timeIntervalSince(entry.from)),
+                width: xPos(for: segment.end.timeIntervalSince(segment.start)),
                 height: bounds.height)
-            block(entry, entryRect)
+            block(segment, entryRect)
+        }
+    }
+    
+    private class Segment {
+        let project: String
+        let start: Date
+        var end: Date
+        
+        init(from entry: FlatEntry) {
+            project = entry.project
+            start = entry.from
+            end = entry.to
         }
     }
 }
