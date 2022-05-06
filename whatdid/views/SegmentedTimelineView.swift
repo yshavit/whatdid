@@ -8,7 +8,7 @@ class SegmentedTimelineView: NSView {
     private static let trackedProjectKey = "TRACKED_PROJECT"
     
     private let strokeWidth = 2.0
-    private var highlightedProjects = Set<String>()
+    private var highlightedProject: String?
     
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -63,7 +63,7 @@ class SegmentedTimelineView: NSView {
         forEntries {entry, entryRect in
             let entryRectToDraw = entryRect.intersection(dirtyRect)
             if !entryRectToDraw.isNull {
-                let isHighlighted = highlightedProjects.contains(entry.project)
+                let isHighlighted = highlightedProject == entry.project
                 
                 var color = entry.project.hashToColor
                 if !isHighlighted {
@@ -105,11 +105,15 @@ class SegmentedTimelineView: NSView {
     }
     
     override func mouseEntered(with event: NSEvent) {
-        withEvent(for: event, {highlightedProjects.update(with: $0)})
+        withEvent(for: event, {highlightedProject = $0})
     }
     
     override func mouseExited(with event: NSEvent) {
-        withEvent(for: event, {highlightedProjects.remove($0)})
+        withEvent(for: event, {
+            if highlightedProject == $0 {
+                highlightedProject = nil
+            }
+        })
     }
     
     private func withEvent(for event: NSEvent, _ block: (String) -> Void) {
@@ -117,7 +121,7 @@ class SegmentedTimelineView: NSView {
             block(tracked)
             setNeedsDisplay(bounds)
         }
-        toolTip = highlightedProjects.first
+        toolTip = highlightedProject
     }
     
     private func forEntries(_ block: (Segment, NSRect) -> Void) {
