@@ -73,6 +73,7 @@
 		7E9C5EBD260C09AA00D839C4 /* Goal+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C5EB9260C09AA00D839C4 /* Goal+CoreDataClass.swift */; };
 		7E9C5EBE260C09AA00D839C4 /* Goal+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C5EBA260C09AA00D839C4 /* Goal+CoreDataProperties.swift */; };
 		7EA1DFC024CA99BF003AD2BC /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */; };
+		7EA30B092824D34A007376A5 /* SegmentedTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA30B082824D34A007376A5 /* SegmentedTimelineView.swift */; };
 		7EA4D3DE261AC9F300EEBF17 /* PasteboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA4D3DD261AC9F300EEBF17 /* PasteboardView.swift */; };
 		7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E8C04E123714F0800A0C3A6 /* MainMenu.xib */; };
 		7EA6E22824BD6C5F004B9297 /* PtnViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */; };
@@ -241,6 +242,7 @@
 		7E9C5EB9260C09AA00D839C4 /* Goal+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Goal+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7E9C5EBA260C09AA00D839C4 /* Goal+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Goal+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7EA1DFBE24CA99BF003AD2BC /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
+		7EA30B082824D34A007376A5 /* SegmentedTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedTimelineView.swift; sourceTree = "<group>"; };
 		7EA4D3DD261AC9F300EEBF17 /* PasteboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteboardView.swift; sourceTree = "<group>"; };
 		7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PtnViewController.xib; sourceTree = "<group>"; };
 		7EAB5ECC24DA366600E18097 /* TimeUtilTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TimeUtilTest.swift; path = whatdidTests/scheduling/TimeUtilTest.swift; sourceTree = SOURCE_ROOT; };
@@ -599,6 +601,7 @@
 				7E947C2B2779AF6F00E882BE /* DateRangePicker.swift */,
 				7E4EB8E227868AAC001234F0 /* DateRangePane.swift */,
 				7E4EB8E4278A4724001234F0 /* DisclosureWithLabel.swift */,
+				7EA30B082824D34A007376A5 /* SegmentedTimelineView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -921,6 +924,7 @@
 				7E51DA09250BF5C60088864F /* TimeZone+Helpers.swift in Sources */,
 				7EB7495F2516F9C7001C7DBC /* Prefs.swift in Sources */,
 				7E73C95827A66A0C007F87F0 /* LargeReportController.swift in Sources */,
+				7EA30B092824D34A007376A5 /* SegmentedTimelineView.swift in Sources */,
 				7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */,
 				7ECAF0DD250C9C110004647E /* NSButton+Helpers.swift in Sources */,
 				7E07C3B824D121770007FD23 /* DayEndReportController.swift in Sources */,
