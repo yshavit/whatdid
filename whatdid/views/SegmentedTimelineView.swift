@@ -68,9 +68,9 @@ class SegmentedTimelineView: NSView {
                 
                 var color = entry.project.hashToColor
                 if !isHighlighted {
-                    NSColor.white.setFill()
+                    NSColor.lightGray.setFill()
                     NSBezierPath.fill(entryRectToDraw)
-                    color = color.withAlphaComponent(0.85)
+                    color = color.withAlphaComponent(0.65)
                 }
                 color.setFill()
                 NSBezierPath.fill(entryRectToDraw)
