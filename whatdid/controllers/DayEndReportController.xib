@@ -17,17 +17,18 @@
                 <outlet property="projectsScroll" destination="LDw-zz-ziZ" id="ccf-fo-s0s"/>
                 <outlet property="projectsWidthConstraint" destination="oEw-ZS-QVg" id="gMy-WG-edQ"/>
                 <outlet property="shockAbsorber" destination="dFU-a1-6Dj" id="p8U-dT-GvY"/>
+                <outlet property="timelineView" destination="ZPI-nu-s8L" id="Q1C-zO-R57"/>
                 <outlet property="view" destination="Qn8-JX-HeH" id="y6a-6x-Afv"/>
                 <outlet property="widthFitsOnScreen" destination="UB3-c9-V8z" id="Rau-r2-VxM"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <stackView identifier="top-v" wantsLayer="YES" distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" misplaced="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qn8-JX-HeH" userLabel="Top">
-            <rect key="frame" x="0.0" y="0.0" width="400" height="103"/>
+        <stackView identifier="top-v" wantsLayer="YES" distribution="fill" orientation="vertical" alignment="leading" spacing="5" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qn8-JX-HeH" userLabel="Top">
+            <rect key="frame" x="0.0" y="0.0" width="400" height="127"/>
             <subviews>
                 <stackView identifier="header-h" distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="500" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pKe-k9-zAn" userLabel="Header Stack">
-                    <rect key="frame" x="0.0" y="79" width="299" height="22"/>
+                    <rect key="frame" x="0.0" y="105" width="299" height="22"/>
                     <subviews>
                         <textField identifier="header_label" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-Lm-qUL" userLabel="Header">
                             <rect key="frame" x="-2" y="2" width="114" height="16"/>
@@ -77,10 +78,10 @@
                     </customSpacing>
                 </stackView>
                 <box verticalHuggingPriority="1000" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="hAT-mx-IFG">
-                    <rect key="frame" x="0.0" y="72" width="400" height="5"/>
+                    <rect key="frame" x="0.0" y="97" width="400" height="5"/>
                 </box>
                 <customView identifier="goals-box" focusRingType="none" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="V55-nV-Y5s">
-                    <rect key="frame" x="0.0" y="54" width="400" height="16"/>
+                    <rect key="frame" x="0.0" y="78" width="400" height="16"/>
                     <subviews>
                         <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1RQ-eW-vGH" userLabel="Goals Summary Stack">
                             <rect key="frame" x="0.0" y="0.0" width="400" height="16"/>
@@ -112,10 +113,16 @@
                     </constraints>
                 </customView>
                 <box verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="h3O-9g-faO">
-                    <rect key="frame" x="0.0" y="47" width="400" height="5"/>
+                    <rect key="frame" x="0.0" y="70" width="400" height="5"/>
                 </box>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="ZPI-nu-s8L" customClass="SegmentedTimelineView" customModule="whatdid" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="52" width="400" height="15"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="15" id="GmF-IM-xzk"/>
+                    </constraints>
+                </customView>
                 <scrollView identifier="projects-scroll" wantsLayer="YES" verticalHuggingPriority="999" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LDw-zz-ziZ" userLabel="Projects scroll">
-                    <rect key="frame" x="0.0" y="29" width="400" height="16"/>
+                    <rect key="frame" x="0.0" y="31" width="400" height="16"/>
                     <clipView key="contentView" identifier="projects-clip" wantsLayer="YES" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vpo-4L-DGR" userLabel="Projects clip">
                         <rect key="frame" x="0.0" y="0.0" width="400" height="16"/>
                         <subviews>
@@ -179,7 +186,7 @@
                     </scroller>
                 </scrollView>
                 <box verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="xNZ-4N-Ext">
-                    <rect key="frame" x="0.0" y="22" width="400" height="5"/>
+                    <rect key="frame" x="0.0" y="23" width="400" height="5"/>
                 </box>
                 <customView identifier="shock-absorber" verticalHuggingPriority="1" verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="dFU-a1-6Dj" userLabel="Shock Absorber">
                     <rect key="frame" x="0.0" y="0.0" width="163" height="20"/>
@@ -191,11 +198,13 @@
             <constraints>
                 <constraint firstItem="V55-nV-Y5s" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" identifier="b" id="9OU-Hb-fFQ"/>
                 <constraint firstItem="h3O-9g-faO" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" identifier="c" id="WB1-I0-7hD"/>
+                <constraint firstItem="ZPI-nu-s8L" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" id="epE-CW-s2m"/>
                 <constraint firstItem="hAT-mx-IFG" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" identifier="a" id="nCY-3T-gJp"/>
                 <constraint firstItem="LDw-zz-ziZ" firstAttribute="width" secondItem="Qn8-JX-HeH" secondAttribute="width" identifier="e" id="oDo-5Q-hjJ"/>
                 <constraint firstItem="xNZ-4N-Ext" firstAttribute="width" secondItem="h3O-9g-faO" secondAttribute="width" identifier="g" id="oGY-bb-pnj"/>
             </constraints>
             <visibilityPriorities>
+                <integer value="1000"/>
                 <integer value="1000"/>
                 <integer value="1000"/>
                 <integer value="1000"/>
@@ -212,8 +221,9 @@
                 <real value="3.4028234663852886e+38"/>
                 <real value="3.4028234663852886e+38"/>
                 <real value="3.4028234663852886e+38"/>
+                <real value="3.4028234663852886e+38"/>
             </customSpacing>
-            <point key="canvasLocation" x="-294.5" y="252.5"/>
+            <point key="canvasLocation" x="-295" y="255"/>
         </stackView>
     </objects>
     <resources>

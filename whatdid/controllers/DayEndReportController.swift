@@ -16,13 +16,13 @@ class DayEndReportController: NSViewController {
     @IBOutlet weak var maxViewHeight: NSLayoutConstraint!
     @IBOutlet weak var goalsSummaryGroup: NSView!
     @IBOutlet weak var goalsSummaryStack: NSStackView!
+    @IBOutlet weak var timelineView: SegmentedTimelineView!
     @IBOutlet weak var projectsScroll: NSScrollView!
     @IBOutlet weak var projectsContainer: NSStackView!
     @IBOutlet weak var projectsWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var dateRangePicker: DateRangePicker!
     @IBOutlet weak var shockAbsorber: NSView!
     private var scrollBarHelper: ScrollBarHelper?
-
     var scheduler: Scheduler = DefaultScheduler.instance
     
     override func awakeFromNib() {
@@ -140,7 +140,17 @@ class DayEndReportController: NSViewController {
         updateGoals(from: start, to: end)
         projectsContainer.subviews.forEach {$0.removeFromSuperview()}
         
-        let projects = Model.GroupedProjects(from: AppDelegate.instance.model.listEntries(from: start, to: end))
+        let entries = AppDelegate.instance.model.listEntries(from: start, to: end)
+        if !entries.isEmpty,
+           let daysBetween = DefaultScheduler.instance.calendar.dateComponents([.day], from: start, to: end).day,
+           daysBetween <= 1
+        {
+            timelineView.isHidden = false
+            timelineView.setEntries(entries)
+        } else {
+            timelineView.isHidden = true
+        }
+        let projects = Model.GroupedProjects(from: entries)
         let allProjectsTotalTime = projects.totalTime
         projects.forEach {project in
             // The vstack group for the whole project

@@ -37,6 +37,7 @@ class SegmentedTimelineView: NSView {
         mostAncientDate = segments.map({$0.start}).min()
         mostRecentDate = segments.map({$0.end}).max()
         updateTrackingAreas()
+        setNeedsDisplay(bounds)
     }
     
     private func calculateSegments(from entries: [FlatEntry]) -> [Segment] {
