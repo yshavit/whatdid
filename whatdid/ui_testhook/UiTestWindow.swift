@@ -19,6 +19,7 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
         add(DateRangePaneComponent())
         add(DateRangePickerComponent())
         add(GoalsViewComponent())
+        add(SegmentedTimelineViewComponent())
     }
     
     private func add(_ use: TestComponent) {
@@ -240,6 +241,29 @@ fileprivate class GoalsViewComponent: TestComponent {
     
     @objc private func resetGoalViews(_ pasteboardButton: NSButton) {
         pasteboardButton.superview?.subviews.compactMap({$0 as? GoalsView}).forEach({$0.reset()})
+    }
+}
+
+fileprivate class SegmentedTimelineViewComponent: TestComponent {
+    func build(adder: @escaping (NSView) -> Void) {
+        func project(_ project: String, from: Int, to: Int) -> FlatEntry {
+            return FlatEntry(
+                from: Date(timeIntervalSince1970: Double(from)),
+                to: Date(timeIntervalSince1970: Double(to)),
+                project: project,
+                task: "",
+                notes: nil)
+        }
+        
+        let segmentedTimelineView = SegmentedTimelineView()
+        segmentedTimelineView.setEntries([
+            project("alpha", from: 4, to: 5),
+            project("alpha", from: 5, to: 6),
+            project("bravo", from: 6, to: 7),
+            project("alpha", from: 8, to: 10),
+        ])
+        adder(segmentedTimelineView)
+        segmentedTimelineView.autoresizingMask = [.height, .width]
     }
 }
 
