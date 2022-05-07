@@ -14,14 +14,4 @@ extension String {
         }
         return result
     }
-    
-    var hashToColor: NSColor {
-        let hashUInt = UInt32(truncatingIfNeeded: hashValue)
-        let rand = SimpleRandom(seed: hashUInt)
-        return NSColor(
-            red: CGFloat(rand.nextUnitFloat()),
-            green: CGFloat(rand.nextUnitFloat()),
-            blue: CGFloat(rand.nextUnitFloat()),
-            alpha: 1.0)
-    }
 }

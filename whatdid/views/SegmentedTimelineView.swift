@@ -66,7 +66,7 @@ class SegmentedTimelineView: NSView {
             if !entryRectToDraw.isNull {
                 let isHighlighted = highlightedProject == entry.project
                 
-                var color = entry.project.hashToColor
+                var color = color(for: entry.project)
                 if !isHighlighted {
                     NSColor.lightGray.setFill()
                     NSBezierPath.fill(entryRectToDraw)
@@ -144,6 +144,16 @@ class SegmentedTimelineView: NSView {
                 height: bounds.height)
             block(segment, entryRect)
         }
+    }
+    
+    func color(for string: String) -> NSColor {
+        let hashUInt = UInt32(truncatingIfNeeded: string.hashValue)
+        let rand = SimpleRandom(seed: hashUInt)
+        return NSColor(
+            red: CGFloat(rand.nextUnitFloat()),
+            green: CGFloat(rand.nextUnitFloat()),
+            blue: CGFloat(rand.nextUnitFloat()),
+            alpha: 1.0)
     }
     
     private class Segment {
