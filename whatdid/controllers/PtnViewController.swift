@@ -53,6 +53,11 @@ class PtnViewController: NSViewController {
         taskField.action = self.projectOrTaskAction
         
         headerText.placeholderString = headerText.stringValue
+        if let view = view as? PtnTopLevelStackView {
+            view.parent = self
+        } else {
+            wdlog(.warn, "Couldn't set top-level stack view's parent to self")
+        }
     }
     
     private func setNotesPlaceholder() {
@@ -267,6 +272,9 @@ class PtnViewController: NSViewController {
         self.closeWindowAsync()
     }
     
+    fileprivate func openFind() {
+        print("FIND")
+    }
     
     @IBAction func preferenceButtonPressed(_ sender: NSButton) {
         if let viewWindow = view.window {
@@ -294,7 +302,7 @@ class PtnViewController: NSViewController {
             })
         }
     }
-    
+
     func grabFocus() {
         if (view.window?.sheets ?? []).isEmpty {
             grabFocusEvenIfHasSheet()
@@ -491,6 +499,28 @@ class PtnViewController: NSViewController {
                 listenHandler = nil
             }
         }
+    }
+    override func performKeyEquivalent(with event: NSEvent) -> Bool {
+        if event.characters?.lowercased() == "f" {
+            print("FOUND")
+            return true
+        }
+        return false
+    }
+}
+
+class PtnTopLevelStackView: NSStackView {
+    fileprivate var parent: PtnViewController?
+    
+    override func performKeyEquivalent(with event: NSEvent) -> Bool {
+        if super.performKeyEquivalent(with: event) {
+            return true
+        }
+        if event.characters?.lowercased() == "f", let parent = parent {
+            parent.openFind()
+            return true
+        }
+        return false
     }
 }
 
