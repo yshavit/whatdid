@@ -159,6 +159,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
         }
     }
     
+    func applicationDidChangeScreenParameters(_ notification: Notification) {
+        mainMenu.ensureWindowCorrectLocation(fromButtonClick: false)
+    }
+    
     private func setUpLauncher() {
         // Taken from https://theswiftdev.com/how-to-launch-a-macos-app-at-login/
         let launcherAppId = "com.yuvalshavit.WhatdidLauncher"
