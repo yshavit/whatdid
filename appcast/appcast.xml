@@ -4,6 +4,22 @@
         <title>whatdid</title>
         <item>
             <title>0.1</title>
+            <pubDate>Mon, 09 May 2022 03:50:36 +0000</pubDate>
+            <sparkle:channel>alpha</sparkle:channel>
+            <sparkle:version>2022.0509.032851</sparkle:version>
+            <sparkle:shortVersionString>0.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>10.14</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://whatdid.yuvalshavit.com/release-notes/Whatdid-2022.0509.032851.html</sparkle:releaseNotesLink>
+            <enclosure url="https://whatdid.yuvalshavit.com/appcast/Whatdid-2022.0509.032851.dmg" length="4970821" type="application/octet-stream" sparkle:edSignature="n+V/PKwbdtVlB6RYrwuF3fRmCL2qCS9qsfyEqDup+XDkhL95ZPKs/r6hlBamjKMspQSblOT2+yK5oIyTFVAgAw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2022.0509.032851-2022.0131.015610.delta" sparkle:deltaFrom="2022.0131.015610" length="319887" type="application/octet-stream" sparkle:edSignature="5EfjGspP/Z1fiNDVEr6Pt42gXj7ZE1rEHcLb1XrLLiLjt++5GOZ1F9ecDQ13nO55JE7ZzWmlYZm/l/Tm0z2wDg=="/>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2022.0509.032851-2022.0130.234301.delta" sparkle:deltaFrom="2022.0130.234301" length="323159" type="application/octet-stream" sparkle:edSignature="Rc1D8c3qM5hQACSrA6yGZRJvnDB1vOZaZzcUQXlV6Cv4jKNx9j6URwD6EuMk3T2HncbsKLZaMtglfOYCRebrBA=="/>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2022.0509.032851-2022.0123.232458.delta" sparkle:deltaFrom="2022.0123.232458" length="412210" type="application/octet-stream" sparkle:edSignature="PodHIAJcOiPGvjDfMiGevm41n2xPtgJJUeBdL8BiWFGCyZiPvWxXkPItJ42XUFc2CCQNVPqpoluiIcyB33B2CA=="/>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2022.0509.032851-2022.0119.074909.delta" sparkle:deltaFrom="2022.0119.074909" length="434044" type="application/octet-stream" sparkle:edSignature="rVgk0l/LHXGZuNEFRyhuORQsURphIpFdgiNACE7nfk4v+5x7toYJ/TNK2ue0iWrXZHxT6WCk/9EKWqjRcqULAg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>0.1</title>
             <pubDate>Mon, 31 Jan 2022 02:06:55 +0000</pubDate>
             <sparkle:channel>alpha</sparkle:channel>
             <sparkle:version>2022.0131.015610</sparkle:version>
