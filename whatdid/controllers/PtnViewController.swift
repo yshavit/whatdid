@@ -15,6 +15,10 @@ class PtnViewController: NSViewController {
     @IBOutlet weak var taskField: AutoCompletingField!
     @IBOutlet weak var noteField: NSTextField!
     
+    @IBOutlet weak var findStack: NSStackView!
+    
+    @IBOutlet weak var findField: AutoCompletingField!
+    
     @IBOutlet var goals: GoalsView!
     
     @IBOutlet weak var snoozeButton: NSButton!
@@ -53,6 +57,37 @@ class PtnViewController: NSViewController {
         taskField.action = self.projectOrTaskAction
         
         headerText.placeholderString = headerText.stringValue
+        
+        findField.optionsLookupOnFocus = {
+            var result = [String]()
+            for project in AppDelegate.instance.model.listProjects() {
+                for task in AppDelegate.instance.model.listTasks(project: project) {
+                    result.append("\u{11}\(project)\u{11} > \u{11}\(task)\u{11}")
+                }
+            }
+            return result
+        }
+        findField.onTextChange = {
+            let splits = self.findField.textField.stringValue.split(separator: "\u{11}")
+            if splits.count > 2 {
+                self.projectField.textField.stringValue = String(splits[0])
+                self.taskField.textField.stringValue = String(splits[2])
+            }
+        }
+        findField.action = self.closeFind(_:)
+        findField.onCancel = {
+            self.projectField.textField.stringValue = ""
+            self.taskField.textField.stringValue = ""
+            self.noteField.stringValue = ""
+            self.closeFind(self)
+            return true
+        }
+        
+        if let view = view as? PtnTopLevelStackView {
+            view.parent = self
+        } else {
+            wdlog(.warn, "Couldn't set top-level stack view's parent to self")
+        }
     }
     
     private func setNotesPlaceholder() {
@@ -267,6 +302,35 @@ class PtnViewController: NSViewController {
         self.closeWindowAsync()
     }
     
+    fileprivate func openFind() {
+        findStack.isHidden = false
+        view.layoutSubtreeIfNeeded()
+        resizeWindowToFit()
+        view.window?.makeFirstResponder(findField)
+    }
+    
+    @IBAction func closeFind(_ sender: Any) {
+        findStack.isHidden = true
+        resizeWindowToFit()
+        grabFocusNow() // grab the project, task, or note field — whatever's open
+    }
+    
+    private func resizeWindowToFit() {
+        guard let window = view.window else {
+            wdlog(.warn, "Couldn't find PTN window to resize")
+            return
+        }
+        let currFrame = window.frame
+        let requiredSize = view.fittingSize
+        let deltaYFromResize = currFrame.height - requiredSize.height
+        window.setFrame(
+            NSRect(
+                x: currFrame.minX,
+                y: currFrame.minY + deltaYFromResize,
+                width: currFrame.width,
+                height: requiredSize.height),
+            display: true)
+    }
     
     @IBAction func preferenceButtonPressed(_ sender: NSButton) {
         if let viewWindow = view.window {
@@ -294,7 +358,7 @@ class PtnViewController: NSViewController {
             })
         }
     }
-    
+
     func grabFocus() {
         if (view.window?.sheets ?? []).isEmpty {
             grabFocusEvenIfHasSheet()
@@ -491,6 +555,28 @@ class PtnViewController: NSViewController {
                 listenHandler = nil
             }
         }
+    }
+    override func performKeyEquivalent(with event: NSEvent) -> Bool {
+        if event.characters?.lowercased() == "f" {
+            print("FOUND")
+            return true
+        }
+        return false
+    }
+}
+
+class PtnTopLevelStackView: NSStackView {
+    fileprivate var parent: PtnViewController?
+    
+    override func performKeyEquivalent(with event: NSEvent) -> Bool {
+        if super.performKeyEquivalent(with: event) {
+            return true
+        }
+        if event.characters?.lowercased() == "f", let parent = parent {
+            parent.openFind()
+            return true
+        }
+        return false
     }
 }
 

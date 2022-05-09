@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="PtnViewController" customModule="whatdid" customModuleProvider="target">
             <connections>
+                <outlet property="findField" destination="dVE-N4-jIs" id="K9M-DM-TEf"/>
+                <outlet property="findStack" destination="baN-bP-K9f" id="Dfi-yC-zts"/>
                 <outlet property="goals" destination="3Mb-B7-qO9" id="nZw-On-KIv"/>
                 <outlet property="headerText" destination="v8p-Bz-hcj" id="LSE-4P-8lM"/>
                 <outlet property="noteField" destination="6A0-cK-Vnh" id="DMw-Er-dNX"/>
@@ -22,14 +24,14 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <stackView identifier="topstack" distribution="fill" orientation="vertical" alignment="trailing" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HWg-YQ-y10" userLabel="Top Stack">
-            <rect key="frame" x="0.0" y="0.0" width="873" height="185"/>
+        <stackView identifier="topstack" distribution="fill" orientation="vertical" alignment="trailing" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HWg-YQ-y10" userLabel="Top Stack" customClass="PtnTopLevelStackView" customModule="whatdid" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="873" height="295"/>
             <subviews>
                 <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xh1-hp-9GB" userLabel="Header stack">
-                    <rect key="frame" x="334" y="153" width="534" height="28"/>
+                    <rect key="frame" x="334" y="160" width="534" height="131"/>
                     <subviews>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="v8p-Bz-hcj" userLabel="Header text">
-                            <rect key="frame" x="-2" y="0.0" width="376" height="28"/>
+                            <rect key="frame" x="-2" y="103" width="326" height="28"/>
                             <textFieldCell key="cell" title="What have you been working on for the last {DURATION} (since {TIME})?" id="MHs-V5-IyC">
                                 <font key="font" metaFont="label" size="11"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -38,10 +40,10 @@
                             <accessibility identifier="durationheader"/>
                         </textField>
                         <customView verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="maZ-n4-VKP" userLabel="Spacer">
-                            <rect key="frame" x="378" y="4" width="0.0" height="24"/>
+                            <rect key="frame" x="328" y="81" width="50" height="50"/>
                         </customView>
                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="HC6-YQ-v0e" userLabel="Snooze buttonopts">
-                            <rect key="frame" x="384" y="14" width="130" height="14"/>
+                            <rect key="frame" x="384" y="117" width="130" height="14"/>
                             <subviews>
                                 <button identifier="snoozebutton" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yjZ-yA-5CH" userLabel="Snooze button">
                                     <rect key="frame" x="0.0" y="-1" width="130" height="15"/>
@@ -100,7 +102,7 @@
                             </constraints>
                         </customView>
                         <button verticalHuggingPriority="750" horizontalCompressionResistancePriority="150" verticalCompressionResistancePriority="150" translatesAutoresizingMaskIntoConstraints="NO" id="tkS-gq-Cbs" userLabel="Prefs Button">
-                            <rect key="frame" x="520" y="14" width="14" height="14"/>
+                            <rect key="frame" x="520" y="117" width="14" height="14"/>
                             <constraints>
                                 <constraint firstAttribute="width" secondItem="tkS-gq-Cbs" secondAttribute="height" multiplier="1:1" id="8lS-9s-VYO"/>
                             </constraints>
@@ -132,17 +134,17 @@
                     </customSpacing>
                 </stackView>
                 <stackView identifier="ptnstack" distribution="fill" orientation="horizontal" alignment="top" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BPo-6t-Flu" userLabel="PTN Stack">
-                    <rect key="frame" x="329" y="132" width="544" height="21"/>
+                    <rect key="frame" x="329" y="132" width="544" height="28"/>
                     <subviews>
                         <customView identifier="pcombo" verticalHuggingPriority="750" verticalCompressionResistancePriority="850" translatesAutoresizingMaskIntoConstraints="NO" id="4Lo-U3-YED" userLabel="Project combo" customClass="AutoCompletingField" customModule="whatdid" customModuleProvider="target">
-                            <rect key="frame" x="5" y="0.0" width="120" height="21"/>
+                            <rect key="frame" x="5" y="2" width="120" height="21"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="21" placeholder="YES" id="AzF-nE-4ig"/>
                                 <constraint firstAttribute="width" constant="120" id="pXy-Lw-dxJ"/>
                             </constraints>
                         </customView>
                         <textField identifier="ptdiv" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xr6-Zi-WMW" userLabel="PT divider">
-                            <rect key="frame" x="124" y="5" width="11" height="16"/>
+                            <rect key="frame" x="124" y="7" width="11" height="16"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="7" id="ziZ-bF-mWC"/>
                             </constraints>
@@ -153,13 +155,13 @@
                             </textFieldCell>
                         </textField>
                         <customView identifier="tcombo" verticalHuggingPriority="750" verticalCompressionResistancePriority="850" translatesAutoresizingMaskIntoConstraints="NO" id="sxc-2C-mp9" userLabel="Task combo" customClass="AutoCompletingField" customModule="whatdid" customModuleProvider="target">
-                            <rect key="frame" x="134" y="0.0" width="156" height="21"/>
+                            <rect key="frame" x="134" y="2" width="156" height="21"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="21" placeholder="YES" id="cLS-DE-x90"/>
                             </constraints>
                         </customView>
                         <textField identifier="tndiv" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CYa-f2-vpT" userLabel="TN divider">
-                            <rect key="frame" x="289" y="5" width="11" height="16"/>
+                            <rect key="frame" x="289" y="7" width="11" height="16"/>
                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title=":" id="Udq-Yr-mqt">
                                 <font key="font" metaFont="system"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -167,7 +169,7 @@
                             </textFieldCell>
                         </textField>
                         <textField identifier="nfield" verticalHuggingPriority="750" verticalCompressionResistancePriority="850" translatesAutoresizingMaskIntoConstraints="NO" id="6A0-cK-Vnh" userLabel="Notes text" customClass="WhatdidTextField" customModule="whatdid" customModuleProvider="target">
-                            <rect key="frame" x="299" y="0.0" width="240" height="21"/>
+                            <rect key="frame" x="299" y="2" width="240" height="21"/>
                             <textFieldCell key="cell" selectable="YES" editable="YES" borderStyle="bezel" placeholderString="notes" drawsBackground="YES" id="iON-DT-Jnl">
                                 <font key="font" metaFont="system"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -203,6 +205,46 @@
                         <real value="3.4028234663852886e+38"/>
                     </customSpacing>
                 </stackView>
+                <stackView hidden="YES" distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="baN-bP-K9f" userLabel="FindStack">
+                    <rect key="frame" x="334" y="274" width="534" height="21"/>
+                    <subviews>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DML-TP-Ano">
+                            <rect key="frame" x="-2" y="4" width="4" height="14"/>
+                            <textFieldCell key="cell" lineBreakMode="clipping" title="find:" id="MBf-w7-PjX">
+                                <font key="font" metaFont="smallSystem"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                        <customView identifier="findfield" translatesAutoresizingMaskIntoConstraints="NO" id="dVE-N4-jIs" userLabel="FindField" customClass="AutoCompletingField" customModule="whatdid" customModuleProvider="target">
+                            <rect key="frame" x="8" y="0.0" width="518" height="21"/>
+                        </customView>
+                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cEK-ck-sHF" userLabel="FindDismiss">
+                            <rect key="frame" x="534" y="3" width="0.0" height="15"/>
+                            <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="xmark.circle" catalog="system" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="R93-Pk-bX5">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="closeFind:" target="-2" id="Wqz-nz-6ix"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="DML-TP-Ano" firstAttribute="centerY" secondItem="dVE-N4-jIs" secondAttribute="centerY" id="Tc7-Tg-LIs"/>
+                        <constraint firstItem="cEK-ck-sHF" firstAttribute="centerY" secondItem="dVE-N4-jIs" secondAttribute="centerY" id="U34-OF-me8"/>
+                    </constraints>
+                    <visibilityPriorities>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                    </visibilityPriorities>
+                    <customSpacing>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                    </customSpacing>
+                </stackView>
                 <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="tY4-8g-lbp">
                     <rect key="frame" x="329" y="125" width="544" height="9"/>
                     <constraints>
@@ -220,14 +262,19 @@
                 <constraint firstItem="3Mb-B7-qO9" firstAttribute="leading" secondItem="v8p-Bz-hcj" secondAttribute="leading" id="VFm-AQ-phk"/>
                 <constraint firstItem="3Mb-B7-qO9" firstAttribute="trailing" secondItem="tkS-gq-Cbs" secondAttribute="trailing" id="e6p-gR-2ta"/>
                 <constraint firstItem="tkS-gq-Cbs" firstAttribute="trailing" secondItem="6A0-cK-Vnh" secondAttribute="trailing" id="e7y-bj-ubu"/>
+                <constraint firstItem="DML-TP-Ano" firstAttribute="leading" secondItem="4Lo-U3-YED" secondAttribute="leading" id="ocW-2g-lfj"/>
+                <constraint firstItem="dVE-N4-jIs" firstAttribute="height" secondItem="4Lo-U3-YED" secondAttribute="height" id="tXs-aA-QAg"/>
+                <constraint firstItem="cEK-ck-sHF" firstAttribute="trailing" secondItem="6A0-cK-Vnh" secondAttribute="trailing" id="wwW-Qx-v2o"/>
             </constraints>
             <visibilityPriorities>
                 <integer value="1000"/>
                 <integer value="1000"/>
                 <integer value="1000"/>
                 <integer value="1000"/>
+                <integer value="1000"/>
             </visibilityPriorities>
             <customSpacing>
+                <real value="3.4028234663852886e+38"/>
                 <real value="3.4028234663852886e+38"/>
                 <real value="3.4028234663852886e+38"/>
                 <real value="3.4028234663852886e+38"/>
@@ -240,5 +287,6 @@
     </objects>
     <resources>
         <image name="NSAdvanced" width="32" height="32"/>
+        <image name="xmark.circle" catalog="system" width="15" height="15"/>
     </resources>
 </document>
