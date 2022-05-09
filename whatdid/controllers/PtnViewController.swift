@@ -62,13 +62,23 @@ class PtnViewController: NSViewController {
             var result = [String]()
             for project in AppDelegate.instance.model.listProjects() {
                 for task in AppDelegate.instance.model.listTasks(project: project) {
-                    result.append("\0\(project)\0 > \0\(task)\0")
+                    result.append("\u{11}\(project)\u{11} > \u{11}\(task)\u{11}")
                 }
             }
             return result
         }
-        findField.action = self.findAction(on:)
+        findField.onTextChange = {
+            let splits = self.findField.textField.stringValue.split(separator: "\u{11}")
+            if splits.count > 2 {
+                self.projectField.textField.stringValue = String(splits[0])
+                self.taskField.textField.stringValue = String(splits[2])
+            }
+        }
+        findField.action = self.closeFind(_:)
         findField.onCancel = {
+            self.projectField.textField.stringValue = ""
+            self.taskField.textField.stringValue = ""
+            self.noteField.stringValue = ""
             self.closeFind(self)
             return true
         }
@@ -295,34 +305,31 @@ class PtnViewController: NSViewController {
     fileprivate func openFind() {
         findStack.isHidden = false
         view.layoutSubtreeIfNeeded()
-        if let window = view.window {
-            let currFrame = window.frame
-            let requiredSize = view.fittingSize
-            window.setFrame(
-                NSRect(
-                    x: currFrame.minX,
-                    y: currFrame.minY,
-                    width: currFrame.width,
-                    height: requiredSize.height),
-                display: true)
-            window.makeFirstResponder(findField)
-        }
+        resizeWindowToFit()
+        view.window?.makeFirstResponder(findField)
     }
     
     @IBAction func closeFind(_ sender: Any) {
         findStack.isHidden = true
+        resizeWindowToFit()
         grabFocusNow() // grab the project, task, or note field — whatever's open
     }
     
-    private func findAction(on field: AutoCompletingField) {
-        let splits = field.textField.stringValue.split(separator: "\0")
-        if splits.count > 0 {
-            projectField.textField.stringValue = String(splits[0])
-            if splits.count > 2 {
-                taskField.textField.stringValue = String(splits[2])
-            }
+    private func resizeWindowToFit() {
+        guard let window = view.window else {
+            wdlog(.warn, "Couldn't find PTN window to resize")
+            return
         }
-        closeFind(self)
+        let currFrame = window.frame
+        let requiredSize = view.fittingSize
+        let deltaYFromResize = currFrame.height - requiredSize.height
+        window.setFrame(
+            NSRect(
+                x: currFrame.minX,
+                y: currFrame.minY + deltaYFromResize,
+                width: currFrame.width,
+                height: requiredSize.height),
+            display: true)
     }
     
     @IBAction func preferenceButtonPressed(_ sender: NSButton) {

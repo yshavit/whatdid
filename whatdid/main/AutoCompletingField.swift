@@ -543,6 +543,7 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
             scrollView.contentView.scroll(to: scrollPoint!)
             scrollView.reflectScrolledClipView(scrollView.contentView)
         }
+        parent.onTextChange()
     }
     
     func match(_ lookFor: String) -> String? {
