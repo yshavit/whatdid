@@ -15,6 +15,10 @@ class PtnViewController: NSViewController {
     @IBOutlet weak var taskField: AutoCompletingField!
     @IBOutlet weak var noteField: NSTextField!
     
+    @IBOutlet weak var findStack: NSStackView!
+    
+    @IBOutlet weak var findField: AutoCompletingField!
+    
     @IBOutlet var goals: GoalsView!
     
     @IBOutlet weak var snoozeButton: NSButton!
@@ -53,6 +57,21 @@ class PtnViewController: NSViewController {
         taskField.action = self.projectOrTaskAction
         
         headerText.placeholderString = headerText.stringValue
+        
+        findField.optionsLookupOnFocus = {
+            var result = [String]()
+            for project in AppDelegate.instance.model.listProjects() {
+                for task in AppDelegate.instance.model.listTasks(project: project) {
+                    result.append("\(project) > \(task)")
+                }
+            }
+            return result
+        }
+        findField.onCancel = {
+            self.closeFind(self)
+            return true
+        }
+        
         if let view = view as? PtnTopLevelStackView {
             view.parent = self
         } else {
@@ -273,7 +292,25 @@ class PtnViewController: NSViewController {
     }
     
     fileprivate func openFind() {
-        print("FIND")
+        findStack.isHidden = false
+        view.layoutSubtreeIfNeeded()
+        if let window = view.window {
+            let currFrame = window.frame
+            let requiredSize = view.fittingSize
+            window.setFrame(
+                NSRect(
+                    x: currFrame.minX,
+                    y: currFrame.minY,
+                    width: currFrame.width,
+                    height: requiredSize.height),
+                display: true)
+            window.makeFirstResponder(findField)
+        }
+    }
+    
+    @IBAction func closeFind(_ sender: Any) {
+        findStack.isHidden = true
+        grabFocusNow() // grab the project, task, or note field — whatever's open
     }
     
     @IBAction func preferenceButtonPressed(_ sender: NSButton) {

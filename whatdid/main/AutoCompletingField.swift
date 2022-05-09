@@ -11,6 +11,7 @@ class AutoCompletingField: NSView, NSAccessibilityGroup {
     var action: (AutoCompletingField) -> Void = {_ in}
     var optionsLookupOnFocus: (() -> [String])?
     var onTextChange: (() -> Void) = {}
+    var onCancel: (() -> Bool) = { return false }
     
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -215,6 +216,9 @@ fileprivate class AutoCompletingFieldView: WhatdidTextField, NSTextViewDelegate,
         case #selector(cancelOperation(_:)):
             if popupManager.windowIsVisible {
                 popupManager.close()
+                return true
+            }
+            if parent.onCancel() {
                 return true
             }
         default:
