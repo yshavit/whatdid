@@ -208,11 +208,19 @@
                 <stackView hidden="YES" distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="baN-bP-K9f" userLabel="FindStack">
                     <rect key="frame" x="334" y="274" width="534" height="21"/>
                     <subviews>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DML-TP-Ano">
+                            <rect key="frame" x="-2" y="4" width="4" height="14"/>
+                            <textFieldCell key="cell" lineBreakMode="clipping" title="find:" id="MBf-w7-PjX">
+                                <font key="font" metaFont="smallSystem"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
                         <customView identifier="findfield" translatesAutoresizingMaskIntoConstraints="NO" id="dVE-N4-jIs" userLabel="FindField" customClass="AutoCompletingField" customModule="whatdid" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="0.0" width="511" height="21"/>
+                            <rect key="frame" x="8" y="0.0" width="518" height="21"/>
                         </customView>
                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cEK-ck-sHF" userLabel="FindDismiss">
-                            <rect key="frame" x="519" y="3" width="15" height="15"/>
+                            <rect key="frame" x="534" y="3" width="0.0" height="15"/>
                             <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="xmark.circle" catalog="system" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="R93-Pk-bX5">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
@@ -223,13 +231,16 @@
                         </button>
                     </subviews>
                     <constraints>
+                        <constraint firstItem="DML-TP-Ano" firstAttribute="centerY" secondItem="dVE-N4-jIs" secondAttribute="centerY" id="Tc7-Tg-LIs"/>
                         <constraint firstItem="cEK-ck-sHF" firstAttribute="centerY" secondItem="dVE-N4-jIs" secondAttribute="centerY" id="U34-OF-me8"/>
                     </constraints>
                     <visibilityPriorities>
                         <integer value="1000"/>
                         <integer value="1000"/>
+                        <integer value="1000"/>
                     </visibilityPriorities>
                     <customSpacing>
+                        <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
                     </customSpacing>
@@ -251,7 +262,7 @@
                 <constraint firstItem="3Mb-B7-qO9" firstAttribute="leading" secondItem="v8p-Bz-hcj" secondAttribute="leading" id="VFm-AQ-phk"/>
                 <constraint firstItem="3Mb-B7-qO9" firstAttribute="trailing" secondItem="tkS-gq-Cbs" secondAttribute="trailing" id="e6p-gR-2ta"/>
                 <constraint firstItem="tkS-gq-Cbs" firstAttribute="trailing" secondItem="6A0-cK-Vnh" secondAttribute="trailing" id="e7y-bj-ubu"/>
-                <constraint firstItem="dVE-N4-jIs" firstAttribute="leading" secondItem="4Lo-U3-YED" secondAttribute="leading" id="j3C-YB-rD5"/>
+                <constraint firstItem="DML-TP-Ano" firstAttribute="leading" secondItem="4Lo-U3-YED" secondAttribute="leading" id="ocW-2g-lfj"/>
                 <constraint firstItem="dVE-N4-jIs" firstAttribute="height" secondItem="4Lo-U3-YED" secondAttribute="height" id="tXs-aA-QAg"/>
                 <constraint firstItem="cEK-ck-sHF" firstAttribute="trailing" secondItem="6A0-cK-Vnh" secondAttribute="trailing" id="wwW-Qx-v2o"/>
             </constraints>

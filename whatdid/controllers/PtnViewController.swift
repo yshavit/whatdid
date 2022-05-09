@@ -62,11 +62,12 @@ class PtnViewController: NSViewController {
             var result = [String]()
             for project in AppDelegate.instance.model.listProjects() {
                 for task in AppDelegate.instance.model.listTasks(project: project) {
-                    result.append("\(project) > \(task)")
+                    result.append("\0\(project)\0 > \0\(task)\0")
                 }
             }
             return result
         }
+        findField.action = self.findAction(on:)
         findField.onCancel = {
             self.closeFind(self)
             return true
@@ -311,6 +312,17 @@ class PtnViewController: NSViewController {
     @IBAction func closeFind(_ sender: Any) {
         findStack.isHidden = true
         grabFocusNow() // grab the project, task, or note field — whatever's open
+    }
+    
+    private func findAction(on field: AutoCompletingField) {
+        let splits = field.textField.stringValue.split(separator: "\0")
+        if splits.count > 0 {
+            projectField.textField.stringValue = String(splits[0])
+            if splits.count > 2 {
+                taskField.textField.stringValue = String(splits[2])
+            }
+        }
+        closeFind(self)
     }
     
     @IBAction func preferenceButtonPressed(_ sender: NSButton) {
