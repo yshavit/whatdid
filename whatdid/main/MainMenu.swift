@@ -133,7 +133,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
             onOpen: {ctx in
                 AppDelegate.instance.windowOpened(self)
                 wdlog(.debug, "MainMenu handling %{public}@ open request for %{public}@", ctx.reason.description, ctx.item.description)
-                self.doOpen(ctx.item, scheduler: ctx.scheduler)
+                self.doOpen(ctx.item, scheduler: ctx.scheduler, fromButtonClick: ctx.reason == .manual)
                 if ctx.reason == .manual {
                     self.focus()
                 }
@@ -186,7 +186,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
         }
     }
     
-    private func doOpen(_ contents: WindowContents, scheduler newScheduler: Scheduler) {
+    private func doOpen(_ contents: WindowContents, scheduler newScheduler: Scheduler, fromButtonClick: Bool) {
         guard let window = window else {
             wdlog(.error, "no window to open for MainMenu::doOpen")
             return
@@ -210,26 +210,7 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
         }
         
         window.setContentSize(window.contentViewController!.view.fittingSize)
-        if let button = statusItem.button, let buttonWindow = button.window, let buttonScreen = buttonWindow.screen {
-            let mouseLoc = NSEvent.mouseLocation
-            let buttonRectInWindow = button.convert(button.bounds, to: nil)
-            let buttonRectInScreen = buttonWindow.convertToScreen(buttonRectInWindow)
-            let buttonMarginFromScreenEdge = buttonScreen.frame.maxX - buttonRectInScreen.origin.x
-            let mouseScreen = NSScreen.screens.first {screen in
-                // screen.frame.contains can be off by 1, so enlarge it just slightly.
-                // (This happens especially when the mouse is as high up as it can go.)
-                screen.frame.insetBy(dx: -2, dy: -2).contains(mouseLoc)
-            } ?? buttonScreen // failsafe, but shouldn't ever be needed
-            let xPosInMouseScreen = mouseScreen.frame.maxX - buttonMarginFromScreenEdge
-            var pos = NSPoint(x: xPosInMouseScreen, y: mouseScreen.visibleFrame.maxY)
-            
-            // Adjust the position if it would put the window off the edge of the screen
-            let tooFarLeftBy = (pos.x + window.frame.width) - mouseScreen.frame.width
-            if tooFarLeftBy > 0 {
-                pos.x -= tooFarLeftBy
-            }
-            window.setFrameTopLeftPoint(pos)
-        }
+        ensureWindowCorrectLocation(fromButtonClick: fromButtonClick)
         if window.isVisible {
             contentViewController?.viewWillAppear()
             cancelClose = true
@@ -239,6 +220,32 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
         RunLoop.current.perform {
             self.statusItem.button?.isHighlighted = true
         }
+    }
+    
+    func ensureWindowCorrectLocation(fromButtonClick: Bool) {
+        guard let window = window,
+              let button = statusItem.button,
+              let buttonWindow = button.window
+        else {
+            wdlog(.warn, "Couldn't find window, button, or screen")
+            return
+        }
+
+        let screenToOpenOn: NSScreen?
+        if fromButtonClick {
+            screenToOpenOn = buttonWindow.screen
+        } else {
+            // The first screen is the one the user designated as "main".
+            // Default to buttonScreen as a failsafe, but that shouldn't ever be needed
+            screenToOpenOn = NSScreen.screens.first
+        }
+        guard let screenToOpenOn = screenToOpenOn else {
+            wdlog(.warn, "couldn't resolve screen to open on")
+            return
+        }
+        let xPosScreen = screenToOpenOn.frame.maxX - window.frame.width
+        let posScreen = NSPoint(x: xPosScreen, y: screenToOpenOn.visibleFrame.maxY)
+        window.setFrameTopLeftPoint(posScreen)
     }
     
     func focus() {
