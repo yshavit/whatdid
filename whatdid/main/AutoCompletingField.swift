@@ -111,6 +111,10 @@ fileprivate class AutoCompletingFieldView: WhatdidTextField, NSTextViewDelegate,
     
     override func resize(withOldSuperviewSize oldSize: NSSize) {
         super.resize(withOldSuperviewSize: oldSize)
+        adjustPopupLocation()
+    }
+    
+    fileprivate func adjustPopupLocation() {
         if parent.popupManager.windowIsVisible, let window = window {
             let popup = parent.popupManager.window
             guard window.screen == popup.screen else {
@@ -348,6 +352,7 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
     private var setWidth: ((CGFloat) -> Void)!
     private var declaredWidth: CGFloat = 100 // any ol' number will do; we'll set this in show()
     var scrollView: NSScrollView!
+    private var onClose: (() -> Void)?
     
     init(parent: AutoCompletingField) {
         self.parent = parent
@@ -481,6 +486,10 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
     
     func close() {
         optionsPopup.close()
+        if let closeHook = onClose {
+            closeHook()
+            onClose = nil
+        }
     }
     
     func moveSelection(down moveDown: Bool) {
@@ -610,6 +619,9 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
             NSEvent.addGlobalMonitorForEvents(matching: eventMask) {event in
                 _ = self.trackClick(event: event)
             })
+        onClose = AppDelegate.instance.registerScreenChangeHook {
+            self.parent.textFieldView.adjustPopupLocation()
+        }
     }
     
     private func setUpScrollBarHelpers() {

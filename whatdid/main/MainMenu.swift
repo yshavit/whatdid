@@ -230,8 +230,6 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
             wdlog(.warn, "Couldn't find window, button, or screen")
             return
         }
-        let buttonRectInWindow = button.convert(button.bounds, to: nil)
-        let buttonRectInScreen = buttonWindow.convertToScreen(buttonRectInWindow)
 
         let screenToOpenOn: NSScreen?
         if fromButtonClick {

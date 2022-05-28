@@ -160,8 +160,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
     }
     
     func applicationDidChangeScreenParameters(_ notification: Notification) {
+        // We want to do this first (before the other hooks), since the other hooks depend on it.
+        // Specifically, AutoCompletingField's popup-mover depends on the window having already
+        // moved. This is ugly, but works for now.
         mainMenu.ensureWindowCorrectLocation(fromButtonClick: false)
+        screenChangeHooks.values.forEach {$0()}
     }
+    
+    private var screenChangeHooks = [UUID: () -> Void]()
+    func registerScreenChangeHook(_ block: @escaping () -> Void) -> (() -> Void) {
+        let uuid = UUID()
+        screenChangeHooks[uuid] = block
+        return {
+            self.screenChangeHooks.removeValue(forKey: uuid)
+        }
+    }
+    
+    
     
     private func setUpLauncher() {
         // Taken from https://theswiftdev.com/how-to-launch-a-macos-app-at-login/
