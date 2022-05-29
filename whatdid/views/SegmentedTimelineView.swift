@@ -10,10 +10,8 @@ class SegmentedTimelineView: NSView {
     private let strokeWidth = 2.0
     private var highlightedProject: String?
     
-    /// A hook that's invoked when the user hovers over a segment.
-    ///
-    /// The hook's argument is the newly-hovered-into region, or `nil` if there isn't one (ie, the user has just hovered out of the view or into an empty region).
-    var onMouseover: ((String?) -> Void)?
+    var onEnter: ((String) -> Void)?
+    var onExit: ((String) -> Void)?
     
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -111,22 +109,23 @@ class SegmentedTimelineView: NSView {
     }
     
     override func mouseEntered(with event: NSEvent) {
-        withEvent(for: event, {highlightedProject = $0})
+        withEvent(for: event, { $0 })
     }
     
     override func mouseExited(with event: NSEvent) {
-        withEvent(for: event, {
-            if highlightedProject == $0 {
-                highlightedProject = nil
-            }
+        withEvent(for: event, {oldProject in
+            highlightedProject == oldProject ? nil : highlightedProject
         })
     }
     
-    private func withEvent(for event: NSEvent, _ block: (String) -> Void) {
+    private func withEvent(for event: NSEvent, _ block: (String) -> String?) {
         let prevHighlight = highlightedProject
-        if let tracked = event.trackingArea?.userInfo?[SegmentedTimelineView.trackedProjectKey] as? String {
-            block(tracked)
+        guard let tracked = event.trackingArea?.userInfo?[SegmentedTimelineView.trackedProjectKey] as? String else {
+            wdlog(.warn, "failed to track mouse event in SegmentedTimelineView")
+            return
         }
+        let previousProject = highlightedProject
+        highlightedProject = block(tracked)
         if prevHighlight == highlightedProject {
             // If we're moving from one region to another, then we'll get the "enter" for the first, followed by the
             // "exit" for the second. That second exit will be a noop, so there's nothing left to do.
@@ -136,7 +135,12 @@ class SegmentedTimelineView: NSView {
         }
         setNeedsDisplay(bounds)
         toolTip = highlightedProject
-        onMouseover?(highlightedProject)
+        if let previousProject = previousProject {
+            onExit?(previousProject)
+        }
+        if let highlightedProject = highlightedProject {
+            onEnter?(highlightedProject)
+        }
     }
     
     private func forEntries(_ block: (Segment, NSRect) -> Void) {

@@ -280,11 +280,6 @@ fileprivate class SegmentedTimelineViewComponent: TestComponent {
             project("alpha", from: 8, to: 10),
         ])
         adder(segmentedTimelineView)
-        let status = NSTextField(labelWithString: "")
-        adder(status)
-        segmentedTimelineView.onMouseover = {curr in
-            status.stringValue = "mouseover into \(curr ?? "nil")"
-        }
         segmentedTimelineView.autoresizingMask = [.height, .width]
     }
 }

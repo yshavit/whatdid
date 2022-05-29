@@ -10,6 +10,16 @@ class DayEndReportController: NSViewController {
         goalsSummaryGroup.setAccessibilityEnabled(true)
         goalsSummaryGroup.setAccessibilityRole(.group)
         goalsSummaryGroup.setAccessibilityLabel("Today's Goals")
+        timelineView.onEnter = {project in
+            for label in self.labelsByProject[project] ?? [] {
+                label.highlight()
+            }
+        }
+        timelineView.onExit = {project in
+            for label in self.labelsByProject[project] ?? [] {
+                label.unHighlight()
+            }
+        }
     }
     
     @IBOutlet var widthFitsOnScreen: NSLayoutConstraint!
@@ -23,6 +33,7 @@ class DayEndReportController: NSViewController {
     @IBOutlet weak var dateRangePicker: DateRangePicker!
     @IBOutlet weak var shockAbsorber: NSView!
     private var scrollBarHelper: ScrollBarHelper?
+    private var labelsByProject = [String: [ExpandableProgressBar]]()
     var scheduler: Scheduler = DefaultScheduler.instance
     
     override func awakeFromNib() {
@@ -139,6 +150,7 @@ class DayEndReportController: NSViewController {
         
         updateGoals(from: start, to: end)
         projectsContainer.subviews.forEach {$0.removeFromSuperview()}
+        labelsByProject.removeAll()
         
         let entries = AppDelegate.instance.model.listEntries(from: start, to: end)
         if !entries.isEmpty,
@@ -163,12 +175,15 @@ class DayEndReportController: NSViewController {
             projectVStack.widthAnchor.constraint(equalTo: projectsContainer.widthAnchor, constant: -2).isActive = true
             projectVStack.leadingAnchor.constraint(equalTo: projectsContainer.leadingAnchor).isActive = true
             
+            var progressBarsForProject = [ExpandableProgressBar]()
+            
             let projectHeader = ExpandableProgressBar(
                 addTo: projectVStack,
                 label: project.name,
                 accessibilityLabelScope: "Project",
                 withDuration: project.totalTime,
                 outOf: allProjectsTotalTime)
+            progressBarsForProject.append(projectHeader)
             // Tasks box
             let tasksBox = NSBox()
             tasksBox.useAutoLayout()
@@ -195,6 +210,7 @@ class DayEndReportController: NSViewController {
                     accessibilityLabelScope: "Task",
                     withDuration: task.totalTime,
                     outOf: allProjectsTotalTime)
+                progressBarsForProject.append(taskHeader)
                 taskHeader.progressBar.leadingAnchor.constraint(equalTo: projectHeader.progressBar.leadingAnchor).isActive = true
                 taskHeader.progressBar.trailingAnchor.constraint(equalTo: projectHeader.progressBar.trailingAnchor).isActive = true
                 
@@ -229,6 +245,8 @@ class DayEndReportController: NSViewController {
                 taskExpansion.leadingAnchor.constraint(equalTo: taskHeader.progressBar.leadingAnchor).isActive = true
                 taskExpansion.trailingAnchor.constraint(equalTo: taskHeader.progressBar.trailingAnchor).isActive = true
             }
+            
+            labelsByProject[project.name] = progressBarsForProject
         }
     }
     
@@ -371,6 +389,7 @@ class DayEndReportController: NSViewController {
         let topView: NSView
         let disclosure: ButtonWithClosure
         let progressBar: NSProgressIndicator
+        let mainHeader: NSTextField
         
         init(addTo enclosing: NSStackView, label: String, accessibilityLabelScope scope: String, withDuration duration: TimeInterval, outOf: TimeInterval) {
             let labelStack = NSStackView()
@@ -382,6 +401,7 @@ class DayEndReportController: NSViewController {
             projectLabel.font = NSFont.systemFont(ofSize: NSFont.systemFontSize)
             labelStack.addView(projectLabel, in: .leading)
             projectLabel.setAccessibilityLabel("\(scope) \"\(label)\"")
+            mainHeader = projectLabel
             let durationLabel = WhatdidTextField(wrappingLabelWithString: TimeUtil.daysHoursMinutes(for: duration))
             durationLabel.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
             labelStack.addView(durationLabel, in: .trailing)
@@ -411,6 +431,35 @@ class DayEndReportController: NSViewController {
             progressBar.setAccessibilityLabel("\(scope) activity indicator for \"\(label)\"")
             
             topView = labelStack
+        }
+        
+        func highlight() {
+            setHighlighting(to: true)
+        }
+        
+        func unHighlight() {
+            setHighlighting(to: false)
+        }
+        
+        private func setHighlighting(to isHighlighted: Bool) {
+            // This is kinda-sorta like bold, except it doesn't affect the vertical height
+            // I've tried it at various display settings, and a stroke width of 7 seems to be the magic spot
+            let attrs = [
+                .strokeWidth: 7,
+                .strokeColor: NSColor.textColor
+            ] as [NSAttributedString.Key : Any]
+            let curr = NSMutableAttributedString(attributedString: mainHeader.attributedStringValue)
+            let fullRange = NSRange(location: 0, length: curr.length)
+            
+            if isHighlighted {
+                curr.addAttributes(attrs, range: fullRange)
+            } else {
+                for key in attrs.keys {
+                    curr.removeAttribute(key, range: fullRange)
+                }
+            }
+            
+            mainHeader.attributedStringValue = curr
         }
     }
 }
