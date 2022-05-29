@@ -10,6 +10,11 @@ class SegmentedTimelineView: NSView {
     private let strokeWidth = 2.0
     private var highlightedProject: String?
     
+    /// A hook that's invoked when the user hovers over a segment.
+    ///
+    /// The hook's argument is the newly-hovered-into region, or `nil` if there isn't one (ie, the user has just hovered out of the view or into an empty region).
+    var onMouseover: ((String?) -> Void)?
+    
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         doInit()
@@ -118,11 +123,20 @@ class SegmentedTimelineView: NSView {
     }
     
     private func withEvent(for event: NSEvent, _ block: (String) -> Void) {
+        let prevHighlight = highlightedProject
         if let tracked = event.trackingArea?.userInfo?[SegmentedTimelineView.trackedProjectKey] as? String {
             block(tracked)
-            setNeedsDisplay(bounds)
         }
+        if prevHighlight == highlightedProject {
+            // If we're moving from one region to another, then we'll get the "enter" for the first, followed by the
+            // "exit" for the second. That second exit will be a noop, so there's nothing left to do.
+            // This is important, or else this no-op will fire the onMouseover hook, making it look like we've mouseover'ed
+            // from A -> A (ie, from a region into itself).
+            return
+        }
+        setNeedsDisplay(bounds)
         toolTip = highlightedProject
+        onMouseover?(highlightedProject)
     }
     
     private func forEntries(_ block: (Segment, NSRect) -> Void) {
