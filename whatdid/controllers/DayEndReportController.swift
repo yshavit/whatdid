@@ -183,6 +183,7 @@ class DayEndReportController: NSViewController {
                 accessibilityLabelScope: "Project",
                 withDuration: project.totalTime,
                 outOf: allProjectsTotalTime)
+            projectHeader.mainHeader.timelineView = timelineView
             progressBarsForProject.append(projectHeader)
             // Tasks box
             let tasksBox = NSBox()
@@ -385,11 +386,11 @@ class DayEndReportController: NSViewController {
         closeWindowAsync()
     }
     
-    struct ExpandableProgressBar {
+    fileprivate struct ExpandableProgressBar {
         let topView: NSView
         let disclosure: ButtonWithClosure
         let progressBar: NSProgressIndicator
-        let mainHeader: NSTextField
+        let mainHeader: MainHeaderLabel
         
         init(addTo enclosing: NSStackView, label: String, accessibilityLabelScope scope: String, withDuration duration: TimeInterval, outOf: TimeInterval) {
             let labelStack = NSStackView()
@@ -467,16 +468,18 @@ class DayEndReportController: NSViewController {
             mainHeader.attributedStringValue = curr
         }
         
-        private class MainHeaderLabel: WhatdidTextField {
+        fileprivate class MainHeaderLabel: WhatdidTextField {
+            var timelineView: SegmentedTimelineView?
+            
             override func mouseEntered(with event: NSEvent) {
                 // TODO have this invoke a callback that goes up to the segemented view and highlights it.
                 // Note that this class represents both projects AND tasks within projects, so the callback
                 // should differentiate between those as appropriate.
-                wdlog(.info, "ENTERED! %@", stringValue)
+                timelineView?.highlightProject(named: stringValue)
             }
             
             override func mouseExited(with event: NSEvent) {
-                wdlog(.info, "EXITED! %@", stringValue)
+                timelineView?.unhighlightProject(named: stringValue)
             }
         }
     }

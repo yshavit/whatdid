@@ -85,10 +85,11 @@ class SegmentedTimelineView: NSView {
         NSBezierPath.defaultLineWidth = strokeWidth
         
         // Draw the rects
+        let currentlyHighlighted = highlightedProjects
         forEntries {entry, entryRect in
             let entryRectToDraw = entryRect.intersection(dirtyRect)
             if !entryRectToDraw.isNull {
-                let isHighlighted = hoveredProject == entry.project
+                let isHighlighted = currentlyHighlighted.contains(entry.project)
                 
                 var color = color(for: entry.project)
                 if !isHighlighted {
