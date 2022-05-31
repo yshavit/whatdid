@@ -34,6 +34,7 @@
 		7E51DA09250BF5C60088864F /* TimeZone+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */; };
 		7E579F702503E2920055D9F6 /* SystemClockSchedulerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */; };
 		7E5EFA272619B14A00E7834D /* NSTextField+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */; };
+		7E63051E2846C71700565880 /* SegmentedTimelineViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E63051D2846C71700565880 /* SegmentedTimelineViewTest.swift */; };
 		7E64F02B24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E64F02A24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift */; };
 		7E6C98D22503EF4900A712EB /* DelegatingScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6C98D12503EF4900A712EB /* DelegatingScheduler.swift */; };
 		7E6C98D42503F5C600A712EB /* DelegatingSchedulerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6C98D32503F5C600A712EB /* DelegatingSchedulerTest.swift */; };
@@ -194,6 +195,7 @@
 		7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeZone+Helpers.swift"; sourceTree = "<group>"; };
 		7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockSchedulerTest.swift; sourceTree = "<group>"; };
 		7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextField+Helpers.swift"; sourceTree = "<group>"; };
+		7E63051D2846C71700565880 /* SegmentedTimelineViewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedTimelineViewTest.swift; sourceTree = "<group>"; };
 		7E64F02A24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIElementQuery+Helpers.swift"; sourceTree = "<group>"; };
 		7E6C98D12503EF4900A712EB /* DelegatingScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelegatingScheduler.swift; sourceTree = "<group>"; };
 		7E6C98D32503F5C600A712EB /* DelegatingSchedulerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelegatingSchedulerTest.swift; sourceTree = "<group>"; };
@@ -378,6 +380,14 @@
 			path = scheduling;
 			sourceTree = "<group>";
 		};
+		7E63051C2846C6D000565880 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				7E63051D2846C71700565880 /* SegmentedTimelineViewTest.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
 		7E6FF19D252D71060071E58C /* WhatdidLauncher */ = {
 			isa = PBXGroup;
 			children = (
@@ -472,6 +482,7 @@
 				7E75D09E251D9A500002DBA0 /* model */,
 				7E579F6E2503E2740055D9F6 /* scheduling */,
 				7EE9A1C024DA35F200EE0FB1 /* util */,
+				7E63051C2846C6D000565880 /* views */,
 			);
 			path = whatdidTests;
 			sourceTree = "<group>";
@@ -984,6 +995,7 @@
 				7EF8579524E0961E00867832 /* OpenCloseHelperTest.swift in Sources */,
 				7E305CF0282472810086574C /* Unit32+HelpersTest.swift in Sources */,
 				7EAB5ECD24DA366600E18097 /* TimeUtilTest.swift in Sources */,
+				7E63051E2846C71700565880 /* SegmentedTimelineViewTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

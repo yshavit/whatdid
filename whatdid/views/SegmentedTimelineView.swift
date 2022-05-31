@@ -5,11 +5,11 @@ import SwiftUI
 
 class SegmentedTimelineView: NSView {
     
-    private static let trackedProjectKey = "TRACKED_PROJECT"
+    static let trackedProjectKey = "TRACKED_PROJECT"
     
     private let strokeWidth = 2.0
-    private var hoveredProject: String?
-
+    private(set) var hoveredProject: String?
+    private var explicitlyHighlightedProjects = Set<String>()
     
     var onEnter: ((String) -> Void)?
     var onExit: ((String) -> Void)?
@@ -42,6 +42,26 @@ class SegmentedTimelineView: NSView {
         mostRecentDate = segments.map({$0.end}).max()
         updateTrackingAreas()
         setNeedsDisplay(bounds)
+    }
+    
+    func highlightProject(named project: String) {
+        updateHighlights {
+            explicitlyHighlightedProjects.update(with: project)
+        }
+    }
+    
+    func unhighlightProject(named project: String) {
+        updateHighlights {
+            explicitlyHighlightedProjects.remove(project)
+        }
+    }
+    
+    var highlightedProjects: Set<String> {
+        if let hoveredProject = hoveredProject {
+            return explicitlyHighlightedProjects.union([hoveredProject])
+        } else {
+            return explicitlyHighlightedProjects
+        }
     }
     
     private func calculateSegments(from entries: [FlatEntry]) -> [Segment] {
@@ -110,38 +130,56 @@ class SegmentedTimelineView: NSView {
     }
     
     override func mouseEntered(with event: NSEvent) {
-        withEvent(for: event, { $0 })
+        mouseEntered(with: event as ProjectTrackedEvent)
     }
     
     override func mouseExited(with event: NSEvent) {
-        withEvent(for: event, {oldProject in
-            hoveredProject == oldProject ? nil : hoveredProject
-        })
+        mouseExited(with: event as ProjectTrackedEvent)
     }
     
-    private func withEvent(for event: NSEvent, _ block: (String) -> String?) {
-        let prevHighlight = hoveredProject
-        guard let tracked = event.trackingArea?.userInfo?[SegmentedTimelineView.trackedProjectKey] as? String else {
+    func mouseEntered(with event: ProjectTrackedEvent) {
+        handle(event) {project in
+            updateHighlights {
+                hoveredProject = project
+            }
+        }
+    }
+    
+    func mouseExited(with event: ProjectTrackedEvent) {
+        handle(event) {project in
+            updateHighlights {
+                if hoveredProject == project {
+                    hoveredProject = nil
+                }
+            }
+        }
+    }
+    
+    private func handle(_ event: ProjectTrackedEvent, via action: (String) -> Void) {
+        guard let tracked = event.projectName else {
             wdlog(.warn, "failed to track mouse event in SegmentedTimelineView")
             return
         }
-        let previousProject = hoveredProject
-        hoveredProject = block(tracked)
-        if prevHighlight == hoveredProject {
-            // If we're moving from one region to another, then we'll get the "enter" for the first, followed by the
-            // "exit" for the second. That second exit will be a noop, so there's nothing left to do.
-            // This is important, or else this no-op will fire the onMouseover hook, making it look like we've mouseover'ed
-            // from A -> A (ie, from a region into itself).
+        action(tracked)
+    }
+    
+    private func updateHighlights(via action: () -> Void) {
+        let origHighlights = highlightedProjects
+        action()
+        let currHighlights = highlightedProjects
+        toolTip = hoveredProject
+        if origHighlights == currHighlights {
             return
         }
+        if let onExit = onExit {
+            let removedHighlights = origHighlights.filter { !currHighlights.contains($0) }
+            removedHighlights.forEach(onExit)
+        }
+        if let onEnter = onEnter {
+            let addedHighlights = currHighlights.subtracting(origHighlights)
+            addedHighlights.forEach(onEnter)
+        }
         setNeedsDisplay(bounds)
-        toolTip = hoveredProject
-        if let previousProject = previousProject {
-            onExit?(previousProject)
-        }
-        if let hoveredProject = hoveredProject {
-            onEnter?(hoveredProject)
-        }
     }
     
     private func forEntries(_ block: (Segment, NSRect) -> Void) {
@@ -185,5 +223,17 @@ class SegmentedTimelineView: NSView {
             start = entry.from
             end = entry.to
         }
+    }
+}
+
+protocol ProjectTrackedEvent {
+    var projectName: String? {
+        get
+    }
+}
+
+extension NSEvent: ProjectTrackedEvent {
+    var projectName: String? {
+        trackingArea?.userInfo?[SegmentedTimelineView.trackedProjectKey] as? String
     }
 }
