@@ -397,7 +397,7 @@ class DayEndReportController: NSViewController {
             labelStack.orientation = .horizontal
             labelStack.leadingAnchor.constraint(equalTo: enclosing.leadingAnchor).isActive = true
             
-            let projectLabel = WhatdidTextField(wrappingLabelWithString: label)
+            let projectLabel = MainHeaderLabel(wrappingLabelWithString: label)
             projectLabel.font = NSFont.systemFont(ofSize: NSFont.systemFontSize)
             labelStack.addView(projectLabel, in: .leading)
             projectLabel.setAccessibilityLabel("\(scope) \"\(label)\"")
@@ -431,6 +431,11 @@ class DayEndReportController: NSViewController {
             progressBar.setAccessibilityLabel("\(scope) activity indicator for \"\(label)\"")
             
             topView = labelStack
+            
+            mainHeader.addTrackingArea(NSTrackingArea(
+                rect: mainHeader.bounds,
+                options: [.mouseEnteredAndExited, .activeAlways],
+                owner: mainHeader))
         }
         
         func highlight() {
@@ -460,6 +465,19 @@ class DayEndReportController: NSViewController {
             }
             
             mainHeader.attributedStringValue = curr
+        }
+        
+        private class MainHeaderLabel: WhatdidTextField {
+            override func mouseEntered(with event: NSEvent) {
+                // TODO have this invoke a callback that goes up to the segemented view and highlights it.
+                // Note that this class represents both projects AND tasks within projects, so the callback
+                // should differentiate between those as appropriate.
+                wdlog(.info, "ENTERED! %@", stringValue)
+            }
+            
+            override func mouseExited(with event: NSEvent) {
+                wdlog(.info, "EXITED! %@", stringValue)
+            }
         }
     }
 }
