@@ -8,7 +8,8 @@ class SegmentedTimelineView: NSView {
     private static let trackedProjectKey = "TRACKED_PROJECT"
     
     private let strokeWidth = 2.0
-    private var highlightedProject: String?
+    private var hoveredProject: String?
+
     
     var onEnter: ((String) -> Void)?
     var onExit: ((String) -> Void)?
@@ -67,7 +68,7 @@ class SegmentedTimelineView: NSView {
         forEntries {entry, entryRect in
             let entryRectToDraw = entryRect.intersection(dirtyRect)
             if !entryRectToDraw.isNull {
-                let isHighlighted = highlightedProject == entry.project
+                let isHighlighted = hoveredProject == entry.project
                 
                 var color = color(for: entry.project)
                 if !isHighlighted {
@@ -114,19 +115,19 @@ class SegmentedTimelineView: NSView {
     
     override func mouseExited(with event: NSEvent) {
         withEvent(for: event, {oldProject in
-            highlightedProject == oldProject ? nil : highlightedProject
+            hoveredProject == oldProject ? nil : hoveredProject
         })
     }
     
     private func withEvent(for event: NSEvent, _ block: (String) -> String?) {
-        let prevHighlight = highlightedProject
+        let prevHighlight = hoveredProject
         guard let tracked = event.trackingArea?.userInfo?[SegmentedTimelineView.trackedProjectKey] as? String else {
             wdlog(.warn, "failed to track mouse event in SegmentedTimelineView")
             return
         }
-        let previousProject = highlightedProject
-        highlightedProject = block(tracked)
-        if prevHighlight == highlightedProject {
+        let previousProject = hoveredProject
+        hoveredProject = block(tracked)
+        if prevHighlight == hoveredProject {
             // If we're moving from one region to another, then we'll get the "enter" for the first, followed by the
             // "exit" for the second. That second exit will be a noop, so there's nothing left to do.
             // This is important, or else this no-op will fire the onMouseover hook, making it look like we've mouseover'ed
@@ -134,12 +135,12 @@ class SegmentedTimelineView: NSView {
             return
         }
         setNeedsDisplay(bounds)
-        toolTip = highlightedProject
+        toolTip = hoveredProject
         if let previousProject = previousProject {
             onExit?(previousProject)
         }
-        if let highlightedProject = highlightedProject {
-            onEnter?(highlightedProject)
+        if let hoveredProject = hoveredProject {
+            onEnter?(hoveredProject)
         }
     }
     
