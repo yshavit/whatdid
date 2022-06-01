@@ -1,11 +1,11 @@
 // whatdid?
 
 import Cocoa
-import SwiftUI
 
 class SegmentedTimelineView: NSView {
     
     static let trackedProjectKey = "TRACKED_PROJECT"
+    private static let boxFillhelper = DiagonalBoxFillHelper(strokeWidth: 1.0, strokePadding: 3.0, strokeDegrees: 30)
     
     private let strokeWidth = 2.0
     private var hoveredProject: String?
@@ -44,7 +44,7 @@ class SegmentedTimelineView: NSView {
         // group by project
         let byProject = Dictionary(grouping: entries, by: {$0.project})
         let segmentsByProject = byProject.mapValues(calculateSegments(from:))
-        segments = segmentsByProject.values.flatMap({$0})
+        segments = segmentsByProject.values.flatMap({$0}).sorted(by: {$0.start < $1.start})
         mostAncientDate = segments.map({$0.start}).min()
         mostRecentDate = segments.map({$0.end}).max()
         updateTrackingAreas()
@@ -81,11 +81,28 @@ class SegmentedTimelineView: NSView {
         // TODO should consider adding an angled stripe pattern here, for missing segments
         NSColor.windowBackgroundColor.setFill()
         NSBezierPath.fill(dirtyRect)
+        NSColor.gray.setStroke()
+        SegmentedTimelineView.boxFillhelper.drawDiagonalLines(for: dirtyRect, within: bounds)
         NSBezierPath.defaultLineWidth = strokeWidth
+        
+        func drawLineAt(x: CGFloat) {
+            if x >= dirtyRect.minX && x <= dirtyRect.maxX {
+                NSColor.gray.setStroke()
+                NSBezierPath.defaultLineWidth = 1
+                NSBezierPath.strokeLine(from: NSPoint(x: x, y: dirtyRect.minY), to: NSPoint(x: x, y: dirtyRect.maxY))
+                NSBezierPath.defaultLineWidth = strokeWidth
+            }
+        }
         
         // Draw the rects
         let currentlyHighlighted = highlightedProjects
+        var lastBoundary: (CGFloat, Date)?
         forEntries {entry, entryRect in
+            if let (lastXPos, lastEndDate) = lastBoundary, lastEndDate != entry.start {
+                drawLineAt(x: lastXPos)
+                drawLineAt(x: entryRect.minX)
+            }
+            lastBoundary = (entryRect.maxX, entry.end)
             let entryRectToDraw = entryRect.intersection(dirtyRect)
             if !entryRectToDraw.isNull {
                 let isHighlighted = currentlyHighlighted.contains(entry.project)
