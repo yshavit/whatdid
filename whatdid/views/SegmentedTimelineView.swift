@@ -5,10 +5,25 @@ import SwiftUI
 
 class SegmentedTimelineView: NSView {
     
-    private static let trackedProjectKey = "TRACKED_PROJECT"
+    static let trackedProjectKey = "TRACKED_PROJECT"
     
     private let strokeWidth = 2.0
-    private var highlightedProject: String?
+    private var hoveredProject: String?
+    private var explicitlyHighlightedProjects = Set<String>()
+    private var segments = [Segment]()
+    private var mostAncientDate: Date?
+    private var mostRecentDate: Date?
+    
+    var onEnter: ((String) -> Void)?
+    var onExit: ((String) -> Void)?
+    
+    var highlightedProjects: Set<String> {
+        if let hoveredProject = hoveredProject {
+            return explicitlyHighlightedProjects.union([hoveredProject])
+        } else {
+            return explicitlyHighlightedProjects
+        }
+    }
     
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -25,10 +40,6 @@ class SegmentedTimelineView: NSView {
         widthAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive = true
     }
     
-    private var segments = [Segment]()
-    private var mostAncientDate: Date?
-    private var mostRecentDate: Date?
-    
     func setEntries(_ entries: [FlatEntry]) {
         // group by project
         let byProject = Dictionary(grouping: entries, by: {$0.project})
@@ -38,6 +49,18 @@ class SegmentedTimelineView: NSView {
         mostRecentDate = segments.map({$0.end}).max()
         updateTrackingAreas()
         setNeedsDisplay(bounds)
+    }
+    
+    func highlightProject(named project: String) {
+        updateHighlights {
+            explicitlyHighlightedProjects.update(with: project)
+        }
+    }
+    
+    func unhighlightProject(named project: String) {
+        updateHighlights {
+            explicitlyHighlightedProjects.remove(project)
+        }
     }
     
     private func calculateSegments(from entries: [FlatEntry]) -> [Segment] {
@@ -61,10 +84,11 @@ class SegmentedTimelineView: NSView {
         NSBezierPath.defaultLineWidth = strokeWidth
         
         // Draw the rects
+        let currentlyHighlighted = highlightedProjects
         forEntries {entry, entryRect in
             let entryRectToDraw = entryRect.intersection(dirtyRect)
             if !entryRectToDraw.isNull {
-                let isHighlighted = highlightedProject == entry.project
+                let isHighlighted = currentlyHighlighted.contains(entry.project)
                 
                 var color = color(for: entry.project)
                 if !isHighlighted {
@@ -106,23 +130,56 @@ class SegmentedTimelineView: NSView {
     }
     
     override func mouseEntered(with event: NSEvent) {
-        withEvent(for: event, {highlightedProject = $0})
+        mouseEntered(with: event as ProjectTrackedEvent)
     }
     
     override func mouseExited(with event: NSEvent) {
-        withEvent(for: event, {
-            if highlightedProject == $0 {
-                highlightedProject = nil
-            }
-        })
+        mouseExited(with: event as ProjectTrackedEvent)
     }
     
-    private func withEvent(for event: NSEvent, _ block: (String) -> Void) {
-        if let tracked = event.trackingArea?.userInfo?[SegmentedTimelineView.trackedProjectKey] as? String {
-            block(tracked)
-            setNeedsDisplay(bounds)
+    func mouseEntered(with event: ProjectTrackedEvent) {
+        handle(event) {project in
+            updateHighlights {
+                hoveredProject = project
+            }
         }
-        toolTip = highlightedProject
+    }
+    
+    func mouseExited(with event: ProjectTrackedEvent) {
+        handle(event) {project in
+            updateHighlights {
+                if hoveredProject == project {
+                    hoveredProject = nil
+                }
+            }
+        }
+    }
+    
+    private func handle(_ event: ProjectTrackedEvent, via action: (String) -> Void) {
+        guard let tracked = event.projectName else {
+            wdlog(.warn, "failed to track mouse event in SegmentedTimelineView")
+            return
+        }
+        action(tracked)
+    }
+    
+    private func updateHighlights(via action: () -> Void) {
+        let origHighlights = highlightedProjects
+        action()
+        let currHighlights = highlightedProjects
+        toolTip = hoveredProject
+        if origHighlights == currHighlights {
+            return
+        }
+        if let onExit = onExit {
+            let removedHighlights = origHighlights.filter { !currHighlights.contains($0) }
+            removedHighlights.forEach(onExit)
+        }
+        if let onEnter = onEnter {
+            let addedHighlights = currHighlights.subtracting(origHighlights)
+            addedHighlights.forEach(onEnter)
+        }
+        setNeedsDisplay(bounds)
     }
     
     private func forEntries(_ block: (Segment, NSRect) -> Void) {
@@ -166,5 +223,17 @@ class SegmentedTimelineView: NSView {
             start = entry.from
             end = entry.to
         }
+    }
+}
+
+protocol ProjectTrackedEvent {
+    var projectName: String? {
+        get
+    }
+}
+
+extension NSEvent: ProjectTrackedEvent {
+    var projectName: String? {
+        trackingArea?.userInfo?[SegmentedTimelineView.trackedProjectKey] as? String
     }
 }

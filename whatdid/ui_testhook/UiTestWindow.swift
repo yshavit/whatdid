@@ -119,6 +119,23 @@ fileprivate class AutocompleteComponent: TestComponent {
         adder(autocompleField)
         optionsStack.arrangedSubviews[1].leadingAnchor.constraint(equalTo: resultStack.arrangedSubviews[1].leadingAnchor).isActive = true
         
+        let separator = NSBox()
+        separator.boxType = .separator
+        adder(separator)
+        
+        adder(ButtonWithClosure(label: "Load lots of data", {_ in
+            var bigOptionsList = [String]()
+            wdlog(.info, "Autocomplete data: generating")
+            for i in 1..<1000 {
+                bigOptionsList.append("option \(i)")
+            }
+            
+            wdlog(.info, "Autocomplete data: setting")
+            self.autocompleField.options = bigOptionsList
+            
+            wdlog(.info, "Autocomplete data: done")
+        }))
+        
         options.nextKeyView = autocompleField
         autocompleField.nextKeyView = options
         
