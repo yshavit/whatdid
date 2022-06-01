@@ -8,11 +8,19 @@ class SegmentedTimelineView: NSView {
     static let trackedProjectKey = "TRACKED_PROJECT"
     
     private let strokeWidth = 2.0
-    private(set) var hoveredProject: String?
+    private var hoveredProject: String?
     private var explicitlyHighlightedProjects = Set<String>()
     
     var onEnter: ((String) -> Void)?
     var onExit: ((String) -> Void)?
+    
+    var highlightedProjects: Set<String> {
+        if let hoveredProject = hoveredProject {
+            return explicitlyHighlightedProjects.union([hoveredProject])
+        } else {
+            return explicitlyHighlightedProjects
+        }
+    }
     
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -53,14 +61,6 @@ class SegmentedTimelineView: NSView {
     func unhighlightProject(named project: String) {
         updateHighlights {
             explicitlyHighlightedProjects.remove(project)
-        }
-    }
-    
-    var highlightedProjects: Set<String> {
-        if let hoveredProject = hoveredProject {
-            return explicitlyHighlightedProjects.union([hoveredProject])
-        } else {
-            return explicitlyHighlightedProjects
         }
     }
     
