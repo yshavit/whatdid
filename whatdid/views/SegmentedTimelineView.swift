@@ -10,6 +10,9 @@ class SegmentedTimelineView: NSView {
     private let strokeWidth = 2.0
     private var hoveredProject: String?
     private var explicitlyHighlightedProjects = Set<String>()
+    private var segments = [Segment]()
+    private var mostAncientDate: Date?
+    private var mostRecentDate: Date?
     
     var onEnter: ((String) -> Void)?
     var onExit: ((String) -> Void)?
@@ -36,10 +39,6 @@ class SegmentedTimelineView: NSView {
         heightAnchor.constraint(greaterThanOrEqualToConstant: 10).isActive = true
         widthAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive = true
     }
-    
-    private var segments = [Segment]()
-    private var mostAncientDate: Date?
-    private var mostRecentDate: Date?
     
     func setEntries(_ entries: [FlatEntry]) {
         // group by project
