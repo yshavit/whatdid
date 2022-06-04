@@ -413,12 +413,12 @@ class Model {
                 || lhs.goal < rhs.goal
         }
         
-        fileprivate let id: URL
+        let id: URL
         let goal: String
         let created: Date
         var completed: Date?
         let sessionStart: Date
-        fileprivate var orderWithinSession: Int
+        let orderWithinSession: Int
         
         fileprivate static func fromManaged(_ goal: Goal) -> GoalDto {
             return GoalDto(

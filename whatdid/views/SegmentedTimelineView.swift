@@ -2,7 +2,7 @@
 
 import Cocoa
 
-class SegmentedTimelineView: NSView {
+class SegmentedTimelineView: WdView {
     
     static let trackedProjectKey = "TRACKED_PROJECT"
     private static let boxFillhelper = DiagonalBoxFillHelper(strokeWidth: 1.0, strokePadding: 3.0, strokeDegrees: 30)
@@ -25,19 +25,33 @@ class SegmentedTimelineView: NSView {
         }
     }
     
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
-        doInit()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        doInit()
-    }
-    
-    private func doInit() {
+    override func wdViewInit() {
         heightAnchor.constraint(greaterThanOrEqualToConstant: 10).isActive = true
         widthAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive = true
+    }
+    
+    override func initializeInterfaceBuilder() {
+        var date = Date()
+        var dummyEntries = [FlatEntry]()
+        func entry(project: String, task: String, duration: TimeInterval) {
+            let endDate = date.addingTimeInterval(duration)
+            dummyEntries.append(FlatEntry(
+                from: date,
+                to: endDate,
+                project: project,
+                task: task,
+                notes: nil))
+            date = endDate
+        }
+        
+        entry(project: "project a", task: "task 1", duration: 5)
+        entry(project: "project a", task: "task 1", duration: 5)
+        date = date.addingTimeInterval(5)
+        entry(project: "project a", task: "task 2", duration: 5)
+        entry(project: "project b", task: "task a", duration: 5)
+        entry(project: "project b", task: "task b", duration: 5)
+        
+        setEntries(dummyEntries)
     }
     
     func setEntries(_ entries: [FlatEntry]) {

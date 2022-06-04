@@ -13,6 +13,7 @@
 		7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1C2F5024CE43C40070D8CD /* Version.swift */; };
 		7E1EE6622612EEF1003314EE /* CloseConfirmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1EE6612612EEF1003314EE /* CloseConfirmer.swift */; };
 		7E1F9060250C5CC500992B7F /* TimeZone+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */; };
+		7E210AF5284BE5DC0050AD31 /* WdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E210AF4284BE5DC0050AD31 /* WdView.swift */; };
 		7E2159E625301BFE00EE5A11 /* MainLauncher.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E2159E525301BFE00EE5A11 /* MainLauncher.xib */; };
 		7E235E03278A968800253DD8 /* NonFocusingNSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E235E02278A968800253DD8 /* NonFocusingNSViewController.swift */; };
 		7E305CE8282466B80086574C /* SimpleRandom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E305CE7282466B80086574C /* SimpleRandom.swift */; };
@@ -175,6 +176,7 @@
 		7E07C3B724D121770007FD23 /* DayEndReportController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DayEndReportController.xib; sourceTree = "<group>"; };
 		7E1C2F5024CE43C40070D8CD /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
 		7E1EE6612612EEF1003314EE /* CloseConfirmer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseConfirmer.swift; sourceTree = "<group>"; };
+		7E210AF4284BE5DC0050AD31 /* WdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WdView.swift; sourceTree = "<group>"; };
 		7E2159E525301BFE00EE5A11 /* MainLauncher.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainLauncher.xib; sourceTree = "<group>"; };
 		7E235E02278A968800253DD8 /* NonFocusingNSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonFocusingNSViewController.swift; sourceTree = "<group>"; };
 		7E305CE7282466B80086574C /* SimpleRandom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleRandom.swift; sourceTree = "<group>"; };
@@ -616,6 +618,7 @@
 				7E4EB8E227868AAC001234F0 /* DateRangePane.swift */,
 				7E4EB8E4278A4724001234F0 /* DisclosureWithLabel.swift */,
 				7EA30B082824D34A007376A5 /* SegmentedTimelineView.swift */,
+				7E210AF4284BE5DC0050AD31 /* WdView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -967,6 +970,7 @@
 				7EF884112610139B00170330 /* NSViewController+Helper.swift in Sources */,
 				7E88CC8E261EB5A900968F64 /* AnimationHelper.swift in Sources */,
 				7E37A29A24C0293E005BA1DF /* Entry+CoreDataClass.swift in Sources */,
+				7E210AF5284BE5DC0050AD31 /* WdView.swift in Sources */,
 				7EE0E74024E4DF4A002D03F8 /* SubsequenceMatcher.swift in Sources */,
 				7E970D6B24DA850D00F634AB /* UiTestWindow.swift in Sources */,
 				7E6C98D22503EF4900A712EB /* DelegatingScheduler.swift in Sources */,
@@ -1187,7 +1191,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1241,7 +1245,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -1264,7 +1268,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.whatdid;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1288,7 +1292,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.whatdid;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1427,7 +1431,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1451,7 +1455,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.whatdid;
 				PRODUCT_NAME = "$(TARGET_NAME)";

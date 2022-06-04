@@ -2,24 +2,14 @@
 
 import Cocoa
 
-class PasteboardView: NSView {
+class PasteboardView: WdView {
     
     private let pasteboardButton = NSButton(title: "", target: nil, action: nil)
     private let trashButton = ButtonWithClosure()
     private var pasteboard: NSPasteboard?
     var action: ((String) -> Void)?
-
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
-        doInit()
-    }
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        doInit()
-    }
-    
-    private func doInit() {
+    override func wdViewInit() {
         pasteboardButton.target = self
         pasteboardButton.action = #selector(self.handleButton)
         pasteboardButton.controlSize = .small

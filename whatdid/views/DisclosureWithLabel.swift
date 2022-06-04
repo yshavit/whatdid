@@ -3,8 +3,7 @@
 import Cocoa
 import SwiftUI
 
-@IBDesignable
-class DisclosureWithLabel: NSView {
+class DisclosureWithLabel: WdView {
     
     private let disclosureButton = NSButton(title: "", target: nil, action: nil)
     private let labelButton = NSButton(title: "Show", target: nil, action: nil)
@@ -51,18 +50,8 @@ class DisclosureWithLabel: NSView {
             updateViews()
         }
     }
-
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
-        doInit()
-    }
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        doInit()
-    }
-    
-    private func doInit() {
+    override func wdViewInit() {
         disclosureButton.bezelStyle = .disclosure
         disclosureButton.setButtonType(.pushOnPushOff)
         
@@ -86,11 +75,6 @@ class DisclosureWithLabel: NSView {
 
     override func setAccessibilityIdentifier(_ accessibilityIdentifier: String?) {
         disclosureButton.setAccessibilityIdentifier(accessibilityIdentifier)
-    }
-    
-    override func prepareForInterfaceBuilder() {
-        doInit()
-        invalidateIntrinsicContentSize()
     }
     
     @objc private func handleClick(_ sender: NSButton) {

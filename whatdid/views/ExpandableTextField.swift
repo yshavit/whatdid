@@ -2,7 +2,7 @@
 
 import Cocoa
 
-class ExpandableTextField: NSView, NSTextFieldDelegate {
+class ExpandableTextField: WdView, NSTextFieldDelegate {
     
     private static let minEditingSize: CGFloat = 100
     private let button = createAddButton()
@@ -68,16 +68,6 @@ class ExpandableTextField: NSView, NSTextFieldDelegate {
         }
     }
     
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
-        doInit()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        doInit()
-    }
-    
     func makeFirstResponder(for window: NSWindow) {
         window.makeFirstResponder(field)
     }
@@ -110,7 +100,7 @@ class ExpandableTextField: NSView, NSTextFieldDelegate {
         field.font = font
     }
     
-    private func doInit() {
+    override func wdViewInit() {
         useAutoLayout()
         setContentHuggingPriority(.required, for: .horizontal)
         

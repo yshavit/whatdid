@@ -2,7 +2,7 @@
 
 import Cocoa
 
-class FlippedView: NSView {
+class FlippedView: WdView {
 
     override var isFlipped : Bool {
         get {

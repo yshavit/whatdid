@@ -2,8 +2,7 @@
 
 import Cocoa
 
-@IBDesignable
-class DateRangePane: NSView {
+class DateRangePane: WdView {
     
     private var hourInDay = 0
     private var minuteInDay = 0
@@ -28,18 +27,8 @@ class DateRangePane: NSView {
             rangeDatePicker.timeInterval = newEnd.timeIntervalSince(newStart)
         }
     }
-
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
-        doInit()
-    }
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        doInit()
-    }
-    
-    private func doInit() {
+    override func wdViewInit() {
         forEachPicker {picker in
             picker.datePickerElements = .yearMonthDay
             picker.calendar = DefaultScheduler.instance.calendar
@@ -111,10 +100,8 @@ class DateRangePane: NSView {
         prepareToShow()
     }
     
-    override func prepareForInterfaceBuilder() {
-        doInit()
+    override func initializeInterfaceBuilder() {
         prepareToShow()
-        invalidateIntrinsicContentSize()
     }
     
     func prepareToShow() {

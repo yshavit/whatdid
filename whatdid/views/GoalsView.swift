@@ -1,8 +1,9 @@
 // whatdid?
 
 import Cocoa
+import WhatdidLauncher
 
-class GoalsView: NSView, NSAccessibilityGroup {
+class GoalsView: WdView, NSAccessibilityGroup {
     private static let new_marker = "🔸"
     private static let new_goal_grace_time = TimeInterval(60 * 60) // one hour
     private static let horizontal_spacing: CGFloat = 3
@@ -12,18 +13,16 @@ class GoalsView: NSView, NSAccessibilityGroup {
     private let addButton = ExpandableTextField()
 
     private var oldWidth: CGFloat?
-    
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
-        doInit()
+
+    #if TARGET_INTERFACE_BUILDER
+    private static var model: GoalsViewModel = DummyModel()
+    #else
+    private static var model: GoalsViewModel {
+        AppDelegate.instance.model
     }
+    #endif
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        doInit()
-    }
-    
-    private func doInit() {
+    override func wdViewInit() {
         addSubview(topStack)
         topStack.anchorAllSides(to: self)
         topStack.alignment = .leading
@@ -41,6 +40,11 @@ class GoalsView: NSView, NSAccessibilityGroup {
         layOutElements()
     }
     
+    override func initializeInterfaceBuilder() {
+        addGoalFrom(text: "goal 1")
+        addGoalFrom(text: "goal 2")
+    }
+    
     func addGoalView(_ goal: Model.GoalDto) {
         add(view: GoalsView.from(goal))
     }
@@ -48,7 +52,7 @@ class GoalsView: NSView, NSAccessibilityGroup {
     private func addGoalFrom(text: String) {
         let stripped = text.trimmingCharacters(in: .whitespacesAndNewlines)
         if !stripped.isEmpty {
-            addGoalView(AppDelegate.instance.model.createNewGoal(goal: text))
+            addGoalView(GoalsView.model.createNewGoal(goal: text))
         }
     }
     
@@ -115,7 +119,8 @@ class GoalsView: NSView, NSAccessibilityGroup {
         currentRow.addArrangedSubview(Spacer())
         currentRow.addArrangedSubview(addButton)
         
-        AppDelegate.instance.model.listGoalsForCurrentSession().forEach(addGoalView(_:))
+        let goals = GoalsView.model.listGoalsForCurrentSession()
+        goals.forEach(addGoalView(_:))
     }
     
     private var currentRowWidth: CGFloat {
@@ -209,7 +214,7 @@ class GoalsView: NSView, NSAccessibilityGroup {
         checkbox.onPress {button in
             var toSave = goal
             toSave.completed = (button.state == .on) ? DefaultScheduler.instance.now : nil
-            AppDelegate.instance.model.save(goal: toSave)
+            self.model.save(goal: toSave)
         }
         return checkbox
     }
@@ -239,3 +244,47 @@ class GoalsView: NSView, NSAccessibilityGroup {
         }
     }
 }
+
+fileprivate protocol GoalsViewModel {
+    func createNewGoal(goal text: String) -> Model.GoalDto
+    func listGoalsForCurrentSession() -> [Model.GoalDto]
+    func save(goal: Model.GoalDto)
+}
+
+#if TARGET_INTERFACE_BUILDER
+class DummyModel: GoalsViewModel {
+    let now = Date()
+    var goals = [Model.GoalDto]()
+    
+    func createNewGoal(goal text: String) -> Model.GoalDto {
+        let id = goals.count
+        let url = URL(string: "whatdid-ib://model/\(id)")!
+        let goal = Model.GoalDto(
+            id: url,
+            goal: text,
+            created: now,
+            sessionStart: now,
+            orderWithinSession: id)
+        goals.append(goal)
+        return goal
+    }
+    
+    func listGoalsForCurrentSession() -> [Model.GoalDto] {
+        return goals
+    }
+    
+    func save(goal: Model.GoalDto) {
+        guard let goalIdInt = Int(goal.id.path) else {
+            wdlog(.warn, "couldn't parse id from URL path: %@", goal.id.absoluteString)
+            return
+        }
+        goals[goalIdInt] = goal
+    }
+    
+    
+}
+#else
+extension Model: GoalsViewModel {
+    // all methods already implemented
+}
+#endif

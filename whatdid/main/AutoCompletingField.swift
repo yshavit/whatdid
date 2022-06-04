@@ -2,7 +2,7 @@
 
 import Cocoa
 
-class AutoCompletingField: NSView, NSAccessibilityGroup {
+class AutoCompletingField: WdView, NSAccessibilityGroup {
     
     fileprivate static let PINNED_OPTIONS_COUNT = 3
     
@@ -13,17 +13,7 @@ class AutoCompletingField: NSView, NSAccessibilityGroup {
     var onTextChange: (() -> Void) = {}
     var onCancel: (() -> Bool) = { return false }
     
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
-        commonInit()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        commonInit()
-    }
-    
-    private func commonInit() {
+    override func wdViewInit() {
         popupManager = PopupManager(parent: self)
         popupManager.window.setAccessibilityParent(self)
         
