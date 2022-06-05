@@ -5,11 +5,16 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      runUiTests:
+        description: Run UI tests
+        required: false
+        type: boolean
 
 jobs:
   ui-tests:
-    if: ${{ false }}  # see git commit
+    if: ${{ github.event.inputs.runUiTests }}  # see #5495d097
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
