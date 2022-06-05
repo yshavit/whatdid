@@ -45,4 +45,33 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build and run unit tests
-      run: xcodebuild clean test -scheme whatdid-debug
+      run: xcodebuild clean test -scheme whatdid-debug | tee build.stdout
+    - name: Report warnings and errors
+      run: |
+            # Check for errors, warnings, and TODOs.
+            #
+            # Each line will be something like:
+            # /path/to/whatdid/whatdid/main/SomeFile.swift:1234:56: warning: todo hello
+            #
+            # The output format for GH actions is:
+            # ::error file={name},line={line},endLine={endLine},title={title}::{message}
+            set -euo pipefail
+            { grep -i '^/.*: \(warning\|error\): ' build.stdout || true; } | sort -u > warnings.txt
+            exit_code=0
+            while read -r line; do
+              IFS=: read filename fileline filecol severity message <<< "$line"
+              severity="$(echo "$severity" | sed 's/^ *//')"
+              message="$(echo "$message" | sed 's/^ *//')"
+              title="Compiler $severity"
+              if grep -qi '^todo ' <<< "$message" ; then
+                severity=error
+                title="TODO detected"
+                message="$(echo "$message" | sed 's/^todo //i')"
+              fi
+              printf '::%s file=%s,line=%s,col=%s,title=%s::%s\n' "$severity" "$filename" "$fileline" "$filecol" "$title" "$message"
+              if [[ "$severity" == error ]]; then
+                exit_code=1
+              fi
+            done < warnings.txt
+            exit $exit_code
+
