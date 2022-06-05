@@ -91,6 +91,14 @@ class PrefsViewController: NSViewController {
         }
     }
     
+    static func exportFileName(_ format: EntryExportFormat, _ scheduler: Scheduler) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = scheduler.timeZone
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HHmmssZ"
+        let now = dateFormatter.string(from: scheduler.now)
+        return "whatdid-export-\(now).\(format.fileExtension)"
+    }
+    
     @IBAction func handlePressExport(_ sender: Any) {
         let selectedFormat = exportFormatPopup.selectedItem
         guard let format = selectedFormat?.representedObject as? EntryExportFormat else {
@@ -100,11 +108,7 @@ class PrefsViewController: NSViewController {
         
         let savePanel = NSSavePanel()
         savePanel.title = "Export Whatdid Data"
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = DefaultScheduler.instance.timeZone
-        dateFormatter.dateFormat = "yyyy-mm-dd'T'HHmmssZ"
-        let now = dateFormatter.string(from: DefaultScheduler.instance.now)
-        savePanel.nameFieldStringValue = "whatdid-export-\(now).\(format.fileExtension)"
+        savePanel.nameFieldStringValue = PrefsViewController.exportFileName(format, DefaultScheduler.instance)
         
         // The NSSavePanel won't have a window controller until we call begin, but we need to
         // increment the counter right away (or else the app will hide as soon as we end the sheet).

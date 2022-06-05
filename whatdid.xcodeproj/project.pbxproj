@@ -14,6 +14,7 @@
 		7E1EE6622612EEF1003314EE /* CloseConfirmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1EE6612612EEF1003314EE /* CloseConfirmer.swift */; };
 		7E1F9060250C5CC500992B7F /* TimeZone+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */; };
 		7E210AF5284BE5DC0050AD31 /* WdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E210AF4284BE5DC0050AD31 /* WdView.swift */; };
+		7E210AF7284C3CA60050AD31 /* PrefsViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E210AF6284C3CA60050AD31 /* PrefsViewControllerTest.swift */; };
 		7E2159E625301BFE00EE5A11 /* MainLauncher.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E2159E525301BFE00EE5A11 /* MainLauncher.xib */; };
 		7E235E03278A968800253DD8 /* NonFocusingNSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E235E02278A968800253DD8 /* NonFocusingNSViewController.swift */; };
 		7E305CE8282466B80086574C /* SimpleRandom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E305CE7282466B80086574C /* SimpleRandom.swift */; };
@@ -177,6 +178,7 @@
 		7E1C2F5024CE43C40070D8CD /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
 		7E1EE6612612EEF1003314EE /* CloseConfirmer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseConfirmer.swift; sourceTree = "<group>"; };
 		7E210AF4284BE5DC0050AD31 /* WdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WdView.swift; sourceTree = "<group>"; };
+		7E210AF6284C3CA60050AD31 /* PrefsViewControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsViewControllerTest.swift; sourceTree = "<group>"; };
 		7E2159E525301BFE00EE5A11 /* MainLauncher.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainLauncher.xib; sourceTree = "<group>"; };
 		7E235E02278A968800253DD8 /* NonFocusingNSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonFocusingNSViewController.swift; sourceTree = "<group>"; };
 		7E305CE7282466B80086574C /* SimpleRandom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleRandom.swift; sourceTree = "<group>"; };
@@ -416,6 +418,7 @@
 			isa = PBXGroup;
 			children = (
 				7E73C95B27A78574007F87F0 /* LargeReportControllerTest.swift */,
+				7E210AF6284C3CA60050AD31 /* PrefsViewControllerTest.swift */,
 			);
 			path = controllers;
 			sourceTree = "<group>";
@@ -998,6 +1001,7 @@
 				7EB7496125170ED6001C7DBC /* PrefsTest.swift in Sources */,
 				7E6C98D42503F5C600A712EB /* DelegatingSchedulerTest.swift in Sources */,
 				7EE0E74224E4DF8A002D03F8 /* SubsequenceMatcherTest.swift in Sources */,
+				7E210AF7284C3CA60050AD31 /* PrefsViewControllerTest.swift in Sources */,
 				7E579F702503E2920055D9F6 /* SystemClockSchedulerTest.swift in Sources */,
 				7E75D0A0251D9A790002DBA0 /* ModelTest.swift in Sources */,
 				7EF8579524E0961E00867832 /* OpenCloseHelperTest.swift in Sources */,
