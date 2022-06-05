@@ -427,6 +427,8 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
             return optionFields.map { $0.stringValue }
         }
         set (values) {
+
+            #warning("todo make this change here")
             mainStack.views.forEach { $0.removeFromSuperview() }
             mainStack.subviews.forEach { $0.removeFromSuperview() }
             matchedSectionSeparators.removeAll()

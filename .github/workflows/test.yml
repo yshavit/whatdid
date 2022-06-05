@@ -55,7 +55,7 @@ jobs:
             # The output format for GH actions is:
             # ::error file={name},line={line},endLine={endLine},title={title}::{message}
             set -euo pipefail
-            grep -i 'warning: todo' build.stdout | sort -u > todos.txt
+            { grep -i 'warning: todo' build.stdout || true; } | sort -u > todos.txt
             while read -r line; do
               IFS=: read filename fileline filecol warning message <<< "$line"
               message="$(echo "$message" | sed 's/ *todo  *//')"
