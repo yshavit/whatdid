@@ -48,7 +48,8 @@ jobs:
       run: xcodebuild clean test -scheme whatdid-debug | tee build.stdout
     - name: Report warnings and errors
       run: |
-            # Check for TODOs
+            # Check for errors, warnings, and TODOs.
+            #
             # Each line will be something like:
             # /path/to/whatdid/whatdid/main/SomeFile.swift:1234:56: warning: todo hello
             #
