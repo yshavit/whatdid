@@ -43,7 +43,6 @@ jobs:
     - name: Package
       run: |
         set -eu -o pipefail
-        /usr/bin/plutil -insert teamID -string "${MY_COOL_TEAM_ID}" buildscripts/archive-export.plist
         /usr/bin/plutil -insert teamID -string "${APPLE_TEAM_ID}" buildscripts/archive-export.plist
         /usr/bin/plutil -insert signingCertificate -string "${APPLE_SIGNING_CERT}" buildscripts/archive-export.plist
         xcodebuild -exportArchive -archivePath build/whatdid.xcarchive -exportPath build -exportOptionsPlist buildscripts/archive-export.plist
