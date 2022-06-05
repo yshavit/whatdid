@@ -46,3 +46,25 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build and run unit tests
       run: xcodebuild clean test -scheme whatdid-debug
+  todos:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Look for TODOs
+      run: |
+            # Each line will be something like:
+            # /path/to/whatdid/whatdid/main/SomeFile.swift:1234:56: warning: todo hello
+            #
+            # The output format for GH actions is:
+            # ::error file={name},line={line},endLine={endLine},title={title}::{message}
+            xcodebuild clean build -scheme whatdid-debug
+            set -euo pipefail
+            xcodebuild clean build -scheme whatdid-debug 2>/dev/null |
+              grep -i 'warning: todo' |
+              sort -u |
+              while read -r line; do
+                IFS=: read filename fileline filecol warning message <<< "$line"
+                filename="$(basename "$filename")"
+                message="$(echo "$message" | sed 's/ *todo  *//')"
+                printf '::error file=%s,line=%s,col=%s,title=Found TODO::%s\n' "$filename" "$fileline" "$filecol" "$message"
+              done
