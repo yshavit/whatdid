@@ -6,8 +6,6 @@
 	<string>export</string>
 	<key>method</key>
 	<string>developer-id</string>
-	<key>signingCertificate</key>
-	<string>Developer ID Application</string>
 	<key>signingStyle</key>
 	<string>manual</string>
 </dict>
