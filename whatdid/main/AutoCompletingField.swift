@@ -428,6 +428,7 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate {
         }
         set (values) {
             
+            #warning("todo a foo")
             mainStack.views.forEach { $0.removeFromSuperview() }
             mainStack.subviews.forEach { $0.removeFromSuperview() }
             matchedSectionSeparators.removeAll()
