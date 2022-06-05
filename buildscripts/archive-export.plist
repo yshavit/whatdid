@@ -10,7 +10,5 @@
 	<string>Developer ID Application</string>
 	<key>signingStyle</key>
 	<string>manual</string>
-	<key>teamID</key>
-	<string>CUJYAXXM6G</string>
 </dict>
 </plist>
