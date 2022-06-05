@@ -57,14 +57,15 @@ jobs:
             #
             # The output format for GH actions is:
             # ::error file={name},line={line},endLine={endLine},title={title}::{message}
-            xcodebuild clean build -scheme whatdid-debug
             set -euo pipefail
+            exit_code=0
             xcodebuild clean build -scheme whatdid-debug 2>/dev/null |
               grep -i 'warning: todo' |
               sort -u |
               while read -r line; do
                 IFS=: read filename fileline filecol warning message <<< "$line"
-                filename="$(basename "$filename")"
                 message="$(echo "$message" | sed 's/ *todo  *//')"
                 printf '::error file=%s,line=%s,col=%s,title=Found TODO::%s\n' "$filename" "$fileline" "$filecol" "$message"
+                exit_code=1
               done
+              exit "$exit_code"
