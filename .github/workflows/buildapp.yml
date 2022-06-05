@@ -42,8 +42,13 @@ jobs:
         CERTIFICATES_P12_PASSWORD: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
     - name: Package
       run: |
-        set -e -o pipefail
+        set -eu -o pipefail
+        /usr/bin/plutil -insert teamID -string "${APPLE_TEAM_ID}" buildscripts/archive-export.plist
+        /usr/bin/plutil -insert signingCertificate -string "${APPLE_SIGNING_CERT}" buildscripts/archive-export.plist
         xcodebuild -exportArchive -archivePath build/whatdid.xcarchive -exportPath build -exportOptionsPlist buildscripts/archive-export.plist
+      env:
+        APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        APPLE_SIGNING_CERT: ${{ secrets.APPLE_SIGNING_CERT }}
     - name: Request notarization
       if: env.should_upload_app && env.should_notarize_app
       run: |
