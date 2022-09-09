@@ -113,6 +113,8 @@
 		7EE0E74A24EA22E7002D03F8 /* NSView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */; };
 		7EE250BB2515B8FE0067C5E9 /* PrefsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE250B92515B8FE0067C5E9 /* PrefsViewController.swift */; };
 		7EE250BC2515B8FE0067C5E9 /* PrefsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EE250BA2515B8FE0067C5E9 /* PrefsViewController.xib */; };
+		7EE27F7A28CBBB6F00D41366 /* SortedMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE27F7928CBBB6F00D41366 /* SortedMap.swift */; };
+		7EE27F7C28CBBB9400D41366 /* SortedMapTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE27F7B28CBBB9400D41366 /* SortedMapTest.swift */; };
 		7EE4E39624E24A3F00552AAF /* WhatdidControlHooks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39524E24A3F00552AAF /* WhatdidControlHooks.swift */; };
 		7EE4E39824E2523F00552AAF /* SystemClockScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39724E2523F00552AAF /* SystemClockScheduler.swift */; };
 		7EE4E39A24E25C0200552AAF /* DefaultScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */; };
@@ -282,6 +284,8 @@
 		7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSView+Helpers.swift"; sourceTree = "<group>"; };
 		7EE250B92515B8FE0067C5E9 /* PrefsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsViewController.swift; sourceTree = "<group>"; };
 		7EE250BA2515B8FE0067C5E9 /* PrefsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefsViewController.xib; sourceTree = "<group>"; };
+		7EE27F7928CBBB6F00D41366 /* SortedMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedMap.swift; sourceTree = "<group>"; };
+		7EE27F7B28CBBB9400D41366 /* SortedMapTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedMapTest.swift; sourceTree = "<group>"; };
 		7EE4E39524E24A3F00552AAF /* WhatdidControlHooks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatdidControlHooks.swift; sourceTree = "<group>"; };
 		7EE4E39724E2523F00552AAF /* SystemClockScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockScheduler.swift; sourceTree = "<group>"; };
 		7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultScheduler.swift; sourceTree = "<group>"; };
@@ -535,6 +539,7 @@
 				7EC09CE32794E89800086334 /* StartupMessage.swift */,
 				7ECE469F279E092700AF884A /* UpdateChannel.swift */,
 				7E305CE7282466B80086574C /* SimpleRandom.swift */,
+				7EE27F7928CBBB6F00D41366 /* SortedMap.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -555,6 +560,7 @@
 			children = (
 				7EB7496025170ED6001C7DBC /* PrefsTest.swift */,
 				7EE0E74124E4DF8A002D03F8 /* SubsequenceMatcherTest.swift */,
+				7EE27F7B28CBBB9400D41366 /* SortedMapTest.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -925,6 +931,7 @@
 				7EEF324624EA542D002E217A /* NSRange+Helpers.swift in Sources */,
 				7E4EB8E327868AAC001234F0 /* DateRangePane.swift in Sources */,
 				7EA4D3DE261AC9F300EEBF17 /* PasteboardView.swift in Sources */,
+				7EE27F7A28CBBB6F00D41366 /* SortedMap.swift in Sources */,
 				7EFEE80223B16EA6002928A2 /* PtnViewController.swift in Sources */,
 				7EE0E74A24EA22E7002D03F8 /* NSView+Helpers.swift in Sources */,
 				7EDA369324D60FCD00F5E368 /* ButtonWithClosure.swift in Sources */,
@@ -1003,6 +1010,7 @@
 				7EE0E74224E4DF8A002D03F8 /* SubsequenceMatcherTest.swift in Sources */,
 				7E210AF7284C3CA60050AD31 /* PrefsViewControllerTest.swift in Sources */,
 				7E579F702503E2920055D9F6 /* SystemClockSchedulerTest.swift in Sources */,
+				7EE27F7C28CBBB9400D41366 /* SortedMapTest.swift in Sources */,
 				7E75D0A0251D9A790002DBA0 /* ModelTest.swift in Sources */,
 				7EF8579524E0961E00867832 /* OpenCloseHelperTest.swift in Sources */,
 				7E305CF0282472810086574C /* Unit32+HelpersTest.swift in Sources */,
