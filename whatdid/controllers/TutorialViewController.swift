@@ -34,7 +34,6 @@ class TutorialViewController: NSViewController {
         box.borderColor = NSColor.findHighlightColor.withAlphaComponent(0.75)
         box.borderWidth = 3
         box.cornerRadius = 7
-        box.borderType = .lineBorder
         highlighWindow.contentView = box
     }
     
