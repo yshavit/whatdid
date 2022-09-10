@@ -8,9 +8,10 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
     // Invoked when the user escapes out of the field.
     var onCancel: (() -> Void) = {}
     
+    fileprivate var pulldownButton: NSButton!
+    
     private var previousAutocompleteHeadLength = 0
     private var shouldAutocompleteOnTextChange = false
-    private var pulldownButton: NSButton!
     private var popupManager: PopupManager!
     
     override init(frame frameRect: NSRect) {
@@ -40,7 +41,11 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
         if popupManager.window.isVisible, let window = window {
             let popup = popupManager.window
             guard window.screen == popup.screen else {
-                wdlog(.warn, "window screen and autocomplete popup screen were different")
+                // Popup screen may be nil if the popup's size is zero. Otherwise, they should be on the
+                // same screen.
+                if popup.screen != nil {
+                    wdlog(.warn, "window screen and autocomplete popup screen were different")
+                }
                 return
             }
             let myBoundsWithinWindow = convert(bounds, to: nil)
@@ -208,7 +213,7 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
     @objc private func buttonClicked() {
         if popupManager.window.isVisible {
             // Note: we shouldn't ever actually get here, but I'm putting it just in case.
-            // If the popup is open, any click outside of it (including to this button) will close it.
+            // That's because if the popup is open, any click outside of it (including to this button) will close it.
             wdlog(.warn, "Unexpectedly saw button press while options popup was open on %{public}@", idForLogging)
             popupManager.close()
         } else {
@@ -267,6 +272,7 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
     private let parent: TextFieldWithPopup
     private let scrollView: NSScrollView
     private let scrollViewWidth: NSLayoutConstraint
+    private var activeEventMonitors = [Any?]()
     
     init(parent: TextFieldWithPopup) {
         self.parent = parent
@@ -332,19 +338,57 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
         window.setIsVisible(true)
         scrollView.setAccessibilityHidden(false)
         
-        #warning("TODO")
-        // TODO move to popupContents.willShow()
-//        let eventMask: NSEvent.EventTypeMask = [.leftMouseDown, .rightMouseDown, .otherMouseDown]
-//        activeEventMonitors.append(
-//            NSEvent.addLocalMonitorForEvents(matching: eventMask.union(.leftMouseUp)) {event in
-//                return self.trackClick(event: event) ? event : nil
-//            })
-//        activeEventMonitors.append(
-//            NSEvent.addGlobalMonitorForEvents(matching: eventMask) {event in
-//                _ = self.trackClick(event: event)
-//            })
+        let eventMask: NSEvent.EventTypeMask = [.leftMouseDown, .rightMouseDown, .otherMouseDown]
+        activeEventMonitors.append(
+            NSEvent.addLocalMonitorForEvents(matching: eventMask.union(.leftMouseUp)) {event in
+                return self.trackClick(event: event) ? event : nil
+            })
+        activeEventMonitors.append(
+            NSEvent.addGlobalMonitorForEvents(matching: eventMask) {event in
+                _ = self.trackClick(event: event)
+            })
     }
     
+    private func trackClick(event: NSEvent) -> Bool {
+        if let eventWindow = event.window, eventWindow == window {
+            // If the event is a mouse event within the popup, then it's either a mouseup to finish a click
+            // (including a long click, and even including one that's actually a drag under the hood) or it's
+            // an event to start the click. If we start the click, ignore the event. If it's the end of the
+            // click, we'll handle the select.
+            if event.type != .leftMouseUp {
+                return false
+            }
+            
+            if let contents = contents {
+                let locationInContents = contents.asView.convert(event.locationInWindow, from: nil)
+                if let resultString = contents.handleClick(at: locationInContents) {
+                    parent.stringValue = resultString
+                    parent.onTextChange()
+                }
+            }
+            close()
+            return false
+        }
+
+        var shouldClose = true // Most clicks close the popups; the only exception is clicking in the text field
+        var continueProcessingEvent = true // See below for the one exception.
+        let closeButton = parent.pulldownButton!
+        if let eventWindow = event.window, eventWindow == closeButton.window {
+            // If the click was on the button that opens this popup, we want to suppress the event. If we don't,
+            // the button will just open the popup back up.
+            if closeButton.contains(pointInWindowCoordinates: event.locationInWindow) {
+                continueProcessingEvent = false
+            } else if parent.contains(pointInWindowCoordinates: event.locationInWindow) {
+                // Don't close if they click within the text field
+                shouldClose = false
+            }
+        }
+        if shouldClose {
+            parent.window?.makeFirstResponder(nil)
+            close()
+        }
+        return continueProcessingEvent
+    }
     
     func contentSizeChanged() {
         scrollView.invalidateIntrinsicContentSize()
@@ -352,6 +396,7 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
         if let docViewBounds = scrollView.documentView?.bounds {
             window.setContentSize(docViewBounds.size)
         }
+        parent.adjustPopupLocation()
     }
     
     func scroll(to bounds: NSRect, within: NSView) {
@@ -373,6 +418,12 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
             scrollView.reflectScrolledClipView(scrollView.contentView)
         }
     }
+    
+    func windowWillClose(_ notification: Notification) {
+        activeEventMonitors.compactMap{$0}.forEach { NSEvent.removeMonitor($0) }
+        activeEventMonitors.removeAll()
+        scrollView.setAccessibilityHidden(true)
+    }
 }
 
 enum Direction {
@@ -391,7 +442,14 @@ protocol TextFieldWithPopupContents {
     var asView: NSView { get }
     func willShow(callbacks: TextFieldWithPopupCallbacks)
     func moveSelection(_ direction: Direction)
+    
     /// Invoked when the text field's value changes. This method returns a string to autocomplete to, which may
     /// be the same as the given string.
     func onTextChanged(to newValue: String) -> String
+    
+    /// Handle a click at a given point, which will be in `asView`'s coordinates.
+    ///
+    /// This will close the pop that contain the contents this object represents. You can optionally
+    /// return a String, which will then be the text field's new value.
+    func handleClick(at point: NSPoint) -> String?
 }

@@ -103,6 +103,18 @@ fileprivate class TextFieldWithPopupComponent: TestComponent {
     }
     
     class DummyPopupContents: TextFieldWithPopupContents {
+        func handleClick(at point: NSPoint) -> String? {
+            guard let superview = asView.superview else {
+                return nil
+            }
+            let pointInSuper = asView.convert(point, to: superview)
+            if let textAtPoint = asView.hitTest(pointInSuper) as? NSTextField {
+                return textAtPoint.stringValue
+            }
+            wdlog(.info, "Saw click at %@, but no text there", point as CVarArg)
+            return nil
+        }
+        
         
         private var callbacks: TextFieldWithPopupCallbacks?
         
@@ -114,6 +126,7 @@ fileprivate class TextFieldWithPopupComponent: TestComponent {
         }
         
         func willShow(callbacks: TextFieldWithPopupCallbacks) {
+            mainStack.spacing = 0
             self.callbacks = callbacks
             mainStack.subviews = []
             moveSelection(.down)
