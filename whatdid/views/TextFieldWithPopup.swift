@@ -361,9 +361,10 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
             
             if let contents = contents {
                 let locationInContents = contents.asView.convert(event.locationInWindow, from: nil)
-                if let resultString = contents.handleClick(at: locationInContents) {
-                    parent.stringValue = resultString
-                    parent.onTextChange()
+                // The click may have happened outside the popup; in that case, just return. Otherwise,
+                // let the popup handle it.
+                if contents.asView.bounds.contains(locationInContents) {
+                    contents.handleClick(at: locationInContents)
                 }
             }
             close()
@@ -397,6 +398,11 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
             window.setContentSize(docViewBounds.size)
         }
         parent.adjustPopupLocation()
+    }
+    
+    func setText(to string: String) {
+        parent.stringValue = string
+        parent.onTextChange()
     }
     
     func scroll(to bounds: NSRect, within: NSView) {
@@ -436,6 +442,8 @@ protocol TextFieldWithPopupCallbacks {
     func contentSizeChanged()
     /// Scroll up or down to the given rect, which is specified within the given NSView's coordinate system.
     func scroll(to bounds: NSRect, within: NSView)
+    /// Set the enclosing field's text. This does not close the popup.
+    func setText(to string: String)
 }
 
 protocol TextFieldWithPopupContents {
@@ -449,7 +457,7 @@ protocol TextFieldWithPopupContents {
     
     /// Handle a click at a given point, which will be in `asView`'s coordinates.
     ///
-    /// This will close the pop that contain the contents this object represents. You can optionally
-    /// return a String, which will then be the text field's new value.
-    func handleClick(at point: NSPoint) -> String?
+    /// This will close the pop that contain the contents this object represents. If the click represented the user
+    /// selecting text, use `callbacks.setText(to:)` to convey that back to the popup.
+    func handleClick(at point: NSPoint)
 }

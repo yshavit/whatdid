@@ -103,21 +103,8 @@ fileprivate class TextFieldWithPopupComponent: TestComponent {
     }
     
     class DummyPopupContents: TextFieldWithPopupContents {
-        func handleClick(at point: NSPoint) -> String? {
-            guard let superview = asView.superview else {
-                return nil
-            }
-            let pointInSuper = asView.convert(point, to: superview)
-            if let textAtPoint = asView.hitTest(pointInSuper) as? NSTextField {
-                return textAtPoint.stringValue
-            }
-            wdlog(.info, "Saw click at %@, but no text there", point as CVarArg)
-            return nil
-        }
-        
-        
-        private var callbacks: TextFieldWithPopupCallbacks?
-        
+        private var callbacks: TextFieldWithPopupCallbacks!
+
         private let mainStack = NSStackView(orientation: .vertical)
         var asView: NSView {
             get {
@@ -132,20 +119,39 @@ fileprivate class TextFieldWithPopupComponent: TestComponent {
             moveSelection(.down)
         }
         
+        func handleClick(at point: NSPoint) {
+            guard let superview = asView.superview else {
+                wdlog(.warn, "Couldn't find superview (to convert local NSPoint to)")
+                return
+            }
+            let pointInSuper = asView.convert(point, to: superview)
+            if let textAtPoint = asView.hitTest(pointInSuper) as? NSTextField {
+                callbacks.setText(to: textAtPoint.stringValue)
+            } else {
+                wdlog(.warn, "Saw click at %@, but no text there", point as CVarArg)
+            }
+        }
+        
         func moveSelection(_ direction: Direction) {
+            func scrollTo(_ elem: NSView?) {
+                guard let elem = elem else {
+                    return
+                }
+                callbacks.scroll(to: elem.bounds, within: elem)
+                if let text = (elem as? NSTextField)?.stringValue {
+                    callbacks.setText(to: text)
+                }
+            }
+            
             switch (direction) {
             case .up:
                 mainStack.arrangedSubviews.last?.removeFromSuperview()
-                callbacks?.contentSizeChanged()
-                if let elem = mainStack.arrangedSubviews.first {
-                    callbacks?.scroll(to: elem.bounds, within: elem)
-                }
+                callbacks.contentSizeChanged()
+                scrollTo(mainStack.arrangedSubviews.first)
             case .down:
                 mainStack.addArrangedSubview(NSTextField(labelWithString: "label #\(mainStack.arrangedSubviews.count + 1)"))
-                callbacks?.contentSizeChanged()
-                if let elem = mainStack.arrangedSubviews.last {
-                    callbacks?.scroll(to: elem.bounds, within: elem)
-                }
+                callbacks.contentSizeChanged()
+                scrollTo(mainStack.arrangedSubviews.last)
             }
             mainStack.invalidateIntrinsicContentSize()
         }
@@ -153,9 +159,6 @@ fileprivate class TextFieldWithPopupComponent: TestComponent {
         func onTextChanged(to newValue: String) -> String {
             return "the quick brown fox jumped over the lazy dog"
         }
-        
-        
-        
     }
 }
 
