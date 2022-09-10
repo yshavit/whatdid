@@ -114,23 +114,19 @@ fileprivate class TextFieldWithPopupComponent: TestComponent {
         }
         
         func willShow(callbacks: TextFieldWithPopupCallbacks) {
-            mainStack.spacing = 0
+            mainStack.spacing = 4
             self.callbacks = callbacks
             mainStack.subviews = []
             moveSelection(.down)
         }
         
-        func handleClick(at point: NSPoint) {
+        func handleClick(at point: NSPoint) -> String? {
             guard let superview = asView.superview else {
                 wdlog(.warn, "Couldn't find superview (to convert local NSPoint to)")
-                return
+                return nil
             }
             let pointInSuper = asView.convert(point, to: superview)
-            if let textAtPoint = asView.hitTest(pointInSuper) as? NSTextField {
-                callbacks.setText(to: textAtPoint.stringValue)
-            } else {
-                wdlog(.warn, "Saw click at %@, but no text there", point as CVarArg)
-            }
+            return (asView.hitTest(pointInSuper) as? NSTextField)?.stringValue
         }
         
         func moveSelection(_ direction: Direction) {
@@ -150,7 +146,9 @@ fileprivate class TextFieldWithPopupComponent: TestComponent {
                 callbacks.contentSizeChanged()
                 scrollTo(mainStack.arrangedSubviews.first)
             case .down:
-                mainStack.addArrangedSubview(NSTextField(labelWithString: "label #\(mainStack.arrangedSubviews.count + 1)"))
+                let label = NSTextField(labelWithString: "label #\(mainStack.arrangedSubviews.count + 1)")
+                label.isBordered = true
+                mainStack.addArrangedSubview(label)
                 callbacks.contentSizeChanged()
                 scrollTo(mainStack.arrangedSubviews.last)
             }

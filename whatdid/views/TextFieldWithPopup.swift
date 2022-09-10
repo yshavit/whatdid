@@ -364,10 +364,14 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
                 // The click may have happened outside the popup; in that case, just return. Otherwise,
                 // let the popup handle it.
                 if contents.asView.bounds.contains(locationInContents) {
-                    contents.handleClick(at: locationInContents)
+                    if let result = contents.handleClick(at: locationInContents) {
+                        setText(to: result)
+                        close()
+                    }
                 }
+            } else {
+                close()
             }
-            close()
             return false
         }
 
@@ -457,7 +461,7 @@ protocol TextFieldWithPopupContents {
     
     /// Handle a click at a given point, which will be in `asView`'s coordinates.
     ///
-    /// This will close the pop that contain the contents this object represents. If the click represented the user
-    /// selecting text, use `callbacks.setText(to:)` to convey that back to the popup.
-    func handleClick(at point: NSPoint)
+    /// If this method returns a non-`nil`,  it will set the string (as `callbacks.setText(to:)` would have) and close the popup.
+    /// If it returns `nil`, nothing happens, and the click just goes away.
+    func handleClick(at point: NSPoint) -> String?
 }
