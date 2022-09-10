@@ -14,6 +14,7 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
     override func awakeFromNib() {
         componentSelector.removeAllItems()
         add(MainComponent())
+        add(TextFieldWithPopupComponent())
         add(AutocompleteComponent())
         add(ButtonWithClosureComponent())
         add(DateRangePaneComponent())
@@ -86,6 +87,63 @@ fileprivate class MainComponent: TestComponent {
         schedulerWindow.build(adder: adder)
     }
     
+}
+
+fileprivate class TextFieldWithPopupComponent: TestComponent {
+    func build(adder: (NSView) -> Void) {
+        let field = TextFieldWithPopup()
+        adder(field)
+        field.contents = DummyPopupContents()
+
+        let echo = NSTextField(labelWithString: "")
+        adder(echo)
+        field.onTextChange = {
+            echo.stringValue = field.stringValue
+        }
+    }
+    
+    class DummyPopupContents: TextFieldWithPopupContents {
+        
+        private var callbacks: TextFieldWithPopupCallbacks?
+        
+        private let mainStack = NSStackView(orientation: .vertical)
+        var asView: NSView {
+            get {
+                mainStack
+            }
+        }
+        
+        func willShow(callbacks: TextFieldWithPopupCallbacks) {
+            self.callbacks = callbacks
+            mainStack.subviews = []
+            moveSelection(.down)
+        }
+        
+        func moveSelection(_ direction: Direction) {
+            switch (direction) {
+            case .up:
+                mainStack.arrangedSubviews.last?.removeFromSuperview()
+                callbacks?.contentSizeChanged()
+                if let elem = mainStack.arrangedSubviews.first {
+                    callbacks?.scroll(to: elem.bounds, within: elem)
+                }
+            case .down:
+                mainStack.addArrangedSubview(NSTextField(labelWithString: "label #\(mainStack.arrangedSubviews.count + 1)"))
+                callbacks?.contentSizeChanged()
+                if let elem = mainStack.arrangedSubviews.last {
+                    callbacks?.scroll(to: elem.bounds, within: elem)
+                }
+            }
+            mainStack.invalidateIntrinsicContentSize()
+        }
+        
+        func onTextChanged(to newValue: String) -> String {
+            return "the quick brown fox jumped over the lazy dog"
+        }
+        
+        
+        
+    }
 }
 
 fileprivate class AutocompleteComponent: TestComponent {
