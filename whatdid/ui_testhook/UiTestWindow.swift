@@ -92,14 +92,15 @@ fileprivate class MainComponent: TestComponent {
 fileprivate class TextFieldWithPopupComponent: TestComponent {
     func build(adder: (NSView) -> Void) {
         let field = TextFieldWithPopup()
-        adder(field)
         field.contents = DummyPopupContents()
 
         let echo = NSTextField(labelWithString: "")
-        adder(echo)
         field.onTextChange = {
             echo.stringValue = field.stringValue
         }
+        
+        adder(echo)
+        adder(field)
     }
     
     class DummyPopupContents: TextFieldWithPopupContents {
