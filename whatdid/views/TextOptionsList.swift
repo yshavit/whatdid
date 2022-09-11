@@ -5,7 +5,12 @@ import Cocoa
 class TextOptionsList: WdView, TextFieldWithPopupContents {
     fileprivate static let PINNED_OPTIONS_COUNT = 3
     
-    var callbacks: TextFieldWithPopupCallbacks!
+    private var callbacks: TextFieldWithPopupCallbacks!
+    private var selectionIdx: Int? {
+        didSet {
+            updateSelection()
+        }
+    }
     
     var asView: NSView {
         self
@@ -16,8 +21,21 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
     }
     
     func moveSelection(_ direction: Direction) {
-        #warning("TODO")
-        wdlog(.info, "TextOptionsList moving selection %@", direction == .up ? "up" : "down")
+        let largestIdx = optionInfosByMaxY.entries.count - 1
+        var idx: Int
+        if let selectionIdx = selectionIdx {
+            idx = selectionIdx + (direction == .up ? -1 : 1)
+            if idx > largestIdx {
+                idx = 0
+            } else if idx < 0 {
+                idx = largestIdx
+            }
+        } else if direction == .up {
+            idx = largestIdx
+        } else {
+            idx = 0
+        }
+        selectionIdx = idx
     }
     
     func onTextChanged(to newValue: String) -> String {
@@ -32,9 +50,24 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         }
     }
     
+    private func updateSelection() {
+        guard let selectionIdx = selectionIdx else {
+            arrowSelectionHighlight.isHidden = true
+            return
+        }
+        let selectedEntry = optionInfosByMaxY.entries[selectionIdx].value
+        let entryRect = NSRect(
+            x: 0,
+            y: selectedEntry.minY,
+            width: frame.width,
+            height: selectedEntry.maxY - selectedEntry.minY)
+        arrowSelectionHighlight.frame = entryRect
+        arrowSelectionHighlight.isHidden = false
+        callbacks.scroll(to: entryRect, within: textView)
+    }
+    
     func handleClick(at point: NSPoint) -> String? {
-        let y = textView.frame.height - point.y // textField's coordinates are inverted from the optionInfosByMaxY's
-        return optionInfosByMaxY.find(highestEntryLessThanOrEqualTo: y)?.stringValue
+        return optionInfosByMaxY.find(highestEntryLessThanOrEqualTo: point.y)?.stringValue
     }
     
     override func wdViewInit() {
@@ -51,13 +84,18 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         textView.mouseMoved = trackMouseMovement(_:)
         textView.startTracking()
         
-        scrollHighlightOverlay = NSVisualEffectView()
+        mouseoverHighlight = NSVisualEffectView()
+        arrowSelectionHighlight = NSVisualEffectView()
+        arrowSelectionHighlight.isEmphasized = true
+        arrowSelectionHighlight.state = .active
+        arrowSelectionHighlight.material = .selection
+        arrowSelectionHighlight.blendingMode = .behindWindow
         
         textView.wantsLayer = true
         textView.drawsBackground = false
         
-        addSubview(scrollHighlightOverlay)
-//        addSubview(FlippedView.of(textView))
+        addSubview(mouseoverHighlight)
+        addSubview(arrowSelectionHighlight)
         addSubview(textView)
         textView.anchorAllSides(to: self)
     }
@@ -71,7 +109,8 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
     //--------------------------------------------------------------------------------------------------------------------------//
     //--------------------------------------------------------------------------------------------------------------------------//
     private var textView: TrackingTextView!
-    private var scrollHighlightOverlay: NSVisualEffectView!
+    private var mouseoverHighlight: NSVisualEffectView!
+    private var arrowSelectionHighlight: NSVisualEffectView!
     
     class Glue: FlippedView {
         override var allowsVibrancy: Bool {
@@ -93,26 +132,29 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             }
         }
     }
+    
+    override var isFlipped : Bool {
+        get {
+            return true // This lets our coordinate system be the same as the textView container's.
+        }
+    }
 
     private var optionInfosByMaxY = SortedMap<CGFloat, OptionInfo>()
     
     private func trackMouseMovement(_ point: NSPoint?) {
         if let point = point {
             if let highlighted = optionInfosByMaxY.find(highestEntryLessThanOrEqualTo: point.y) {
-                // The textField's coordinates are 0-on-top, whereas these coordinates are 0-on-bottom. So, flip 'em.
-                let y = textView.frame.height - highlighted.maxY
-                scrollHighlightOverlay.frame = NSRect(
+                mouseoverHighlight.frame = NSRect(
                     x: 0,
-                    y: y,
+                    y: highlighted.minY,
                     width: textView.bounds.width,
                     height: highlighted.maxY - highlighted.minY)
-                scrollHighlightOverlay.isHidden = false
+                mouseoverHighlight.isHidden = false
             }
         } else {
-            scrollHighlightOverlay.isHidden = true
+            mouseoverHighlight.isHidden = true
         }
     }
-
     
     var options: [String] {
         get {
@@ -131,7 +173,7 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             var fullText = ""
             var optionRanges = [NSRange]()
             #warning("todo add separator")
-            for (i, optionText) in values.enumerated() {
+            for optionText in values {
                 let rangeStart: Int
                 if fullText.isEmpty {
                     rangeStart = 0
@@ -159,35 +201,13 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             if let layoutManager = textView.layoutManager, let textContainer = textView.textContainer {
                 var optionInfoEntries = [(CGFloat, OptionInfo)]()
                 layoutManager.ensureLayout(for: textContainer)
-                let f = layoutManager.usedRect(for: textContainer)
-                let size = f.size
-                textView.frame = f
-                wdlog(.info, "layout size: %@", size as CVarArg)
-                for (pCount, p) in optionRanges.enumerated() {
-                    // see https://stackoverflow.com/questions/2654580/how-to-resize-nstextview-according-to-its-content
-                    var rectCount = -1
-                    let rects = layoutManager.rectArray(
-                        forCharacterRange: p,
-                        withinSelectedCharacterRange: p,
-                        in: textContainer,
-                        rectCount: &rectCount)
-                    var yBounds: (CGFloat, CGFloat)?
-                    if let rects = rects {
-                        for i in 0..<rectCount {
-                            let rect = rects[i]
-                            let (currMinY, currMaxY) = yBounds ?? (rect.minY, rect.maxY) // if nil, just use the current rect; min/max are identities in that case
-                            yBounds = (
-                                min(currMinY, rect.minY),
-                                max(currMaxY, rect.maxY)
-                            )
-                        }
-                    }
-                    if let (minY, maxY) = yBounds {
-                        let optionText = fullTextNSString.substring(with: p)
-                        optionInfoEntries.append((minY, OptionInfo(minY: minY, maxY: maxY, stringValue: optionText)));
-                    } else {
-                        wdlog(.warn, "Couldn't find maxY for option #%d", pCount)
-                    }
+                textView.bounds = layoutManager.usedRect(for: textContainer)
+                for optionRange in optionRanges {
+                    let rect = layoutManager.boundingRect(forGlyphRange: optionRange, in: textContainer)
+                    let optionText = fullTextNSString.substring(with: optionRange)
+                    optionInfoEntries.append((
+                        rect.minY,
+                        OptionInfo(minY: rect.minY, maxY: rect.maxY, stringValue: optionText)));
                 }
                 optionInfosByMaxY.add(kvPairs: optionInfoEntries)
             } else {
