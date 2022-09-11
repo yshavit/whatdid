@@ -117,6 +117,7 @@
 		7EE27F7C28CBBB9400D41366 /* SortedMapTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE27F7B28CBBB9400D41366 /* SortedMapTest.swift */; };
 		7EE27F7E28CBBC8100D41366 /* AutoCompletingFieldV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE27F7D28CBBC8100D41366 /* AutoCompletingFieldV2.swift */; };
 		7EE27F8028CBC01800D41366 /* TextFieldWithPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE27F7F28CBC01800D41366 /* TextFieldWithPopup.swift */; };
+		7EE27F8228CCE29600D41366 /* TextOptionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE27F8128CCE29500D41366 /* TextOptionsList.swift */; };
 		7EE4E39624E24A3F00552AAF /* WhatdidControlHooks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39524E24A3F00552AAF /* WhatdidControlHooks.swift */; };
 		7EE4E39824E2523F00552AAF /* SystemClockScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39724E2523F00552AAF /* SystemClockScheduler.swift */; };
 		7EE4E39A24E25C0200552AAF /* DefaultScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */; };
@@ -290,6 +291,7 @@
 		7EE27F7B28CBBB9400D41366 /* SortedMapTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedMapTest.swift; sourceTree = "<group>"; };
 		7EE27F7D28CBBC8100D41366 /* AutoCompletingFieldV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletingFieldV2.swift; sourceTree = "<group>"; };
 		7EE27F7F28CBC01800D41366 /* TextFieldWithPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithPopup.swift; sourceTree = "<group>"; };
+		7EE27F8128CCE29500D41366 /* TextOptionsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextOptionsList.swift; sourceTree = "<group>"; };
 		7EE4E39524E24A3F00552AAF /* WhatdidControlHooks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatdidControlHooks.swift; sourceTree = "<group>"; };
 		7EE4E39724E2523F00552AAF /* SystemClockScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockScheduler.swift; sourceTree = "<group>"; };
 		7EE4E39924E25C0200552AAF /* DefaultScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultScheduler.swift; sourceTree = "<group>"; };
@@ -634,6 +636,7 @@
 				7E210AF4284BE5DC0050AD31 /* WdView.swift */,
 				7EE27F7D28CBBC8100D41366 /* AutoCompletingFieldV2.swift */,
 				7EE27F7F28CBC01800D41366 /* TextFieldWithPopup.swift */,
+				7EE27F8128CCE29500D41366 /* TextOptionsList.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -950,6 +953,7 @@
 				7EE4E39624E24A3F00552AAF /* WhatdidControlHooks.swift in Sources */,
 				7E9C5EBC260C09AA00D839C4 /* Session+CoreDataProperties.swift in Sources */,
 				7ECF97A724F1D50100DBF1BF /* NSControl+Helper.swift in Sources */,
+				7EE27F8228CCE29600D41366 /* TextOptionsList.swift in Sources */,
 				7EC09CE42794E89800086334 /* StartupMessage.swift in Sources */,
 				7EE0E74624E8899E002D03F8 /* AutoCompletingField.swift in Sources */,
 				7EF8579324E094D100867832 /* OpenCloseHelper.swift in Sources */,

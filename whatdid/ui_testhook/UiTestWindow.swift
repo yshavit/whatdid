@@ -15,6 +15,7 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
         componentSelector.removeAllItems()
         add(MainComponent())
         add(TextFieldWithPopupComponent())
+        add(TextOptionsListComponent())
         add(AutocompleteComponent())
         add(ButtonWithClosureComponent())
         add(DateRangePaneComponent())
@@ -58,6 +59,17 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
             actualWindow.setContentSize(contentView.fittingSize)
         }
     }
+}
+
+fileprivate func hStack(label: String?, _ elems: NSView...) -> NSView {
+    let hStack = NSStackView(orientation: .horizontal)
+    if let label = label {
+        let labelField = NSTextField(labelWithString: label + ":")
+        labelField.font = NSFont.labelFont(ofSize: NSFont.systemFontSize(for: .small))
+        hStack.addArrangedSubview(labelField)
+    }
+    elems.forEach(hStack.addArrangedSubview)
+    return hStack
 }
 
 fileprivate class ButtonWithClosureComponent: TestComponent {
@@ -158,6 +170,87 @@ fileprivate class TextFieldWithPopupComponent: TestComponent {
         func onTextChanged(to newValue: String) -> String {
             return "the quick brown fox jumped over the lazy dog"
         }
+    }
+}
+
+fileprivate class TextOptionsListComponent: TestComponent, TextFieldWithPopupCallbacks {
+    
+    private let stepperEcho = NSTextField(labelWithString: "")
+    private let textOptionsAutocompleteEcho = NSTextField(labelWithString: "")
+    private let textOptionsResult = NSTextField(labelWithString: "")
+    private let textOptionsList = TextOptionsList()
+    
+    func build(adder: (NSView) -> Void) {
+        textOptionsList.willShow(callbacks: self)
+        
+        let stepper = NSStepper()
+        stepper.minValue = 0
+        // max value is optionSegments.count!
+        stepper.maxValue = Double(generateOptions(max: nil).count)
+        stepper.intValue = 4
+        stepper.valueWraps = false
+        stepper.target = self
+        stepper.action = #selector(handleStepperChange(_:))
+        handleStepperChange(stepper)
+        
+        let matchInput = NSTextField(string: "")
+        matchInput.target = self
+        matchInput.action = #selector(handleMatchInput(_:))
+        
+        textOptionsAutocompleteEcho.isBordered = true
+        
+        adder(hStack(label: "# options", stepperEcho, stepper))
+        adder(hStack(
+            label: "keyboard selection",
+            ButtonWithClosure(label: "▲", {_ in self.textOptionsList.moveSelection(.up)}),
+            ButtonWithClosure(label: "▼", {_ in self.textOptionsList.moveSelection(.down)})
+        ))
+        adder(hStack(label: "input", matchInput))
+        adder(hStack(label: "autocompletes to", textOptionsAutocompleteEcho))
+        adder(hStack(label: "result", textOptionsResult))
+        adder(textOptionsList)
+        if let parent = textOptionsList.superview {
+            textOptionsList.widthAnchor.constraint(equalTo: parent.widthAnchor).isActive = true
+        }
+    }
+    
+    func contentSizeChanged() {
+        if let view = textOptionsList.asView.superview {
+            view.invalidateIntrinsicContentSize()
+            view.layoutSubtreeIfNeeded()
+        }
+    }
+    
+    func scroll(to bounds: NSRect, within: NSView) {
+        // nothing
+    }
+    
+    func setText(to string: String) {
+        textOptionsResult.stringValue = string
+    }
+    
+    @objc private func handleStepperChange(_ stepper: NSStepper) {
+        stepperEcho.stringValue = "\(stepper.intValue)"
+        textOptionsList.options = generateOptions(max: stepper.intValue)
+    }
+    
+    @objc private func handleMatchInput(_ textField: NSTextField) {
+        textOptionsAutocompleteEcho.stringValue = textOptionsList.onTextChanged(to: textField.stringValue)
+    }
+    
+    private func generateOptions(max: Int32?) -> [String] {
+        let segment1Options = ["alpha", "bravo", "charlie", "delta"]
+        let segment2Options = ["one", "two", "three", "four"]
+        
+        var results = segment1Options.flatMap {seg1 in
+            segment2Options.map {seg2 in
+                "\(seg1) \(seg2)"
+            }
+        }
+        if let max = max, max < results.count {
+            results = results.dropLast(results.count - Int(max))
+        }
+        return results
     }
 }
 

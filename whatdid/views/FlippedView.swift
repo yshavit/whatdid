@@ -10,4 +10,10 @@ class FlippedView: WdView {
         }
     }
     
+    static func of(_ view: NSView) -> NSView {
+        let result = FlippedView()
+        result.addSubview(view)
+        result.anchorAllSides(to: view)
+        return result
+    }
 }
