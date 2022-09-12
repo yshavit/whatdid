@@ -163,91 +163,92 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         }
     }
     
-    var options: [String] {
-        get {
-            return optionInfosByMinY.entries.map { $0.value.stringValue }
+    var options = [String]() {
+        didSet {
+            updateText()
         }
-        set (values) {
-            guard let storage = textView.textStorage, let p = textView.defaultParagraphStyle else {
-                textView.string = "<error>"
-                wdlog(.error, "Couldn't find storage or default paragraph style")
-                return
-            }
-            
-            optionInfosByMinY.removeAll()
-            if values.isEmpty {
-                storage.setAttributedString(NSAttributedString(
-                    string: "(no previous entries)",
-                    attributes: [
-                        .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize * 0.9),
-                        .foregroundColor: NSColor.systemGray,
-                        .underlineColor: NSColor.systemGray,
-                    ]))
-                return
-            }
-            var fullText = ""
-            var optionRanges = [NSRange]()
-            var labelRanges = [NSRange]()
-            var hrRanges = [NSRange]()
-            let hrSeparatorText = "\r\u{00A0}\u{0009}\u{00A0}\n" // https://stackoverflow.com/a/65994719/1076640.
-            
-            func addLabel(_ labelText: String, using range: inout [NSRange]) {
-                range.append(NSRange(location: fullText.count, length: labelText.count))
-                fullText += labelText
-            }
-            
-            for (i, optionText) in values.enumerated() {
-                if i == 0 {
-                    addLabel("recent", using: &labelRanges)
-                } else if i == TextOptionsList.PINNED_OPTIONS_COUNT {
-                    addLabel(hrSeparatorText, using: &hrRanges)
-                    addLabel("matched", using: &labelRanges)
-                }
-                let rangeStart = fullText.count
-                fullText += "\n" + optionText
-                optionRanges.append(NSRange(location: rangeStart + 1, length: optionText.count))
-            }
-            let attrText = NSMutableAttributedString(
-                string: fullText,
+    }
+        
+    private func updateText() {
+        guard let storage = textView.textStorage, let p = textView.defaultParagraphStyle else {
+            textView.string = "<error>"
+            wdlog(.error, "Couldn't find storage or default paragraph style")
+            return
+        }
+        
+        optionInfosByMinY.removeAll()
+        if options.isEmpty {
+            storage.setAttributedString(NSAttributedString(
+                string: "(no previous entries)",
                 attributes: [
-                    .font: NSFont.labelFont(ofSize: NSFont.systemFontSize),
-                    .paragraphStyle: p
-                ])
-            storage.setAttributedString(attrText)
-            
-            for hrRange in hrRanges {
-                storage.addAttributes(
-                    [
-                        .strikethroughStyle: NSUnderlineStyle.single.rawValue,
-                        .strikethroughColor: NSColor.separatorColor
-                    ], range: hrRange)
+                    .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize * 0.9),
+                    .foregroundColor: NSColor.systemGray,
+                    .underlineColor: NSColor.systemGray,
+                ]))
+            return
+        }
+        var fullText = ""
+        var optionRanges = [NSRange]()
+        var labelRanges = [NSRange]()
+        var hrRanges = [NSRange]()
+        let hrSeparatorText = "\r\u{00A0}\u{0009}\u{00A0}\n" // https://stackoverflow.com/a/65994719/1076640.
+        
+        func addLabel(_ labelText: String, using range: inout [NSRange]) {
+            range.append(NSRange(location: fullText.count, length: labelText.count))
+            fullText += labelText
+        }
+        
+        for (i, optionText) in options.enumerated() {
+            if i == 0 {
+                addLabel("recent", using: &labelRanges)
+            } else if i == TextOptionsList.PINNED_OPTIONS_COUNT {
+                addLabel(hrSeparatorText, using: &hrRanges)
+                addLabel("matched", using: &labelRanges)
             }
-            for labelRange in labelRanges {
-                storage.addAttributes(
-                    [
-                        .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize * 0.9),
-                        .foregroundColor: NSColor.systemGray,
-                        .underlineColor: NSColor.systemGray,
-                        .underlineStyle: NSUnderlineStyle.single.rawValue
-                    ],
-                    range: labelRange)
-                storage.applyFontTraits(.italicFontMask, range: labelRange)
+            let rangeStart = fullText.count
+            fullText += "\n"
+            fullText += optionText
+            optionRanges.append(NSRange(location: rangeStart + 1, length: optionText.count))
+        }
+        let attrText = NSMutableAttributedString(
+            string: fullText,
+            attributes: [
+                .font: NSFont.labelFont(ofSize: NSFont.systemFontSize),
+                .paragraphStyle: p
+            ])
+        storage.setAttributedString(attrText)
+        
+        for hrRange in hrRanges {
+            storage.addAttributes(
+                [
+                    .strikethroughStyle: NSUnderlineStyle.single.rawValue,
+                    .strikethroughColor: NSColor.separatorColor
+                ], range: hrRange)
+        }
+        for labelRange in labelRanges {
+            storage.addAttributes(
+                [
+                    .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize * 0.9),
+                    .foregroundColor: NSColor.systemGray,
+                    .underlineColor: NSColor.systemGray,
+                    .underlineStyle: NSUnderlineStyle.single.rawValue
+                ],
+                range: labelRange)
+            storage.applyFontTraits(.italicFontMask, range: labelRange)
+        }
+        let fullTextNSString = NSString(string: fullText)
+        if let layoutManager = textView.layoutManager, let textContainer = textView.textContainer {
+            var optionInfoEntries = [(CGFloat, OptionInfo)]()
+            for optionRange in optionRanges {
+                let rect = layoutManager.boundingRect(forGlyphRange: optionRange, in: textContainer)
+                let optionText = fullTextNSString.substring(with: optionRange)
+                optionInfoEntries.append((
+                    rect.minY,
+                    OptionInfo(minY: rect.minY, maxY: rect.maxY, stringValue: optionText)));
             }
-            let fullTextNSString = NSString(string: fullText)
-            if let layoutManager = textView.layoutManager, let textContainer = textView.textContainer {
-                var optionInfoEntries = [(CGFloat, OptionInfo)]()
-                for optionRange in optionRanges {
-                    let rect = layoutManager.boundingRect(forGlyphRange: optionRange, in: textContainer)
-                    let optionText = fullTextNSString.substring(with: optionRange)
-                    optionInfoEntries.append((
-                        rect.minY,
-                        OptionInfo(minY: rect.minY, maxY: rect.maxY, stringValue: optionText)));
-                }
-                optionInfosByMinY.add(kvPairs: optionInfoEntries)
-            } else {
-                wdlog(.warn, "textView no layoutManager or textContainer")
-            }
-            callbacks.contentSizeChanged()
+            optionInfosByMinY.add(kvPairs: optionInfoEntries)
+        } else {
+            wdlog(.warn, "textView no layoutManager or textContainer")
         }
     }
     
