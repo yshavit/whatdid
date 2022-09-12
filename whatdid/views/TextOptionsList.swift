@@ -3,23 +3,24 @@
 import Cocoa
 
 class TextOptionsList: WdView, TextFieldWithPopupContents {
-    fileprivate static let PINNED_OPTIONS_COUNT = 3
-    fileprivate static let labelAttrs: [NSAttributedString.Key : Any] = [
+    private static let PINNED_OPTIONS_COUNT = 3
+    private static let labelAttrs: [NSAttributedString.Key : Any] = [
         .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize * 0.9),
         .foregroundColor: NSColor.systemGray,
         .underlineColor: NSColor.systemGray,
         .underlineStyle: NSUnderlineStyle.single.rawValue
     ]
-    fileprivate static let hrSeparatorAttrs: [NSAttributedString.Key : Any] = [
+    private static let hrSeparatorAttrs: [NSAttributedString.Key : Any] = [
         .strikethroughStyle: NSUnderlineStyle.single.rawValue,
         .strikethroughColor: NSColor.separatorColor
     ]
-    fileprivate static let matchedCharAttrs: [NSAttributedString.Key : Any] = [
+    private static let matchedCharAttrs: [NSAttributedString.Key : Any] = [
         .foregroundColor: NSColor.selectedTextColor,
         .backgroundColor: NSColor.selectedTextBackgroundColor,
         .underlineColor: NSColor.findHighlightColor,
         .underlineStyle: NSUnderlineStyle.single.rawValue,
     ]
+    private static let hrSeparatorText = "\r\u{00A0}\u{0009}\u{00A0}\n" // https://stackoverflow.com/a/65994719/1076640.
     
     private var textView: TrackingTextView!
     private var mouseoverHighlight: NSVisualEffectView!
@@ -194,7 +195,6 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         let fullText = NSMutableAttributedString()
         var optionRanges = [NSRange]()
         var italicRanges = [NSRange]()
-        let hrSeparatorText = "\r\u{00A0}\u{0009}\u{00A0}\n" // https://stackoverflow.com/a/65994719/1076640.
         
         func addLabel(_ labelText: String, with attributes: [NSAttributedString.Key : Any], italic: Bool) {
             if italic {
@@ -220,7 +220,7 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             if i == 0 {
                 addLabel("recent", with: TextOptionsList.labelAttrs, italic: true)
             } else if i >= TextOptionsList.PINNED_OPTIONS_COUNT && !haveShownMatchedLabel {
-                addLabel(hrSeparatorText, with: TextOptionsList.hrSeparatorAttrs, italic: false)
+                addLabel(TextOptionsList.hrSeparatorText, with: TextOptionsList.hrSeparatorAttrs, italic: false)
                 addLabel("matched", with: TextOptionsList.labelAttrs, italic: true)
                 haveShownMatchedLabel = true
             }
