@@ -14,6 +14,12 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         .strikethroughStyle: NSUnderlineStyle.single.rawValue,
         .strikethroughColor: NSColor.separatorColor
     ]
+    fileprivate static let matchedCharAttrs: [NSAttributedString.Key : Any] = [
+        .foregroundColor: NSColor.selectedTextColor,
+        .backgroundColor: NSColor.selectedTextBackgroundColor,
+        .underlineColor: NSColor.findHighlightColor,
+        .underlineStyle: NSUnderlineStyle.single.rawValue,
+    ]
     
     private var textView: TrackingTextView!
     private var mouseoverHighlight: NSVisualEffectView!
@@ -65,7 +71,7 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
     }
     
     func onTextChanged(to newValue: String) -> String {
-        #warning("TODO")
+        filterByText = newValue
         return newValue
     }
     
@@ -194,13 +200,27 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             fullText.append(NSAttributedString(string: labelText, attributes: attributes))
         }
         
+        var haveShownMatchedLabel = false
         for (i, optionText) in options.enumerated() {
+            // Find the matches; continue to next iteration if there are none, and this isn't one of the top 3.
+            let matched: [NSRange]
+            if filterByText.isEmpty {
+                matched = []
+            } else {
+                matched = SubsequenceMatcher.matches(lookFor: filterByText, inString: optionText)
+                if matched.isEmpty && i >= TextOptionsList.PINNED_OPTIONS_COUNT {
+                    continue
+                }
+            }
+            // Add the section, if needed
             if i == 0 {
                 addLabel("recent", with: TextOptionsList.labelAttrs, italic: true)
-            } else if i == TextOptionsList.PINNED_OPTIONS_COUNT {
+            } else if i >= TextOptionsList.PINNED_OPTIONS_COUNT && !haveShownMatchedLabel {
                 addLabel(hrSeparatorText, with: TextOptionsList.hrSeparatorAttrs, italic: false)
                 addLabel("matched", with: TextOptionsList.labelAttrs, italic: true)
+                haveShownMatchedLabel = true
             }
+            // Add the option text
             fullText.append(NSAttributedString(string: "\n"))
             let rangeStart = fullText.length
             fullText.append(NSAttributedString(string: optionText, attributes: [
@@ -208,6 +228,11 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
                 .paragraphStyle: p
             ]))
             optionRanges.append(NSRange(location: rangeStart, length: optionText.count))
+            // Decorate it with the match info, if applicable
+            for match in matched {
+                let adjustedRange = NSRange(location: match.location + rangeStart, length: match.length)
+                fullText.addAttributes(TextOptionsList.matchedCharAttrs, range: adjustedRange)
+            }
         }
         storage.setAttributedString(fullText)
 
