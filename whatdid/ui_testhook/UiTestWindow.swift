@@ -211,14 +211,11 @@ fileprivate class TextOptionsListComponent: TestComponent, TextFieldWithPopupCal
         adder(textOptionsList)
         if let parent = textOptionsList.superview {
             textOptionsList.widthAnchor.constraint(equalTo: parent.widthAnchor).isActive = true
-        }
+        } 
     }
     
     func contentSizeChanged() {
-        if let view = textOptionsList.asView.superview {
-            view.invalidateIntrinsicContentSize()
-            view.layoutSubtreeIfNeeded()
-        }
+        // nothing
     }
     
     func scroll(to bounds: NSRect, within: NSView) {
