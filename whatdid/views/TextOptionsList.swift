@@ -37,6 +37,8 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             updateText()
         }
     }
+    /// Updated from `updateText`, and then returned from `onTextChanged`
+    private var autocompleteTo = ""
     
     var options = [String]() {
         didSet {
@@ -71,8 +73,8 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
     }
     
     func onTextChanged(to newValue: String) -> String {
-        filterByText = newValue
-        return newValue
+        filterByText = newValue // triggers `updateText()`, which updates autocompleteTo
+        return autocompleteTo
     }
     
     override func mouseUp(with event: NSEvent) {
@@ -171,6 +173,7 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
     }
         
     private func updateText() {
+        autocompleteTo = filterByText
         guard let storage = textView.textStorage, let p = textView.defaultParagraphStyle else {
             textView.string = "<error>"
             wdlog(.error, "Couldn't find storage or default paragraph style")
@@ -201,6 +204,7 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         }
         
         var haveShownMatchedLabel = false
+        var autocomplete: String?
         for (i, optionText) in options.enumerated() {
             // Find the matches; continue to next iteration if there are none, and this isn't one of the top 3.
             let matched: [NSRange]
@@ -233,7 +237,20 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
                 let adjustedRange = NSRange(location: match.location + rangeStart, length: match.length)
                 fullText.addAttributes(TextOptionsList.matchedCharAttrs, range: adjustedRange)
             }
+            // Update the autocomplete, if applicable
+            if optionText.starts(with: filterByText) {
+                if let previousBest = autocomplete {
+                    // Important not to inline these two ifs! The "else" below has
+                    // to apply to only the first one.
+                    if optionText.count < previousBest.count {
+                        autocomplete = optionText
+                    }
+                } else {
+                    autocomplete = optionText
+                }
+            }
         }
+        autocompleteTo = autocomplete ?? filterByText
         storage.setAttributedString(fullText)
 
         for labelRange in italicRanges {
