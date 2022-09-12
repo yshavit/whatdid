@@ -101,7 +101,7 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
     }
     
     override func initializeInterfaceBuilder() {
-        #warning("TODO")
+        options = ["alpha", "bravo", "charlie"]
     }
     
     //--------------------------------------------------------------------------------------------------------------------------//
@@ -161,6 +161,11 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             return optionInfosByMaxY.entries.map { $0.value.stringValue }
         }
         set (values) {
+            guard let storage = textView.textStorage, let p = textView.defaultParagraphStyle else {
+                wdlog(.error, "Couldn't find storage or default paragraph style")
+                return
+            }
+            
             optionInfosByMaxY.removeAll()
             if values.isEmpty {
                 let labelString = NSAttributedString(string: "(no previous entries)", attributes: [
@@ -173,7 +178,8 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             var fullText = ""
             var optionRanges = [NSRange]()
             #warning("todo add separator")
-            for optionText in values {
+            var hrRanges = [NSRange]()
+            for (i, optionText) in values.enumerated() {
                 let rangeStart: Int
                 if fullText.isEmpty {
                     rangeStart = 0
@@ -183,21 +189,26 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
                 }
                 fullText += optionText
                 optionRanges.append(NSRange(location: rangeStart, length: optionText.count))
-                
-                if let storage = textView.textStorage, let p = textView.defaultParagraphStyle {
-                    #warning("TODO use consts for both font and graf style")
-                    let font = NSFont.labelFont(ofSize: NSFont.systemFontSize)
-                    let attrText = NSAttributedString(
-                        string: fullText,
-                        attributes: [
-                            .font: font,
-                            .paragraphStyle: p
-                        ])
-                    storage.setAttributedString(attrText)
+                if i == 2 && values.count > i {
+                    let separatorText = "\r\u{00A0}\u{0009}\u{00A0}"
+                    hrRanges.append(NSRange(location: fullText.count, length: separatorText.count + 1))
+                    fullText += separatorText
                 }
             }
+            let attrText = NSMutableAttributedString(
+                string: fullText,
+                attributes: [
+                    .font: NSFont.labelFont(ofSize: NSFont.systemFontSize),
+                    .paragraphStyle: p
+                ])
+            storage.setAttributedString(attrText)
             let fullTextNSString = NSString(string: fullText)
-                
+
+            
+            for hrRange in hrRanges {
+                storage.addAttributes([.strikethroughStyle: NSUnderlineStyle.single.rawValue, .strikethroughColor: NSColor.separatorColor], range: hrRange)
+            }
+            
             if let layoutManager = textView.layoutManager, let textContainer = textView.textContainer {
                 var optionInfoEntries = [(CGFloat, OptionInfo)]()
                 layoutManager.ensureLayout(for: textContainer)
