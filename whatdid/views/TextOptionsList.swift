@@ -4,6 +4,16 @@ import Cocoa
 
 class TextOptionsList: WdView, TextFieldWithPopupContents {
     fileprivate static let PINNED_OPTIONS_COUNT = 3
+    fileprivate static let labelAttrs: [NSAttributedString.Key : Any] = [
+        .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize * 0.9),
+        .foregroundColor: NSColor.systemGray,
+        .underlineColor: NSColor.systemGray,
+        .underlineStyle: NSUnderlineStyle.single.rawValue
+    ]
+    fileprivate static let hrSeparatorAttrs: [NSAttributedString.Key : Any] = [
+        .strikethroughStyle: NSUnderlineStyle.single.rawValue,
+        .strikethroughColor: NSColor.separatorColor
+    ]
     
     private var textView: TrackingTextView!
     private var mouseoverHighlight: NSVisualEffectView!
@@ -13,6 +23,18 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
     private var selectionIdx: Int? {
         didSet {
             updateSelection()
+        }
+    }
+    
+    private var filterByText = "" {
+        didSet {
+            updateText()
+        }
+    }
+    
+    var options = [String]() {
+        didSet {
+            updateText()
         }
     }
     
@@ -108,27 +130,6 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         options = ["alpha", "bravo", "charlie"]
     }
     
-    class Glue: FlippedView {
-        override var allowsVibrancy: Bool {
-            true
-        }
-        
-        private var requestedFrame: NSRect?
-        fileprivate var heightConstraint: NSLayoutConstraint?
-        
-        override var frame: NSRect {
-            get {
-                requestedFrame ?? super.frame
-            } set (value) {
-                #warning("TODO I don't actually need this, ALL I need is the height constraint!")
-                requestedFrame = value
-                heightConstraint?.constant = value.height
-                super.frame = value
-                setBoundsSize(value.size)
-            }
-        }
-    }
-    
     override var isFlipped : Bool {
         get {
             return true // This lets our coordinate system be the same as the textView container's.
@@ -162,12 +163,6 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             mouseoverHighlight.isHidden = true
         }
     }
-    
-    var options = [String]() {
-        didSet {
-            updateText()
-        }
-    }
         
     private func updateText() {
         guard let storage = textView.textStorage, let p = textView.defaultParagraphStyle else {
@@ -187,56 +182,39 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
                 ]))
             return
         }
-        var fullText = ""
+        let fullText = NSMutableAttributedString()
         var optionRanges = [NSRange]()
-        var labelRanges = [NSRange]()
-        var hrRanges = [NSRange]()
+        var italicRanges = [NSRange]()
         let hrSeparatorText = "\r\u{00A0}\u{0009}\u{00A0}\n" // https://stackoverflow.com/a/65994719/1076640.
         
-        func addLabel(_ labelText: String, using range: inout [NSRange]) {
-            range.append(NSRange(location: fullText.count, length: labelText.count))
-            fullText += labelText
+        func addLabel(_ labelText: String, with attributes: [NSAttributedString.Key : Any], italic: Bool) {
+            if italic {
+                italicRanges.append(NSRange(location: fullText.length, length: labelText.count))
+            }
+            fullText.append(NSAttributedString(string: labelText, attributes: attributes))
         }
         
         for (i, optionText) in options.enumerated() {
             if i == 0 {
-                addLabel("recent", using: &labelRanges)
+                addLabel("recent", with: TextOptionsList.labelAttrs, italic: true)
             } else if i == TextOptionsList.PINNED_OPTIONS_COUNT {
-                addLabel(hrSeparatorText, using: &hrRanges)
-                addLabel("matched", using: &labelRanges)
+                addLabel(hrSeparatorText, with: TextOptionsList.hrSeparatorAttrs, italic: false)
+                addLabel("matched", with: TextOptionsList.labelAttrs, italic: true)
             }
-            let rangeStart = fullText.count
-            fullText += "\n"
-            fullText += optionText
-            optionRanges.append(NSRange(location: rangeStart + 1, length: optionText.count))
-        }
-        let attrText = NSMutableAttributedString(
-            string: fullText,
-            attributes: [
+            fullText.append(NSAttributedString(string: "\n"))
+            let rangeStart = fullText.length
+            fullText.append(NSAttributedString(string: optionText, attributes: [
                 .font: NSFont.labelFont(ofSize: NSFont.systemFontSize),
                 .paragraphStyle: p
-            ])
-        storage.setAttributedString(attrText)
-        
-        for hrRange in hrRanges {
-            storage.addAttributes(
-                [
-                    .strikethroughStyle: NSUnderlineStyle.single.rawValue,
-                    .strikethroughColor: NSColor.separatorColor
-                ], range: hrRange)
+            ]))
+            optionRanges.append(NSRange(location: rangeStart, length: optionText.count))
         }
-        for labelRange in labelRanges {
-            storage.addAttributes(
-                [
-                    .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize * 0.9),
-                    .foregroundColor: NSColor.systemGray,
-                    .underlineColor: NSColor.systemGray,
-                    .underlineStyle: NSUnderlineStyle.single.rawValue
-                ],
-                range: labelRange)
+        storage.setAttributedString(fullText)
+
+        for labelRange in italicRanges {
             storage.applyFontTraits(.italicFontMask, range: labelRange)
         }
-        let fullTextNSString = NSString(string: fullText)
+        let fullTextNSString = NSString(string: fullText.string)
         if let layoutManager = textView.layoutManager, let textContainer = textView.textContainer {
             var optionInfoEntries = [(CGFloat, OptionInfo)]()
             for optionRange in optionRanges {
