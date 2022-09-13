@@ -9,6 +9,7 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
     private var mouseoverHighlight: NSVisualEffectView!
     private var arrowSelectionHighlight: NSVisualEffectView!
     private var callbacks: TextFieldWithPopupCallbacks!
+    private var heightConstraint: NSLayoutConstraint!
     
     private var selectionIdx: Int? {
         didSet {
@@ -105,7 +106,8 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         grafStyle.alignment = .justified
         textView.defaultParagraphStyle = grafStyle
         
-        textView.heightAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive = true
+        heightConstraint = textView.heightAnchor.constraint(equalToConstant: 0)
+        heightConstraint.isActive = true
         textView.mouseMoved = trackMouseMovement(_:)
         textView.startTracking()
         
@@ -165,6 +167,12 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         
     private func updateText() {
         autocompleteTo = filterByText
+        defer {
+            if let layout = textView.layoutManager, let container = textView.textContainer {
+                let fullRange = NSRange(location: 0, length: textView.textStorage?.length ?? 0)
+                heightConstraint.constant = layout.boundingRect(forGlyphRange: fullRange, in: container).height
+            }
+        }
         guard let storage = textView.textStorage, let pStyle = textView.defaultParagraphStyle else {
             textView.string = "<error>"
             wdlog(.error, "Couldn't find storage or default paragraph style")
@@ -176,7 +184,7 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             storage.setAttributedString(NSAttributedString(
                 string: "(no previous entries)",
                 attributes: [
-                    .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize * 0.9),
+                    .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
                     .foregroundColor: NSColor.systemGray,
                     .underlineColor: NSColor.systemGray,
                 ]))

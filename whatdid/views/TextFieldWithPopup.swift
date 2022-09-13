@@ -301,6 +301,7 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
     private let scrollView: NSScrollView
     private let scrollViewWidth: NSLayoutConstraint
     private var activeEventMonitors = [Any?]()
+    private var scrollBarHelpers = [ScrollBarHelper]()
     
     init(parent: TextFieldWithPopup) {
         self.parent = parent
@@ -325,6 +326,21 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
         let flipped = FlippedView()
         flipped.useAutoLayout()
         scrollView.documentView = flipped
+        
+        let flippedWidth = flipped.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        flippedWidth.isActive = true
+        if let scroller = scrollView.horizontalScroller {
+            scrollBarHelpers.append(ScrollBarHelper(on: scroller) {scrollerWidth in
+                flippedWidth.constant = -(scrollerWidth)
+            })
+        }
+//        let flippedHeight = flipped.heightAnchor.constraint(equalTo: scrollView.widthAnchor)
+//        flippedHeight.isActive = true
+//        if let scroller = scrollView.verticalScroller {
+//            scrollBarHelpers.append(ScrollBarHelper(on: scroller) {scrollerHeight in
+//                flippedHeight.constant = scrollerHeight
+//            })
+//        }
         
         window.contentView = scrollView
         window.level = .popUpMenu

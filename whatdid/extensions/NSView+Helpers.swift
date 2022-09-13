@@ -24,15 +24,24 @@ extension NSView {
     #if UI_TEST
     func printConstraints() {
         func doPrint(view: NSView, indent: Int) {
-            let h = String(repeating: "    ", count: indent)
-            print("\(h)* \(view.className):")
-            for c in view.constraints.filter({$0.isActive}) {
-                print("\(h)\(view.className): \(c)")
+            func p(_ elem: Any) {
+                print(String(repeating: "    ", count: indent), elem, separator: "")
             }
+            let excuse = view.constraints.isEmpty && view.subviews.isEmpty ? " (no constraints or subviews)" : ""
+            p(view.className + excuse)
+            if excuse.isEmpty {
+                p(String(repeating: "─", count: view.className.count))
+            }
+            for c in view.constraintsAffectingLayout(for: .horizontal) {
+                p("↔︎ \(c)")
+            }
+            for c in view.constraintsAffectingLayout(for: .vertical) {
+                p("↕︎ \(c)")
+            }
+            print("")
             for v in view.subviews {
                 doPrint(view: v, indent: indent + 1)
             }
-            
         }
         doPrint(view: self, indent: 0)
     }
