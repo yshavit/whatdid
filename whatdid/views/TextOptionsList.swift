@@ -4,23 +4,6 @@ import Cocoa
 
 class TextOptionsList: WdView, TextFieldWithPopupContents {
     private static let PINNED_OPTIONS_COUNT = 3
-    private static let labelAttrs: [NSAttributedString.Key : Any] = [
-        .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize * 0.9),
-        .foregroundColor: NSColor.systemGray,
-        .underlineColor: NSColor.systemGray,
-        .underlineStyle: NSUnderlineStyle.single.rawValue
-    ]
-    private static let hrSeparatorAttrs: [NSAttributedString.Key : Any] = [
-        .strikethroughStyle: NSUnderlineStyle.single.rawValue,
-        .strikethroughColor: NSColor.separatorColor
-    ]
-    private static let matchedCharAttrs: [NSAttributedString.Key : Any] = [
-        .foregroundColor: NSColor.selectedTextColor,
-        .backgroundColor: NSColor.selectedTextBackgroundColor,
-        .underlineColor: NSColor.findHighlightColor,
-        .underlineStyle: NSUnderlineStyle.single.rawValue,
-    ]
-    private static let hrSeparatorText = "\r\u{00A0}\u{0009}\u{00A0}\n" // https://stackoverflow.com/a/65994719/1076640.
     
     private var textView: TrackingTextView!
     private var mouseoverHighlight: NSVisualEffectView!
@@ -51,6 +34,13 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         self
     }
     
+    /// Used for testing.
+    ///
+    /// You can generate the expected text using `DisplayTextBuilder`.
+    var textViewText: NSAttributedString {
+        return textView.attributedString()
+    }
+    
     func willShow(callbacks: TextFieldWithPopupCallbacks) {
         self.callbacks = callbacks
     }
@@ -74,7 +64,7 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
     }
     
     func onTextChanged(to newValue: String) -> String {
-        filterByText = newValue // triggers `updateText()`, which updates autocompleteTo
+        filterByText = newValue // triggers `updateText()`, which updates `autocompleteTo`
         return autocompleteTo
     }
     
@@ -175,7 +165,7 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         
     private func updateText() {
         autocompleteTo = filterByText
-        guard let storage = textView.textStorage, let p = textView.defaultParagraphStyle else {
+        guard let storage = textView.textStorage, let pStyle = textView.defaultParagraphStyle else {
             textView.string = "<error>"
             wdlog(.error, "Couldn't find storage or default paragraph style")
             return
@@ -192,16 +182,9 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
                 ]))
             return
         }
-        let fullText = NSMutableAttributedString()
+        let builder = DisplayTextBuilder(paragraphStyle: pStyle)
         var optionRanges = [NSRange]()
         var italicRanges = [NSRange]()
-        
-        func addLabel(_ labelText: String, with attributes: [NSAttributedString.Key : Any], italic: Bool) {
-            if italic {
-                italicRanges.append(NSRange(location: fullText.length, length: labelText.count))
-            }
-            fullText.append(NSAttributedString(string: labelText, attributes: attributes))
-        }
         
         var haveShownMatchedLabel = false
         var autocomplete: String?
@@ -218,25 +201,14 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             }
             // Add the section, if needed
             if i == 0 {
-                addLabel("recent", with: TextOptionsList.labelAttrs, italic: true)
+                italicRanges.append(builder.add(label: "recent"))
             } else if i >= TextOptionsList.PINNED_OPTIONS_COUNT && !haveShownMatchedLabel {
-                addLabel(TextOptionsList.hrSeparatorText, with: TextOptionsList.hrSeparatorAttrs, italic: false)
-                addLabel("matched", with: TextOptionsList.labelAttrs, italic: true)
+                builder.addHorizontalSeparator()
+                italicRanges.append(builder.add(label: "matched"))
                 haveShownMatchedLabel = true
             }
             // Add the option text
-            fullText.append(NSAttributedString(string: "\n"))
-            let rangeStart = fullText.length
-            fullText.append(NSAttributedString(string: optionText, attributes: [
-                .font: NSFont.labelFont(ofSize: NSFont.systemFontSize),
-                .paragraphStyle: p
-            ]))
-            optionRanges.append(NSRange(location: rangeStart, length: optionText.count))
-            // Decorate it with the match info, if applicable
-            for match in matched {
-                let adjustedRange = NSRange(location: match.location + rangeStart, length: match.length)
-                fullText.addAttributes(TextOptionsList.matchedCharAttrs, range: adjustedRange)
-            }
+            optionRanges.append(builder.add(option: optionText, highlighting: matched))
             // Update the autocomplete, if applicable
             if optionText.starts(with: filterByText) {
                 if let previousBest = autocomplete {
@@ -251,12 +223,12 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             }
         }
         autocompleteTo = autocomplete ?? filterByText
-        storage.setAttributedString(fullText)
+        storage.setAttributedString(builder.fullText)
 
         for labelRange in italicRanges {
             storage.applyFontTraits(.italicFontMask, range: labelRange)
         }
-        let fullTextNSString = NSString(string: fullText.string)
+        let fullTextNSString = NSString(string: builder.fullText.string)
         if let layoutManager = textView.layoutManager, let textContainer = textView.textContainer {
             var optionInfoEntries = [(CGFloat, OptionInfo)]()
             for optionRange in optionRanges {
@@ -276,6 +248,62 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         let minY: CGFloat
         let maxY: CGFloat
         let stringValue: String
+    }
+    
+    class DisplayTextBuilder {
+        private static let labelAttrs: [NSAttributedString.Key : Any] = [
+            .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize * 0.9),
+            .foregroundColor: NSColor.systemGray,
+            .underlineColor: NSColor.systemGray,
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
+        private static let hrSeparatorAttrs: [NSAttributedString.Key : Any] = [
+            .strikethroughStyle: NSUnderlineStyle.single.rawValue,
+            .strikethroughColor: NSColor.separatorColor
+        ]
+        private static let matchedCharAttrs: [NSAttributedString.Key : Any] = [
+            .foregroundColor: NSColor.selectedTextColor,
+            .backgroundColor: NSColor.selectedTextBackgroundColor,
+            .underlineColor: NSColor.findHighlightColor,
+            .underlineStyle: NSUnderlineStyle.single.rawValue,
+        ]
+        private static let hrSeparatorText = "\r\u{00A0}\u{0009}\u{00A0}\n" // https://stackoverflow.com/a/65994719/1076640.
+        
+        private let paragraphStyle: NSParagraphStyle
+        let fullText = NSMutableAttributedString()
+        
+        init(paragraphStyle: NSParagraphStyle) {
+            self.paragraphStyle = paragraphStyle
+        }
+        
+        func add(option: String, highlighting matches: [NSRange]) -> NSRange {
+            let _ = add(text: "\n", with: [:])
+            let result =  add(text: option, with: [
+                .font: NSFont.labelFont(ofSize: NSFont.systemFontSize),
+                .paragraphStyle: paragraphStyle
+            ])
+            
+            // Decorate it with the match info
+            for match in matches {
+                let adjustedRange = NSRange(location: match.location + result.location, length: match.length)
+                fullText.addAttributes(DisplayTextBuilder.matchedCharAttrs, range: adjustedRange)
+            }
+            return result
+        }
+        
+        func add(label: String) -> NSRange {
+            return add(text: label, with: DisplayTextBuilder.labelAttrs)
+        }
+        
+        func addHorizontalSeparator() {
+            let _ = add(text: DisplayTextBuilder.hrSeparatorText, with: DisplayTextBuilder.hrSeparatorAttrs)
+        }
+        
+        private func add(text: String, with attributes: [NSAttributedString.Key : Any]) -> NSRange {
+            let range = NSRange(location: fullText.length, length: text.count)
+            fullText.append(NSAttributedString(string: text, attributes: attributes))
+            return range
+        }
     }
 }
 

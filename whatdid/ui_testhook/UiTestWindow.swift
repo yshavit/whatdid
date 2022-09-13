@@ -237,7 +237,7 @@ fileprivate class TextOptionsListComponent: TestComponent, TextFieldWithPopupCal
     
     private func generateOptions(max: Int32?) -> [String] {
         let segment1Options = ["alpha", "bravo", "charlie", "delta"]
-        let segment2Options = ["one", "two", "three", "four"]
+        let segment2Options = ["one", "2", "three", "four"]
         
         var results = segment1Options.flatMap {seg1 in
             segment2Options.map {seg2 in
