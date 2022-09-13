@@ -262,7 +262,7 @@ fileprivate class AutocompleteComponent: TestComponent {
         options.action = #selector(setAutocompleterOptions(_:))
         options.setAccessibilityIdentifier("test_defineoptions")
         
-        autocompleField.action = { self.resultField.stringValue = $0.textField.stringValue }
+        autocompleField.onAction = { self.resultField.stringValue = $0.stringValue }
         autocompleField.setAccessibilityIdentifier("test_autocomplete")
         
         let optionsStack = NSStackView(orientation: .horizontal)

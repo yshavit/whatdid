@@ -35,9 +35,9 @@ class PtnViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        projectField.textField.placeholderString = "project"
-        taskField.textField.placeholderString = "task"
-        for field in [projectField.textField, taskField.textField, noteField] {
+        projectField.placeholderString = "project"
+        taskField.placeholderString = "task"
+        for field in [projectField, taskField, noteField] {
             if let plainString = field?.placeholderString {
                 field?.placeholderAttributedString = NSAttributedString(
                     string: plainString,
@@ -48,13 +48,13 @@ class PtnViewController: NSViewController {
             AppDelegate.instance.model.listProjects()
         }
         taskField.optionsLookupOnFocus = {
-            AppDelegate.instance.model.listTasks(project: self.projectField.textField.stringValue)
+            AppDelegate.instance.model.listTasks(project: self.projectField.stringValue)
         }
         projectField.onTextChange = {
-            self.taskField.textField.stringValue = ""
+            self.taskField.stringValue = ""
         }
-        projectField.action = self.projectOrTaskAction
-        taskField.action = self.projectOrTaskAction
+        projectField.onAction = self.projectOrTaskAction
+        taskField.onAction = self.projectOrTaskAction
         
         headerText.placeholderString = headerText.stringValue
         
@@ -68,19 +68,18 @@ class PtnViewController: NSViewController {
             return result
         }
         findField.onTextChange = {
-            let splits = self.findField.textField.stringValue.split(separator: "\u{11}")
+            let splits = self.findField.stringValue.split(separator: "\u{11}")
             if splits.count > 2 {
-                self.projectField.textField.stringValue = String(splits[0])
-                self.taskField.textField.stringValue = String(splits[2])
+                self.projectField.stringValue = String(splits[0])
+                self.taskField.stringValue = String(splits[2])
             }
         }
-        findField.action = self.closeFind(_:)
+        findField.onAction = self.closeFind(_:)
         findField.onCancel = {
-            self.projectField.textField.stringValue = ""
-            self.taskField.textField.stringValue = ""
+            self.projectField.stringValue = ""
+            self.taskField.stringValue = ""
             self.noteField.stringValue = ""
             self.closeFind(self)
-            return true
         }
         
         if let view = view as? PtnTopLevelStackView {
@@ -102,8 +101,8 @@ class PtnViewController: NSViewController {
     
     func reset() {
         noteField.stringValue = ""
-        if projectField.textField.stringValue.isEmpty {
-            taskField.textField.stringValue = ""
+        if projectField.stringValue.isEmpty {
+            taskField.stringValue = ""
         }
     }
     
@@ -371,10 +370,10 @@ class PtnViewController: NSViewController {
     
     @objc private func grabFocusNow() {
         var firstResponder = noteField
-        if projectField.textField.stringValue.isEmpty {
-            firstResponder = projectField.textField
-        } else if taskField.textField.stringValue.isEmpty {
-            firstResponder = taskField.textField
+        if projectField.stringValue.isEmpty {
+            firstResponder = projectField
+        } else if taskField.stringValue.isEmpty {
+            firstResponder = taskField
         }
         if firstResponder != nil {
             view.window?.makeFirstResponder(firstResponder)
@@ -388,16 +387,16 @@ class PtnViewController: NSViewController {
     }
     
     @IBAction func notesFieldAction(_ sender: NSTextField) {
-        let project = projectField.textField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        let task = taskField.textField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        let project = projectField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        let task = taskField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         let notes = noteField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         var allowEntry = true
         if project.isEmpty {
-            projectField.textField.flashTextField()
+            projectField.flashTextField()
             allowEntry = false
         }
         if task.isEmpty {
-            taskField.textField.flashTextField()
+            taskField.flashTextField()
             allowEntry = false
         }
         if notes.isEmpty && Prefs.requireNotes {

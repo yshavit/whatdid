@@ -58,6 +58,11 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
         }
     }
     
+    /// Called after the rest of initialization is complete. Put whatever you want here.
+    func finishInit() {
+        // nothing
+    }
+    
     private func commonInit() {
         popupManager = PopupManager(parent: self)
         useAutoLayout()
@@ -107,9 +112,32 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
         addTrackingArea(pulldownButtonTracker)
         
         delegate = self
+        
+        finishInit()
     }
     
     override func setAccessibilityIdentifier(_ id: String?) {
+        // from AutoCompletingField's init:
+        //        setAccessibilityEnabled(true)
+        //        setAccessibilityRole(.comboBox)
+        //        ...
+        //        setAccessibilityChildren(nil) // we'll be adding textFieldView in our overload of accessibilityChildren()
+//
+// also:
+//        override func accessibilityChildren() -> [Any]? {
+//            var result = [Any]()
+//            result.append(contentsOf: textFieldView.accessibilityChildren()!)
+//            result.append(contentsOf: textFieldView.pulldownButton.accessibilityChildren()!)
+//            if popupManager.windowIsVisible {
+//                result.append(popupManager.scrollView!)
+//            }
+//            if let superChildren = super.accessibilityChildren() {
+//                result.append(contentsOf: superChildren)
+//            }
+//            return result
+//        }
+//
+        
         super.setAccessibilityIdentifier(id)
         cell?.setAccessibilityIdentifier(id.map({ "\($0)__cell"}))
         pulldownButton.setAccessibilityIdentifier(id.map({ "\($0)__pulldown"}))
