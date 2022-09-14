@@ -115,7 +115,6 @@
 		7EE250BC2515B8FE0067C5E9 /* PrefsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EE250BA2515B8FE0067C5E9 /* PrefsViewController.xib */; };
 		7EE27F7A28CBBB6F00D41366 /* SortedMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE27F7928CBBB6F00D41366 /* SortedMap.swift */; };
 		7EE27F7C28CBBB9400D41366 /* SortedMapTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE27F7B28CBBB9400D41366 /* SortedMapTest.swift */; };
-		7EE27F7E28CBBC8100D41366 /* AutoCompletingFieldV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE27F7D28CBBC8100D41366 /* AutoCompletingFieldV2.swift */; };
 		7EE27F8028CBC01800D41366 /* TextFieldWithPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE27F7F28CBC01800D41366 /* TextFieldWithPopup.swift */; };
 		7EE27F8228CCE29600D41366 /* TextOptionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE27F8128CCE29500D41366 /* TextOptionsList.swift */; };
 		7EE4E39624E24A3F00552AAF /* WhatdidControlHooks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4E39524E24A3F00552AAF /* WhatdidControlHooks.swift */; };
@@ -289,7 +288,6 @@
 		7EE250BA2515B8FE0067C5E9 /* PrefsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefsViewController.xib; sourceTree = "<group>"; };
 		7EE27F7928CBBB6F00D41366 /* SortedMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedMap.swift; sourceTree = "<group>"; };
 		7EE27F7B28CBBB9400D41366 /* SortedMapTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedMapTest.swift; sourceTree = "<group>"; };
-		7EE27F7D28CBBC8100D41366 /* AutoCompletingFieldV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletingFieldV2.swift; sourceTree = "<group>"; };
 		7EE27F7F28CBC01800D41366 /* TextFieldWithPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithPopup.swift; sourceTree = "<group>"; };
 		7EE27F8128CCE29500D41366 /* TextOptionsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextOptionsList.swift; sourceTree = "<group>"; };
 		7EE4E39524E24A3F00552AAF /* WhatdidControlHooks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatdidControlHooks.swift; sourceTree = "<group>"; };
@@ -634,7 +632,6 @@
 				7E4EB8E4278A4724001234F0 /* DisclosureWithLabel.swift */,
 				7EA30B082824D34A007376A5 /* SegmentedTimelineView.swift */,
 				7E210AF4284BE5DC0050AD31 /* WdView.swift */,
-				7EE27F7D28CBBC8100D41366 /* AutoCompletingFieldV2.swift */,
 				7EE27F7F28CBC01800D41366 /* TextFieldWithPopup.swift */,
 				7EE27F8128CCE29500D41366 /* TextOptionsList.swift */,
 			);
@@ -947,7 +944,6 @@
 				7EF883FC260D7DD400170330 /* DayStartController.swift in Sources */,
 				7EE250BB2515B8FE0067C5E9 /* PrefsViewController.swift in Sources */,
 				7E37A29B24C0293E005BA1DF /* Entry+CoreDataProperties.swift in Sources */,
-				7EE27F7E28CBBC8100D41366 /* AutoCompletingFieldV2.swift in Sources */,
 				7E9C5EAE2606BDFB00D839C4 /* GoalsView.swift in Sources */,
 				7ECAF0DF250D75B70004647E /* WhatdidTextField.swift in Sources */,
 				7EE4E39624E24A3F00552AAF /* WhatdidControlHooks.swift in Sources */,

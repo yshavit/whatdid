@@ -116,34 +116,13 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
         setAccessibilityEnabled(true)
         setAccessibilityRole(.comboBox)
         pulldownButton.setAccessibilityEnabled(true)
-        pulldownButton.setAccessibilityRole(.popUpButton)
-        setAccessibilityChildren(nil) // we'll be adding textFieldView in our overload of accessibilityChildren()
+        pulldownButton.setAccessibilityRole(.button)
+        setAccessibilityChildren(nil) // we'll do it manually in `accessibilityChildren`
         
         finishInit()
     }
     
     override func setAccessibilityIdentifier(_ id: String?) {
-        // from AutoCompletingField's init:
-        //        setAccessibilityEnabled(true)
-        //        setAccessibilityRole(.comboBox)
-        //        ...
-        //        setAccessibilityChildren(nil) // we'll be adding textFieldView in our overload of accessibilityChildren()
-//
-// also:
-//        override func accessibilityChildren() -> [Any]? {
-//            var result = [Any]()
-//            result.append(contentsOf: textFieldView.accessibilityChildren()!)
-//            result.append(contentsOf: textFieldView.pulldownButton.accessibilityChildren()!)
-//            if popupManager.windowIsVisible {
-//                result.append(popupManager.scrollView!)
-//            }
-//            if let superChildren = super.accessibilityChildren() {
-//                result.append(contentsOf: superChildren)
-//            }
-//            return result
-//        }
-//
-        
         super.setAccessibilityIdentifier(id)
         cell?.setAccessibilityIdentifier(id.map({ "\($0)__cell"}))
         pulldownButton.setAccessibilityIdentifier(id.map({ "\($0)__pulldown"}))
@@ -151,7 +130,13 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
     }
     
     override func accessibilityChildren() -> [Any]? {
-        <#code#>
+        var result = [NSObject]()
+        
+        result.append(pulldownButton.cell ?? pulldownButton)
+        if let scroll = popupManager.accessibilityView {
+            result.append(scroll)
+        }
+        return result
     }
     
     /// Set the cursor to the arrow (instead of NSTextField's default I-beam) when hovering over the button
@@ -343,21 +328,18 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
                 flippedWidth.constant = -(scrollerWidth)
             })
         }
-//        let flippedHeight = flipped.heightAnchor.constraint(equalTo: scrollView.widthAnchor)
-//        flippedHeight.isActive = true
-//        if let scroller = scrollView.verticalScroller {
-//            scrollBarHelpers.append(ScrollBarHelper(on: scroller) {scrollerHeight in
-//                flippedHeight.constant = scrollerHeight
-//            })
-//        }
         
         window.contentView = scrollView
         window.level = .popUpMenu
-        window.setAccessibilityChildren(nil)
-        window.setAccessibilityRole(.none)
+        scrollView.setAccessibilityChildren(nil)
+        scrollView.setAccessibilityRole(.scrollArea)
         
         super.init()
         window.delegate = self
+    }
+    
+    var accessibilityView: NSView? {
+        return window.isVisible ? scrollView : nil
     }
     
     var contents: TextFieldWithPopupContents? {
