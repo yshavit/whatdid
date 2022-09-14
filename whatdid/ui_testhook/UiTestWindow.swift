@@ -211,7 +211,7 @@ fileprivate class TextOptionsListComponent: TestComponent, TextFieldWithPopupCal
         adder(textOptionsList)
         if let parent = textOptionsList.superview {
             textOptionsList.widthAnchor.constraint(equalTo: parent.widthAnchor).isActive = true
-        } 
+        }
     }
     
     func contentSizeChanged() {

@@ -10,6 +10,19 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
     private var arrowSelectionHighlight: NSVisualEffectView!
     private var callbacks: TextFieldWithPopupCallbacks!
     private var heightConstraint: NSLayoutConstraint!
+    /// This isn't just a performance-related cache: it's required for correctness.
+    ///
+    /// The system may call `accessibilityChildren()` several times, and if the elements haven't changed,
+    /// it should return the same exact instances. This ensures that parent-child relationships and other such things
+    /// all work correctly; I think it's also important for make sure that the objects don't get prematurely GC'ed, though
+    /// I'm not positive about that.
+    ///
+    /// Point is, this is important!
+    ///
+    /// Alternatively, we could just calculate the array at each call to `updateText()`, and then just call
+    /// `setAccessibilityChildren(~)`. This whole cache thing may be a premature optimization. But whatever,
+    /// I've already written it!
+    private var cachedAccessibilityChildren: [NSAccessibilityElement]?
     
     private var selectionIdx: Int? {
         didSet {
@@ -22,6 +35,7 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             updateText()
         }
     }
+    
     /// Updated from `updateText`, and then returned from `onTextChanged`
     private var autocompleteTo = ""
     
@@ -125,10 +139,56 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         addSubview(arrowSelectionHighlight)
         addSubview(textView)
         textView.anchorAllSides(to: self)
+        
+        textView.setAccessibilityElement(false)
+        textView.setAccessibilityEnabled(false)
+        setAccessibilityEnabled(true)
+        setAccessibilityElement(true)
+        setAccessibilityRole(.none)
+        setAccessibilityLabel("Options")
+        setAccessibilityChildren(nil)
     }
     
     override func initializeInterfaceBuilder() {
         options = ["alpha", "bravo", "charlie"]
+    }
+    
+    override func viewWillMove(toWindow newWindow: NSWindow?) {
+        cachedAccessibilityChildren = nil // invalidate so that we regenerate it as needed
+    }
+    
+    override func accessibilityChildren() -> [Any]? {
+        if let cachedAccessibilityChildren = cachedAccessibilityChildren {
+            return cachedAccessibilityChildren
+        }
+        guard let window = window else {
+            wdlog(.error, "no window to add accessibility elements to")
+            return []
+        }
+        let textViewWidth = textView.bounds.width
+        var results = [NSAccessibilityElement]()
+        for (i, entry) in optionInfosByMinY.entries.enumerated() {
+            let optionInfo = entry.value
+            let textViewRect = NSRect(x: 0, y: optionInfo.minY, width: textViewWidth, height: optionInfo.maxY - optionInfo.minY)
+            let windowRect = textView.convert(textViewRect, to: nil)
+            let screenRect = window.convertToScreen(windowRect)
+            let accessibility = NSAccessibilityElement.element(
+                withRole: .staticText,
+                frame: screenRect,
+                label: optionInfo.stringValue,
+                parent: self)
+            if let accessibility = accessibility as? NSAccessibilityElement {
+                accessibility.setAccessibilityIndex(i)
+                accessibility.setAccessibilityRoleDescription("option")
+                accessibility.setAccessibilityEnabled(true)
+                accessibility.setAccessibilityFrameInParentSpace(textViewRect)
+                results.append(accessibility)
+            } else {
+                wdlog(.error, "NSAccessibilityElement.element returned an unknown type; couldn't creaet accessibility element")
+            }
+        }
+        cachedAccessibilityChildren = results
+        return results
     }
     
     override var isFlipped : Bool {
@@ -164,8 +224,10 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             mouseoverHighlight.isHidden = true
         }
     }
+    
         
     private func updateText() {
+        cachedAccessibilityChildren = nil // invalidate so that we regenerate it as needed
         autocompleteTo = filterByText
         defer {
             if let layout = textView.layoutManager, let container = textView.textContainer {
