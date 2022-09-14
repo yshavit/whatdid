@@ -113,6 +113,12 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
         
         delegate = self
         
+        setAccessibilityEnabled(true)
+        setAccessibilityRole(.comboBox)
+        pulldownButton.setAccessibilityEnabled(true)
+        pulldownButton.setAccessibilityRole(.popUpButton)
+        setAccessibilityChildren(nil) // we'll be adding textFieldView in our overload of accessibilityChildren()
+        
         finishInit()
     }
     
@@ -141,8 +147,11 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
         super.setAccessibilityIdentifier(id)
         cell?.setAccessibilityIdentifier(id.map({ "\($0)__cell"}))
         pulldownButton.setAccessibilityIdentifier(id.map({ "\($0)__pulldown"}))
-        #warning("TODO what here?")
 //        popupManager.accessibilityIdentifierChanged()
+    }
+    
+    override func accessibilityChildren() -> [Any]? {
+        <#code#>
     }
     
     /// Set the cursor to the arrow (instead of NSTextField's default I-beam) when hovering over the button
