@@ -283,15 +283,12 @@ fileprivate class AutocompleteComponent: TestComponent {
         
         adder(ButtonWithClosure(label: "Load lots of data", {_ in
             var bigOptionsList = [String]()
-            wdlog(.info, "Autocomplete data: generating")
             for i in 1..<1000 {
                 bigOptionsList.append("option \(i)")
             }
-            
-            wdlog(.info, "Autocomplete data: setting")
-            self.autocompleField.options = bigOptionsList
-            
-            wdlog(.info, "Autocomplete data: done")
+            timed("lots of data") {
+                self.autocompleField.options = bigOptionsList
+            }
         }))
         
         options.nextKeyView = autocompleField

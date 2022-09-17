@@ -147,3 +147,18 @@ class TimeUtil {
         case literal(String)
     }
 }
+
+func timed(_ action: String, _ block: () -> Void) {
+    #if UI_TEST
+    let start = DispatchTime.now().uptimeNanoseconds
+    defer {
+        DispatchQueue.main.async(group: nil, qos: .userInteractive, flags: []) {
+            let end = DispatchTime.now().uptimeNanoseconds
+            let nanos = end - start
+            let millis = nanos / 1000000
+            wdlog(.info, "** TIMER: %@ => %d ms", action, millis)
+        }
+    }
+    #endif
+    block()
+}
