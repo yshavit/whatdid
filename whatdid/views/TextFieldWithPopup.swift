@@ -415,7 +415,7 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
             // an event to start the click. If we start the click, ignore the event. If it's the end of the
             // click, we'll handle the select.
             if event.type != .leftMouseUp {
-                return false
+                return true
             }
             
             if let contents = contents {
