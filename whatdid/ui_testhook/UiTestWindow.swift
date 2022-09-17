@@ -61,17 +61,6 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
     }
 }
 
-fileprivate func hStack(label: String?, _ elems: NSView...) -> NSView {
-    let hStack = NSStackView(orientation: .horizontal)
-    if let label = label {
-        let labelField = NSTextField(labelWithString: label + ":")
-        labelField.font = NSFont.labelFont(ofSize: NSFont.systemFontSize(for: .small))
-        hStack.addArrangedSubview(labelField)
-    }
-    elems.forEach(hStack.addArrangedSubview)
-    return hStack
-}
-
 fileprivate class ButtonWithClosureComponent: TestComponent {
     func build(adder: @escaping (NSView) -> Void) {
         let pasteboardButton = ButtonWithClosure()
@@ -192,7 +181,6 @@ fileprivate class TextOptionsListComponent: TestComponent, TextFieldWithPopupCal
         
         let stepper = NSStepper()
         stepper.minValue = 0
-        // max value is optionSegments.count!
         stepper.maxValue = Double(generateOptions(max: nil).count)
         stepper.intValue = 4
         stepper.valueWraps = false
@@ -452,6 +440,17 @@ fileprivate class SegmentedTimelineViewComponent: TestComponent {
         adder(segmentedTimelineView)
         segmentedTimelineView.autoresizingMask = [.height, .width]
     }
+}
+
+fileprivate func hStack(label: String?, _ elems: NSView...) -> NSView {
+    let hStack = NSStackView(orientation: .horizontal)
+    if let label = label {
+        let labelField = NSTextField(labelWithString: label + ":")
+        labelField.font = NSFont.labelFont(ofSize: NSFont.systemFontSize(for: .small))
+        hStack.addArrangedSubview(labelField)
+    }
+    elems.forEach(hStack.addArrangedSubview)
+    return hStack
 }
 
 fileprivate protocol TestComponent {

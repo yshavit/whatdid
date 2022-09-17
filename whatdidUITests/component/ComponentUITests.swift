@@ -487,8 +487,6 @@ class ComponentUITests: XCTestCase {
                 fieldHelper.assertOptionsOpenButEmpty()
             }
             group("Click in text field") {
-                print(fieldHelper.textField.frame)
-                print(fieldHelper.textField.simpleDescription)
                 fieldHelper.textField.click()
                 fieldHelper.assertOptionsOpenButEmpty()
                 XCTAssertTrue(fieldHelper.textField.hasFocus)
@@ -647,7 +645,6 @@ class ComponentUITests: XCTestCase {
                     XCTAssertTrue(fieldHelper.textField.hasFocus)
                 }
                 group("Select \"Ccc\"") {
-                    print(fieldHelper.optionsScroll.descendants(matching: .textField)["Ccc"].simpleDescription)
                     fieldHelper.optionsScroll.descendants(matching: .textField)["Ccc"].click()
                     fieldHelper.assertOptionsPaneHidden()
                 }
@@ -777,7 +774,6 @@ class ComponentUITests: XCTestCase {
             XCTAssertTrue(fieldHelper.textField.hasFocus) // Sanity check
             fieldHelper.textField.typeKey(.upArrow)
             XCTAssertEqual("option 49", fieldHelper.selectedOptionText)
-            print(fieldHelper.optionTextField(atIndex: 49).simpleDescription)
         }
         group("Down-up back up to the first element") {
             XCTAssertTrue(fieldHelper.textField.hasFocus) // Sanity check
