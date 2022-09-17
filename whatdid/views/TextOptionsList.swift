@@ -251,8 +251,12 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         autocompleteTo = filterByText
         defer {
             if let layout = textView.layoutManager, let container = textView.textContainer {
-                let fullRange = NSRange(location: 0, length: textView.textStorage?.length ?? 0)
-                heightConstraint.constant = layout.boundingRect(forGlyphRange: fullRange, in: container).height
+                let fullRange = layout.glyphRange(for: container)
+                let requestedHeight = layout.boundingRect(forGlyphRange: fullRange, in: container).height
+                if heightConstraint.constant != requestedHeight {
+                    heightConstraint.constant = requestedHeight
+                    callbacks?.contentSizeChanged()
+                }
             }
             let accessibilityChildren = (0..<optionInfosByMinY.entries.count).map {
                 OptionAccessibilityElement(parent: self, optionIndex: $0)
@@ -269,9 +273,9 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             storage.setAttributedString(NSAttributedString(
                 string: "(no previous entries)",
                 attributes: [
-                    .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
-                    .foregroundColor: NSColor.systemGray,
-                    .underlineColor: NSColor.systemGray,
+                    .font: NSFont.labelFont(ofSize: NSFont.systemFontSize),
+                    .paragraphStyle: NSParagraphStyle.default,
+                    .foregroundColor: NSColor.disabledControlTextColor,
                 ]))
             return
         }
@@ -401,12 +405,16 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             self.paragraphStyle = paragraphStyle
         }
         
+        var optionAttrs: [NSAttributedString.Key : Any] {
+            return [
+                .font: NSFont.labelFont(ofSize: NSFont.systemFontSize),
+                .paragraphStyle: paragraphStyle,
+            ]
+        }
+        
         func add(option: String, highlighting matches: [NSRange]) -> NSRange {
             let _ = add(text: "\n", with: [:])
-            let result =  add(text: option, with: [
-                .font: NSFont.labelFont(ofSize: NSFont.systemFontSize),
-                .paragraphStyle: paragraphStyle
-            ])
+            let result =  add(text: option, with: optionAttrs)
             
             // Decorate it with the match info
             for match in matches {
