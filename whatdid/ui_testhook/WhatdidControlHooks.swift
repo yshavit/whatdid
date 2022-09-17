@@ -215,7 +215,25 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
     }
     
     func controlTextDidEndEditing(_ obj: Notification) {
-        updateDate()
+        if NSApp.currentEvent?.modifierFlags.contains(.shift) ?? false {
+            let origValue = setter.stringValue
+            setter.isEnabled = false
+            var secondsRemaining = 3
+            Timer.scheduledTimer(withTimeInterval: TimeInterval(1), repeats: true, block: {timer in
+                if secondsRemaining == 0 {
+                    timer.invalidate()
+                    self.setter.isEnabled = true
+                    self.setter.stringValue = origValue
+                    self.updateDate()
+                } else {
+                    self.setter.stringValue = "Setting in \(secondsRemaining)..."
+                    secondsRemaining -= 1
+                }
+            }).fire()
+        }
+        if setter.isEnabled {
+            updateDate()
+        }
     }
     
     func updateDateDisplays(to date: Date) {
