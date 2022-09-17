@@ -273,7 +273,7 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             storage.setAttributedString(NSAttributedString(
                 string: "(no previous entries)",
                 attributes: [
-                    .font: NSFont.labelFont(ofSize: NSFont.systemFontSize),
+                    .font: NSFont.labelFont(ofSize: NSFont.smallSystemFontSize),
                     .paragraphStyle: NSParagraphStyle.default,
                     .foregroundColor: NSColor.disabledControlTextColor,
                 ]))
