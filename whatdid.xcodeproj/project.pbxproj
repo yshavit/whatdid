@@ -61,6 +61,7 @@
 		7E7C385224DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7C385124DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift */; };
 		7E7D006D262BFC08002D4CB5 /* ConfirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7D006B262BFC08002D4CB5 /* ConfirmViewController.swift */; };
 		7E7D006E262BFC08002D4CB5 /* ConfirmViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E7D006C262BFC08002D4CB5 /* ConfirmViewController.xib */; };
+		7E7D8D6A28D58A67009EC9B2 /* XCUIKeyboardKey+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7D8D6928D58A67009EC9B2 /* XCUIKeyboardKey+Helpers.swift */; };
 		7E88CC8E261EB5A900968F64 /* AnimationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E88CC8D261EB5A900968F64 /* AnimationHelper.swift */; };
 		7E88F5AA2529AB46002B2F2E /* Int+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E88F5A92529AB46002B2F2E /* Int+Helpers.swift */; };
 		7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */; };
@@ -230,6 +231,7 @@
 		7E7C385124DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlatEntry+SerdeTest.swift"; sourceTree = "<group>"; };
 		7E7D006B262BFC08002D4CB5 /* ConfirmViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmViewController.swift; sourceTree = "<group>"; };
 		7E7D006C262BFC08002D4CB5 /* ConfirmViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfirmViewController.xib; sourceTree = "<group>"; };
+		7E7D8D6928D58A67009EC9B2 /* XCUIKeyboardKey+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIKeyboardKey+Helpers.swift"; sourceTree = "<group>"; };
 		7E88CC8D261EB5A900968F64 /* AnimationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationHelper.swift; sourceTree = "<group>"; };
 		7E88F5A92529AB46002B2F2E /* Int+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Helpers.swift"; sourceTree = "<group>"; };
 		7E8C04DA23714F0700A0C3A6 /* whatdid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = whatdid.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -677,6 +679,7 @@
 				7E6F2E6C24F38D9E008874FE /* XCTestCase+Helpers.swift */,
 				7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */,
 				7E64F02A24FAF01700C988C5 /* XCUIElementQuery+Helpers.swift */,
+				7E7D8D6928D58A67009EC9B2 /* XCUIKeyboardKey+Helpers.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -1051,6 +1054,7 @@
 				7EDD2BCC2616F06A005E6A4B /* ScheduleTest.swift in Sources */,
 				7E7C385224DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift in Sources */,
 				7EDDFF5F250097F20027E91A /* Date+Helpers.swift in Sources */,
+				7E7D8D6A28D58A67009EC9B2 /* XCUIKeyboardKey+Helpers.swift in Sources */,
 				7EF8B9E926158E2200834866 /* UITestBase.swift in Sources */,
 				7E4CD510277C4B9600C83D7D /* DatePickerUtils.swift in Sources */,
 				7EEF62D426195C3800528000 /* DailyReportTest.swift in Sources */,

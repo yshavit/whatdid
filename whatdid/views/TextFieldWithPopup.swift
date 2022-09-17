@@ -67,8 +67,9 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
         popupManager = PopupManager(parent: self)
         useAutoLayout()
         
-        setAccessibilityRole(.textField)
         let textFieldCell = ShrunkenTextFieldCell(textCell: "")
+        textFieldCell.setAccessibilityElement(false)
+        textFieldCell.setAccessibilityEnabled(false)
         self.cell = textFieldCell
         self.isBordered = true
         self.backgroundColor = .white
@@ -114,24 +115,29 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
         delegate = self
         
         setAccessibilityEnabled(true)
+        setAccessibilityElement(true)
         setAccessibilityRole(.comboBox)
         pulldownButton.setAccessibilityEnabled(true)
         pulldownButton.setAccessibilityRole(.button)
         setAccessibilityChildren(nil) // we'll do it manually in `accessibilityChildren`
-        
         finishInit()
     }
     
     override func setAccessibilityIdentifier(_ id: String?) {
         super.setAccessibilityIdentifier(id)
-        cell?.setAccessibilityIdentifier(id.map({ "\($0)__cell"}))
         pulldownButton.setAccessibilityIdentifier(id.map({ "\($0)__pulldown"}))
-//        popupManager.accessibilityIdentifierChanged()
+    }
+    
+    override func accessibilityFrame() -> NSRect {
+        return super.accessibilityFrame()
+    }
+    
+    override func accessibilityFrame(for range: NSRange) -> NSRect {
+        return super.accessibilityFrame(for: range)
     }
     
     override func accessibilityChildren() -> [Any]? {
         var result = [NSObject]()
-        
         result.append(pulldownButton.cell ?? pulldownButton)
         if let scroll = popupManager.accessibilityView {
             result.append(scroll)
@@ -228,6 +234,11 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
     }
     
     override func textDidEndEditing(_ notification: Notification) {
+        if popupManager.isOpen, let selected = popupManager.contents?.selectedText {
+            // This occurs when the user hit "enter" after arrowing down to the text, instead of
+            // clicking on it with the cursor.
+            stringValue = selected
+        }
         super.textDidEndEditing(notification)
         popupManager.close()
     }
@@ -331,6 +342,8 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
         
         window.contentView = scrollView
         window.level = .popUpMenu
+        scrollView.setAccessibilityElement(true)
+        scrollView.setAccessibilityEnabled(true)
         scrollView.setAccessibilityChildren(nil)
         scrollView.setAccessibilityRole(.scrollArea)
         
@@ -339,7 +352,11 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
     }
     
     var accessibilityView: NSView? {
-        return window.isVisible ? scrollView : nil
+        isOpen ? scrollView : nil
+    }
+    
+    var isOpen: Bool {
+        window.isVisible
     }
     
     var contents: TextFieldWithPopupContents? {
@@ -348,14 +365,17 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
             if let view = contents?.asView {
                 scrollDocView.subviews = [view]
                 view.anchorAllSides(to: scrollDocView)
+                scrollView.setAccessibilityChildren([view])
             } else {
                 scrollDocView.subviews = []
+                scrollView.setAccessibilityChildren(nil)
             }
         }
     }
     
     func close() {
         window.close()
+        contents?.didHide()
         self.parent.adjustPopupLocation()
     }
     
@@ -401,6 +421,8 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
                 if contents.asView.bounds.contains(locationInContents) {
                     if let result = contents.handleClick(at: locationInContents) {
                         setText(to: result)
+                        /// `let _ =`: this returns `false` if the action/target aren't set. But we don't care, it's still handled.
+                        let _ = parent.sendAction(parent.action, to: parent.target)
                         close()
                     }
                 }
@@ -487,7 +509,9 @@ protocol TextFieldWithPopupCallbacks {
 
 protocol TextFieldWithPopupContents {
     var asView: NSView { get }
+    var selectedText: String? { get }
     func willShow(callbacks: TextFieldWithPopupCallbacks)
+    func didHide()
     func moveSelection(_ direction: Direction)
     
     /// Invoked when the text field's value changes. This method returns a string to autocomplete to, which may

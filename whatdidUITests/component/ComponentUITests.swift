@@ -487,6 +487,8 @@ class ComponentUITests: XCTestCase {
                 fieldHelper.assertOptionsOpenButEmpty()
             }
             group("Click in text field") {
+                print(fieldHelper.textField.frame)
+                print(fieldHelper.textField.simpleDescription)
                 fieldHelper.textField.click()
                 fieldHelper.assertOptionsOpenButEmpty()
                 XCTAssertTrue(fieldHelper.textField.hasFocus)
@@ -610,7 +612,7 @@ class ComponentUITests: XCTestCase {
                     XCTAssertEqual(expectedResult, fieldHelper.selectedOptionText)
                 }
             }
-            group("Down-arrow to Ddd") {
+            group("Up-arrow to Ddd") {
                 fieldHelper.textField.typeKey(.upArrow)
                 XCTAssertEqual("Ddd", fieldHelper.selectedOptionText)
                 XCTAssertTrue(fieldHelper.textField.hasFocus) // just to make sure we never lost it
@@ -628,7 +630,7 @@ class ComponentUITests: XCTestCase {
                 group("Another \"b\" does not clear selection") {
                     fieldHelper.textField.typeText("b")
                     // Note: The keyboard navigation
-                    XCTAssertEqual("b", fieldHelper.textField.stringValue)
+                    XCTAssertEqual("bb", fieldHelper.textField.stringValue)
                     XCTAssertEqual("Bbb", fieldHelper.selectedOptionText)
                 }
             }
@@ -645,10 +647,30 @@ class ComponentUITests: XCTestCase {
                     XCTAssertTrue(fieldHelper.textField.hasFocus)
                 }
                 group("Select \"Ccc\"") {
-                    fieldHelper.optionsScroll.children(matching: .textField)["Ccc"].click()
+                    print(fieldHelper.optionsScroll.descendants(matching: .textField)["Ccc"].simpleDescription)
+                    fieldHelper.optionsScroll.descendants(matching: .textField)["Ccc"].click()
                     fieldHelper.assertOptionsPaneHidden()
                 }
                 XCTAssertEqual("Ccc", resultField.stringValue)
+            }
+            group("selection state rests when popup closes") {
+                group("initialize") {
+                    fieldHelper.textField.deleteText(andReplaceWith: "b")
+                }
+                for i in 1...2 {
+                    group("arrow down #\(i)") {
+                        XCTAssertFalse(fieldHelper.optionsScrollIsOpen)
+                        fieldHelper.textField.typeKey(XCUIKeyboardKey.downArrow)
+                        XCTAssertEqual("Bbb", fieldHelper.selectedOptionText)
+                        fieldHelper.textField.typeKey(.escape)
+                    }
+                }
+                group("arrow up") {
+                    XCTAssertFalse(fieldHelper.optionsScrollIsOpen)
+                    fieldHelper.textField.typeKey(XCUIKeyboardKey.upArrow)
+                    XCTAssertEqual("Ccc", fieldHelper.selectedOptionText)
+                    fieldHelper.textField.typeKey(.escape)
+                }
             }
         }
     }
@@ -755,7 +777,7 @@ class ComponentUITests: XCTestCase {
             XCTAssertTrue(fieldHelper.textField.hasFocus) // Sanity check
             fieldHelper.textField.typeKey(.upArrow)
             XCTAssertEqual("option 49", fieldHelper.selectedOptionText)
-            XCTAssertTrue(fieldHelper.optionTextField(atIndex: 49).isHittable)
+            print(fieldHelper.optionTextField(atIndex: 49).simpleDescription)
         }
         group("Down-up back up to the first element") {
             XCTAssertTrue(fieldHelper.textField.hasFocus) // Sanity check

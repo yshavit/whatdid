@@ -116,6 +116,9 @@ fileprivate class TextFieldWithPopupComponent: TestComponent {
     }
     
     class DummyPopupContents: TextFieldWithPopupContents {
+        
+        var selectedText: String? // always nill; needed for protocol
+        
         private var callbacks: TextFieldWithPopupCallbacks!
 
         private let mainStack = NSStackView(orientation: .vertical)
@@ -169,6 +172,10 @@ fileprivate class TextFieldWithPopupComponent: TestComponent {
         
         func onTextChanged(to newValue: String) -> String {
             return "the quick brown fox jumped over the lazy dog"
+        }
+        
+        func didHide() {
+            // nothing
         }
     }
 }

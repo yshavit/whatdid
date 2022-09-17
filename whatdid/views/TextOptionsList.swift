@@ -3,6 +3,7 @@
 import Cocoa
 
 class TextOptionsList: WdView, TextFieldWithPopupContents {
+    
     private static let PINNED_OPTIONS_COUNT = 3
     
     private var textView: TrackingTextView!
@@ -10,19 +11,6 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
     private var arrowSelectionHighlight: NSVisualEffectView!
     private var callbacks: TextFieldWithPopupCallbacks!
     private var heightConstraint: NSLayoutConstraint!
-    /// This isn't just a performance-related cache: it's required for correctness.
-    ///
-    /// The system may call `accessibilityChildren()` several times, and if the elements haven't changed,
-    /// it should return the same exact instances. This ensures that parent-child relationships and other such things
-    /// all work correctly; I think it's also important for make sure that the objects don't get prematurely GC'ed, though
-    /// I'm not positive about that.
-    ///
-    /// Point is, this is important!
-    ///
-    /// Alternatively, we could just calculate the array at each call to `updateText()`, and then just call
-    /// `setAccessibilityChildren(~)`. This whole cache thing may be a premature optimization. But whatever,
-    /// I've already written it!
-    private var cachedAccessibilityChildren: [NSAccessibilityElement]?
     
     private var selectionIdx: Int? {
         didSet {
@@ -30,9 +18,57 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         }
     }
     
+    var selectedText: String? {
+        selectionIdx.map({optionInfosByMinY.entries[$0].value.stringValue})
+    }
+    
     private var filterByText = "" {
         didSet {
+            let oldSelected: (String, Int)? // the old text, and how many duplicates of that text were before it
+            if let selectionIdx = selectionIdx {
+                let allOptions = optionInfosByMinY.entries.map({$0.value.stringValue})
+                let oldText = allOptions[selectionIdx]
+                let entriesBeforeSelection = allOptions[0..<selectionIdx]
+                let dupesCount = entriesBeforeSelection.filter({$0 == oldText}).count
+                oldSelected = (oldText, dupesCount)
+            } else {
+                oldSelected = nil
+            }
             updateText()
+            if let (oldText, oldDupesCount) = oldSelected {
+                /// `updateText()` cleared the selection. We may want to restore it. There are a few scenarios:
+                ///
+                /// 1. Current `filterByText` starts with `oldValue`: the user typed additional characters.
+                /// 2. The `oldValue` starts with `filterByText`: the user deleted characters.
+                /// 3. Alll other cases (we're not interested in common prefixes, etc).
+                ///
+                /// The first case is tricky, because our selected option may not be available anymore. If it's not, where should we go instead? Do we pick
+                /// the next-best option, even if it may be far away from where the original was? Since elements aren't ordered, can we shift _up_?
+                ///
+                /// The easy case is when the old selected option is still available. In that case, stay on it. For now, let's say that in all other cases, we just
+                /// unselect.
+                ///
+                /// In case #2, we know the old option is still available; so let's stay on it.
+                ///
+                /// In case 3, we should just clear the selection.
+                ///
+                /// tldr: If the old option is still available, stay on it, otherwise clear the selection.
+                ///
+                /// This may not always be the most convenient, but it's nice and simple, and doesn't risk the user jumping all around as they type.
+                /// As an added bonus: an option may be present multiple times. Let's stay on whichever one we were at before (they'll all be there, or none be there).
+                let allOptions = optionInfosByMinY.entries.map({$0.value.stringValue})
+                var dupesRemaining = oldDupesCount
+                for (i, optionText) in allOptions.enumerated() {
+                    if optionText == oldText {
+                        if dupesRemaining == 0 {
+                            selectionIdx = i
+                            break
+                        } else {
+                            dupesRemaining -= 1
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -60,8 +96,17 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         self.callbacks = callbacks
     }
     
+    func didHide() {
+        selectionIdx = nil
+    }
+    
     func moveSelection(_ direction: Direction) {
-        let largestIdx = optionInfosByMinY.entries.count - 1
+        let allEntries = optionInfosByMinY.entries
+        guard !allEntries.isEmpty else {
+            selectionIdx = nil
+            return
+        }
+        let largestIdx = allEntries.count - 1
         var idx: Int
         if let selectionIdx = selectionIdx {
             idx = selectionIdx + (direction == .up ? -1 : 1)
@@ -73,7 +118,22 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         } else if direction == .up {
             idx = largestIdx
         } else {
+            /// Okay, this is a special case! We want the first hit that matches, but if none do, then we want just element 0.
+            /// We're guaranteed a match at element index `PINNED_OPTIONS_COUNT` + 1 (ie the 4th element, if we pin 3).
+            /// So, look for at least `PINNED_OPTIONS_COUNT + 1` elems (but to a max of however many there are, obviously!),
+            /// and if you don't find any, then in _that_ case fall back to `0.`
             idx = 0
+            /// Special case: if `filterByText.isEmpty`, then the 0th will always match.
+            if !filterByText.isEmpty {
+                for i in 0..<min(TextOptionsList.PINNED_OPTIONS_COUNT + 1, allEntries.count) {
+                    let optionText = optionInfosByMinY.entries[i].value.stringValue
+                    let matches = SubsequenceMatcher.matches(lookFor: filterByText, inString: optionText)
+                    if !matches.isEmpty {
+                        idx = i
+                        break
+                    }
+                }
+            }
         }
         selectionIdx = idx
     }
@@ -142,53 +202,14 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         
         textView.setAccessibilityElement(false)
         textView.setAccessibilityEnabled(false)
-        setAccessibilityEnabled(true)
-        setAccessibilityElement(true)
-        setAccessibilityRole(.none)
-        setAccessibilityLabel("Options")
-        setAccessibilityChildren(nil)
+        textView.setAccessibilityRole(.list)
+        textView.setAccessibilityLabel("Options")
+        
+        updateText()
     }
     
     override func initializeInterfaceBuilder() {
         options = ["alpha", "bravo", "charlie"]
-    }
-    
-    override func viewWillMove(toWindow newWindow: NSWindow?) {
-        cachedAccessibilityChildren = nil // invalidate so that we regenerate it as needed
-    }
-    
-    override func accessibilityChildren() -> [Any]? {
-        if let cachedAccessibilityChildren = cachedAccessibilityChildren {
-            return cachedAccessibilityChildren
-        }
-        guard let window = window else {
-            wdlog(.error, "no window to add accessibility elements to")
-            return []
-        }
-        let textViewWidth = textView.bounds.width
-        var results = [NSAccessibilityElement]()
-        for (i, entry) in optionInfosByMinY.entries.enumerated() {
-            let optionInfo = entry.value
-            let textViewRect = NSRect(x: 0, y: optionInfo.minY, width: textViewWidth, height: optionInfo.maxY - optionInfo.minY)
-            let windowRect = textView.convert(textViewRect, to: nil)
-            let screenRect = window.convertToScreen(windowRect)
-            let accessibility = NSAccessibilityElement.element(
-                withRole: .staticText,
-                frame: screenRect,
-                label: optionInfo.stringValue,
-                parent: self)
-            if let accessibility = accessibility as? NSAccessibilityElement {
-                accessibility.setAccessibilityIndex(i)
-                accessibility.setAccessibilityRoleDescription("option")
-                accessibility.setAccessibilityEnabled(true)
-                accessibility.setAccessibilityFrameInParentSpace(textViewRect)
-                results.append(accessibility)
-            } else {
-                wdlog(.error, "NSAccessibilityElement.element returned an unknown type; couldn't creaet accessibility element")
-            }
-        }
-        cachedAccessibilityChildren = results
-        return results
     }
     
     override var isFlipped : Bool {
@@ -224,23 +245,25 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             mouseoverHighlight.isHidden = true
         }
     }
-    
         
     private func updateText() {
-        cachedAccessibilityChildren = nil // invalidate so that we regenerate it as needed
+        selectionIdx = nil // TODO maybe keep it iff the new option is still available?
         autocompleteTo = filterByText
         defer {
             if let layout = textView.layoutManager, let container = textView.textContainer {
                 let fullRange = NSRange(location: 0, length: textView.textStorage?.length ?? 0)
                 heightConstraint.constant = layout.boundingRect(forGlyphRange: fullRange, in: container).height
             }
+            let accessibilityChildren = (0..<optionInfosByMinY.entries.count).map {
+                OptionAccessibilityElement(parent: self, optionIndex: $0)
+            }
+            textView.setAccessibilityChildren(accessibilityChildren)
         }
         guard let storage = textView.textStorage, let pStyle = textView.defaultParagraphStyle else {
             textView.string = "<error>"
             wdlog(.error, "Couldn't find storage or default paragraph style")
             return
         }
-        
         optionInfosByMinY.removeAll()
         if options.isEmpty {
             storage.setAttributedString(NSAttributedString(
@@ -311,6 +334,38 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             optionInfosByMinY.add(kvPairs: optionInfoEntries)
         } else {
             wdlog(.warn, "textView no layoutManager or textContainer")
+        }
+    }
+    
+    private class OptionAccessibilityElement: NSAccessibilityElement {
+        private let parent: TextOptionsList
+        private let optionIndex: Int
+        
+        init(parent: TextOptionsList, optionIndex: Int) {
+            self.parent = parent
+            self.optionIndex = optionIndex
+            super.init()
+            setAccessibilityRole(.textField)
+            setAccessibilityValue(parent.optionInfosByMinY.entries[optionIndex].value.stringValue)
+            setAccessibilityLabel(accessibilityValue() as? String)
+            setAccessibilityIndex(optionIndex)
+            setAccessibilityRoleDescription("option")
+            setAccessibilityEnabled(true)
+            setAccessibilityElement(true)
+        }
+        
+        override func isAccessibilitySelected() -> Bool {
+            return parent.selectionIdx == optionIndex
+        }
+        
+        override func accessibilityFrame() -> NSRect {
+            let optionInfo = parent.optionInfosByMinY.entries[optionIndex].value
+            let width = parent.textView.frame.width
+            let textViewRect = NSRect(x: 0, y: optionInfo.minY, width: width, height: optionInfo.maxY - optionInfo.minY)
+            
+            let windowRect = parent.textView.convert(textViewRect, to: nil)
+            let screenRect = parent.textView.window?.convertToScreen(windowRect) ?? NSRect.zero
+            return screenRect
         }
     }
     
