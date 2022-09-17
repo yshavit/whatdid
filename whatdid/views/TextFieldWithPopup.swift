@@ -171,10 +171,11 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
         case #selector(cancelOperation(_:)):
             if popupManager.window.isVisible {
                 popupManager.close()
+                return true
             } else {
                 onCancel()
+                return false
             }
-            return true
         default:
             break
         }
