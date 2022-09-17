@@ -263,6 +263,9 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
     }
     
     func showOptions() {
+        if window?.attachedSheet != nil {
+            return
+        }
         let originWithinWindow = superview!.convert(frame.origin, to: nil)
         let originWithinScreen = window!.convertPoint(toScreen: originWithinWindow)
         popupManager.show(
