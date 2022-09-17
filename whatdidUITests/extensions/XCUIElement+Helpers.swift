@@ -154,6 +154,7 @@ extension XCUIElement {
         if let theValue = value {
             result += " ==> \"\(theValue)\""
         }
+        result += " at (x=\(frame.minX), y=\(frame.minY), width=\(frame.width), height=\(frame.height))"
         return result
     }
     

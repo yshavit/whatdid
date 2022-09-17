@@ -237,7 +237,7 @@ class AppUITestBase: UITestBase {
     }
     
     func type(into app: XCUIElement, _ entry: FlatEntry) {
-        app.comboBoxes["pcombo"].children(matching: .textField).firstMatch.click()
+        app.comboBoxes["pcombo"].click()
         for text in [entry.project, entry.task, entry.notes ?? ""] {
             app.typeText(text + "\r")
         }

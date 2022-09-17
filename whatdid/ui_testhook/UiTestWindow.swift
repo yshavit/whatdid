@@ -14,6 +14,8 @@ class UiTestWindow: NSWindowController, NSWindowDelegate {
     override func awakeFromNib() {
         componentSelector.removeAllItems()
         add(MainComponent())
+        add(TextFieldWithPopupComponent())
+        add(TextOptionsListComponent())
         add(AutocompleteComponent())
         add(ButtonWithClosureComponent())
         add(DateRangePaneComponent())
@@ -88,6 +90,162 @@ fileprivate class MainComponent: TestComponent {
     
 }
 
+fileprivate class TextFieldWithPopupComponent: TestComponent {
+    func build(adder: (NSView) -> Void) {
+        let field = TextFieldWithPopup()
+        field.contents = DummyPopupContents()
+
+        let echo = NSTextField(labelWithString: "")
+        field.onTextChange = {
+            echo.stringValue = field.stringValue
+        }
+        
+        adder(echo)
+        adder(field)
+    }
+    
+    class DummyPopupContents: TextFieldWithPopupContents {
+        
+        var selectedText: String? // always nill; needed for protocol
+        
+        private var callbacks: TextFieldWithPopupCallbacks!
+
+        private let mainStack = NSStackView(orientation: .vertical)
+        var asView: NSView {
+            get {
+                mainStack
+            }
+        }
+        
+        func willShow(callbacks: TextFieldWithPopupCallbacks) {
+            mainStack.spacing = 4
+            self.callbacks = callbacks
+            mainStack.subviews = []
+            moveSelection(.down)
+        }
+        
+        func handleClick(at point: NSPoint) -> String? {
+            guard let superview = asView.superview else {
+                wdlog(.warn, "Couldn't find superview (to convert local NSPoint to)")
+                return nil
+            }
+            let pointInSuper = asView.convert(point, to: superview)
+            return (asView.hitTest(pointInSuper) as? NSTextField)?.stringValue
+        }
+        
+        func moveSelection(_ direction: Direction) {
+            func scrollTo(_ elem: NSView?) {
+                guard let elem = elem else {
+                    return
+                }
+                callbacks.scroll(to: elem.bounds, within: elem)
+                if let text = (elem as? NSTextField)?.stringValue {
+                    callbacks.setText(to: text)
+                }
+            }
+            
+            switch (direction) {
+            case .up:
+                mainStack.arrangedSubviews.last?.removeFromSuperview()
+                callbacks.contentSizeChanged()
+                scrollTo(mainStack.arrangedSubviews.first)
+            case .down:
+                let label = NSTextField(labelWithString: "label #\(mainStack.arrangedSubviews.count + 1)")
+                label.isBordered = true
+                mainStack.addArrangedSubview(label)
+                callbacks.contentSizeChanged()
+                scrollTo(mainStack.arrangedSubviews.last)
+            }
+            mainStack.invalidateIntrinsicContentSize()
+        }
+        
+        func onTextChanged(to newValue: String) -> String {
+            return "the quick brown fox jumped over the lazy dog"
+        }
+        
+        func didHide() {
+            // nothing
+        }
+    }
+}
+
+fileprivate class TextOptionsListComponent: TestComponent, TextFieldWithPopupCallbacks {
+    
+    private let stepperEcho = NSTextField(labelWithString: "")
+    private let textOptionsAutocompleteEcho = NSTextField(labelWithString: "")
+    private let textOptionsResult = NSTextField(labelWithString: "")
+    private let textOptionsList = TextOptionsList()
+    
+    func build(adder: (NSView) -> Void) {
+        textOptionsList.willShow(callbacks: self)
+        
+        let stepper = NSStepper()
+        stepper.minValue = 0
+        stepper.maxValue = Double(generateOptions(max: nil).count)
+        stepper.intValue = 4
+        stepper.valueWraps = false
+        stepper.target = self
+        stepper.action = #selector(handleStepperChange(_:))
+        handleStepperChange(stepper)
+        
+        let matchInput = NSTextField(string: "")
+        matchInput.target = self
+        matchInput.action = #selector(handleMatchInput(_:))
+        
+        textOptionsAutocompleteEcho.isBordered = true
+        
+        adder(hStack(label: "# options", stepperEcho, stepper))
+        adder(hStack(
+            label: "keyboard selection",
+            ButtonWithClosure(label: "▲", {_ in self.textOptionsList.moveSelection(.up)}),
+            ButtonWithClosure(label: "▼", {_ in self.textOptionsList.moveSelection(.down)})
+        ))
+        adder(hStack(label: "input", matchInput))
+        adder(hStack(label: "autocompletes to", textOptionsAutocompleteEcho))
+        adder(hStack(label: "result", textOptionsResult))
+        adder(textOptionsList)
+        if let parent = textOptionsList.superview {
+            textOptionsList.widthAnchor.constraint(equalTo: parent.widthAnchor).isActive = true
+        }
+    }
+    
+    func contentSizeChanged() {
+        // nothing
+    }
+    
+    func scroll(to bounds: NSRect, within: NSView) {
+        // nothing
+    }
+    
+    func setText(to string: String) {
+        textOptionsResult.stringValue = string
+    }
+    
+    @objc private func handleStepperChange(_ stepper: NSStepper) {
+        stepperEcho.stringValue = "\(stepper.intValue)"
+        textOptionsList.options = generateOptions(max: stepper.intValue)
+    }
+    
+    @objc private func handleMatchInput(_ textField: NSTextField) {
+        textOptionsAutocompleteEcho.stringValue = textOptionsList.onTextChanged(to: textField.stringValue)
+    }
+    
+    private func generateOptions(max: Int32?) -> [String] {
+        let segment1Options = ["alpha", "bravo", "charlie", "delta"]
+        let segment2Options = ["one", "2", "three", "four"]
+        
+        var results = segment1Options.flatMap {seg1 in
+            segment2Options.map {seg2 in
+                "\(seg1) \(seg2)"
+            }
+        }
+        if let max = max, max < results.count {
+            results = results.dropLast(results.count - Int(max))
+        }
+        return results
+    }
+}
+
 fileprivate class AutocompleteComponent: TestComponent {
     
     private let resultField = NSTextField(labelWithString: "")
@@ -99,7 +257,7 @@ fileprivate class AutocompleteComponent: TestComponent {
         options.action = #selector(setAutocompleterOptions(_:))
         options.setAccessibilityIdentifier("test_defineoptions")
         
-        autocompleField.action = { self.resultField.stringValue = $0.textField.stringValue }
+        autocompleField.onAction = { self.resultField.stringValue = $0.stringValue }
         autocompleField.setAccessibilityIdentifier("test_autocomplete")
         
         let optionsStack = NSStackView(orientation: .horizontal)
@@ -279,6 +437,17 @@ fileprivate class SegmentedTimelineViewComponent: TestComponent {
         adder(segmentedTimelineView)
         segmentedTimelineView.autoresizingMask = [.height, .width]
     }
+}
+
+fileprivate func hStack(label: String?, _ elems: NSView...) -> NSView {
+    let hStack = NSStackView(orientation: .horizontal)
+    if let label = label {
+        let labelField = NSTextField(labelWithString: label + ":")
+        labelField.font = NSFont.labelFont(ofSize: NSFont.systemFontSize(for: .small))
+        hStack.addArrangedSubview(labelField)
+    }
+    elems.forEach(hStack.addArrangedSubview)
+    return hStack
 }
 
 fileprivate protocol TestComponent {

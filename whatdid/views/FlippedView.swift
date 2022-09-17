@@ -9,5 +9,4 @@ class FlippedView: WdView {
             return true
         }
     }
-    
 }

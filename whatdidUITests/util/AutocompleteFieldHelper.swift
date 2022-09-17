@@ -14,12 +14,12 @@ struct AutocompleteFieldHelper {
     
     /// The editable text field
     var textField: XCUIElement {
-        return element.children(matching: .textField).element
+        element
     }
     
     /// The popup button that toggles the options pane
     var button: XCUIElement {
-        return element.children(matching: .popUpButton).element
+        return element.children(matching: .button).element
     }
     
     /// The options pane, or fail if it is not open
@@ -53,7 +53,6 @@ struct AutocompleteFieldHelper {
     func assertOptionsOpenButEmpty() {
         XCTestCase.group("FieldHelper: assertOptionsOpenButEmpty") {
             XCTAssertEqual(0, optionsScroll.children(matching: .textField).count)
-            XCTAssertEqual("(no previous entries)", optionsScroll.staticTexts.element.stringValue)
         }
     }
     
@@ -71,7 +70,7 @@ struct AutocompleteFieldHelper {
     }
 
     var optionTextFieldsQuery: XCUIElementQuery {
-        optionsScroll.children(matching: .textField)
+        return optionsScroll.descendants(matching: .textField)
     }
     
     /// The available options; fails if the options pane is not open
@@ -83,7 +82,7 @@ struct AutocompleteFieldHelper {
     
     /// A faster variant of `optionTextFields[index]`
     func optionTextField(atIndex index: Int) -> XCUIElement {
-        return optionsScroll.children(matching: .textField).element(boundBy: index)
+        return optionsScroll.descendants(matching: .textField).element(boundBy: index)
     }
     
     /// The available options' string values; fails if the options pane is not open.
