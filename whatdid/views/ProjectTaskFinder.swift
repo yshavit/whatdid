@@ -42,6 +42,7 @@ class ProjectTaskFinder: WdView {
             return true // nothing left to do for next reponder(s)
         }
         autoCompleteField.tracksPopupSelection = true
+        autoCompleteField.placeholderString = "enter any project or task"
         
         let stack = NSStackView(
             orientation: .horizontal,
