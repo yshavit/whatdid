@@ -15,6 +15,7 @@
                 <outlet property="noteField" destination="6A0-cK-Vnh" id="DMw-Er-dNX"/>
                 <outlet property="prefsButton" destination="tkS-gq-Cbs" id="I1H-5c-cWw"/>
                 <outlet property="projectField" destination="4Lo-U3-YED" id="7SV-al-VYn"/>
+                <outlet property="projectTaskFinder" destination="At2-6r-CSh" id="TbX-Vg-fyx"/>
                 <outlet property="snoozeButton" destination="yjZ-yA-5CH" id="kMR-QE-XYq"/>
                 <outlet property="snoozeExtraOptions" destination="2d3-tf-ady" id="sU1-Fq-fTJ"/>
                 <outlet property="snoozeUntilTomorrow" destination="qvY-Zm-z6P" id="q3v-bx-6bh"/>

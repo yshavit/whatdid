@@ -24,9 +24,13 @@ class AutoCompletingField: TextFieldWithPopup, NSAccessibilityGroup {
     }
     
     override func becomeFirstResponder() -> Bool {
+        var optionsLocal: [String]?
+        if let optionsLookupOnFocus = optionsLookupOnFocus {
+            optionsLocal = optionsLookupOnFocus()
+        }
         let result = super.becomeFirstResponder()
-        if result, let optionsLookupOnFocus = optionsLookupOnFocus {
-            options = optionsLookupOnFocus()
+        if result, let optionsLocal = optionsLocal {
+            options = optionsLocal
         }
         return result
     }

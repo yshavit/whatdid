@@ -3,10 +3,19 @@
 import Cocoa
 
 class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDelegate {
-    // Invoked when the text changes
+    /// Invoked when the text changes
     var onTextChange: (() -> Void) = {}
-    // Invoked when the user escapes out of the field.
-    var onCancel: (() -> Void) = {}
+    
+    /// Invoked when the user escapes out of the field, and returns whether the cancel event was handled.
+    ///
+    /// If this returns `true`, the system will not continue processing the event. If it returns `false`, it will (which may do things
+    /// like closing a window, etc, depending on what the next responders do).
+    ///
+    /// The default implementation does nothing, and returns `false`.
+    var onCancel: (() -> Bool) = {false}
+    
+    /// Whether the text field portion of this view tracks the selection of the popup (when the user uses the up/down keys).
+    var tracksPopupSelection = false
     
     fileprivate var pulldownButton: NSButton!
     
@@ -155,26 +164,30 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
     }
     
     func control(_ control: NSControl, textView: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
+        func arrow(_ direction: Direction) -> Bool {
+            if !popupManager.window.isVisible {
+                showOptions()
+            }
+            if let contents = contents {
+                contents.moveSelection(direction)
+                if tracksPopupSelection, let selection = contents.selectedText {
+                    textView.string = selection
+                    onTextChange()
+                }
+            }
+            return true
+        }
         switch commandSelector {
         case #selector(moveDown(_:)):
-            if !popupManager.window.isVisible {
-                showOptions()
-            }
-            popupManager.contents?.moveSelection(.down)
-            return true
+            return arrow(.down)
         case #selector(moveUp(_:)):
-            if !popupManager.window.isVisible {
-                showOptions()
-            }
-            popupManager.contents?.moveSelection(.up)
-            return true
+            return arrow(.up)
         case #selector(cancelOperation(_:)):
             if popupManager.window.isVisible {
                 popupManager.close()
                 return true
             } else {
-                onCancel()
-                return false
+                return onCancel()
             }
         default:
             break
