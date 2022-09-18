@@ -28,10 +28,10 @@
             <rect key="frame" x="0.0" y="0.0" width="873" height="295"/>
             <subviews>
                 <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xh1-hp-9GB" userLabel="Header stack">
-                    <rect key="frame" x="334" y="160" width="534" height="131"/>
+                    <rect key="frame" x="334" y="181" width="534" height="110"/>
                     <subviews>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="v8p-Bz-hcj" userLabel="Header text">
-                            <rect key="frame" x="-2" y="103" width="376" height="28"/>
+                            <rect key="frame" x="-2" y="82" width="376" height="28"/>
                             <textFieldCell key="cell" title="What have you been working on for the last {DURATION} (since {TIME})?" id="MHs-V5-IyC">
                                 <font key="font" metaFont="label" size="11"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -40,10 +40,10 @@
                             <accessibility identifier="durationheader"/>
                         </textField>
                         <customView verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="maZ-n4-VKP" userLabel="Spacer">
-                            <rect key="frame" x="378" y="81" width="0.0" height="50"/>
+                            <rect key="frame" x="378" y="60" width="0.0" height="50"/>
                         </customView>
                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="HC6-YQ-v0e" userLabel="Snooze buttonopts">
-                            <rect key="frame" x="384" y="117" width="130" height="14"/>
+                            <rect key="frame" x="384" y="96" width="130" height="14"/>
                             <subviews>
                                 <button identifier="snoozebutton" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yjZ-yA-5CH" userLabel="Snooze button">
                                     <rect key="frame" x="0.0" y="-1" width="130" height="15"/>
@@ -102,7 +102,7 @@
                             </constraints>
                         </customView>
                         <button verticalHuggingPriority="750" horizontalCompressionResistancePriority="150" verticalCompressionResistancePriority="150" translatesAutoresizingMaskIntoConstraints="NO" id="tkS-gq-Cbs" userLabel="Prefs Button">
-                            <rect key="frame" x="520" y="117" width="14" height="14"/>
+                            <rect key="frame" x="520" y="96" width="14" height="14"/>
                             <constraints>
                                 <constraint firstAttribute="width" secondItem="tkS-gq-Cbs" secondAttribute="height" multiplier="1:1" id="8lS-9s-VYO"/>
                             </constraints>
@@ -134,7 +134,7 @@
                     </customSpacing>
                 </stackView>
                 <stackView identifier="ptnstack" distribution="fill" orientation="horizontal" alignment="top" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BPo-6t-Flu" userLabel="PTN Stack">
-                    <rect key="frame" x="329" y="132" width="544" height="28"/>
+                    <rect key="frame" x="329" y="153" width="544" height="28"/>
                     <subviews>
                         <customView identifier="pcombo" verticalHuggingPriority="750" verticalCompressionResistancePriority="850" translatesAutoresizingMaskIntoConstraints="NO" id="4Lo-U3-YED" userLabel="Project combo" customClass="AutoCompletingField" customModule="whatdid" customModuleProvider="target">
                             <rect key="frame" x="5" y="2" width="120" height="21"/>
@@ -205,6 +205,9 @@
                         <real value="3.4028234663852886e+38"/>
                     </customSpacing>
                 </stackView>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="At2-6r-CSh" userLabel="ProjectTaskFinder" customClass="ProjectTaskFinder" customModule="whatdid" customModuleProvider="target">
+                    <rect key="frame" x="334" y="132" width="534" height="21"/>
+                </customView>
                 <stackView hidden="YES" distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="baN-bP-K9f" userLabel="FindStack">
                     <rect key="frame" x="334" y="274" width="534" height="21"/>
                     <subviews>
@@ -257,12 +260,15 @@
             </subviews>
             <edgeInsets key="edgeInsets" left="0.0" right="0.0" top="4" bottom="4"/>
             <constraints>
+                <constraint firstItem="At2-6r-CSh" firstAttribute="trailing" secondItem="6A0-cK-Vnh" secondAttribute="trailing" id="0y3-EP-Iod"/>
                 <constraint firstItem="v8p-Bz-hcj" firstAttribute="leading" secondItem="4Lo-U3-YED" secondAttribute="leading" id="1nm-Nj-tYM"/>
                 <constraint firstItem="tY4-8g-lbp" firstAttribute="width" secondItem="BPo-6t-Flu" secondAttribute="width" id="MJr-jV-AFq"/>
+                <constraint firstItem="At2-6r-CSh" firstAttribute="leading" secondItem="4Lo-U3-YED" secondAttribute="leading" id="V8t-9v-qtW"/>
                 <constraint firstItem="3Mb-B7-qO9" firstAttribute="leading" secondItem="v8p-Bz-hcj" secondAttribute="leading" id="VFm-AQ-phk"/>
                 <constraint firstItem="3Mb-B7-qO9" firstAttribute="trailing" secondItem="tkS-gq-Cbs" secondAttribute="trailing" id="e6p-gR-2ta"/>
                 <constraint firstItem="tkS-gq-Cbs" firstAttribute="trailing" secondItem="6A0-cK-Vnh" secondAttribute="trailing" id="e7y-bj-ubu"/>
                 <constraint firstItem="DML-TP-Ano" firstAttribute="leading" secondItem="4Lo-U3-YED" secondAttribute="leading" id="ocW-2g-lfj"/>
+                <constraint firstItem="At2-6r-CSh" firstAttribute="height" secondItem="4Lo-U3-YED" secondAttribute="height" id="omL-rI-OQE"/>
                 <constraint firstItem="dVE-N4-jIs" firstAttribute="height" secondItem="4Lo-U3-YED" secondAttribute="height" id="tXs-aA-QAg"/>
                 <constraint firstItem="cEK-ck-sHF" firstAttribute="trailing" secondItem="6A0-cK-Vnh" secondAttribute="trailing" id="wwW-Qx-v2o"/>
             </constraints>
@@ -272,8 +278,10 @@
                 <integer value="1000"/>
                 <integer value="1000"/>
                 <integer value="1000"/>
+                <integer value="1000"/>
             </visibilityPriorities>
             <customSpacing>
+                <real value="3.4028234663852886e+38"/>
                 <real value="3.4028234663852886e+38"/>
                 <real value="3.4028234663852886e+38"/>
                 <real value="3.4028234663852886e+38"/>
