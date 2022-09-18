@@ -33,6 +33,12 @@ class PasteboardView: WdView {
         box.anchorAllSides(to: self)
     }
     
+    func copyStyle(to other: NSButton) {
+        other.font = pasteboardButton.font
+        other.controlSize = pasteboardButton.controlSize
+        other.bezelStyle = pasteboardButton.bezelStyle
+    }
+    
     override func setAccessibilityLabel(_ accessibilityLabel: String?) {
         pasteboardButton.setAccessibilityLabel(accessibilityLabel)
         trashButton.setAccessibilityLabel(accessibilityLabel.map({$0 + "_rm"}))

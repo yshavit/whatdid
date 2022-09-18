@@ -62,6 +62,10 @@
 		7E7D006D262BFC08002D4CB5 /* ConfirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7D006B262BFC08002D4CB5 /* ConfirmViewController.swift */; };
 		7E7D006E262BFC08002D4CB5 /* ConfirmViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E7D006C262BFC08002D4CB5 /* ConfirmViewController.xib */; };
 		7E7D8D6A28D58A67009EC9B2 /* XCUIKeyboardKey+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7D8D6928D58A67009EC9B2 /* XCUIKeyboardKey+Helpers.swift */; };
+		7E8443E328D7878E00D9694A /* screenshot-entries.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7E0562F8261AB07800F6CDD7 /* screenshot-entries.txt */; };
+		7E8443E628D788B500D9694A /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8443E428D787EC00D9694A /* SampleData.swift */; };
+		7E8443E728D788EF00D9694A /* ScreenshotGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC1FC37261AA9160095388F /* ScreenshotGenerator.swift */; };
+		7E8443E928D795D000D9694A /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8443E428D787EC00D9694A /* SampleData.swift */; };
 		7E88CC8E261EB5A900968F64 /* AnimationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E88CC8D261EB5A900968F64 /* AnimationHelper.swift */; };
 		7E88F5AA2529AB46002B2F2E /* Int+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E88F5A92529AB46002B2F2E /* Int+Helpers.swift */; };
 		7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */; };
@@ -95,7 +99,6 @@
 		7EBE61F124DD2739000B2CB3 /* PtnViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */; };
 		7EBE61F324DD28F2000B2CB3 /* XCUIElement+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE61F224DD28F2000B2CB3 /* XCUIElement+Helpers.swift */; };
 		7EC09CE42794E89800086334 /* StartupMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC09CE32794E89800086334 /* StartupMessage.swift */; };
-		7EC1FC38261AA9160095388F /* ScreenshotGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC1FC37261AA9160095388F /* ScreenshotGenerator.swift */; };
 		7ECAF0DD250C9C110004647E /* NSButton+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECAF0DC250C9C110004647E /* NSButton+Helpers.swift */; };
 		7ECAF0DF250D75B70004647E /* WhatdidTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECAF0DE250D75B70004647E /* WhatdidTextField.swift */; };
 		7ECE46A0279E092700AF884A /* UpdateChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECE469F279E092700AF884A /* UpdateChannel.swift */; };
@@ -232,6 +235,7 @@
 		7E7D006B262BFC08002D4CB5 /* ConfirmViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmViewController.swift; sourceTree = "<group>"; };
 		7E7D006C262BFC08002D4CB5 /* ConfirmViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfirmViewController.xib; sourceTree = "<group>"; };
 		7E7D8D6928D58A67009EC9B2 /* XCUIKeyboardKey+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIKeyboardKey+Helpers.swift"; sourceTree = "<group>"; };
+		7E8443E428D787EC00D9694A /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 		7E88CC8D261EB5A900968F64 /* AnimationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationHelper.swift; sourceTree = "<group>"; };
 		7E88F5A92529AB46002B2F2E /* Int+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Helpers.swift"; sourceTree = "<group>"; };
 		7E8C04DA23714F0700A0C3A6 /* whatdid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = whatdid.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -526,6 +530,8 @@
 				7E970D6A24DA850D00F634AB /* UiTestWindow.swift */,
 				7E970D6824DA84AF00F634AB /* UiTestWindow.xib */,
 				7EE4E39524E24A3F00552AAF /* WhatdidControlHooks.swift */,
+				7E8443E428D787EC00D9694A /* SampleData.swift */,
+				7E0562F8261AB07800F6CDD7 /* screenshot-entries.txt */,
 			);
 			path = ui_testhook;
 			sourceTree = "<group>";
@@ -702,7 +708,6 @@
 				7EEF62E1261964C700528000 /* PrefsUITest.swift */,
 				7EBE61F024DD2739000B2CB3 /* PtnViewControllerTest.swift */,
 				7EDD2BCB2616F06A005E6A4B /* ScheduleTest.swift */,
-				7E0562F8261AB07800F6CDD7 /* screenshot-entries.txt */,
 				7EC1FC37261AA9160095388F /* ScreenshotGenerator.swift */,
 				7EDD2BC52616EFCB005E6A4B /* TutorialTest.swift */,
 			);
@@ -869,6 +874,7 @@
 				7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */,
 				7E970D6924DA84AF00F634AB /* UiTestWindow.xib in Resources */,
 				7E73C95927A66A0C007F87F0 /* LargeReportController.xib in Resources */,
+				7E8443E328D7878E00D9694A /* screenshot-entries.txt in Resources */,
 				7EF883FD260D7DD400170330 /* DayStartController.xib in Resources */,
 				7E7D006E262BFC08002D4CB5 /* ConfirmViewController.xib in Resources */,
 			);
@@ -959,6 +965,7 @@
 				7E4EB8E5278A4724001234F0 /* DisclosureWithLabel.swift in Sources */,
 				7EF883EB260C7D9900170330 /* ExpandableTextField.swift in Sources */,
 				7E51DA09250BF5C60088864F /* TimeZone+Helpers.swift in Sources */,
+				7E8443E928D795D000D9694A /* SampleData.swift in Sources */,
 				7EB7495F2516F9C7001C7DBC /* Prefs.swift in Sources */,
 				7E73C95827A66A0C007F87F0 /* LargeReportController.swift in Sources */,
 				7EA30B092824D34A007376A5 /* SegmentedTimelineView.swift in Sources */,
@@ -1049,16 +1056,17 @@
 				7E947C292779AAA200E882BE /* ExtraStringHelpers.swift in Sources */,
 				7E1F9060250C5CC500992B7F /* TimeZone+Helpers.swift in Sources */,
 				7EBE61F124DD2739000B2CB3 /* PtnViewControllerTest.swift in Sources */,
+				7E8443E728D788EF00D9694A /* ScreenshotGenerator.swift in Sources */,
 				7E6F2E6D24F38D9E008874FE /* XCTestCase+Helpers.swift in Sources */,
 				7E4778F024F8F177007BAE8C /* AutocompleteFieldHelper.swift in Sources */,
 				7EDD2BCC2616F06A005E6A4B /* ScheduleTest.swift in Sources */,
+				7E8443E628D788B500D9694A /* SampleData.swift in Sources */,
 				7E7C385224DF36D000CFF3E7 /* FlatEntry+SerdeTest.swift in Sources */,
 				7EDDFF5F250097F20027E91A /* Date+Helpers.swift in Sources */,
 				7E7D8D6A28D58A67009EC9B2 /* XCUIKeyboardKey+Helpers.swift in Sources */,
 				7EF8B9E926158E2200834866 /* UITestBase.swift in Sources */,
 				7E4CD510277C4B9600C83D7D /* DatePickerUtils.swift in Sources */,
 				7EEF62D426195C3800528000 /* DailyReportTest.swift in Sources */,
-				7EC1FC38261AA9160095388F /* ScreenshotGenerator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

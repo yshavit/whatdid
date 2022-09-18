@@ -19,7 +19,7 @@ class ScreenshotGenerator: AppUITestBase {
 
     func testPtnAndDailyReport() {
         let lastEntryEpochSeconds = group("set up entries") {() -> Int in
-            entriesHook = duplicateToTomorrow(readEntries())
+            entriesHook = readEntries()
             let lastEntry = entriesHook.last!
             return Int(lastEntry.to.timeIntervalSince1970)
         }
@@ -125,90 +125,25 @@ class ScreenshotGenerator: AppUITestBase {
     }
     
     func readEntries() -> [FlatEntry] {
-        let realNow = Date() // note! Unlike most of the UI test dates, this is actual, real, wall-clock-now.
-        let cal = Calendar.current
-        let lastMidnight = cal.date(bySettingHour: 00, minute: 00, second: 00, of: realNow)!
-        var lastEntryEnd: Date? = nil
-        
-        var entries = [FlatEntry]()
-        for line in readEntriesFile().split(separator: "\n") {
-            /// The format is a backslash delimited line::
-            /// ```
-            /// | hh:mm | project | task | notes |`
-            /// ```
-            /// Note that the `hh:mm` is _not_ tab-delimited; that uses a colon, so that it reads nicely.
-            let trimmed = line.trimmingCharacters(in: .whitespacesAndNewlines)
-            if trimmed.isEmpty {
-                continue
-            }
-            let segments = trimmed.split(separator: "|").map({$0.trimmingCharacters(in: .whitespaces)})
-            let hhmm = segments[0].split(separator: ":")
-            let project = segments[1]
-            let task = segments.maybe(2) ?? ""
-            let notes = segments.maybe(3) ?? ""
-            
-            if hhmm.count != 2 {
-                XCTAssertEqual(2, hhmm.count, String(line))
-            }
-            
-            let hours = Int(hhmm[0])!
-            let mins = Int(hhmm[1])!
-            
-            let endDate = cal.date(bySettingHour: hours, minute: mins, second: 0, of: lastMidnight)!
-            let startDate = lastEntryEnd ?? endDate.addingTimeInterval(-300)
-            entries.append(
-                FlatEntry(
-                    from: startDate,
-                    to: endDate,
-                    project: String(project),
-                    task: String(task),
-                    notes: String(notes)))
-            lastEntryEnd = endDate
+        #if UI_TEST
+        // note! Unlike most of the UI test dates, this is actual, real, wall-clock-now.
+        let data = SampleData(relativeTo: Date()) {msg in
+            XCTFail(msg)
         }
-        print(entries.count)
-        return entries
-    }
-    
-    func readEntriesFile() -> String {
-        let bundle = Bundle(for: Swift.type(of: self))
-        guard let path = bundle.path(forResource: "screenshot-entries", ofType: "txt") else {
-            return failAndReturn(with: "couldn't find resource")
+        let todayEntries = data.entries()
+        data.now = Calendar.current.date(byAdding: .day, value: -1, to: data.now)!
+        data.entryTransform = {e in FlatEntry(
+            from: e.from,
+            to: e.to,
+            project: e.project.rot13,
+            task: e.task.rot13,
+            notes: e.notes?.rot13)
         }
-        guard let data = FileManager.default.contents(atPath: path) else {
-            return failAndReturn(with: "no data in resource")
-        }
-        guard let string = String(data: data, encoding: .utf8) else {
-            return failAndReturn(with: "invalid data in resource")
-        }
-        return string
-    }
-    
-    func duplicateToTomorrow(_ entries: [FlatEntry]) -> [FlatEntry] {
-        let cal = Calendar.current
-        let yesterdayEntries = entries.map { e in
-            return FlatEntry(
-                from: cal.date(byAdding: .day, value: -1, to: e.from)!,
-                to: cal.date(byAdding: .day, value: -1, to: e.to)!,
-                project: e.project.rot13,
-                task: e.task.rot13,
-                notes: e.notes?.rot13)
-        }
-        let combined = yesterdayEntries + entries
-        return combined
-    }
-    
-    func failAndReturn<T>(with message: String) -> T {
-        let maybe: T? = nil
-        XCTFail(message)
-        return maybe!
-    }
-}
-
-private extension Array {
-    func maybe(_ index: Int) -> Element? {
-        guard index >= 0 && index < count else {
-            return nil
-        }
-        return self[index]
+        let yesterdayEntries = data.entries()
+        return yesterdayEntries + todayEntries
+        #else
+        XCTFail("must be run in UI_TEST mode")
+        return []
+        #endif
     }
 }

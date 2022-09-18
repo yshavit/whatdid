@@ -92,6 +92,15 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
         divider()
         adder(entriesField)
         adder(pasteboardButton)
+        let dataGenButton = ButtonWithClosure(label: "generate sample data", {_ in
+            let generator = SampleData(relativeTo: DefaultScheduler.instance.now) {msg in
+                wdlog(.error, "error loading sample data: %@", msg)
+            }
+            let entries = generator.entries()
+            self.setEntriesViaJson(string: FlatEntry.serialize(entries))
+        })
+        pasteboardButton.copyStyle(to: dataGenButton)
+        adder(dataGenButton)
         
         divider()
         adder(ButtonWithClosure(label: "Reset All", {_ in AppDelegate.instance.resetAll()}))
