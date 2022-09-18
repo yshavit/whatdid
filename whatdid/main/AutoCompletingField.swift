@@ -7,7 +7,7 @@ class AutoCompletingField: TextFieldWithPopup, NSAccessibilityGroup {
     fileprivate static let PINNED_OPTIONS_COUNT = 3
     
     var onAction: (AutoCompletingField) -> Void = {_ in}
-    var optionsLookupOnFocus: (() -> [String])?
+    var optionsLookup: (() -> [String])?
     
     private var optionsList: TextOptionsList {
         contents as! TextOptionsList
@@ -23,16 +23,23 @@ class AutoCompletingField: TextFieldWithPopup, NSAccessibilityGroup {
         onAction(self)
     }
     
-    override func becomeFirstResponder() -> Bool {
-        var optionsLocal: [String]?
-        if let optionsLookupOnFocus = optionsLookupOnFocus {
-            optionsLocal = optionsLookupOnFocus()
+    override func showOptions() {
+        if let optionsLookup = optionsLookup {
+            options = optionsLookup()
         }
-        let result = super.becomeFirstResponder()
-        if result, let optionsLocal = optionsLocal {
-            options = optionsLocal
+        super.showOptions()
+    }
+    
+    func makeFirstResponderWithoutShowingPopup() {
+        guard let window = window else {
+            return
         }
-        return result
+        let prevSetting = automaticallyShowPopup
+        automaticallyShowPopup = false
+        defer {
+            automaticallyShowPopup = prevSetting
+        }
+        window.makeFirstResponder(self)
     }
 
     var options: [String] {

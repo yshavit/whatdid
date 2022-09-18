@@ -17,6 +17,9 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
     /// Whether the text field portion of this view tracks the selection of the popup (when the user uses the up/down keys).
     var tracksPopupSelection = false
     
+    /// Whether to automatically open up the popup when becoming first responder
+    var automaticallyShowPopup = true
+    
     fileprivate var pulldownButton: NSButton!
     
     private var previousAutocompleteHeadLength = 0
@@ -208,7 +211,7 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
 
     override func becomeFirstResponder() -> Bool {
         let succeeded = super.becomeFirstResponder()
-        if succeeded {
+        if succeeded && automaticallyShowPopup {
             showOptions()
         }
         return succeeded
@@ -437,7 +440,7 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
                 // let the popup handle it.
                 if contents.asView.bounds.contains(locationInContents) {
                     if let result = contents.handleClick(at: locationInContents) {
-                        setText(to: result)
+                        parent.stringValue = result // Don't call setText! It will trigger onTextChange(), which double-notifies
                         /// `let _ =`: this returns `false` if the action/target aren't set. But we don't care, it's still handled.
                         let _ = parent.sendAction(parent.action, to: parent.target)
                         close()

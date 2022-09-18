@@ -23,7 +23,7 @@ class ProjectTaskFinder: WdView {
             }
         }
         
-        autoCompleteField.optionsLookupOnFocus = {
+        autoCompleteField.optionsLookup = {
             let (saveState, options) = self.onOpen()
             self.autoCompleteField.stringValue = ""
             self.saveState = saveState

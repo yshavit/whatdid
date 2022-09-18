@@ -42,10 +42,10 @@ class PtnViewController: NSViewController {
                     attributes: [.foregroundColor: NSColor.secondarySelectedControlColor])
             }
         }
-        projectField.optionsLookupOnFocus = {
+        projectField.optionsLookup = {
             AppDelegate.instance.model.listProjects()
         }
-        taskField.optionsLookupOnFocus = {
+        taskField.optionsLookup = {
             AppDelegate.instance.model.listTasks(project: self.projectField.stringValue)
         }
         projectField.onTextChange = {
@@ -73,11 +73,30 @@ class PtnViewController: NSViewController {
         projectTaskFinder.previewSelect = {pt in
             self.projectField.stringValue = pt.project
             self.taskField.stringValue = pt.task
-            self.noteField.stringValue = ""
         }
         projectTaskFinder.onSelect = {pt in
-            self.projectTaskFinder.previewSelect(pt)
+            /// Run an action after a small delay.
+            /// Note: this is really just a minor animation, not a "functional" delay, so we're going
+            /// to use the real/system mechanism instead of DefaultScheduler.instance.
+            func delayed(_ actions: [() -> Void]) {
+                if actions.isEmpty {
+                    return
+                }
+                let action = actions[0]
+                let rest = Array(actions.dropFirst())
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.025, qos: .userInteractive, flags: []) {
+                    action()
+                    delayed(rest)
+                }
+            }
             self.closeFind(self)
+            self.projectField.makeFirstResponderWithoutShowingPopup()
+            delayed([
+                { self.projectField.stringValue = pt.project },
+                { self.taskField.makeFirstResponderWithoutShowingPopup() },
+                { self.taskField.stringValue = pt.task },
+                { self.view.window?.makeFirstResponder(self.noteField) }
+            ])
         }
         projectTaskFinder.onCancel = {prev in
             self.projectField.stringValue = prev.project
