@@ -9,10 +9,13 @@ class ProjectTaskFinder: WdView {
     var onCancel: (SaveState) -> Void = {_ in}
     
     private let autoCompleteField = AutoCompletingField()
+    private var dismissButton: NSButton!
     private var saveState = SaveState.empty
+
+    private static let separator = Character("\u{11}")
     
     override func wdViewInit() {
-        let dismissButton = ButtonWithClosure(label: "dismiss") {_ in self.cancel()}
+        dismissButton = ButtonWithClosure(label: "dismiss") {_ in self.cancel()}
         dismissButton.bezelStyle = .rounded
         if #available(macOS 11.0, *) {
             if let dismissImage = NSImage(systemSymbolName: "xmark.circle", accessibilityDescription: "dismiss") {
@@ -23,12 +26,15 @@ class ProjectTaskFinder: WdView {
             }
         }
         
+        autoCompleteField.accessibilityStringIgnoredChars =
+            CharacterSet(charactersIn: "\(ProjectTaskFinder.separator)")
         autoCompleteField.optionsLookup = {
             let (saveState, options) = self.onOpen()
             self.autoCompleteField.stringValue = ""
             self.saveState = saveState
+            let sep = ProjectTaskFinder.separator
             return options.map {pt in
-                "\u{11}\(pt.project)\u{11} > \u{11}\(pt.task)\u{11}"
+                "\(sep)\(pt.project)\(sep) ▸ \(sep)\(pt.task)\(sep)"
             }
         }
         autoCompleteField.onAction = {f in
@@ -59,13 +65,18 @@ class ProjectTaskFinder: WdView {
         onCancel(saveState)
     }
     
+    override func setAccessibilityIdentifier(_ accessibilityIdentifier: String?) {
+        autoCompleteField.setAccessibilityIdentifier(accessibilityIdentifier)
+        dismissButton.setAccessibilityIdentifier(accessibilityIdentifier.map({"\($0)_cancel"}))
+    }
+    
     override func becomeFirstResponder() -> Bool {
         return autoCompleteField.becomeFirstResponder()
     }
     
     private func parseProjectAndTask(to handler: (ProjectAndTask) -> Void) {
         let str = autoCompleteField.stringValue
-        let splits = str.split(separator: "\u{11}")
+        let splits = str.split(separator: ProjectTaskFinder.separator)
         if splits.count >= 3 {
             /// The splits should be:
             /// `[project, " > ", task]`

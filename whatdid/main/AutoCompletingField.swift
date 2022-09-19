@@ -9,6 +9,15 @@ class AutoCompletingField: TextFieldWithPopup, NSAccessibilityGroup {
     var onAction: (AutoCompletingField) -> Void = {_ in}
     var optionsLookup: (() -> [String])?
     
+    /// Characters to ignore when reporting the accessibility value
+    var accessibilityStringIgnoredChars: CharacterSet {
+        get {
+            optionsList.accessibilityStringIgnoredChars
+        } set (value) {
+            optionsList.accessibilityStringIgnoredChars = value
+        }
+    }
+    
     private var optionsList: TextOptionsList {
         contents as! TextOptionsList
     }

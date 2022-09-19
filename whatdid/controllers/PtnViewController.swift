@@ -105,6 +105,8 @@ class PtnViewController: NSViewController {
             self.closeFind(self)
         }
         projectTaskFinder.isHidden = true
+        projectTaskFinder.setAccessibilityIdentifier("ptn_find")
+        projectTaskFinder.setAccessibilityRole(.group)
         
         if let view = view as? PtnTopLevelStackView {
             view.parent = self
