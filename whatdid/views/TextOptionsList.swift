@@ -3,6 +3,8 @@
 import Cocoa
 
 class TextOptionsList: WdView, TextFieldWithPopupContents {
+    /// Characters to ignore when reporting the accessibility value
+    var accessibilityStringIgnoredChars = CharacterSet()
     
     private static let PINNED_OPTIONS_COUNT = 3
     
@@ -350,7 +352,9 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             self.optionIndex = optionIndex
             super.init()
             setAccessibilityRole(.textField)
-            setAccessibilityValue(parent.optionInfosByMinY.entries[optionIndex].value.stringValue)
+            var value = parent.optionInfosByMinY.entries[optionIndex].value.stringValue
+            value.unicodeScalars.removeAll(where: parent.accessibilityStringIgnoredChars.contains(_:))
+            setAccessibilityValue(value)
             setAccessibilityLabel(accessibilityValue() as? String)
             setAccessibilityIndex(optionIndex)
             setAccessibilityRoleDescription("option")

@@ -66,6 +66,7 @@
 		7E8443E628D788B500D9694A /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8443E428D787EC00D9694A /* SampleData.swift */; };
 		7E8443E728D788EF00D9694A /* ScreenshotGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC1FC37261AA9160095388F /* ScreenshotGenerator.swift */; };
 		7E8443E928D795D000D9694A /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8443E428D787EC00D9694A /* SampleData.swift */; };
+		7E8443EB28D7A2D700D9694A /* ProjectTaskFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8443EA28D7A2D700D9694A /* ProjectTaskFinder.swift */; };
 		7E88CC8E261EB5A900968F64 /* AnimationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E88CC8D261EB5A900968F64 /* AnimationHelper.swift */; };
 		7E88F5AA2529AB46002B2F2E /* Int+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E88F5A92529AB46002B2F2E /* Int+Helpers.swift */; };
 		7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */; };
@@ -236,6 +237,7 @@
 		7E7D006C262BFC08002D4CB5 /* ConfirmViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfirmViewController.xib; sourceTree = "<group>"; };
 		7E7D8D6928D58A67009EC9B2 /* XCUIKeyboardKey+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIKeyboardKey+Helpers.swift"; sourceTree = "<group>"; };
 		7E8443E428D787EC00D9694A /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
+		7E8443EA28D7A2D700D9694A /* ProjectTaskFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectTaskFinder.swift; sourceTree = "<group>"; };
 		7E88CC8D261EB5A900968F64 /* AnimationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationHelper.swift; sourceTree = "<group>"; };
 		7E88F5A92529AB46002B2F2E /* Int+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Helpers.swift"; sourceTree = "<group>"; };
 		7E8C04DA23714F0700A0C3A6 /* whatdid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = whatdid.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -642,6 +644,7 @@
 				7E210AF4284BE5DC0050AD31 /* WdView.swift */,
 				7EE27F7F28CBC01800D41366 /* TextFieldWithPopup.swift */,
 				7EE27F8128CCE29500D41366 /* TextOptionsList.swift */,
+				7E8443EA28D7A2D700D9694A /* ProjectTaskFinder.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -967,6 +970,7 @@
 				7E51DA09250BF5C60088864F /* TimeZone+Helpers.swift in Sources */,
 				7E8443E928D795D000D9694A /* SampleData.swift in Sources */,
 				7EB7495F2516F9C7001C7DBC /* Prefs.swift in Sources */,
+				7E8443EB28D7A2D700D9694A /* ProjectTaskFinder.swift in Sources */,
 				7E73C95827A66A0C007F87F0 /* LargeReportController.swift in Sources */,
 				7EA30B092824D34A007376A5 /* SegmentedTimelineView.swift in Sources */,
 				7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */,

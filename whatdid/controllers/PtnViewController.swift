@@ -15,9 +15,7 @@ class PtnViewController: NSViewController {
     @IBOutlet weak var taskField: AutoCompletingField!
     @IBOutlet weak var noteField: NSTextField!
     
-    @IBOutlet weak var findStack: NSStackView!
-    
-    @IBOutlet weak var findField: AutoCompletingField!
+    @IBOutlet weak var projectTaskFinder: ProjectTaskFinder!
     
     @IBOutlet var goals: GoalsView!
     
@@ -44,10 +42,10 @@ class PtnViewController: NSViewController {
                     attributes: [.foregroundColor: NSColor.secondarySelectedControlColor])
             }
         }
-        projectField.optionsLookupOnFocus = {
+        projectField.optionsLookup = {
             AppDelegate.instance.model.listProjects()
         }
-        taskField.optionsLookupOnFocus = {
+        taskField.optionsLookup = {
             AppDelegate.instance.model.listTasks(project: self.projectField.stringValue)
         }
         projectField.onTextChange = {
@@ -58,29 +56,57 @@ class PtnViewController: NSViewController {
         
         headerText.placeholderString = headerText.stringValue
         
-        findField.optionsLookupOnFocus = {
-            var result = [String]()
+        projectTaskFinder.onOpen = {
+            var options = [ProjectAndTask]()
             for project in AppDelegate.instance.model.listProjects() {
                 for task in AppDelegate.instance.model.listTasks(project: project) {
-                    result.append("\u{11}\(project)\u{11} > \u{11}\(task)\u{11}")
+                    options.append(ProjectAndTask(project: project, task: task))
                 }
             }
-            return result
+            let saveState = ProjectTaskFinder.SaveState(
+                project: self.projectField.stringValue,
+                task: self.taskField.stringValue,
+                notes: self.noteField.stringValue)
+            return (saveState, options)
+            
         }
-        findField.onTextChange = {
-            let splits = self.findField.stringValue.split(separator: "\u{11}")
-            if splits.count > 2 {
-                self.projectField.stringValue = String(splits[0])
-                self.taskField.stringValue = String(splits[2])
+        projectTaskFinder.previewSelect = {pt in
+            self.projectField.stringValue = pt.project
+            self.taskField.stringValue = pt.task
+        }
+        projectTaskFinder.onSelect = {pt in
+            /// Run an action after a small delay.
+            /// Note: this is really just a minor animation, not a "functional" delay, so we're going
+            /// to use the real/system mechanism instead of DefaultScheduler.instance.
+            func delayed(_ actions: [() -> Void]) {
+                if actions.isEmpty {
+                    return
+                }
+                let action = actions[0]
+                let rest = Array(actions.dropFirst())
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.025, qos: .userInteractive, flags: []) {
+                    action()
+                    delayed(rest)
+                }
             }
+            self.closeFind(self)
+            self.projectField.makeFirstResponderWithoutShowingPopup()
+            delayed([
+                { self.projectField.stringValue = pt.project },
+                { self.taskField.makeFirstResponderWithoutShowingPopup() },
+                { self.taskField.stringValue = pt.task },
+                { self.view.window?.makeFirstResponder(self.noteField) }
+            ])
         }
-        findField.onAction = self.closeFind(_:)
-        findField.onCancel = {
-            self.projectField.stringValue = ""
-            self.taskField.stringValue = ""
-            self.noteField.stringValue = ""
+        projectTaskFinder.onCancel = {prev in
+            self.projectField.stringValue = prev.project
+            self.taskField.stringValue = prev.task
+            self.noteField.stringValue = prev.notes
             self.closeFind(self)
         }
+        projectTaskFinder.isHidden = true
+        projectTaskFinder.setAccessibilityIdentifier("ptn_find")
+        projectTaskFinder.setAccessibilityRole(.group)
         
         if let view = view as? PtnTopLevelStackView {
             view.parent = self
@@ -302,14 +328,14 @@ class PtnViewController: NSViewController {
     }
     
     fileprivate func openFind() {
-        findStack.isHidden = false
+        projectTaskFinder.isHidden = false
         view.layoutSubtreeIfNeeded()
         resizeWindowToFit()
-        view.window?.makeFirstResponder(findField)
+        view.window?.makeFirstResponder(projectTaskFinder)
     }
     
     @IBAction func closeFind(_ sender: Any) {
-        findStack.isHidden = true
+        projectTaskFinder.isHidden = true
         resizeWindowToFit()
         grabFocusNow() // grab the project, task, or note field — whatever's open
     }

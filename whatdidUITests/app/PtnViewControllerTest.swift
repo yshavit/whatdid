@@ -149,6 +149,103 @@ class PtnViewControllerTest: AppUITestBase {
             XCTAssertEqual("whodid", pcombo.stringValue)
         }
     }
+    
+    func testFind() {
+        let ptn = openPtn()
+        group("initialize data") {
+            entriesHook = [
+                entry("project_a", "task 1", "notes 1", from: t(-100), to: t(-90)),
+                entry("project_a", "task 2", "notes 2", from: t(-80), to: t(-70)),
+                entry("project_a", "task 2", "notes 3", from: t(-70), to: t(-60)),
+                entry("project_b", "task i", "notes i", from: t(-60), to: t(-50))]
+        }
+        func openFind() -> (AutocompleteFieldHelper, XCUIElement) {
+            return group("open find bar") {
+                ptn.window.typeKey("f", modifierFlags: [.command])
+                let findElem = ptn.window.comboBoxes["ptn_find"]
+                wait(for: "find to open", until: {findElem.isVisible})
+                let searchField = AutocompleteFieldHelper(element: findElem)
+                // Everything should be empty and unset, even if this has been opened before
+                XCTAssertEqual("", searchField.textField.stringValue)
+                XCTAssertTrue(searchField.optionsScrollIsOpen)
+                XCTAssertEqual(searchField.optionTextStrings, [
+                    "project_b ▸ task i", // note: only three unique (project, task)s, though we had 4 entries
+                    "project_a ▸ task 2",
+                    "project_a ▸ task 1"
+                ])
+                searchField.assertNoOptionSelected()
+                return (searchField, ptn.window.buttons["ptn_find_cancel"].firstMatch)
+            }
+        }
+        group("cancel restores PTN") {
+            group("initial") {
+                ptn.pcombo.textField.click()
+                ptn.pcombo.textField.typeText("foo\rbar\rbazz")
+                XCTAssertEqual("foo", ptn.pcombo.textField.stringValue)
+                XCTAssertEqual("bar", ptn.tcombo.textField.stringValue)
+                XCTAssertEqual("bazz", ptn.nfield.stringValue)
+            }
+            let cancelApproaches = [
+                ("button", {(b: XCUIElement) in b.click()}),
+                ("escape key", {(b: XCUIElement) in
+                    ptn.window.typeKey(.escape)  // close the options pane
+                    ptn.window.typeKey(.escape)} // cancel the find
+                ),
+            ]
+            for (description, handler) in cancelApproaches {
+                group("by using \(description)") {
+                    let (search, cancelButton) = openFind()
+                    group("open find, select down") {
+                        ptn.window.typeKey(.downArrow)
+                        XCTAssertEqual("project_b ▸ task i", search.selectedOptionText)
+                        XCTAssertEqual("project_b", ptn.pcombo.textField.stringValue)
+                        XCTAssertEqual("task i", ptn.tcombo.textField.stringValue)
+                        XCTAssertEqual("bazz", ptn.nfield.stringValue)
+                    }
+                    group("cancel") {
+                        handler(cancelButton)
+                        XCTAssertFalse(search.element.isVisible)
+                    }
+                    group("everything was restored") {
+                        XCTAssertEqual("foo", ptn.pcombo.textField.stringValue)
+                        XCTAssertEqual("bar", ptn.tcombo.textField.stringValue)
+                        XCTAssertEqual("bazz", ptn.nfield.stringValue)
+                    }
+                }
+            }
+        }
+        group("select option") {
+            let selectApproaches = [
+                ("button", {(f: AutocompleteFieldHelper) in f.optionTextField(atIndex: 0).click()}),
+                ("keyboard", {(f: AutocompleteFieldHelper) in
+                    ptn.window.typeKey(.downArrow)
+                    ptn.window.typeKey(.enter)}
+                ),
+            ]
+            for (description, handler) in selectApproaches {
+                group("by using \(description)") {
+                    group("initial") {
+                        ptn.pcombo.textField.click()
+                        ptn.pcombo.textField.typeText("foo\rbar\rbazz")
+                        XCTAssertEqual("foo", ptn.pcombo.textField.stringValue)
+                        XCTAssertEqual("bar", ptn.tcombo.textField.stringValue)
+                        XCTAssertEqual("bazz", ptn.nfield.stringValue)
+                    }
+                    let (search, _) = openFind()
+                    group("select element") {
+                        handler(search)
+                        XCTAssertFalse(search.element.isVisible)
+                    }
+                    group("everything typed out") {
+                        XCTAssertEqual("project_b", ptn.pcombo.textField.stringValue)
+                        XCTAssertEqual("task i", ptn.tcombo.textField.stringValue)
+                        XCTAssertEqual("bazz", ptn.nfield.stringValue)
+                        XCTAssertTrue(ptn.nfield.hasFocus)
+                    }
+                }
+            }
+        }
+    }
 
     func testFocus() {
         let ptn = openPtn()
