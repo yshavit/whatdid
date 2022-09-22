@@ -56,6 +56,7 @@ jobs:
         echo -n "$DEV_ID_CERTIFICATE_BASE64" | base64 --decode > "$devid_certificate_path"
         security import "$devid_certificate_path" -P "$BUILD_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$keychain_path"
 
+        security list-keychain -d user -s "$keychain_path"
         security list-keychain
       env:
         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
