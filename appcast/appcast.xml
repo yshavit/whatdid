@@ -4,6 +4,23 @@
         <title>whatdid</title>
         <item>
             <title>0.1</title>
+            <pubDate>Thu, 22 Sep 2022 04:32:57 +0000</pubDate>
+            <sparkle:channel>alpha</sparkle:channel>
+            <sparkle:version>2022.0922.042717</sparkle:version>
+            <sparkle:shortVersionString>0.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://whatdid.yuvalshavit.com/release-notes/Whatdid-2022.0922.042717.html</sparkle:releaseNotesLink>
+            <enclosure url="https://whatdid.yuvalshavit.com/appcast/Whatdid-2022.0922.042717.dmg" length="1950454" type="application/octet-stream" sparkle:edSignature="FGw3Bz6C1CYcSVGnLNDjTmI6+JJ9r1tM2y7b2Ilxi7hDRCgU3kfI3aW03SZ/jdCd6oiOZxQNfr629Pn1McJQAA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2022.0922.042717-2022.0919.034505.delta" sparkle:deltaFrom="2022.0919.034505" length="134888" type="application/octet-stream" sparkle:edSignature="xbLFBXVWyY15+RtaRyUxdFw6pKqcwpmY+rxApBQDDUVmaGIgLDQ++ar+SFODBns1J+ipT8EgVEHjRdm7uk/jAg=="/>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2022.0922.042717-2022.0601.041721.delta" sparkle:deltaFrom="2022.0601.041721" length="481854" type="application/octet-stream" sparkle:edSignature="t2TRRqpD8EK7LQBU8UBI3gnDj5+lER8u/naTzsQETZta7W1webTPS+jJaYekXCtqJ1qbfPn53Qn1dFpCCW68CA=="/>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2022.0922.042717-2022.0528.203457.delta" sparkle:deltaFrom="2022.0528.203457" length="511963" type="application/octet-stream" sparkle:edSignature="K4GC6hVmrrhSAhQixc0kCM5ZZZiugsS9TfQGSYvor7U7T6Y7tRDCCxFAPnN4BthCo3KH/vLecP/jVO5VQmjDAg=="/>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2022.0922.042717-2022.0509.032851.delta" sparkle:deltaFrom="2022.0509.032851" length="518317" type="application/octet-stream" sparkle:edSignature="CNXr4+PVK4U50vF3i2ibxVSDlV3VjSeClVB7zGh0jP3HDPEqtpKpGjG3aHnzz7a8nqC25WDrYfcJjvh5yfFwAQ=="/>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2022.0922.042717-2022.0131.015610.delta" sparkle:deltaFrom="2022.0131.015610" length="542091" type="application/octet-stream" sparkle:edSignature="VaVApOAYLiwv+mvyunMsVkitHtx2smpO3zSTHEUrtA0wscHxCAMMt0zNs+2+Hdp8lfxZY0XH0JuUc107L3nBBQ=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>0.1</title>
             <pubDate>Mon, 19 Sep 2022 04:06:06 +0000</pubDate>
             <sparkle:channel>alpha</sparkle:channel>
             <sparkle:version>2022.0919.034505</sparkle:version>
