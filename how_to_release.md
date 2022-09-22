@@ -1,6 +1,6 @@
 1. Publish a new release on GH.
     1. Create a new tag
-    2. Mark the release as pre-release to flag this as a alpha release.
+    2. Mark the release as pre-release to flag this as an alpha release.
        (This affects whether all users will get it, or only those who have
        opted into alphas.)
 2. Wait for the "on release" GH action to run. It'll be named after the
