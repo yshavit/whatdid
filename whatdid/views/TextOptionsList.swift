@@ -179,7 +179,7 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         let grafStyle = NSMutableParagraphStyle()
         grafStyle.setParagraphStyle(NSParagraphStyle.default)
         grafStyle.headIndent = 10.0
-        grafStyle.alignment = .justified
+        grafStyle.alignment = .natural
         textView.defaultParagraphStyle = grafStyle
         
         heightConstraint = textView.heightAnchor.constraint(equalToConstant: 0)
@@ -190,9 +190,11 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         mouseoverHighlight = NSVisualEffectView()
         arrowSelectionHighlight = NSVisualEffectView()
         arrowSelectionHighlight.isEmphasized = true
-        arrowSelectionHighlight.state = .active
-        arrowSelectionHighlight.material = .selection
-        arrowSelectionHighlight.blendingMode = .behindWindow
+        for highlight in [mouseoverHighlight, arrowSelectionHighlight] {
+            highlight!.state = .active
+            highlight!.material = .selection
+            highlight!.blendingMode = .behindWindow
+        }
         
         textView.wantsLayer = true
         textView.drawsBackground = false

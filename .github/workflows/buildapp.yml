@@ -18,10 +18,11 @@ jobs:
         python-version: 3.7
     - name: Check actions to perform
       run: |
+        set -x
         if [[ -n '${{ secrets.APPLE_ID}}' ]]; then
           echo "should_notarize_app=yes" >> "$GITHUB_ENV"
         fi
-        if [[ "{{ github.event_name }}" == 'workflow_dispatch' || "{{ github.ref }}" == 'refs/heads/main' ]]; then
+        if [[ "${{ github.event_name }}" == 'workflow_dispatch' || "${{ github.ref }}" == 'refs/heads/main' ]]; then
           echo "should_upload_app=yes" >> "$GITHUB_ENV"
         fi
     - name: Will notarize
