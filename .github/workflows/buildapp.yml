@@ -16,72 +16,88 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.7
-    - name: Check whether should upload artifact
-      if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
-      run: echo "should_upload_app=yes" >> "$GITHUB_ENV"
-    - name: Check whether should notarize
+    - name: Check actions to perform
       run: |
         if [[ -n '${{ secrets.APPLE_ID}}' ]]; then
           echo "should_notarize_app=yes" >> "$GITHUB_ENV"
         fi
+        if [[ "{{ github.event_name }}" == 'workflow_dispatch' || "{{ github.ref }}" == 'refs/heads/main' ]]; then
+          echo "should_upload_app=yes" >> "$GITHUB_ENV"
+        fi
     - name: Will notarize
       if: env.should_notarize_app
       run: echo "Will notarize app"
+    - name: Will upload
+      if: env.should_upload_app
+      run: echo "Will upload app"
     - name: Pip install
       run: |
         python -m pip install --upgrade pip
         python -m pip install --upgrade biplist dmgbuild
-    - name: Build
-      # To add the CERTIFICATES_P12 to GH secrets, do:
-      # base64 -w 0 cert.p12
-      run: |
-        ./buildscripts/add-osx-cert.sh
-        xcodebuild -scheme whatdid-release build archive -archivePath build/whatdid
-      env:
-        CERTIFICATES_P12: ${{ secrets.CERTIFICATES_P12 }}
-        CERTIFICATES_P12_PASSWORD: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
-    - name: Package
+    - name: Import certs
       run: |
         set -eu -o pipefail
-        /usr/bin/plutil -insert teamID -string "${APPLE_TEAM_ID}" buildscripts/archive-export.plist
-        /usr/bin/plutil -insert signingCertificate -string "${APPLE_SIGNING_CERT}" buildscripts/archive-export.plist
-        xcodebuild -exportArchive -archivePath build/whatdid.xcarchive -exportPath build -exportOptionsPlist buildscripts/archive-export.plist
+        pwd
+
+        ## Create and populate a temporary keychain with our cert
+        # create temporary keychain
+        keychain_path="$RUNNER_TEMP/app-signing.keychain-db"
+        keychain_password="$(uuidgen)"
+        security create-keychain -p "$keychain_password" "$keychain_path"
+        security set-keychain-settings -lut 21600 "$keychain_path"
+        security unlock-keychain -p "$keychain_password" "$keychain_path"
+        # import certificates to keychain
+        # We need the "Apple Development" one for building, and then "Developer ID" one for notarizing
+        certificate_path="$RUNNER_TEMP/build_certificate.p12"
+        echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode > "$certificate_path"
+        security import "$certificate_path" -P "$BUILD_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$keychain_path"
+
+        devid_certificate_path="$RUNNER_TEMP/build_dev_id_certificate.p12"
+        echo -n "$DEV_ID_CERTIFICATE_BASE64" | base64 --decode > "$devid_certificate_path"
+        security import "$devid_certificate_path" -P "$BUILD_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$keychain_path"
+
+        security list-keychain -d user -s "$keychain_path"
+        security list-keychain
       env:
         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-        APPLE_SIGNING_CERT: ${{ secrets.APPLE_SIGNING_CERT }}
-    - name: Request notarization
+        BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }} # the "Apple Development" one
+        BUILD_CERTIFICATE_PASSWORD: ${{ secrets.BUILD_CERTIFICATE_PASSWORD }}
+        DEV_ID_CERTIFICATE_BASE64: ${{ secrets.DEV_ID_CERTIFICATE_BASE64 }} # the "Developer ID Application" one
+    - name: Build
+      run: |
+        xcodebuild -scheme whatdid-release build archive -archivePath build/whatdid
+    - name: Archive and notarize
       if: env.should_upload_app && env.should_notarize_app
       run: |
+        set -eu -o pipefail
+
+        /usr/bin/plutil -insert teamID -string "${APPLE_TEAM_ID}" buildscripts/archive-export.plist
+        /usr/bin/plutil -insert signingCertificate -string "${APPLE_SIGNING_CERT_NAME}" buildscripts/archive-export.plist
+
+        xcodebuild -exportArchive -archivePath build/whatdid.xcarchive -exportPath build -exportOptionsPlist buildscripts/archive-export.plist
         cd build
         ditto -c -k --keepParent whatdid.app whatdid.zip
         mkdir logs
         mv DistributionSummary.plist Packaging.log logs/
-        xcrun altool --notarize-app --primary-bundle-id "com.yuvalshavit.whatdid.gh.${{ github.run_number }}" -u "${{ secrets.APPLE_ID }}" -p "${{ secrets.APPLE_PW }}" -f whatdid.zip --output-format json | tee notarization-results.json
-        notarization_request=$(jq <notarization-results.json -r '."notarization-upload".RequestUUID')
-        echo "notarization_request=${notarization_request}" >> "$GITHUB_ENV"
-    - name: Wait for notarization and stamp app
-      if: env.should_upload_app && env.should_notarize_app
-      run: |
-        set -e -o pipefail
-        cd build
-        timeout_seconds=3600 # in practice, it should be just a few minutes; but Apple says it's less than an hour
-        echo "Will wait up to $timeout_seconds for notarization request $notarization_request."
-        timeout_at=$(( $(date +%s) + $timeout_seconds ))
-        while true ; do
-          if xcrun altool --notarization-history 0 -u "${{ secrets.APPLE_ID }}" -p "${{ secrets.APPLE_PW }}" | grep -qE "${notarization_request}\s+success" ; then
-            echo "Success. Stapling and re-zipping"
-            xcrun stapler staple whatdid.app
-            break
-          elif [[ $(date +%s) -gt $timeout_at ]]; then
-            echo "Timed out!"
-            exit 1
-          else
-            echo "Notarization not yet complete. Waiting 60 seconds."
-            sleep 60
-          fi
-        done
+
+        xcrun notarytool store-credentials "AC_PASSWORD" --apple-id "$APPLE_ID" --team-id "$APPLE_TEAM_ID" --password "$APPLE_NOTARYTOOL_PASSWORD"
+        # tee /dev/fd/2 just tees out to stderr -- so we can see the response, but also capture it to a variable
+        notary_submission="$(xcrun notarytool submit whatdid.zip --keychain-profile AC_PASSWORD -f json | tee /dev/fd/2)"
+        echo "$notary_submission" | jq .
+        notary_id="$(echo "$notary_submission" | jq -r .id)"
+        notary_result="$(xcrun notarytool wait "$notary_id" --keychain-profile AC_PASSWORD -f json | tee /dev/fd/2)"
+        if [[ "$(echo "$notary_result" | jq -r .status)" != Accepted ]]; then
+          xcrun notarytool log "$notary_id" --keychain-profile AC_PASSWORD | jq .
+        fi
+
+        pwd
+        xcrun stapler staple whatdid.app
+        spctl -vvv --assess --type exec ./whatdid.app
       env:
-        notarization_request: ${{ env.notarization_request }}
+        APPLE_ID: ${{ secrets.APPLE_ID }}
+        APPLE_SIGNING_CERT_NAME: ${{ secrets.APPLE_SIGNING_CERT_NAME }}
+        APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        APPLE_NOTARYTOOL_PASSWORD: ${{ secrets.APPLE_NOTARYTOOL_PASSWORD }}
     - name: Create DMG
       if: env.should_upload_app
       run: |
