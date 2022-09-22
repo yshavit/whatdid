@@ -179,7 +179,7 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         let grafStyle = NSMutableParagraphStyle()
         grafStyle.setParagraphStyle(NSParagraphStyle.default)
         grafStyle.headIndent = 10.0
-        grafStyle.alignment = .justified
+        grafStyle.alignment = .natural
         textView.defaultParagraphStyle = grafStyle
         
         heightConstraint = textView.heightAnchor.constraint(equalToConstant: 0)
