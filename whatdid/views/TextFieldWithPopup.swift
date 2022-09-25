@@ -354,7 +354,7 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
         
         let flippedWidth = flipped.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         flippedWidth.isActive = true
-        if let scroller = scrollView.horizontalScroller {
+        if let scroller = scrollView.verticalScroller {
             scrollBarHelpers.append(ScrollBarHelper(on: scroller) {scrollerWidth in
                 flippedWidth.constant = -(scrollerWidth)
             })
