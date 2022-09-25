@@ -96,8 +96,8 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
             let generator = SampleData(relativeTo: DefaultScheduler.instance.now) {msg in
                 wdlog(.error, "error loading sample data: %@", msg)
             }
-            let entries = generator.entries()
-            self.setEntriesViaJson(string: FlatEntry.serialize(entries))
+            let nodes = generator.entries()
+            self.setEntriesViaJson(string: FlatEntry.serialize(nodes))
         })
         pasteboardButton.copyStyle(to: dataGenButton)
         adder(dataGenButton)
@@ -209,8 +209,8 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
     }
     
     func populateJsonFlatEntryField() {
-        let entries = AppDelegate.instance.model.listEntries(from: Date.distantPast, to: Date.distantFuture)
-        entriesField.stringValue = FlatEntry.serialize(entries)
+        let nodes = AppDelegate.instance.model.listEntries(from: Date.distantPast, to: Date.distantFuture)
+        entriesField.stringValue = FlatEntry.serialize(nodes)
     }
     
     @objc private func setEntriesViaJson(field: NSTextField) {
@@ -218,9 +218,9 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
     }
     
     private func setEntriesViaJson(string: String) {
-        let entries = FlatEntry.deserialize(from: string)
+        let nodes = FlatEntry.deserialize(from: string)
         AppDelegate.instance.resetModel()
-        entries.reversed().forEach {AppDelegate.instance.model.add($0, andThen: {})}
+        nodes.reversed().forEach {AppDelegate.instance.model.add($0, andThen: {})}
     }
     
     func controlTextDidEndEditing(_ obj: Notification) {

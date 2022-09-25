@@ -27,21 +27,21 @@ extension FlatEntry {
         }
     }
     
-    static func serialize(_ entries: FlatEntry...) -> String {
-        return serialize(entries)
+    static func serialize(_ nodes: FlatEntry...) -> String {
+        return serialize(nodes)
     }
     
-    static func serialize(_ entries: [FlatEntry]) -> String {
-        if entries.isEmpty {
+    static func serialize(_ nodes: [FlatEntry]) -> String {
+        if nodes.isEmpty {
             return ""
         }
         do {
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .millisecondsSince1970
-            let jsonData = try encoder.encode(entries)
+            let jsonData = try encoder.encode(nodes)
             return String(data: jsonData, encoding: .utf8)!
         } catch {
-            os_log(.error, "failed to encode entries: %@", String(describing: entries), error as NSError)
+            os_log(.error, "failed to encode entries: %@", String(describing: nodes), error as NSError)
             return ""
         }
     }

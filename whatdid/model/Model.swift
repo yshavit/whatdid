@@ -140,9 +140,159 @@ class Model {
         }
         return results
     }
-    
+
+    func rewrite(entries toWrite: [RewrittenFlatEntry], andThen callback: @escaping (Bool) -> Void) {
+        let callback = {(success: Bool) in
+            DispatchQueue.main.async { callback(success) }
+        }
+        // Get all of the old projects, and for each one its tasks. We'll use this to clean up any dangling
+        // projects or tasks at the end.
+        var originalProjectsAndTasks = [String:Set<String>]()
+        for rewrite in toWrite {
+            let original = rewrite.original.entry
+            var tasks = originalProjectsAndTasks[original.project] ?? Set()
+            tasks.insert(original.task)
+            originalProjectsAndTasks[original.project] = tasks
+        }
+
+        // Get the new projects and tasks, and for each one, calculate its last-used date. We'll use this to update
+        // the projects' and tasks' `lastUsed` below
+        var newProjectsAndTasks = [String:[String:Date]]()
+        for rewrite in toWrite {
+            let project = rewrite.newValue.project.trimmingCharacters(in: .whitespacesAndNewlines)
+            let task = rewrite.newValue.task.trimmingCharacters(in: .whitespacesAndNewlines)
+            let newDate = rewrite.newValue.to
+            var tasks = newProjectsAndTasks[project] ?? [:]
+            if newDate > (tasks[task] ?? Date.distantPast) {
+                tasks[task] = newDate
+            }
+            newProjectsAndTasks[project] = tasks
+        }
+
+        // Prep work is done, let's go!
+        container.performBackgroundTask {context in
+            context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+
+            // A couple utils, for finding existing projects and tasks
+            func fetch(project: String) throws -> Project? {
+                let projectRequest = Project.fetchRequest()
+                projectRequest.predicate = NSPredicate(format: "%K = %@", #keyPath(Project.project), project)
+                projectRequest.fetchLimit = 1
+                return try projectRequest.execute().first
+            }
+
+            func fetch(task: String, within project: Project) throws -> Task? {
+                let taskRequest = Task.fetchRequest()
+                taskRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                    NSPredicate(format: "%K = %@", #keyPath(Task.project), project),
+                    NSPredicate(format: "%K = %@", #keyPath(Task.task), task),
+                ])
+                taskRequest.fetchLimit = 1
+                return try taskRequest.execute().first
+            }
+
+            // First step: make sure all the new projects and tasks are there, and with an up-to-date `lastUpdated`.
+            // If any are missing, create them
+            var tasksByPat = [ProjectAndTask: Task]()
+            do {
+                for (project, tasksAndDate) in newProjectsAndTasks {
+                    let projectObj: Project
+                    if let existingProjectObj = try fetch(project: project) {
+                        projectObj = existingProjectObj
+                    } else {
+                        projectObj = Project(context: context)
+                        projectObj.project = project
+                        projectObj.lastUsed = Date.distantPast
+                    }
+                    for (task, lastUsedInRewrittens) in tasksAndDate {
+                        let taskObj: Task
+                        if let existingTaskObj = try fetch(task: task, within: projectObj) {
+                            taskObj = existingTaskObj
+                        } else {
+                            taskObj = Task(context: context)
+                            taskObj.project = projectObj
+                            taskObj.task = task
+                            taskObj.lastUsed = Date.distantPast
+                        }
+                        taskObj.lastUsed = max(taskObj.lastUsed, lastUsedInRewrittens)
+                        tasksByPat[ProjectAndTask(project: project, task: task)] = taskObj
+                    }
+                }
+            } catch {
+                wdlog(.error, "Failed to fetch existing projects and tasks: %@", error as NSError)
+                callback(false)
+                return
+            }
+
+            // Next, write the new entries. For each one, we expect there to be a pre-existing entry. So we're not
+            // actually writing any new entries; rather, we're looking up the old ones and editing them.
+            for rewrite in toWrite {
+                let newEntry = rewrite.newValue
+                guard let fetched = context.object(with: rewrite.original.objectId) as? Entry else {
+                    wdlog(.error, "couldn't fetch Entry with id=%@", rewrite.original.objectId)
+                    continue
+                }
+                guard let taskObj = tasksByPat[ProjectAndTask(project: newEntry.project, task: newEntry.task)] else {
+                    wdlog(.error, "couldn't fetch project and task: (%@, %@)", newEntry.project, newEntry.task)
+                    continue
+                }
+                fetched.notes = newEntry.notes?.trimmingCharacters(in: .whitespacesAndNewlines)
+                fetched.task = taskObj
+            }
+
+            // Finally, cleanup: Look through all of the old projects and tasks. For each one, see if it has any
+            // children, and if not, delete it.
+            // Note that if an old project or task should now have a newer lastUpdated, we *don't* modify that.
+            // Mostly, this is out of laziness. :-) But it also makes some UX sense, I think: the user will remember
+            // typing them recently, and so might expect them to show up in the autocompletes. Anyway, it'll all fade
+            // away with use, so it doesn't matter much.
+            do {
+                for (project, tasks) in originalProjectsAndTasks {
+                    guard let projectObj = try fetch(project: project) else {
+                        continue
+                    }
+                    for task in tasks {
+                        guard let taskObj = try fetch(task: task, within: projectObj) else {
+                            continue
+                        }
+                        if taskObj.entries.isEmpty {
+                            context.delete(taskObj)
+                            projectObj.tasks.remove(taskObj)
+                            wdlog(.info, "deleting now-unused task: %@ > %@", project, task)
+                        }
+                    }
+                    if projectObj.tasks.isEmpty {
+                        context.delete(projectObj)
+                        wdlog(.info, "deleting now-unused project: %@", project)
+                    }
+                }
+            } catch {
+                wdlog(.warn, "couldn't clean up projects or tasks: %@", error as NSError)
+            }
+
+            // Now just commit all of that, and report back
+            var success = false
+            do {
+                wdlog(.debug, "rewriting flat entries: %d", toWrite.count)
+                try context.save()
+                success = true
+            } catch {
+                wdlog(.error, "Error saving entry: %@", error as NSError)
+                success = false
+            }
+            callback(success)
+            #if UI_TEST
+            self.notifyListeners()
+            #endif
+        }
+    }
+
     func listEntries(from: Date, to: Date) -> [FlatEntry] {
-        var results : [FlatEntry] = []
+        listEntriesWithIds(from: from, to: to).map({$0.entry})
+    }
+
+    func listEntriesWithIds(from: Date, to: Date) -> [RewriteableFlatEntry] {
+        var results : [RewriteableFlatEntry] = []
         container.viewContext.performAndWait {
             do {
                 let request = NSFetchRequest<Entry>(entityName: "Entry")
@@ -152,14 +302,15 @@ class Model {
                     to as NSDate)
                 request.sortDescriptors = [.init(key: "timeApproximatelyStarted", ascending: true)]
                 let entries = try request.execute()
-                results = entries.map({entry in
-                    FlatEntry(
-                        from: entry.timeApproximatelyStarted,
-                        to: entry.timeEntered,
-                        project: entry.task.project.project.trimmingCharacters(in: .controlCharacters),
-                        task: entry.task.task,
-                        notes: entry.notes
-                    )
+                results = entries.map({ entry in
+                    RewriteableFlatEntry(
+                            entry: FlatEntry(
+                                    from: entry.timeApproximatelyStarted,
+                                    to: entry.timeEntered,
+                                    project: entry.task.project.project.trimmingCharacters(in: .controlCharacters),
+                                    task: entry.task.task,
+                                    notes: entry.notes),
+                            objectId: entry.objectID)
                 })
             } catch {
                 wdlog(.error, "couldn't load projects: %@", error as NSError)
@@ -289,21 +440,21 @@ class Model {
         container.performBackgroundTask({context in
             context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
             
-            let projectData = Project.init(context: context)
+            let projectData = Project(context: context)
             projectData.project = flatEntry.project.trimmingCharacters(in: .whitespacesAndNewlines)
             projectData.lastUsed = flatEntry.to
             
-            let taskData = Task.init(context: context)
+            let taskData = Task(context: context)
             taskData.project = projectData
             taskData.task = flatEntry.task.trimmingCharacters(in: .whitespacesAndNewlines)
             taskData.lastUsed = flatEntry.to
-            
-            let entry = Entry.init(context: context)
+
+            let entry = Entry(context: context)
             entry.task = taskData
             entry.notes = flatEntry.notes?.trimmingCharacters(in: .whitespacesAndNewlines)
             entry.timeApproximatelyStarted = flatEntry.from
             entry.timeEntered = flatEntry.to
-            
+
             do {
                 wdlog(
                     .debug,

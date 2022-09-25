@@ -6,6 +6,8 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
     /// Characters to ignore when reporting the accessibility value
     var accessibilityStringIgnoredChars = CharacterSet()
     
+    var emptyOptionsPlaceholder = "(no previous entries)"
+    
     private static let PINNED_OPTIONS_COUNT = 3
     
     private var textView: TrackingTextView!
@@ -274,8 +276,9 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         }
         optionInfosByMinY.removeAll()
         if options.isEmpty {
+            
             storage.setAttributedString(NSAttributedString(
-                string: "(no previous entries)",
+                string: emptyOptionsPlaceholder,
                 attributes: [
                     .font: NSFont.labelFont(ofSize: NSFont.smallSystemFontSize),
                     .paragraphStyle: NSParagraphStyle.default,

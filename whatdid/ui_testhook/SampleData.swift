@@ -18,7 +18,7 @@ class SampleData {
         let lastMidnight = cal.date(bySettingHour: 00, minute: 00, second: 00, of: now)!
         var lastEntryEnd: Date? = nil
         
-        var entries = [FlatEntry]()
+        var nodes = [FlatEntry]()
         for line in readEntriesFile().split(separator: "\n") {
             /// The format is a backslash delimited line::
             /// ```
@@ -44,7 +44,7 @@ class SampleData {
             
             let endDate = cal.date(bySettingHour: hours, minute: mins, second: 0, of: lastMidnight)!
             let startDate = lastEntryEnd ?? endDate.addingTimeInterval(-300)
-            entries.append(
+            nodes.append(
                 FlatEntry(
                     from: startDate,
                     to: endDate,
@@ -54,9 +54,9 @@ class SampleData {
             lastEntryEnd = endDate
         }
         if let entryTransform = entryTransform {
-            entries = entries.map(entryTransform)
+            nodes = nodes.map(entryTransform)
         }
-        return entries
+        return nodes
     }
     
     private func readEntriesFile() -> String {

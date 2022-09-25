@@ -94,7 +94,13 @@ class ProjectTaskFinder: WdView {
     }
 }
 
-struct ProjectAndTask {
+struct ProjectAndTask: Hashable {
     let project: String
     let task: String
+}
+
+extension ProjectAndTask {
+    init(from entry: FlatEntry) {
+        self.init(project: entry.project, task: entry.task)
+    }
 }

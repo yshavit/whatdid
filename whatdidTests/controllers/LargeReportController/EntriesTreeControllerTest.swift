@@ -3,7 +3,7 @@
 import XCTest
 @testable import whatdid
 
-class LargeReportControllerTest: XCTestCase {
+class EntriesTreeControllerTest: XCTestCase {
     
     private var thisMorning: Date!
     private var model: Model!
@@ -30,8 +30,8 @@ class LargeReportControllerTest: XCTestCase {
             builder.add(project: "p1", task: "p1.t2", note: "c", withDuration: 3)
             builder.add(project: "p1", task: "p1.t1", note: "d", withDuration: 4)
         })
-        controller.tasksTreeView.sortDescriptors = sortDescriptor(for: controller, column: "Time spent", ascending: true)
-        let actualItems = expandAllItems(on: controller.tasksTreeView)
+        controller.treeView.sortDescriptors = sortDescriptor(for: controller, column: "Time spent", ascending: true)
+        let actualItems = expandAllItems(on: controller.treeView)
         let indentedTitles = toIndentedString(actualItems, annotatedBy: {"\(Int($0.timeSpent / 60))m"})
         /// Note: The `a` and `d` notes for the `p1.t1` task are still ordered by when they happened, _not_ by how much time they took
         XCTAssertEqual(
@@ -56,8 +56,8 @@ class LargeReportControllerTest: XCTestCase {
             builder.add(project: "p1", task: "p1.t2", note: "c", withDuration: 3)
             builder.add(project: "p1", task: "p1.t1", note: "d", withDuration: 4)
         })
-        controller.tasksTreeView.sortDescriptors = sortDescriptor(for: controller, column: "Time spent", ascending: false)
-        let actualItems = expandAllItems(on: controller.tasksTreeView)
+        controller.treeView.sortDescriptors = sortDescriptor(for: controller, column: "Time spent", ascending: false)
+        let actualItems = expandAllItems(on: controller.treeView)
         let indentedTitles = toIndentedString(actualItems, annotatedBy: {"\(Int($0.timeSpent / 60))m"})
         XCTAssertEqual(
             """
@@ -74,15 +74,15 @@ class LargeReportControllerTest: XCTestCase {
             indentedTitles)
     }
     
-    func testSortByLastWorkedOnAcending() throws {
+    func testSortByLastWorkedOnAscending() throws {
         let controller = createController(withData: {builder in
             builder.add(project: "p1", task: "p1.t1", note: "a", withDuration: 1)
             builder.add(project: "p2", task: "p2.tA", note: "b", withDuration: 2)
             builder.add(project: "p1", task: "p1.t2", note: "c", withDuration: 3)
             builder.add(project: "p1", task: "p1.t1", note: "d", withDuration: 4)
         })
-        controller.tasksTreeView.sortDescriptors = sortDescriptor(for: controller, column: "Last worked on", ascending: true)
-        let actualItems = expandAllItems(on: controller.tasksTreeView)
+        controller.treeView.sortDescriptors = sortDescriptor(for: controller, column: "Last worked on", ascending: true)
+        let actualItems = expandAllItems(on: controller.treeView)
         let indentedTitles = toIndentedString(actualItems, annotatedBy: {"T\(t($0.lastWorkedOn))"})
         /// Note: Notes within a task are always ordered with oldest on top
         XCTAssertEqual(
@@ -107,8 +107,8 @@ class LargeReportControllerTest: XCTestCase {
             builder.add(project: "p1", task: "p1.t2", note: "c", withDuration: 3)
             builder.add(project: "p1", task: "p1.t1", note: "d", withDuration: 4)
         })
-        controller.tasksTreeView.sortDescriptors = sortDescriptor(for: controller, column: "Last worked on", ascending: false)
-        let actualItems = expandAllItems(on: controller.tasksTreeView)
+        controller.treeView.sortDescriptors = sortDescriptor(for: controller, column: "Last worked on", ascending: false)
+        let actualItems = expandAllItems(on: controller.treeView)
         let indentedTitles = toIndentedString(actualItems, annotatedBy: {"T\(t($0.lastWorkedOn))"})
         /// Note: Notes within a task are always ordered with oldest on top
         XCTAssertEqual(
@@ -130,7 +130,7 @@ class LargeReportControllerTest: XCTestCase {
         let controller = createController(withData: {_ in})
         
         var actualTitles = [String]()
-        for column in controller.tasksTreeView.tableColumns {
+        for column in controller.treeView.tableColumns {
             if column.sortDescriptorPrototype?.key != nil {
                 actualTitles.append(column.title)
             }
@@ -152,50 +152,19 @@ class LargeReportControllerTest: XCTestCase {
         }
         let controller = createController(withData: {_ in})
         var foundSortDescriptors = Set<[SimpleSortDescriptor]>()
-        let itemsInSortMenu = controller.sortOptions.itemArray
-        for item in itemsInSortMenu {
-            controller.sortOptions.select(item)
-            sendActionToTarget(of: controller.sortOptions)
-            
-            let simpleDescriptors = controller.tasksTreeView.sortDescriptors.map(SimpleSortDescriptor.from)
+        let itemsInSortMenu = controller.sortOptionsMenu.items
+        for (i, _) in itemsInSortMenu.enumerated() {
+            controller.sortOptionsMenu.performActionForItem(at: i)
+
+            let simpleDescriptors = controller.treeView.sortDescriptors.map(SimpleSortDescriptor.from)
             XCTAssertEqual(1, simpleDescriptors.count)
             foundSortDescriptors.formUnion([simpleDescriptors])
         }
-        
+
         XCTAssertEqual(itemsInSortMenu.count, foundSortDescriptors.count)
     }
     
-    func testDateRangePicker() {
-        let controller = createController(withData: {builder in
-            builder.eventOffset = -86400 // start 24 hours ago
-            
-            for i in 0..<20 {
-                // Create 5 days' worth of 6-hour projects
-                builder.add(project: "project-\(i)", task: "task", note: "", withDuration: 6 * 60)
-            }
-        })
-        controller.tasksTreeView.sortDescriptors = sortDescriptor(for: controller, column: "Last worked on", ascending: true)
-        let treeView = controller.tasksTreeView!
-        
-        func projectTitlesWithDefaultDateRange() -> [String] {
-            return (1..<treeView.numberOfRows).map({
-                visibleNode(for: treeView.item(atRow: $0), in: treeView).title
-            })
-        }
-        
-        XCTAssertEqual(
-            ["project-5", "project-6", "project-7", "project-8"],
-            projectTitlesWithDefaultDateRange())
-        
-        // Now, set the date range picker back to yesterday
-        controller.dateRangePicker.selectItem(withTitle: "yesterday")
-        sendActionToTarget(of: controller.dateRangePicker)
-        XCTAssertEqual(
-            ["project-1", "project-2", "project-3", "project-4"],
-            projectTitlesWithDefaultDateRange())
-    }
-    
-    private func createController(withData dataLoader: (DataBuilder) -> Void) -> LargeReportController {
+    private func createController(withData dataLoader: (DataBuilder) -> Void) -> EntriesTreeController {
         let dataBuilder = DataBuilder(using: model, startingAt: thisMorning)
         dataLoader(dataBuilder)
         
@@ -206,11 +175,22 @@ class LargeReportControllerTest: XCTestCase {
             XCTAssertLessThan(Date(), timeoutAt)
         }
         
-        let controller = LargeReportController(windowNibName: NSNib.Name("LargeReportController"))
-        controller.loadDataAsynchronously = false
-        controller.modelOverride = model
-        controller.showWindow(nil)
-        return controller
+        
+        if let nib = NSNib(nibNamed: "LargeReportController", bundle: Bundle(for: EntriesTreeController.self)) {
+            var topLevelObjects: NSArray? = NSArray()
+            nib.instantiate(withOwner: nil, topLevelObjects: &topLevelObjects)
+            if let controller = topLevelObjects?.compactMap({$0 as? EntriesTreeController}).first {
+                controller.viewDidLoad()
+                let loader = controller.createLoader(using: model.listEntries(from: Date.distantPast, to: Date.distantFuture))
+                controller.load(from: loader)
+                return controller
+            } else {
+                XCTFail("couldn't find EntriesTreeController in nib")
+            }
+        } else {
+            XCTFail("couldn't load nib")
+        }
+        fatalError()
     }
     
     private func expandAllItems(on view: NSOutlineView) -> [VisibleNode] {
@@ -231,9 +211,9 @@ class LargeReportControllerTest: XCTestCase {
         control.sendAction(control.action, to: control.target)
     }
     
-    private func sortDescriptor(for controller: LargeReportController, column columnTitle: String, ascending: Bool) -> [NSSortDescriptor] {
+    private func sortDescriptor(for controller: EntriesTreeController, column columnTitle: String, ascending: Bool) -> [NSSortDescriptor] {
         var result = [NSSortDescriptor]()
-        for column in controller.tasksTreeView.tableColumns {
+        for column in controller.treeView.tableColumns {
             if column.title == columnTitle, let columnSortKey = column.sortDescriptorPrototype?.key {
                 result.append(NSSortDescriptor(key: columnSortKey, ascending: ascending))
             }
@@ -258,7 +238,7 @@ class LargeReportControllerTest: XCTestCase {
     }
     
     private func visibleNode(for rowItem: Any?, in view: NSOutlineView) -> VisibleNode {
-        if let asNode = rowItem as? LargeReportController.Node {
+        if let asNode = rowItem as? EntriesTreeDataSource.Node {
             return VisibleNode(
                 title: asNode.title,
                 lastWorkedOn: asNode.lastWorkedOn,

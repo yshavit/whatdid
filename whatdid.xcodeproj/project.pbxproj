@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6E01204F389CB80FC8CD75ED /* EditEntriesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E012F97EBB4C11F269A1939 /* EditEntriesDataSource.swift */; };
+		6E012216A8475ABF72DEBC69 /* EntriesTreeControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E012ED45DEC1A299BFA43AB /* EntriesTreeControllerTest.swift */; };
+		6E012342D0F39A9653C28569 /* ExtraAssertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0129247B26E0835305551D /* ExtraAssertions.swift */; };
+		6E0128278A73B6631B9459E6 /* Sorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E012C854B86EF8C65210EBE /* Sorting.swift */; };
+		6E012A1B7806208A1E8E8FFE /* NSTableView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E012ED1C001C59F49F03A0F /* NSTableView+Helpers.swift */; };
+		6E012B1EE5BB0F46B7799088 /* PushableString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01214AC5B51926451AA2BC /* PushableString.swift */; };
+		6E012EEB6AED2650C8DD05AB /* EntriesTreeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E012CA6525EE76D8540F1AA /* EntriesTreeDataSource.swift */; };
 		7E0562F9261AB07800F6CDD7 /* screenshot-entries.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7E0562F8261AB07800F6CDD7 /* screenshot-entries.txt */; };
 		7E07C3B824D121770007FD23 /* DayEndReportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E07C3B624D121770007FD23 /* DayEndReportController.swift */; };
 		7E07C3B924D121770007FD23 /* DayEndReportController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E07C3B724D121770007FD23 /* DayEndReportController.xib */; };
@@ -33,6 +40,7 @@
 		7E4CD510277C4B9600C83D7D /* DatePickerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4CD50F277C4B9600C83D7D /* DatePickerUtils.swift */; };
 		7E4EB8E327868AAC001234F0 /* DateRangePane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4EB8E227868AAC001234F0 /* DateRangePane.swift */; };
 		7E4EB8E5278A4724001234F0 /* DisclosureWithLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4EB8E4278A4724001234F0 /* DisclosureWithLabel.swift */; };
+		7E506BE128EBDEAA00EBD002 /* Array+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E506BE028EBDEAA00EBD002 /* Array+Helpers.swift */; };
 		7E51DA09250BF5C60088864F /* TimeZone+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */; };
 		7E579F702503E2920055D9F6 /* SystemClockSchedulerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */; };
 		7E5EFA272619B14A00E7834D /* NSTextField+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */; };
@@ -48,7 +56,6 @@
 		7E6FF1CA252D745C0071E58C /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E6FF1C9252D745C0071E58C /* ServiceManagement.framework */; };
 		7E73C95827A66A0C007F87F0 /* LargeReportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E73C95627A66A0C007F87F0 /* LargeReportController.swift */; };
 		7E73C95927A66A0C007F87F0 /* LargeReportController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E73C95727A66A0C007F87F0 /* LargeReportController.xib */; };
-		7E73C95C27A78574007F87F0 /* LargeReportControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E73C95B27A78574007F87F0 /* LargeReportControllerTest.swift */; };
 		7E75D0A0251D9A790002DBA0 /* ModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E75D09F251D9A790002DBA0 /* ModelTest.swift */; };
 		7E76A141278F99920017FAE9 /* EntryExportFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E76A140278F99920017FAE9 /* EntryExportFormats.swift */; };
 		7E76A143278FB4E70017FAE9 /* OutputStream+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E76A142278FB4E70017FAE9 /* OutputStream+Helpers.swift */; };
@@ -134,6 +141,8 @@
 		7EF58F8D2580F180002F9604 /* TutorialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EF58F8B2580F180002F9604 /* TutorialViewController.xib */; };
 		7EF58FA12584972F002F9604 /* UITestCommonConsts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF58FA02584972F002F9604 /* UITestCommonConsts.swift */; };
 		7EF58FA22584972F002F9604 /* UITestCommonConsts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF58FA02584972F002F9604 /* UITestCommonConsts.swift */; };
+		7EF5E89F290E401000E812BD /* EntriesTreeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF5E89E290E401000E812BD /* EntriesTreeController.swift */; };
+		7EF70923290E5C2B00E1A045 /* EditEntriesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF70922290E5C2B00E1A045 /* EditEntriesController.swift */; };
 		7EF8579324E094D100867832 /* OpenCloseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579224E094D100867832 /* OpenCloseHelper.swift */; };
 		7EF8579524E0961E00867832 /* OpenCloseHelperTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */; };
 		7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF8579A24E220EA00867832 /* OpenReason.swift */; };
@@ -181,6 +190,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6E01214AC5B51926451AA2BC /* PushableString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushableString.swift; sourceTree = "<group>"; };
+		6E0129247B26E0835305551D /* ExtraAssertions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtraAssertions.swift; sourceTree = "<group>"; };
+		6E012C854B86EF8C65210EBE /* Sorting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sorting.swift; sourceTree = "<group>"; };
+		6E012CA6525EE76D8540F1AA /* EntriesTreeDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntriesTreeDataSource.swift; sourceTree = "<group>"; };
+		6E012ED1C001C59F49F03A0F /* NSTableView+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSTableView+Helpers.swift"; sourceTree = "<group>"; };
+		6E012ED45DEC1A299BFA43AB /* EntriesTreeControllerTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntriesTreeControllerTest.swift; sourceTree = "<group>"; };
+		6E012F97EBB4C11F269A1939 /* EditEntriesDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditEntriesDataSource.swift; sourceTree = "<group>"; };
 		7E0562F8261AB07800F6CDD7 /* screenshot-entries.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "screenshot-entries.txt"; sourceTree = "<group>"; };
 		7E07C3B624D121770007FD23 /* DayEndReportController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayEndReportController.swift; sourceTree = "<group>"; };
 		7E07C3B724D121770007FD23 /* DayEndReportController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DayEndReportController.xib; sourceTree = "<group>"; };
@@ -206,6 +222,7 @@
 		7E4CD50F277C4B9600C83D7D /* DatePickerUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerUtils.swift; sourceTree = "<group>"; };
 		7E4EB8E227868AAC001234F0 /* DateRangePane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRangePane.swift; sourceTree = "<group>"; };
 		7E4EB8E4278A4724001234F0 /* DisclosureWithLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclosureWithLabel.swift; sourceTree = "<group>"; };
+		7E506BE028EBDEAA00EBD002 /* Array+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Helpers.swift"; sourceTree = "<group>"; };
 		7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeZone+Helpers.swift"; sourceTree = "<group>"; };
 		7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockSchedulerTest.swift; sourceTree = "<group>"; };
 		7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextField+Helpers.swift"; sourceTree = "<group>"; };
@@ -223,7 +240,6 @@
 		7E6FF1C9252D745C0071E58C /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		7E73C95627A66A0C007F87F0 /* LargeReportController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeReportController.swift; sourceTree = "<group>"; };
 		7E73C95727A66A0C007F87F0 /* LargeReportController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LargeReportController.xib; sourceTree = "<group>"; };
-		7E73C95B27A78574007F87F0 /* LargeReportControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeReportControllerTest.swift; sourceTree = "<group>"; };
 		7E75D09F251D9A790002DBA0 /* ModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTest.swift; sourceTree = "<group>"; };
 		7E76A140278F99920017FAE9 /* EntryExportFormats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryExportFormats.swift; sourceTree = "<group>"; };
 		7E76A142278FB4E70017FAE9 /* OutputStream+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OutputStream+Helpers.swift"; sourceTree = "<group>"; };
@@ -309,6 +325,8 @@
 		7EF58F8A2580F180002F9604 /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
 		7EF58F8B2580F180002F9604 /* TutorialViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TutorialViewController.xib; sourceTree = "<group>"; };
 		7EF58FA02584972F002F9604 /* UITestCommonConsts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestCommonConsts.swift; sourceTree = "<group>"; };
+		7EF5E89E290E401000E812BD /* EntriesTreeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntriesTreeController.swift; sourceTree = "<group>"; };
+		7EF70922290E5C2B00E1A045 /* EditEntriesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEntriesController.swift; sourceTree = "<group>"; };
 		7EF8579224E094D100867832 /* OpenCloseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCloseHelper.swift; sourceTree = "<group>"; };
 		7EF8579424E0961E00867832 /* OpenCloseHelperTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCloseHelperTest.swift; sourceTree = "<group>"; };
 		7EF8579A24E220EA00867832 /* OpenReason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenReason.swift; sourceTree = "<group>"; };
@@ -361,6 +379,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6E0127952227AFED25C1C814 /* test_helpers */ = {
+			isa = PBXGroup;
+			children = (
+				6E0129247B26E0835305551D /* ExtraAssertions.swift */,
+			);
+			path = test_helpers;
+			sourceTree = "<group>";
+		};
+		6E012D78358839E319024F1D /* LargeReportController */ = {
+			isa = PBXGroup;
+			children = (
+				6E012ED45DEC1A299BFA43AB /* EntriesTreeControllerTest.swift */,
+			);
+			path = LargeReportController;
+			sourceTree = "<group>";
+		};
+		6E012E30C1CC4E63DF8D9250 /* LargeReportController */ = {
+			isa = PBXGroup;
+			children = (
+				6E012CA6525EE76D8540F1AA /* EntriesTreeDataSource.swift */,
+				6E012F97EBB4C11F269A1939 /* EditEntriesDataSource.swift */,
+				6E012C854B86EF8C65210EBE /* Sorting.swift */,
+				7EF5E89E290E401000E812BD /* EntriesTreeController.swift */,
+				7EF70922290E5C2B00E1A045 /* EditEntriesController.swift */,
+			);
+			path = LargeReportController;
+			sourceTree = "<group>";
+		};
 		7E2A11DA24C02D38009B18D2 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -433,8 +479,8 @@
 		7E73C95A27A7853E007F87F0 /* controllers */ = {
 			isa = PBXGroup;
 			children = (
-				7E73C95B27A78574007F87F0 /* LargeReportControllerTest.swift */,
 				7E210AF6284C3CA60050AD31 /* PrefsViewControllerTest.swift */,
+				6E012D78358839E319024F1D /* LargeReportController */,
 			);
 			path = controllers;
 			sourceTree = "<group>";
@@ -506,6 +552,7 @@
 				7E579F6E2503E2740055D9F6 /* scheduling */,
 				7EE9A1C024DA35F200EE0FB1 /* util */,
 				7E63051C2846C6D000565880 /* views */,
+				6E0127952227AFED25C1C814 /* test_helpers */,
 			);
 			path = whatdidTests;
 			sourceTree = "<group>";
@@ -554,6 +601,7 @@
 				7ECE469F279E092700AF884A /* UpdateChannel.swift */,
 				7E305CE7282466B80086574C /* SimpleRandom.swift */,
 				7EE27F7928CBBB6F00D41366 /* SortedMap.swift */,
+				6E01214AC5B51926451AA2BC /* PushableString.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -613,6 +661,7 @@
 				7E235E02278A968800253DD8 /* NonFocusingNSViewController.swift */,
 				7E73C95627A66A0C007F87F0 /* LargeReportController.swift */,
 				7E73C95727A66A0C007F87F0 /* LargeReportController.xib */,
+				6E012E30C1CC4E63DF8D9250 /* LargeReportController */,
 			);
 			path = controllers;
 			sourceTree = "<group>";
@@ -667,6 +716,8 @@
 				7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */,
 				7E76A142278FB4E70017FAE9 /* OutputStream+Helpers.swift */,
 				7E305CED282471DE0086574C /* UInt32+Helpers.swift */,
+				7E506BE028EBDEAA00EBD002 /* Array+Helpers.swift */,
+				6E012ED1C001C59F49F03A0F /* NSTableView+Helpers.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -946,6 +997,7 @@
 				7ECE46A0279E092700AF884A /* UpdateChannel.swift in Sources */,
 				7EE4E39824E2523F00552AAF /* SystemClockScheduler.swift in Sources */,
 				7EAD2A4B2626CBB100153A47 /* ScrollBarHelper.swift in Sources */,
+				7EF70923290E5C2B00E1A045 /* EditEntriesController.swift in Sources */,
 				7EEF324624EA542D002E217A /* NSRange+Helpers.swift in Sources */,
 				7E4EB8E327868AAC001234F0 /* DateRangePane.swift in Sources */,
 				7EA4D3DE261AC9F300EEBF17 /* PasteboardView.swift in Sources */,
@@ -959,6 +1011,7 @@
 				7E9C5EAE2606BDFB00D839C4 /* GoalsView.swift in Sources */,
 				7ECAF0DF250D75B70004647E /* WhatdidTextField.swift in Sources */,
 				7EE4E39624E24A3F00552AAF /* WhatdidControlHooks.swift in Sources */,
+				7E506BE128EBDEAA00EBD002 /* Array+Helpers.swift in Sources */,
 				7E9C5EBC260C09AA00D839C4 /* Session+CoreDataProperties.swift in Sources */,
 				7ECF97A724F1D50100DBF1BF /* NSControl+Helper.swift in Sources */,
 				7EE27F8228CCE29600D41366 /* TextOptionsList.swift in Sources */,
@@ -1016,6 +1069,12 @@
 				7EA1DFC024CA99BF003AD2BC /* MainMenu.swift in Sources */,
 				7E9C5EBB260C09AA00D839C4 /* Session+CoreDataClass.swift in Sources */,
 				7E37A29C24C0293E005BA1DF /* Task+CoreDataClass.swift in Sources */,
+				6E012B1EE5BB0F46B7799088 /* PushableString.swift in Sources */,
+				6E012A1B7806208A1E8E8FFE /* NSTableView+Helpers.swift in Sources */,
+				7EF5E89F290E401000E812BD /* EntriesTreeController.swift in Sources */,
+				6E012EEB6AED2650C8DD05AB /* EntriesTreeDataSource.swift in Sources */,
+				6E0128278A73B6631B9459E6 /* Sorting.swift in Sources */,
+				6E01204F389CB80FC8CD75ED /* EditEntriesDataSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1024,7 +1083,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7EEF324824EA54AD002E217A /* NSRange+HelpersTest.swift in Sources */,
-				7E73C95C27A78574007F87F0 /* LargeReportControllerTest.swift in Sources */,
 				7E76A145279000440017FAE9 /* EntryExportFormatsTest.swift in Sources */,
 				7E6C98D62506B67F00A712EB /* DummyScheduler.swift in Sources */,
 				7EB7496125170ED6001C7DBC /* PrefsTest.swift in Sources */,
@@ -1038,6 +1096,8 @@
 				7E305CF0282472810086574C /* Unit32+HelpersTest.swift in Sources */,
 				7EAB5ECD24DA366600E18097 /* TimeUtilTest.swift in Sources */,
 				7E63051E2846C71700565880 /* SegmentedTimelineViewTest.swift in Sources */,
+				6E012342D0F39A9653C28569 /* ExtraAssertions.swift in Sources */,
+				6E012216A8475ABF72DEBC69 /* EntriesTreeControllerTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
