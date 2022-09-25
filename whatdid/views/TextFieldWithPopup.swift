@@ -90,7 +90,6 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
         self.isEnabled = true
         self.isEditable = true
         self.isSelectable = true
-        self.placeholderString = "placeholder"
         
         pulldownButton = NoKeyButton()
         pulldownButton.useAutoLayout()

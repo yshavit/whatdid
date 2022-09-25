@@ -18,6 +18,11 @@ class AutoCompletingField: TextFieldWithPopup, NSAccessibilityGroup {
         }
     }
     
+    var emptyOptionsPlaceholder: String {
+        get { optionsList.emptyOptionsPlaceholder }
+        set { optionsList.emptyOptionsPlaceholder = newValue }
+    }
+    
     private var optionsList: TextOptionsList {
         contents as! TextOptionsList
     }

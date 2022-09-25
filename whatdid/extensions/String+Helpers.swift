@@ -14,4 +14,13 @@ extension String {
         }
         return result
     }
+    
+    /// Drops the suffix from this string, if it is present. Returns the resulting string if the suffix was there, or `nil` if it wasn't.
+    func dropping(suffix: String) -> String? {
+        if hasSuffix(suffix) {
+            return String(dropLast(suffix.count))
+        } else {
+            return nil
+        }
+    }
 }
