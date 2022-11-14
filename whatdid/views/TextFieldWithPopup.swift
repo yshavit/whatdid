@@ -69,6 +69,10 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
             }
         }
     }
+
+    var popupIsOpen: Bool {
+        popupManager.isOpen
+    }
     
     /// Called after the rest of initialization is complete. Put whatever you want here.
     func finishInit() {
@@ -231,10 +235,11 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
     
     override func textDidChange(_ notification: Notification) {
         super.textDidChange(notification)
-        textDidChange()
+        updatePopupAutocomplete(dueToTextChange: true)
     }
     
-    private func textDidChange() {
+    private func updatePopupAutocomplete(dueToTextChange: Bool) {
+        var notifyTextChange = dueToTextChange
         let maybeAutocomplete = popupManager.contents?.onTextChanged(to: stringValue)
         // If the selection is at the tail of the string, fill in the autocomplete.
         if shouldAutocompleteOnTextChange, let autoComplete = maybeAutocomplete, autoComplete.starts(with: stringValue) {
@@ -243,17 +248,23 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
                 let autocompleTail = String(autoComplete.dropFirst(stringValue.count))
                 let stringCountBeforeAutocomplete = stringValue.count
                 stringValue += autocompleTail
+                notifyTextChange = true
                 currentEditor()!.selectedRange = NSRange(location: stringCountBeforeAutocomplete, length: charsToAutocomplete)
             }
         }
-        onTextChange()
+        if notifyTextChange {
+            onTextChange()
+        }
     }
     
     override func textDidEndEditing(_ notification: Notification) {
         if popupManager.isOpen, let selected = popupManager.contents?.selectedText {
             // This occurs when the user hit "enter" after arrowing down to the text, instead of
             // clicking on it with the cursor.
-            stringValue = selected
+            if selected != stringValue {
+                stringValue = selected
+                onTextChange()
+            }
         }
         super.textDidEndEditing(notification)
         popupManager.close()
@@ -286,7 +297,7 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
         popupManager.show(
             minWidth: frame.width,
             atTopLeft: originWithinScreen)
-        textDidChange()
+        updatePopupAutocomplete(dueToTextChange: false)
     }
     
     private class NoKeyButton: NSButton {
@@ -439,7 +450,7 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
                 // let the popup handle it.
                 if contents.asView.bounds.contains(locationInContents) {
                     if let result = contents.handleClick(at: locationInContents) {
-                        parent.stringValue = result // Don't call setText! It will trigger onTextChange(), which double-notifies
+                        setText(to: result)
                         /// `let _ =`: this returns `false` if the action/target aren't set. But we don't care, it's still handled.
                         let _ = parent.sendAction(parent.action, to: parent.target)
                         close()
@@ -481,8 +492,10 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
     }
     
     func setText(to string: String) {
-        parent.stringValue = string
-        parent.onTextChange()
+        if string != parent.stringValue {
+            parent.stringValue = string
+            parent.onTextChange()
+        }
     }
     
     func scroll(to bounds: NSRect, within: NSView) {

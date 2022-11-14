@@ -3,25 +3,7 @@
 import XCTest
 @testable import whatdid
 
-class EntriesTreeControllerTest: XCTestCase {
-    
-    private var thisMorning: Date!
-    private var model: Model!
-
-    override func setUpWithError() throws {
-        let uniqueName = name.replacingOccurrences(of: "\\W", with: "", options: .regularExpression)
-        thisMorning = TimeUtil.dateForTime(.previous, hh: 9, mm: 00)
-        model = Model(modelName: uniqueName, clearAllEntriesOnStartup: true)
-        // fetch the (empty set of) entries, to force the model's lazy loading. Otherwise, the unit test's adding of entries can
-        // race with the controller's fetching of them, such that they both try to clear out the same set of old files (and
-        // whoever gets there second, fails due to those files not being there.)
-        let _ = model.listEntries(from: thisMorning, to: DefaultScheduler.instance.now)
-        
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
+class EntriesTreeControllerTest: ControllerTestBase<EntriesTreeController> {
 
     func testSortByTimeSpentAscending() throws {
         let controller = createController(withData: {builder in
@@ -164,35 +146,6 @@ class EntriesTreeControllerTest: XCTestCase {
         XCTAssertEqual(itemsInSortMenu.count, foundSortDescriptors.count)
     }
     
-    private func createController(withData dataLoader: (DataBuilder) -> Void) -> EntriesTreeController {
-        let dataBuilder = DataBuilder(using: model, startingAt: thisMorning)
-        dataLoader(dataBuilder)
-        
-        // Wait until we have as many entries as our DataBuilder expects
-        let timeoutAt = Date().addingTimeInterval(3)
-        while model.listEntries(from: Date.distantPast, to: Date.distantFuture).count < dataBuilder.expected {
-            usleep(50000)
-            XCTAssertLessThan(Date(), timeoutAt)
-        }
-        
-        
-        if let nib = NSNib(nibNamed: "LargeReportController", bundle: Bundle(for: EntriesTreeController.self)) {
-            var topLevelObjects: NSArray? = NSArray()
-            nib.instantiate(withOwner: nil, topLevelObjects: &topLevelObjects)
-            if let controller = topLevelObjects?.compactMap({$0 as? EntriesTreeController}).first {
-                controller.viewDidLoad()
-                let loader = controller.createLoader(using: model.listEntries(from: Date.distantPast, to: Date.distantFuture))
-                controller.load(from: loader)
-                return controller
-            } else {
-                XCTFail("couldn't find EntriesTreeController in nib")
-            }
-        } else {
-            XCTFail("couldn't load nib")
-        }
-        fatalError()
-    }
-    
     private func expandAllItems(on view: NSOutlineView) -> [VisibleNode] {
         var seenNodes = [VisibleNode]()
         while seenNodes.count < view.numberOfRows {
@@ -250,31 +203,16 @@ class EntriesTreeControllerTest: XCTestCase {
             return fail!
         }
     }
-    
-    private class DataBuilder {
-        private let model: Model
-        private let startingAt: Date
-        private var lastEventOffset = TimeInterval(0)
-        private(set) var expected = 0
-        /// An offset that's applied to all events (after you set this; it's not retroactive).
-        var eventOffset = TimeInterval(0)
-        
-        init(using model: Model, startingAt: Date) {
-            self.model = model
-            self.startingAt = startingAt
-        }
-        
-        func add(project: String, task: String, note: String, withDuration minutes: Int) {
-            let thisTaskDuration = TimeInterval(minutes * 60)
-            let from = startingAt.addingTimeInterval(lastEventOffset + eventOffset)
-            let to = from.addingTimeInterval(thisTaskDuration)
-            let entry = FlatEntry(from: from, to: to, project: project, task: task, notes: note)
-            model.add(entry, andThen: {})
-            lastEventOffset += thisTaskDuration
-            expected += 1
-        }
+
+    override func load(model: Model, into controller: EntriesTreeController) {
+        let loader = controller.createLoader(using: model.listEntries(from: Date.distantPast, to: Date.distantFuture))
+        controller.load(from: loader)
     }
     
+    override var nibName: String {
+        "LargeReportController"
+    }
+
     private struct VisibleNode: Equatable {
         let title: String
         let lastWorkedOn: Date
