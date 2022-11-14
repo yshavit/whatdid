@@ -78,7 +78,6 @@ class PtnViewController: NSViewController {
                 task: self.taskField.stringValue,
                 notes: self.noteField.stringValue)
             return (saveState, options)
-            
         }
         projectTaskFinder.previewSelect = {pt in
             self.projectField.stringValue = pt.project
