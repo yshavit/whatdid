@@ -13,7 +13,9 @@
 		6E0128278A73B6631B9459E6 /* Sorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E012C854B86EF8C65210EBE /* Sorting.swift */; };
 		6E01289DF626AB0D2507E523 /* ControllerTestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01235C79DD985D5113CB89 /* ControllerTestBase.swift */; };
 		6E012A1B7806208A1E8E8FFE /* NSTableView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E012ED1C001C59F49F03A0F /* NSTableView+Helpers.swift */; };
+		6E012A5B746EC256131FAD0A /* PtnViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01231E7D1758169D1CCC4D /* PtnViewControllerTest.swift */; };
 		6E012B1EE5BB0F46B7799088 /* PushableString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E01214AC5B51926451AA2BC /* PushableString.swift */; };
+		6E012DDCB930C9662AA534E4 /* NSEventHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0128A0FF062E560EA67CD9 /* NSEventHelpers.swift */; };
 		6E012EEB6AED2650C8DD05AB /* EntriesTreeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E012CA6525EE76D8540F1AA /* EntriesTreeDataSource.swift */; };
 		7E0562F9261AB07800F6CDD7 /* screenshot-entries.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7E0562F8261AB07800F6CDD7 /* screenshot-entries.txt */; };
 		7E07C3B824D121770007FD23 /* DayEndReportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E07C3B624D121770007FD23 /* DayEndReportController.swift */; };
@@ -192,7 +194,9 @@
 
 /* Begin PBXFileReference section */
 		6E01214AC5B51926451AA2BC /* PushableString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushableString.swift; sourceTree = "<group>"; };
+		6E01231E7D1758169D1CCC4D /* PtnViewControllerTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PtnViewControllerTest.swift; sourceTree = "<group>"; };
 		6E01235C79DD985D5113CB89 /* ControllerTestBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerTestBase.swift; sourceTree = "<group>"; };
+		6E0128A0FF062E560EA67CD9 /* NSEventHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSEventHelpers.swift; sourceTree = "<group>"; };
 		6E0129247B26E0835305551D /* ExtraAssertions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtraAssertions.swift; sourceTree = "<group>"; };
 		6E012C854B86EF8C65210EBE /* Sorting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sorting.swift; sourceTree = "<group>"; };
 		6E012CA6525EE76D8540F1AA /* EntriesTreeDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntriesTreeDataSource.swift; sourceTree = "<group>"; };
@@ -385,6 +389,7 @@
 			isa = PBXGroup;
 			children = (
 				6E0129247B26E0835305551D /* ExtraAssertions.swift */,
+				6E0128A0FF062E560EA67CD9 /* NSEventHelpers.swift */,
 			);
 			path = test_helpers;
 			sourceTree = "<group>";
@@ -484,6 +489,7 @@
 				7E210AF6284C3CA60050AD31 /* PrefsViewControllerTest.swift */,
 				6E012D78358839E319024F1D /* LargeReportController */,
 				6E01235C79DD985D5113CB89 /* ControllerTestBase.swift */,
+				6E01231E7D1758169D1CCC4D /* PtnViewControllerTest.swift */,
 			);
 			path = controllers;
 			sourceTree = "<group>";
@@ -1102,6 +1108,8 @@
 				6E012342D0F39A9653C28569 /* ExtraAssertions.swift in Sources */,
 				6E012216A8475ABF72DEBC69 /* EntriesTreeControllerTest.swift in Sources */,
 				6E01289DF626AB0D2507E523 /* ControllerTestBase.swift in Sources */,
+				6E012A5B746EC256131FAD0A /* PtnViewControllerTest.swift in Sources */,
+				6E012DDCB930C9662AA534E4 /* NSEventHelpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

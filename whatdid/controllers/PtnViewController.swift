@@ -31,6 +31,16 @@ class PtnViewController: NSViewController {
     
     var scheduler: Scheduler = DefaultScheduler.instance
     
+    private var modelOverride: Model?
+    
+    private var model: Model {
+        modelOverride ?? AppDelegate.instance.model
+    }
+
+    func override(model: Model) {
+        modelOverride = model
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         projectField.placeholderString = "project"
@@ -43,10 +53,10 @@ class PtnViewController: NSViewController {
             }
         }
         projectField.optionsLookup = {
-            AppDelegate.instance.model.listProjects()
+            self.model.listProjects()
         }
         taskField.optionsLookup = {
-            AppDelegate.instance.model.listTasks(project: self.projectField.stringValue)
+            self.model.listTasks(project: self.projectField.stringValue)
         }
         projectField.onTextChange = {
             self.taskField.stringValue = ""
@@ -58,8 +68,8 @@ class PtnViewController: NSViewController {
         
         projectTaskFinder.onOpen = {
             var options = [ProjectAndTask]()
-            for project in AppDelegate.instance.model.listProjects() {
-                for task in AppDelegate.instance.model.listTasks(project: project) {
+            for project in self.model.listProjects() {
+                for task in self.model.listTasks(project: project) {
                     options.append(ProjectAndTask(project: project, task: task))
                 }
             }
@@ -250,7 +260,7 @@ class PtnViewController: NSViewController {
     }
     
     private func updateHeaderText() {
-        let lastEntryDate = AppDelegate.instance.model.lastEntryDate
+        let lastEntryDate = model.lastEntryDate
         headerText.stringValue = headerText.placeholderString!.replacingBracketedPlaceholders(with: [
             "TIME": TimeUtil.formatSuccinctly(date: lastEntryDate),
             "DURATION": TimeUtil.daysHoursMinutes(for: scheduler.timeInterval(since: lastEntryDate))
@@ -302,7 +312,7 @@ class PtnViewController: NSViewController {
             let confirm = ConfirmViewController()
             let showConfirmation = confirm.prepareToAttach(to: window)
             let duration = TimeUtil.daysHoursMinutes(
-                for: scheduler.timeInterval(since: AppDelegate.instance.model.lastEntryDate))
+                for: scheduler.timeInterval(since: model.lastEntryDate))
             confirm.header = "Skip this session?"
             confirm.detail = """
             If you skip this session, the last \(duration) will not be recorded.
@@ -323,7 +333,7 @@ class PtnViewController: NSViewController {
     }
     
     private func skipSession() {
-        AppDelegate.instance.model.setLastEntryDateToNow()
+        model.setLastEntryDateToNow()
         self.closeWindowAsync()
     }
     
@@ -393,8 +403,9 @@ class PtnViewController: NSViewController {
     private func grabFocusEvenIfHasSheet() {
         perform(#selector(grabFocusNow), with: nil, afterDelay: TimeInterval.zero, inModes: [RunLoop.Mode.common])
     }
-    
-    @objc private func grabFocusNow() {
+
+    /// Only intended for unit tests. In prod code, prefer `grabFocus`.
+    @objc func grabFocusNow() {
         var firstResponder = noteField
         if projectField.stringValue.isEmpty {
             firstResponder = projectField
@@ -430,7 +441,7 @@ class PtnViewController: NSViewController {
             allowEntry = false
         }
         if allowEntry {
-            AppDelegate.instance.model.addEntryNow(
+            model.addEntryNow(
                 project: project,
                 task: task,
                 notes: notes,

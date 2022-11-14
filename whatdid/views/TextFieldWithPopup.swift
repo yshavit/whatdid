@@ -69,6 +69,10 @@ class TextFieldWithPopup: WhatdidTextField, NSTextViewDelegate, NSTextFieldDeleg
             }
         }
     }
+
+    var popupIsOpen: Bool {
+        popupManager.isOpen
+    }
     
     /// Called after the rest of initialization is complete. Put whatever you want here.
     func finishInit() {

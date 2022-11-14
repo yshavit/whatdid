@@ -9,16 +9,17 @@ class ControllerTestBase<T: NSViewController>: XCTestCase {
     private var model: Model!
 
     override func setUpWithError() throws {
-        let uniqueName = name.replacingOccurrences(of: "\\W", with: "", options: .regularExpression)
         thisMorning = TimeUtil.dateForTime(.previous, hh: 9, mm: 00)
+    }
+
+    func loadModel(withData dataLoader: (DataBuilder) -> Void) -> Model {
+        let uniqueName = name.replacingOccurrences(of: "\\W", with: "", options: .regularExpression)
         model = Model(modelName: uniqueName, clearAllEntriesOnStartup: true)
         // fetch the (empty set of) entries, to force the model's lazy loading. Otherwise, the unit test's adding of entries can
         // race with the controller's fetching of them, such that they both try to clear out the same set of old files (and
         // whoever gets there second, fails due to those files not being there.)
         let _ = model.listEntries(from: thisMorning, to: DefaultScheduler.instance.now)
-    }
 
-    func createController(withData dataLoader: (DataBuilder) -> Void) -> T {
         let dataBuilder = DataBuilder(using: model, startingAt: thisMorning)
         dataLoader(dataBuilder)
 
@@ -28,7 +29,11 @@ class ControllerTestBase<T: NSViewController>: XCTestCase {
             usleep(50000)
             XCTAssertLessThan(Date(), timeoutAt)
         }
+        return model
+    }
 
+    func createController(withData dataLoader: (DataBuilder) -> Void) -> T {
+        let _ = loadModel(withData: dataLoader)
         if let nib = NSNib(nibNamed: nibName, bundle: Bundle(for: T.self)) {
             var topLevelObjects: NSArray? = NSArray()
             nib.instantiate(withOwner: nil, topLevelObjects: &topLevelObjects)
