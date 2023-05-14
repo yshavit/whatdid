@@ -39,6 +39,7 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
                 oldSelected = nil
             }
             updateText()
+            let allOptions = optionInfosByMinY.entries.map({$0.value.stringValue})
             if let (oldText, oldDupesCount) = oldSelected {
                 /// `updateText()` cleared the selection. We may want to restore it. There are a few scenarios:
                 ///
@@ -54,24 +55,31 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
                 ///
                 /// In case #2, we know the old option is still available; so let's stay on it.
                 ///
-                /// In case 3, we should just clear the selection.
+                /// In case 3, we should just clear the selection, or move to the new value if it's in the list.
                 ///
                 /// tldr: If the old option is still available, stay on it, otherwise clear the selection.
                 ///
                 /// This may not always be the most convenient, but it's nice and simple, and doesn't risk the user jumping all around as they type.
                 /// As an added bonus: an option may be present multiple times. Let's stay on whichever one we were at before (they'll all be there, or none be there).
-                let allOptions = optionInfosByMinY.entries.map({$0.value.stringValue})
-                var dupesRemaining = oldDupesCount
-                for (i, optionText) in allOptions.enumerated() {
-                    if optionText == oldText {
-                        if dupesRemaining == 0 {
-                            selectionIdx = i
-                            break
-                        } else {
-                            dupesRemaining -= 1
+                if oldValue.commonPrefix(with: autocompleteTo, options: [.caseInsensitive]).isEmpty {
+                    // case 3
+                    selectionIdx = allOptions.firstIndex(of: autocompleteTo)
+                } else {
+                    // cases 1 and 2
+                    var dupesRemaining = oldDupesCount
+                    for (i, optionText) in allOptions.enumerated() {
+                        if optionText == oldText {
+                            if dupesRemaining == 0 {
+                                selectionIdx = i
+                                break
+                            } else {
+                                dupesRemaining -= 1
+                            }
                         }
                     }
                 }
+            } else {
+                selectionIdx = allOptions.firstIndex(of: autocompleteTo)
             }
         }
     }
@@ -253,7 +261,14 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
     }
         
     private func updateText() {
-        selectionIdx = nil // TODO maybe keep it iff the new option is still available?
+        var helper: AutocompleteHelper
+        if let selectedText = selectedText {
+            let alreadySelected = selectedText.starts(with: filterByText) ? selectedText : nil
+            helper = AutocompleteHelper(filterByText: filterByText, previousSelection: alreadySelected)
+        } else {
+            helper = AutocompleteHelper(filterByText: filterByText, previousSelection: nil)
+        }
+        selectionIdx = nil
         autocompleteTo = filterByText
         defer {
             if let layout = textView.layoutManager, let container = textView.textContainer {
@@ -291,7 +306,6 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         var italicRanges = [NSRange]()
         
         var haveShownMatchedLabel = false
-        var autocomplete: String?
         for (i, optionText) in options.enumerated() {
             // Find the matches; continue to next iteration if there are none, and this isn't one of the top 3.
             let matched: [NSRange]
@@ -313,25 +327,18 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
             }
             // Add the option text
             optionRanges.append(builder.add(option: optionText, highlighting: matched))
-            // Update the autocomplete, if applicable
-            if optionText.starts(with: filterByText) {
-                if let previousBest = autocomplete {
-                    // Important not to inline these two ifs! The "else" below has
-                    // to apply to only the first one.
-                    if optionText.count < previousBest.count {
-                        autocomplete = optionText
-                    }
-                } else {
-                    autocomplete = optionText
-                }
-            }
+            
+            // Update the autocomplete
+            helper.see(option: optionText)
         }
-        autocompleteTo = autocomplete ?? filterByText
+        autocompleteTo = helper.bestOption
         storage.setAttributedString(builder.fullText)
 
+        // update the visuals: this is the individual letter highlighting of the matched text
         for labelRange in italicRanges {
             storage.applyFontTraits(.italicFontMask, range: labelRange)
         }
+        // (I forget what exactly this bit is)
         let fullTextNSString = NSString(string: builder.fullText.string)
         if let layoutManager = textView.layoutManager, let textContainer = textView.textContainer {
             var optionInfoEntries = [(CGFloat, OptionInfo)]()
@@ -468,5 +475,53 @@ fileprivate class TrackingTextView: NSTextView {
     
     override func mouseExited(with event: NSEvent) {
         mouseMoved(nil)
+    }
+}
+
+/// Helper class for figuring out which option should be the autocomplete.
+/// 1. If the new option is the filterByText, always pick that
+/// 2. Otherewise, if the new option is the previous selection, pick that.
+/// 3. Otherwise, use this option if the filterByText is a prefix of it.
+///   If there was already a good option, pick the longer of the two, favoring the first in case of ties.
+fileprivate struct AutocompleteHelper {
+    private let filterByText: String
+    private let previousSelection: String?
+    
+    private var sawExactFilterBy: Bool = false
+    private var sawPreviousSelection: Bool = false
+    private var longestByPrefix: String? = nil
+    
+    init(filterByText: String, previousSelection: String?) {
+        self.filterByText = filterByText
+        self.previousSelection = previousSelection
+    }
+    
+    mutating func see(option: String) {
+        if option == filterByText {
+            sawExactFilterBy = true
+        }
+        if option == previousSelection {
+            sawPreviousSelection = true
+        }
+        if option.starts(with: filterByText) {
+            if let previousBest = longestByPrefix {
+                // Important not to inline these two ifs! The "else" below has to apply to only the first one.
+                if option.count < previousBest.count {
+                    longestByPrefix = option
+                }
+            } else {
+                longestByPrefix = option
+            }
+        }
+    }
+    
+    var bestOption: String {
+        if sawPreviousSelection {
+            return previousSelection ?? ""
+        } else if sawExactFilterBy {
+            return filterByText
+        } else {
+            return longestByPrefix ?? filterByText
+        }
     }
 }

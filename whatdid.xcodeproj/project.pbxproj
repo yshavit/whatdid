@@ -20,6 +20,7 @@
 		7E0562F9261AB07800F6CDD7 /* screenshot-entries.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7E0562F8261AB07800F6CDD7 /* screenshot-entries.txt */; };
 		7E07C3B824D121770007FD23 /* DayEndReportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E07C3B624D121770007FD23 /* DayEndReportController.swift */; };
 		7E07C3B924D121770007FD23 /* DayEndReportController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E07C3B724D121770007FD23 /* DayEndReportController.xib */; };
+		7E087CCC2A1171180094F50B /* TextOptionsListTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E087CCB2A1171180094F50B /* TextOptionsListTest.swift */; };
 		7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1C2F5024CE43C40070D8CD /* Version.swift */; };
 		7E1EE6622612EEF1003314EE /* CloseConfirmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1EE6612612EEF1003314EE /* CloseConfirmer.swift */; };
 		7E1F9060250C5CC500992B7F /* TimeZone+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */; };
@@ -206,6 +207,7 @@
 		7E0562F8261AB07800F6CDD7 /* screenshot-entries.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "screenshot-entries.txt"; sourceTree = "<group>"; };
 		7E07C3B624D121770007FD23 /* DayEndReportController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayEndReportController.swift; sourceTree = "<group>"; };
 		7E07C3B724D121770007FD23 /* DayEndReportController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DayEndReportController.xib; sourceTree = "<group>"; };
+		7E087CCB2A1171180094F50B /* TextOptionsListTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextOptionsListTest.swift; sourceTree = "<group>"; };
 		7E1C2F5024CE43C40070D8CD /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
 		7E1EE6612612EEF1003314EE /* CloseConfirmer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseConfirmer.swift; sourceTree = "<group>"; };
 		7E210AF4284BE5DC0050AD31 /* WdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WdView.swift; sourceTree = "<group>"; };
@@ -459,6 +461,7 @@
 			isa = PBXGroup;
 			children = (
 				7E63051D2846C71700565880 /* SegmentedTimelineViewTest.swift */,
+				7E087CCB2A1171180094F50B /* TextOptionsListTest.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -1095,6 +1098,7 @@
 				7E76A145279000440017FAE9 /* EntryExportFormatsTest.swift in Sources */,
 				7E6C98D62506B67F00A712EB /* DummyScheduler.swift in Sources */,
 				7EB7496125170ED6001C7DBC /* PrefsTest.swift in Sources */,
+				7E087CCC2A1171180094F50B /* TextOptionsListTest.swift in Sources */,
 				7E6C98D42503F5C600A712EB /* DelegatingSchedulerTest.swift in Sources */,
 				7EE0E74224E4DF8A002D03F8 /* SubsequenceMatcherTest.swift in Sources */,
 				7E210AF7284C3CA60050AD31 /* PrefsViewControllerTest.swift in Sources */,
