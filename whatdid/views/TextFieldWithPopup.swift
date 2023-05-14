@@ -536,7 +536,7 @@ protocol TextFieldWithPopupCallbacks {
     /// Scroll up or down to the given rect, which is specified within the given NSView's coordinate system.
     func scroll(to bounds: NSRect, within: NSView)
     /// Set the enclosing field's text. This does not close the popup.
-    func setText(to string: String)
+    func setText(to string: String) // TODO does this actually need to be in the protocol?
 }
 
 protocol TextFieldWithPopupContents {
