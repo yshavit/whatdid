@@ -37,3 +37,4 @@ jobs:
         APPCAST_PRIVATE_KEY: ${{ secrets.APPCAST_PRIVATE_KEY }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SHOULD_CLOBBER: ${{ github.event.inputs.clobber_upload }}
+        UPDATE_MAIN_DOWNLOAD: ${{ secrets.APPLE_ID }} 

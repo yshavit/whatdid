@@ -67,8 +67,8 @@ jobs:
     - name: Build
       run: |
         xcodebuild -scheme whatdid-release build archive -archivePath build/whatdid
-    - name: Archive and notarize
-      if: env.should_upload_app && env.should_notarize_app
+    - name: Archive
+      if: env.should_upload_app
       run: |
         set -eu -o pipefail
 
@@ -78,6 +78,13 @@ jobs:
         xcodebuild -exportArchive -archivePath build/whatdid.xcarchive -exportPath build -exportOptionsPlist buildscripts/archive-export.plist
         cd build
         ditto -c -k --keepParent whatdid.app whatdid.zip
+      env:
+        APPLE_SIGNING_CERT_NAME: ${{ secrets.APPLE_SIGNING_CERT_NAME }}
+        APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+    - name: Notarize
+      if: env.should_upload_app && env.should_notarize_app
+      run: |
+        cd build
         mkdir logs
         mv DistributionSummary.plist Packaging.log logs/
 
@@ -96,7 +103,6 @@ jobs:
         spctl -vvv --assess --type exec ./whatdid.app
       env:
         APPLE_ID: ${{ secrets.APPLE_ID }}
-        APPLE_SIGNING_CERT_NAME: ${{ secrets.APPLE_SIGNING_CERT_NAME }}
         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         APPLE_NOTARYTOOL_PASSWORD: ${{ secrets.APPLE_NOTARYTOOL_PASSWORD }}
     - name: Create DMG
