@@ -29,12 +29,26 @@ class TextOptionsListTest: XCTestCase {
         view.options = ["one", "two"]
         view.moveSelection(.up)
         XCTAssertEqual("two", view.selectedText) // sanity check
-        let autocompleteSuggestion = view.onTextChanged(to: "three")
-        XCTAssertEqual("three", autocompleteSuggestion)
+        let autocompleteSuggestion = view.onTextChanged(to: "th")
+        XCTAssertEqual("th", autocompleteSuggestion)
         XCTAssertNil(view.selectedText)
     }
     
-    func testAutocompleteSetsSelectin() throws {
+    func testAutocompleteNegatesSelectionOneLetterAtATime() throws {
+        view.options = ["one", "two"]
+        view.moveSelection(.up)
+        XCTAssertEqual("two", view.selectedText) // sanity check
+        
+        var autocompleteSuggestion = view.onTextChanged(to: "t")
+        XCTAssertEqual("two", autocompleteSuggestion)
+        XCTAssertEqual("two", view.selectedText)
+        
+        autocompleteSuggestion = view.onTextChanged(to: "th")
+        XCTAssertEqual("th", autocompleteSuggestion)
+        XCTAssertNil(view.selectedText)
+    }
+    
+    func testAutocompleteSetsSelection() throws {
         view.options = ["one", "two"]
         XCTAssertNil(view.selectedText) // sanity check
         var autocompleteSuggestion = view.onTextChanged(to: "o")

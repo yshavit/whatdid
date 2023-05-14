@@ -28,58 +28,39 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
     
     private var filterByText = "" {
         didSet {
-            let oldSelected: (String, Int)? // the old text, and how many duplicates of that text were before it
-            if let selectionIdx = selectionIdx {
-                let allOptions = optionInfosByMinY.entries.map({$0.value.stringValue})
-                let oldText = allOptions[selectionIdx]
-                let entriesBeforeSelection = allOptions[0..<selectionIdx]
-                let dupesCount = entriesBeforeSelection.filter({$0 == oldText}).count
-                oldSelected = (oldText, dupesCount)
-            } else {
-                oldSelected = nil
-            }
             updateText()
             let allOptions = optionInfosByMinY.entries.map({$0.value.stringValue})
-            if let (oldText, oldDupesCount) = oldSelected {
-                /// `updateText()` cleared the selection. We may want to restore it. There are a few scenarios:
-                ///
-                /// 1. Current `filterByText` starts with `oldValue`: the user typed additional characters.
-                /// 2. The `oldValue` starts with `filterByText`: the user deleted characters.
-                /// 3. Alll other cases (we're not interested in common prefixes, etc).
-                ///
-                /// The first case is tricky, because our selected option may not be available anymore. If it's not, where should we go instead? Do we pick
-                /// the next-best option, even if it may be far away from where the original was? Since elements aren't ordered, can we shift _up_?
-                ///
-                /// The easy case is when the old selected option is still available. In that case, stay on it. For now, let's say that in all other cases, we just
-                /// unselect.
-                ///
-                /// In case #2, we know the old option is still available; so let's stay on it.
-                ///
-                /// In case 3, we should just clear the selection, or move to the new value if it's in the list.
-                ///
-                /// tldr: If the old option is still available, stay on it, otherwise clear the selection.
-                ///
-                /// This may not always be the most convenient, but it's nice and simple, and doesn't risk the user jumping all around as they type.
-                /// As an added bonus: an option may be present multiple times. Let's stay on whichever one we were at before (they'll all be there, or none be there).
-                if oldValue.commonPrefix(with: autocompleteTo, options: [.caseInsensitive]).isEmpty {
-                    // case 3
-                    selectionIdx = allOptions.firstIndex(of: autocompleteTo)
-                } else {
-                    // cases 1 and 2
-                    var dupesRemaining = oldDupesCount
-                    for (i, optionText) in allOptions.enumerated() {
-                        if optionText == oldText {
-                            if dupesRemaining == 0 {
-                                selectionIdx = i
-                                break
-                            } else {
-                                dupesRemaining -= 1
-                            }
-                        }
+            /// `updateText()` cleared the selection. We may want to restore it. There are a few scenarios:
+            ///
+            /// 1. Current `filterByText` starts with `oldValue`: the user typed additional characters.
+            /// 2. The `oldValue` starts with `filterByText`: the user deleted characters.
+            /// 3. Alll other cases (we're not interested in common prefixes, etc).
+            ///
+            /// The first case is tricky, because our selected option may not be available anymore. If it's not, where should we go instead? Do we pick
+            /// the next-best option, even if it may be far away from where the original was? Since elements aren't ordered, can we shift _up_?
+            ///
+            /// The easy case is when the old selected option is still available. In that case, stay on it. For now, let's say that in all other cases, we just
+            /// unselect.
+            ///
+            /// In case #2, we know the old option is still available; so let's stay on it.
+            ///
+            /// In case 3, we should just clear the selection, or move to the new value if it's in the list.
+            ///
+            /// tldr: If the old option is still available, stay on it, otherwise clear the selection.
+            ///
+            /// This may not always be the most convenient, but it's nice and simple, and doesn't risk the user jumping all around as they type.
+            /// As an added bonus: an option may be present multiple times. Let's stay on whichever one we were at before (they'll all be there, or none be there).
+            if oldValue.commonPrefix(with: filterByText, options: [.caseInsensitive]).isEmpty {
+                // case 3
+                selectionIdx = allOptions.firstIndex(of: autocompleteTo)
+            } else {
+                // cases 1 and 2
+                for (i, optionText) in allOptions.enumerated() {
+                    if optionText.hasPrefix(filterByText) {
+                        selectionIdx = i
+                        break
                     }
                 }
-            } else {
-                selectionIdx = allOptions.firstIndex(of: autocompleteTo)
             }
         }
     }
@@ -338,7 +319,8 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         for labelRange in italicRanges {
             storage.applyFontTraits(.italicFontMask, range: labelRange)
         }
-        // (I forget what exactly this bit is)
+        
+        // Figure out the minY for each option; this lets us highlight them and dispatch clicks on them
         let fullTextNSString = NSString(string: builder.fullText.string)
         if let layoutManager = textView.layoutManager, let textContainer = textView.textContainer {
             var optionInfoEntries = [(CGFloat, OptionInfo)]()

@@ -14,6 +14,7 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
     
     let scheduler: ManualTickScheduler = DefaultScheduler.instance
     private let deferButton: NSButton
+    private let autoincTimestamp: NSButton
     private let setter: NSTextField
     private let printUtc: NSTextField
     private let printLocal: NSTextField
@@ -28,6 +29,7 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
         setter.setAccessibilityLabel("uitestwindowclock")
         
         deferButton = NSButton(checkboxWithTitle: WhatdidControlHooks.deferCheckboxTitle, target: nil, action: nil)
+        autoincTimestamp = NSButton(checkboxWithTitle: "auto-increment on save", target: nil, action: nil)
         
         printUtc = NSTextField(labelWithString: "")
         printUtc.setAccessibilityLabel("mockclock_status")
@@ -60,7 +62,15 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
             self.setEntriesViaJson(string: data)
             self.entriesField.stringValue = data
         }
-        AppDelegate.instance.model.addListener(self.populateJsonFlatEntryField)
+        AppDelegate.instance.model.addListener {
+            self.populateJsonFlatEntryField()
+            if self.autoincTimestamp.state == .on {
+                if let date = self.date {
+                    self.updateDateDisplays(to: date.addingTimeInterval(1))
+                }
+            }
+        }
+        
         
         hideStatusItem.target = self
         hideStatusItem.action = #selector(self.toggleStatusItemVisibility(_:))
@@ -80,6 +90,7 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
         
         adder(setter)
         adder(deferButton)
+        adder(autoincTimestamp)
         adder(printUtc)
         adder(printLocal)
         let tzField = NSTextField(labelWithString: DefaultScheduler.instance.calendar.timeZone.identifier)
@@ -256,9 +267,16 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
         printLocal.stringValue = timeFormatter.string(from: date)
     }
     
-    private func updateDate() {
+    private var date: Date? {
         if let dateAsInt = Int(setter.stringValue) {
-            let date = Date(timeIntervalSince1970: Double(dateAsInt))
+            return Date(timeIntervalSince1970: Double(dateAsInt))
+        } else {
+            return nil
+        }
+    }
+    
+    private func updateDate() {
+        if let date = date {
             updateDateDisplays(to: date)
             
             switch deferButton.state {
