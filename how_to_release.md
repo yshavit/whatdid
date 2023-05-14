@@ -6,7 +6,7 @@
 2. Wait for the "on release" GH action to run. It'll be named after the
    release name from the previous step.
 3. That GH action will create a PR. Check that:
-    1. The symlink at `Whatdid.dmg` has been updated
+    1. ~The symlink at `Whatdid.dmg` has been updated~ (disabling this for now, because I'm not building notarized apps anymore, because I don't want to pay Apple)
     2. The screenshots look good
     3. There's a new release notes `.md` file for this release.
     4. Some `.delta` files got generated
