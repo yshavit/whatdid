@@ -71,6 +71,27 @@ class TextOptionsListTest: XCTestCase {
         XCTAssertEqual("one b", view.selectedText)
     }
     
+    func testClickAtOtherThanSelection() throws {
+        guard let screen = NSScreen.main else {
+            XCTFail("couldn't find main screen")
+            fatalError()
+        }
+        view.options = ["one", "two"]
+        
+        let window = NSWindow(
+            contentRect: NSRect(origin: NSPoint(x: screen.frame.midX, y: screen.frame.midY), size: self.view.fittingSize),
+            styleMask: [.fullSizeContentView],
+            backing: .buffered,
+            defer: false)
+        window.contentView = self.view
+        
+        view.moveSelection(.down)
+        XCTAssertEqual("one", view.selectedText) // sanity check
+        
+        let clicked = view.handleClick(at: NSPoint(x: 10, y: view.bounds.maxY - 2)) // click near the bottom
+        XCTAssertEqual("two", clicked)
+    }
+    
     private class DummyCallbacks: TextFieldWithPopupCallbacks {
         func contentSizeChanged() {
             // nothing

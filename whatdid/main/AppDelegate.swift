@@ -94,7 +94,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
             Prefs.tutorialVersion = PtnViewController.CURRENT_TUTORIAL_VERSION
         }
         
-        if let currentSession = model.getCurrentSession(), let sessionStart = currentSession.startTime {
+        if !SILENT_STARTUP, let currentSession = model.getCurrentSession(), let sessionStart = currentSession.startTime {
             // Check to see if the session is earlier than the start of today. If so, start a new session
             let dayStart = Prefs.dayStartTime.map { hh, mm in TimeUtil.dateForTime(.previous, hh: hh, mm: mm) }
             if sessionStart < dayStart {

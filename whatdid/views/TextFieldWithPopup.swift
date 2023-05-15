@@ -450,10 +450,12 @@ fileprivate class PopupManager: NSObject, NSWindowDelegate, TextFieldWithPopupCa
                 // let the popup handle it.
                 if contents.asView.bounds.contains(locationInContents) {
                     if let result = contents.handleClick(at: locationInContents) {
+                        // It's important to call close() before setText(to:). textDidEndEditing above uses the fact that the
+                        // window is closed to infer that it's a click (and not the "enter" key)
+                        close()
                         setText(to: result)
                         /// `let _ =`: this returns `false` if the action/target aren't set. But we don't care, it's still handled.
                         let _ = parent.sendAction(parent.action, to: parent.target)
-                        close()
                     }
                 }
             } else {
