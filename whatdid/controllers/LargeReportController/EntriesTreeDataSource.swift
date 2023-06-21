@@ -212,9 +212,9 @@ class EntriesTreeDataSource: NSObject, NSOutlineViewDataSource, NSOutlineViewDel
         func sortOrder(ascending: Bool) -> (Node, Node) -> Bool {
             switch self {
             case .summaryAge:
-                return createOrdering(using: {$0.timeSpent}, ascending: ascending)
-            case .summaryTime:
                 return createOrdering(using: {$0.lastWorkedOn}, ascending: ascending)
+            case .summaryTime:
+                return createOrdering(using: {$0.timeSpent}, ascending: ascending)
             }
         }
     }
