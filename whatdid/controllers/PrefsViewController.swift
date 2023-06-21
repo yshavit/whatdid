@@ -147,6 +147,67 @@ class PrefsViewController: NSViewController {
         }
     }
     
+    @IBAction func handlePressViewExported(_ sender: Any) {
+        guard #available(macOS 11.0, *) else {
+            return
+        }
+        
+        let openPanel = NSOpenPanel()
+        openPanel.title = "Select Whatdid data file"
+        openPanel.allowedContentTypes = [.json, .commaSeparatedText]
+        
+        // See comments in handlePressExport
+        // increment the counter right away (or else the app will hide as soon as we end the sheet).
+        // So, create a dummy controller just to "hold the spot" as it were.
+        let dummyController = NSWindowController()
+        AppDelegate.instance.windowOpened(dummyController)
+        endParentSheet(with: PrefsViewController.CLOSE_PTN)
+        
+        openPanel.begin { response in
+            defer {
+                AppDelegate.instance.windowClosed(dummyController)
+            }
+            guard response == .OK else {
+                return
+            }
+            guard let url = openPanel.url else {
+                wdlog(.error, "couldn't find URL from save panel")
+                return
+            }
+            do {
+                struct ModelAdapter: LargeReportEntriesModel {
+                    let entries: [RewriteableFlatEntry]
+                    func fetchRewriteableEntries(from: Date, to: Date) -> [RewriteableFlatEntry] {
+                        return entries.filter({e in e.entry.from >= from && e.entry.to <= to})
+                    }
+                }
+                let entries = try importFile(from: url)
+                let newWindow = LargeReportController(windowNibName: NSNib.Name("LargeReportController"))
+                newWindow.model = ModelAdapter(entries: entries.map{ entry in
+                    RewriteableFlatEntry(entry: entry, objectId: NSManagedObjectID())
+                })
+                newWindow.showWindow(sender)
+                if let datePicker = newWindow.dateRangePicker {
+                    var earliest = Date.distantFuture
+                    var latest = Date.distantPast
+                    for entryDate in entries.map({e in e.from}) {
+                        earliest = min(earliest, entryDate)
+                        latest = max(latest, entryDate)
+                    }
+                    if earliest <= latest {
+                        datePicker.setDates(from: earliest, to: latest)
+                    }
+                }
+                
+            } catch {
+                wdlog(.error, "failed to read %s: %s", url.absoluteString, error as CVarArg)
+                // TODO need better error
+            }
+            
+        }
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         outerVStackWidth.constant = desiredWidth

@@ -8,6 +8,11 @@ protocol EntryExportFormat {
     var name: String { get }
     var fileExtension: String { get }
     func write(entries: [FlatEntry], to out: OutputStream) throws
+    func read(from: Data) throws -> [FlatEntry]
+}
+
+enum EntryReadError: Error {
+    case unsupportedFileType
 }
 
 let allEntryExportFormats: [EntryExportFormat] = [
@@ -15,6 +20,18 @@ let allEntryExportFormats: [EntryExportFormat] = [
     CsvEntryExportFormat(),
     TextTreeEntryExportFormat(),
 ]
+
+func importFile(from url: URL) throws -> [FlatEntry] {
+    let ext = url.pathExtension
+    for format in allEntryExportFormats {
+        if ext == format.fileExtension {
+            let data = try Data(contentsOf: url)
+            return try format.read(from: data)
+        }
+    }
+    throw EntryReadError.unsupportedFileType
+    
+}
 
 class JsonEntryExportFormat : EntryExportFormat {
     
@@ -40,6 +57,24 @@ class JsonEntryExportFormat : EntryExportFormat {
         encoder.dateEncodingStrategy = .iso8601
         let jsonData = try encoder.encode(projectByName)
         try out.write(jsonData)
+    }
+    
+    func read(from input: Data) throws -> [FlatEntry] {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let projects = try decoder.decode([String: Project].self, from: input)
+        return projects.flatMap { projectName, project in
+            project.flatMap { taskName, entries in
+                entries.map { entry in
+                    FlatEntry(
+                        from: entry.from,
+                        to: entry.to,
+                        project: projectName,
+                        task: taskName,
+                        notes: entry.notes)
+                }
+            }
+        }
     }
     
     private typealias Project = [String: Task]
@@ -87,6 +122,10 @@ class TextTreeEntryExportFormat : EntryExportFormat {
             }
         }
     }
+    
+    func read(from: Data) throws -> [FlatEntry] {
+        throw EntryReadError.unsupportedFileType
+    }
 }
 
 class CsvEntryExportFormat : EntryExportFormat {
@@ -119,4 +158,7 @@ class CsvEntryExportFormat : EntryExportFormat {
         }
     }
     
+    func read(from: Data) throws -> [FlatEntry] {
+        throw EntryReadError.unsupportedFileType
+    }
 }

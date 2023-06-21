@@ -72,6 +72,11 @@ class DateRangePicker: NSPopUpButton, NSPopoverDelegate {
         dateRangePane.prepareToShow()
         notifyHandlers(because: .prepareToShow)
     }
+    
+    func setDates(from start: Date, to end: Date) {
+        dateRangePane.dateRange = (start, end)
+        notifyHandlers(because: .prepareToShow)
+    }
 
     /// Registers a handler to get notifications about date selections.
     ///

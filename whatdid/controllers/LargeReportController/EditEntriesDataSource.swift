@@ -234,7 +234,7 @@ class EditEntriesDataSource: NSObject, NSTableViewDataSource, NSTableViewDelegat
         }
     }
 
-    func saveAll(to model: Model) {
+    func saveAll(to model: LargeReportEntriesRewriter) {
         var rewrites = [RewrittenFlatEntry]()
         var dirtyFields = [RevertableTextField]()
         for (rowIdx, entry) in entries.enumerated() {

@@ -5,7 +5,11 @@ import Cocoa
 class EditEntriesController: NSViewController {
     @IBOutlet weak var tableView: NSTableView!
     private var dataSource: EditEntriesDataSource!
-    var model: Model?
+    var model: LargeReportEntriesModel?
+    
+    private var supportsEdits: Bool {
+        model is LargeReportEntriesRewriter
+    }
     
     // sort options
     @IBOutlet weak var sortOptionsMenu: NSMenu!
@@ -50,7 +54,7 @@ class EditEntriesController: NSViewController {
     // selection state
     @IBInspectable private dynamic var selectedIndexes = IndexSet() {
         didSet {
-            anySelected = !selectedIndexes.isEmpty
+            anySelected = supportsEdits && !selectedIndexes.isEmpty
         }
     }
     @IBInspectable private dynamic var anySelected = false
@@ -82,7 +86,7 @@ class EditEntriesController: NSViewController {
             return item
         }
         
-        editsSource.onDirtyFlagChange = {self.hasPendingEdits = $0}
+        editsSource.onDirtyFlagChange = {self.hasPendingEdits = self.supportsEdits && $0}
         
         
         // force a change in both sorts, so that we update the sort descriptors. Not efficient, but easy :)
@@ -95,7 +99,7 @@ class EditEntriesController: NSViewController {
         if !checkForHiddenSelectedRows() {
             return
         }
-        if let model = model {
+        if let model = model as? LargeReportEntriesRewriter {
             dataSource.saveAll(to: model)
         } else {
             wdlog(.error, "couldn't save: no model set")

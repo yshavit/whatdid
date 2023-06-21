@@ -11,12 +11,8 @@ class LargeReportController: NSWindowController, NSWindowDelegate {
     @IBOutlet weak var mainTabView: NSTabView!
     @IBInspectable dynamic var selectedTab: Any?
     @IBOutlet weak var editsSearchField: AutoCompletingField!
-    
-    var modelOverride: Model?
 
-    var model: Model {
-        modelOverride ?? AppDelegate.instance.model
-    }
+    var model: LargeReportEntriesModel = ModelBasedEntries(model: AppDelegate.instance.model)
     
     var loadDataAsynchronously = true
     
@@ -27,8 +23,6 @@ class LargeReportController: NSWindowController, NSWindowDelegate {
 
         editsController.viewDidLoad()
         editsController.model = model
-        
-        
 
         // Set up the edits view
 
@@ -110,7 +104,7 @@ class LargeReportController: NSWindowController, NSWindowDelegate {
             var editsLoader: EditEntriesController.Loader
             var summaryLoader: EntriesTreeController.Loader
             if let (fetchStart, fetchEnd) = fetchingDates {
-                let newEntries = self.model.listEntriesWithIds(from: fetchStart, to: fetchEnd)
+                let newEntries = self.model.fetchRewriteableEntries(from: fetchStart, to: fetchEnd)
                 editsLoader = self.editsController.createLoader(using: newEntries)
                 summaryLoader = self.summaryController.createLoader(using: newEntries.withoutObjectIds)
             } else {
@@ -144,5 +138,25 @@ class LargeReportController: NSWindowController, NSWindowDelegate {
     
     func windowWillClose(_ notification: Notification) {
         AppDelegate.instance.windowClosed(self)
+    }
+}
+
+protocol LargeReportEntriesModel {
+    func fetchRewriteableEntries(from: Date, to: Date) -> [RewriteableFlatEntry]
+}
+
+protocol LargeReportEntriesRewriter {
+    func rewrite(entries toWrite: [RewrittenFlatEntry], andThen callback: @escaping (Bool) -> Void)
+}
+
+fileprivate struct ModelBasedEntries: LargeReportEntriesModel, LargeReportEntriesRewriter {
+    let model: Model
+    
+    func fetchRewriteableEntries(from fetchStart: Date, to fetchEnd: Date) -> [RewriteableFlatEntry] {
+        model.listEntriesWithIds(from: fetchStart, to: fetchEnd)
+    }
+    
+    func rewrite(entries toWrite: [RewrittenFlatEntry], andThen callback: @escaping (Bool) -> Void) {
+        model.rewrite(entries: toWrite, andThen: callback)
     }
 }
