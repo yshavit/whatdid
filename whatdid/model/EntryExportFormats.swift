@@ -11,9 +11,9 @@ protocol EntryExportFormat {
 }
 
 let allEntryExportFormats: [EntryExportFormat] = [
-    TextTreeEntryExportFormat(),
     JsonEntryExportFormat(),
     CsvEntryExportFormat(),
+    TextTreeEntryExportFormat(),
 ]
 
 class JsonEntryExportFormat : EntryExportFormat {

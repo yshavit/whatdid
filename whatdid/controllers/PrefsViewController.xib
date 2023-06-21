@@ -97,7 +97,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="550" height="148"/>
                                         <subviews>
                                             <gridView xPlacement="leading" yPlacement="center" rowAlignment="none" translatesAutoresizingMaskIntoConstraints="NO" id="8wI-wf-FiW">
-                                                <rect key="frame" x="0.0" y="0.0" width="453" height="202"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="453" height="201"/>
                                                 <rows>
                                                     <gridRow id="XZL-na-geY"/>
                                                     <gridRow id="ziJ-5D-O0w"/>
@@ -126,10 +126,10 @@
                                                     </gridCell>
                                                     <gridCell row="XZL-na-geY" column="II0-JS-5iC" id="cUr-fb-go0">
                                                         <stackView key="contentView" distribution="fill" orientation="horizontal" alignment="centerY" spacing="3" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5B5-US-fZ7">
-                                                            <rect key="frame" x="156" y="180" width="297" height="22"/>
+                                                            <rect key="frame" x="156" y="180" width="297" height="21"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eP2-Vd-05o">
-                                                                    <rect key="frame" x="0.0" y="1" width="35" height="21"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="35" height="21"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="35" id="hAW-cg-GJz"/>
                                                                     </constraints>
@@ -165,7 +165,7 @@
                                                                     </textFieldCell>
                                                                 </textField>
                                                                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Sbj-WK-0IT" userLabel="Randomness">
-                                                                    <rect key="frame" x="194" y="1" width="35" height="21"/>
+                                                                    <rect key="frame" x="194" y="0.0" width="35" height="21"/>
                                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="Q5O-Pl-FQs">
                                                                         <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" formatWidth="-1" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="O4S-5f-smy"/>
                                                                         <font key="font" metaFont="system"/>
@@ -372,7 +372,7 @@
                                                     <gridCell row="qMx-fE-qGH" column="II0-JS-5iC" headOfMergedCell="1dP-Rh-AKT" id="SIU-dT-5vT"/>
                                                     <gridCell row="GdY-mp-2wg" column="4ur-bR-EOi" headOfMergedCell="VyO-5H-2CD" id="VyO-5H-2CD">
                                                         <stackView key="contentView" distribution="fill" orientation="horizontal" alignment="centerY" spacing="3" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zc1-aB-Kgt">
-                                                            <rect key="frame" x="0.0" y="0.0" width="156" height="20"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="157" height="20"/>
                                                             <subviews>
                                                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="G33-5j-W1a">
                                                                     <rect key="frame" x="0.0" y="-1" width="94" height="22"/>
@@ -393,13 +393,13 @@
                                                                     </textFieldCell>
                                                                 </textField>
                                                                 <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="Mfh-dF-ivs">
-                                                                    <rect key="frame" x="114" y="-1" width="42" height="22"/>
-                                                                    <popUpButtonCell key="cell" type="smallSquare" title="text" bezelStyle="smallSquare" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="3Ti-nm-LmA" id="RKS-PM-mEW">
+                                                                    <rect key="frame" x="114" y="-1" width="43" height="22"/>
+                                                                    <popUpButtonCell key="cell" type="smallSquare" title="json" bezelStyle="smallSquare" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="3Ti-nm-LmA" id="RKS-PM-mEW">
                                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                        <font key="font" metaFont="system"/>
+                                                                        <font key="font" metaFont="menu"/>
                                                                         <menu key="menu" id="Cna-Dj-tqj">
                                                                             <items>
-                                                                                <menuItem title="text" state="on" id="3Ti-nm-LmA"/>
+                                                                                <menuItem title="json" state="on" id="3Ti-nm-LmA"/>
                                                                             </items>
                                                                         </menu>
                                                                     </popUpButtonCell>
