@@ -15,6 +15,8 @@ class Model {
     convenience init() {
         #if UI_TEST
         self.init(modelName: "UITest", clearAllEntriesOnStartup: true)
+        #elseif DEBUG
+        self.init(modelName: "DebugModel")
         #else
         self.init(modelName: "Model")
         #endif

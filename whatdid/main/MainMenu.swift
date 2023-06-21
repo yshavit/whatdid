@@ -127,6 +127,9 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
             button.image = NSImage(named: "MenuIcon")
             button.imagePosition = .imageOnly
             button.imageScaling = .scaleProportionallyUpOrDown
+            #if DEBUG
+            button.contentTintColor = .systemYellow
+            #endif
         }
         
         opener = OpenCloseHelper<WindowContents>(
