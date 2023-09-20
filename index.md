@@ -1,6 +1,6 @@
 # whatdid
 
-Download Whatdid [here][download]!
+### Download Whatdid [here][download]!
 
 [download]: https://whatdid.yuvalshavit.com/Whatdid.dmg
 
