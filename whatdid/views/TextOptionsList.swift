@@ -379,9 +379,9 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
     
     class DisplayTextBuilder {
         private static let labelAttrs: [NSAttributedString.Key : Any] = [
-            .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize * 0.9),
-            .foregroundColor: NSColor.systemGray,
-            .underlineColor: NSColor.systemGray,
+            .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
+            .foregroundColor: NSColor.disabledControlTextColor,
+            .underlineColor: NSColor.disabledControlTextColor,
             .underlineStyle: NSUnderlineStyle.single.rawValue
         ]
         private static let hrSeparatorAttrs: [NSAttributedString.Key : Any] = [
@@ -406,6 +406,7 @@ class TextOptionsList: WdView, TextFieldWithPopupContents {
         var optionAttrs: [NSAttributedString.Key : Any] {
             return [
                 .font: NSFont.labelFont(ofSize: NSFont.systemFontSize),
+                .foregroundColor: NSColor.textColor,
                 .paragraphStyle: paragraphStyle,
             ]
         }
