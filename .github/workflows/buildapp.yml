@@ -51,7 +51,7 @@ jobs:
         # We need the "Apple Development" one for building, and then "Developer ID" one for notarizing
         certificate_path="$RUNNER_TEMP/build_certificate.p12"
         echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode > "$certificate_path"
-        security import "$certificate_path" -P "$BUILD_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$keychain_path"
+        security import "$certificate_path" -P "$BUILD_CERTIFICATE_PASSWORD" -A -t cert -f pkcs7 -k "$keychain_path"
 
         devid_certificate_path="$RUNNER_TEMP/build_dev_id_certificate.p12"
         echo -n "$DEV_ID_CERTIFICATE_BASE64" | base64 --decode > "$devid_certificate_path"
