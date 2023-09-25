@@ -36,7 +36,6 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install --upgrade biplist dmgbuild
     - name: Import certs
-      if: false # skip
       run: |
         set -eu -o pipefail
         pwd
