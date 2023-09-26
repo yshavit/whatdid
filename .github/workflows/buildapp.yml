@@ -52,22 +52,23 @@ jobs:
         certificate_path="$RUNNER_TEMP/build_certificate.p12"
         echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode > "$certificate_path"
         security import "$certificate_path" -P "$BUILD_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+      env:
+        BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }} # the "Apple Development" one
+        BUILD_CERTIFICATE_PASSWORD: ${{ secrets.BUILD_CERTIFICATE_PASSWORD }}
     - name: Import notarization cert
       run: |
         set -eu -o pipefail
         dev_id_certificate_path="$RUNNER_TEMP/build_dev_id_certificate.p12"
         echo -n "$DEV_ID_CERTIFICATE_BASE64" | base64 --decode > "$dev_id_certificate_path"
         security import "$dev_id_certificate_path" -P "$BUILD_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+      env:
+        DEV_ID_CERTIFICATE_BASE64: ${{ secrets.DEV_ID_CERTIFICATE_BASE64 }} # the "Developer ID Application" one
+        BUILD_CERTIFICATE_PASSWORD: ${{ secrets.BUILD_CERTIFICATE_PASSWORD }}
     - name: Check keychain
       run: |
         set -eu -o pipefail
         security list-keychain -d user -s "$KEYCHAIN_PATH"
         security list-keychain
-      env:
-        APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-        BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }} # the "Apple Development" one
-        BUILD_CERTIFICATE_PASSWORD: ${{ secrets.BUILD_CERTIFICATE_PASSWORD }}
-        DEV_ID_CERTIFICATE_BASE64: ${{ secrets.DEV_ID_CERTIFICATE_BASE64 }} # the "Developer ID Application" one
     - name: Build
       run: |
         xcodebuild -scheme whatdid-release build archive -archivePath build/whatdid
