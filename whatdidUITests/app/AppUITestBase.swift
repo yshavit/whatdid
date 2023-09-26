@@ -47,7 +47,7 @@ class AppUITestBase: UITestBase {
     override func uiSetUp() {
         activate()
         XCUIElement.perform(withKeyModifiers: .option) {
-            app.menuBars.statusItems["Focus Whatdid"].click()
+            app.menuBars.statusItems["ui hook: focus whatdid"].click()
         }
         wait(for: "window to close", until: {openWindow == nil})
     }
@@ -65,7 +65,7 @@ class AppUITestBase: UITestBase {
     private var uiHooksWindow: XCUIElement {
         let mockedClockWindow = app.windows["UI Test Window"]
         activate()
-        app.menuBars.statusItems["Focus Whatdid"].click()
+        app.menuBars.statusItems["ui hook: focus whatdid"].click()
         mockedClockWindow.staticTexts.firstMatch.click()
         return mockedClockWindow
     }
@@ -168,7 +168,7 @@ class AppUITestBase: UITestBase {
     var entriesHook: [FlatEntry] {
         get {
             activate()
-            app.menuBars.statusItems["Focus Whatdid"].click()
+            app.menuBars.statusItems["ui hook: focus whatdid"].click()
             let field = app.windows["UI Test Window"].textFields["uihook_flatentryjson"]
             return FlatEntry.deserialize(from: field.stringValue)
         }

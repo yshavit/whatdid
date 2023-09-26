@@ -6,7 +6,7 @@ import ServiceManagement
 import Sparkle
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate, NSMenuDelegate {
     public static let instance = NSApplication.shared.delegate as! AppDelegate
     public static let DEBUG_DATE_FORMATTER = ISO8601DateFormatter()
 
