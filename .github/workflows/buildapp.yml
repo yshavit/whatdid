@@ -46,12 +46,12 @@ jobs:
         security set-keychain-settings -lut 21600 "$keychain_path"
         security unlock-keychain -p "$keychain_password" "$keychain_path"
         echo "KEYCHAIN_PATH=$keychain_path" >> "$GITHUB_ENV"
-        security list-keychain -d user -s "$KEYCHAIN_PATH"
-        security list-keychain
     - name: Confirm keychain
       run: |
         set -eu -o pipefail
         echo "keychain path: >$KEYCHAIN_PATH<"
+        security list-keychain -d user -s "$KEYCHAIN_PATH"
+        security list-keychain
     - name: Import build cert
       run: |
         set -eu o pipefail
