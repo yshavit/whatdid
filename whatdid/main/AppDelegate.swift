@@ -5,10 +5,6 @@ import KeyboardShortcuts
 import ServiceManagement
 #if canImport(Sparkle)
 import Sparkle
-#else
-fileprivate protocol SPUUpdaterDelegate {
-    // dummy protocol definition to stand in for sparkle's
-}
 #endif
 
 @NSApplicationMain
@@ -241,6 +237,9 @@ private class UpdaterDelegate: NSObject, SPUUpdaterDelegate {
     }
 }
 #else
+fileprivate protocol SPUUpdaterDelegate {
+    // dummy protocol definition to stand in for sparkle's
+}
 private class UpdaterDelegate: NSObject, SPUUpdaterDelegate {
     // dummy class
 }
