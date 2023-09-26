@@ -66,16 +66,9 @@ jobs:
         set -eu -o pipefail
         dev_id_certificate_path="$RUNNER_TEMP/build_dev_id_certificate.p12"
         echo -n "$DEV_ID_CERTIFICATE_BASE64" | base64 --decode > "$dev_id_certificate_path"
-        security import "$dev_id_certificate_path" -P "$BUILD_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+        security import "$dev_id_certificate_path" -k "$KEYCHAIN_PATH"
       env:
         DEV_ID_CERTIFICATE_BASE64: ${{ secrets.DEV_ID_CERTIFICATE_BASE64 }} # the "Developer ID Application" one
-        BUILD_CERTIFICATE_PASSWORD: ${{ secrets.BUILD_CERTIFICATE_PASSWORD }}
-    - name: Check keychain
-      run: |
-        set -eu -o pipefail
-        set -x
-        security list-keychain -d user -s "$KEYCHAIN_PATH"
-        security list-keychain
     - name: Build
       run: |
         xcodebuild -scheme whatdid-release build archive -archivePath build/whatdid
