@@ -17,6 +17,8 @@ jobs:
     if: ${{ github.event.inputs.runUiTests }}  # see #5495d097
     runs-on: macos-latest
     steps:
+    - name: REMOVE ME
+      run: exit 1 # TODO remove me
     - uses: actions/checkout@v2
     - name: Dismiss upgrade dialog if present
       run: |
