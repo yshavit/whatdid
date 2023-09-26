@@ -35,29 +35,33 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install --upgrade biplist dmgbuild
-    - name: Import certs
+    - name: Create temporary keychain
       run: |
         set -eu -o pipefail
-        pwd
-
-        ## Create and populate a temporary keychain with our cert
-        # create temporary keychain
+        ## Create and populate a temporary keychain with our cert.
+        # We need the "Apple Development" one for building, and then "Developer ID" one for notarizing
         keychain_path="$RUNNER_TEMP/app-signing.keychain-db"
         keychain_password="$(uuidgen)"
         security create-keychain -p "$keychain_password" "$keychain_path"
         security set-keychain-settings -lut 21600 "$keychain_path"
         security unlock-keychain -p "$keychain_password" "$keychain_path"
-        # import certificates to keychain
-        # We need the "Apple Development" one for building, and then "Developer ID" one for notarizing
+        echo "KEYCHAIN_PATH=$keychain_path" >> "$GITHUB_ENV"
+    - name: Import build cert
+      run: |
+        set -eu o pipefail
         certificate_path="$RUNNER_TEMP/build_certificate.p12"
         echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode > "$certificate_path"
-        security import "$certificate_path" -P "$BUILD_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$keychain_path"
-
-        devid_certificate_path="$RUNNER_TEMP/build_dev_id_certificate.p12"
-        echo -n "$DEV_ID_CERTIFICATE_BASE64" | base64 --decode > "$devid_certificate_path"
-        security import "$devid_certificate_path" -P "$BUILD_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$keychain_path"
-
-        security list-keychain -d user -s "$keychain_path"
+        security import "$certificate_path" -P "$BUILD_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+    - name: Import notarization cert
+      run: |
+        set -eu -o pipefail
+        dev_id_certificate_path="$RUNNER_TEMP/build_dev_id_certificate.p12"
+        echo -n "$DEV_ID_CERTIFICATE_BASE64" | base64 --decode > "$dev_id_certificate_path"
+        security import "$dev_id_certificate_path" -P "$BUILD_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+    - name: Check keychain
+      run: |
+        set -eu -o pipefail
+        security list-keychain -d user -s "$KEYCHAIN_PATH"
         security list-keychain
       env:
         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
