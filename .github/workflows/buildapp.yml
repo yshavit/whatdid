@@ -49,7 +49,7 @@ jobs:
     - name: Confirm keychain
       run: |
         set -eu -o pipefail
-        echo "keychain path: >$KEYCHAIN_PATH<"
+        set -x
         security list-keychain -d user -s "$KEYCHAIN_PATH"
         security list-keychain
     - name: Import build cert
@@ -73,6 +73,7 @@ jobs:
     - name: Check keychain
       run: |
         set -eu -o pipefail
+        set -x
         security list-keychain -d user -s "$KEYCHAIN_PATH"
         security list-keychain
     - name: Build
