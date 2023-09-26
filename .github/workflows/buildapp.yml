@@ -56,18 +56,16 @@ jobs:
       run: |
         set -eu o pipefail
         certificate_path="$RUNNER_TEMP/build_certificate.p12"
-        echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode > "$certificate_path"
-        security import "$certificate_path" -P "$BUILD_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+        echo -n "$BUILD_P12_BASE64" | base64 --decode > "$certificate_path"
+        security import "$certificate_path" -P "$BUILD_P12_PASSPHRASE" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
       env:
-        BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }} # the "Apple Development" one
-        BUILD_CERTIFICATE_PASSWORD: ${{ secrets.BUILD_CERTIFICATE_PASSWORD }}
+        BUILD_P12_BASE64: ${{ secrets.BUILD_P12_BASE64 }} # the "Apple Development" one, though "Mac Developer ID" also seems to work (that's what I'm using now)
+        BUILD_P12_PASSPHRASE: ${{ secrets.BUILD_P12_PASSPHRASE }}
     - name: Import notarization cert
       run: |
         set -eu -o pipefail
         dev_id_certificate_path="$RUNNER_TEMP/build_dev_id.cer"
-        echo here
         echo -n "$DEV_ID_CERTIFICATE_BASE64" | base64 --decode > "$dev_id_certificate_path"
-        echo there
         security import "$dev_id_certificate_path" -k "$KEYCHAIN_PATH"
       env:
         DEV_ID_CERTIFICATE_BASE64: ${{ secrets.DEV_ID_CERTIFICATE_BASE64 }} # the "Developer ID Application" one
