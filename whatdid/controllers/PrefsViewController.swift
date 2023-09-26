@@ -2,7 +2,9 @@
 
 import Cocoa
 import KeyboardShortcuts
+#if canImport(Sparkle)
 import Sparkle
+#endif
 
 class PrefsViewController: NSViewController {
     public static let SHOW_TUTORIAL = NSApplication.ModalResponse(27)
@@ -65,6 +67,7 @@ class PrefsViewController: NSViewController {
         set(value) { Prefs.requireNotes = value}
     }
 
+    #if canImport(Sparkle)
     @IBInspectable
     dynamic var autoCheckUpdates: Bool {
         get {
@@ -74,7 +77,9 @@ class PrefsViewController: NSViewController {
             AppDelegate.instance.updaterController.updater.automaticallyChecksForUpdates = value
         }
     }
+    #endif
     
+    #if canImport(Sparkle)
     @IBInspectable
     dynamic var includeAlphaReleases: Bool {
         get {
@@ -90,6 +95,7 @@ class PrefsViewController: NSViewController {
             Prefs.updateChannels = newChannels
         }
     }
+    #endif
     
     static func exportFileName(_ format: EntryExportFormat, _ scheduler: Scheduler) -> String {
         let dateFormatter = DateFormatter()
@@ -335,9 +341,11 @@ class PrefsViewController: NSViewController {
         githubShaInfo.isHidden = !NSEvent.modifierFlags.contains(.command)
     }
     
+    #if canImport(Sparkle)
     @IBAction func checkUpdateNow(_ sender: Any) {
         AppDelegate.instance.updaterController.checkForUpdates(sender)
     }
+    #endif
     
     //------------------------------------------------------------------
     // OTHER / COMMON

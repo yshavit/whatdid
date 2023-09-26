@@ -3,7 +3,13 @@
 import Cocoa
 import KeyboardShortcuts
 import ServiceManagement
+#if canImport(Sparkle)
 import Sparkle
+#else
+fileprivate protocol SPUUpdaterDelegate {
+    // dummy protocol definition to stand in for sparkle's
+}
+#endif
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate, NSMenuDelegate {
@@ -14,7 +20,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate, NSMenuDe
     @IBOutlet weak var mainMenu: MainMenu!
     private var deactivationHooks : Atomic<[() -> Void]> = Atomic(wrappedValue: [])
     private var openWindows = [ObjectIdentifier:NSWindowController]()
+    #if canImport(Sparkle)
     let updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: UpdaterDelegate.instance, userDriverDelegate: nil)
+    #endif
     
     #if UI_TEST
     private var uiTestWindow: UiTestWindow!
@@ -209,6 +217,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate, NSMenuDe
     }
 }
 
+#if canImport(Sparkle)
 private class UpdaterDelegate: NSObject, SPUUpdaterDelegate {
     static let instance = UpdaterDelegate()
     
@@ -231,6 +240,11 @@ private class UpdaterDelegate: NSObject, SPUUpdaterDelegate {
         return s
     }
 }
+#else
+private class UpdaterDelegate: NSObject, SPUUpdaterDelegate {
+    // dummy class
+}
+#endif
 
 extension Notification.Name {
     static let killLauncher = Notification.Name("killLauncher")
