@@ -68,3 +68,14 @@ jobs:
       with:
         name: screenshots-${{ github.run_number }}
         path: ${{ runner.temp }}/screenshots/export
+    - name: Gather logs (if failed)
+      if: ${{ failure() }}
+      run: |
+            mkdir "${{ runner.temp }}/export"
+            mv "$(readlink ${{ runner.temp }}/test-results/bundle)" "${{ runner.temp }}/export/whatdid-uitest-failures-${{ github.run_number }}.xcresult"
+    - name: Upload test artifacts (if failed)
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: whatdid-ui-tests-${{ github.run_number }}
+        path: ${{ runner.temp }}/export

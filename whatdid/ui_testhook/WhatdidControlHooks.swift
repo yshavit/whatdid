@@ -10,7 +10,7 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
     /// This lets us take screenshots of it without it getting in the way; and the wideness means that if we
     /// order the icons as whatdid's being rightmost and then this directly left of it, then the screenshots won't include
     /// any other icons the system has, either.
-    let activatorStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+    let activatorStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
     
     let scheduler: ManualTickScheduler = DefaultScheduler.instance
     private let deferButton: NSButton
@@ -184,8 +184,12 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
             fatalError("No activator button")
         }
         button.title = "Focus Whatdid"
+        button.setAccessibilityLabel("ui hook: focus whatdid")
         button.target = self
         button.action = #selector(grabFocus)
+        button.image = NSImage(named: NSImage.statusNoneName)
+        button.imagePosition = .imageOnly
+        
     }
     
     @objc private func grabFocus() {
@@ -204,6 +208,8 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
     /// That makes it suitable for screenshotting, if you put it directly to the left of the real whatdid item.
     @objc private func toggleStatusItemVisibility(_ toggle: NSButton) {
         if let button = activatorStatusItem.button {
+            
+            
             var attributes = [NSAttributedString.Key : Any]()
             if toggle.state == .on {
                 attributes[.foregroundColor] = NSColor.black.withAlphaComponent(0)
