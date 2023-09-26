@@ -21,7 +21,7 @@ class Pref<T: PrefType> {
     var projectedValue: PrefsListeners<T>
     
     init(wrappedValue: T, key: String) {
-        self.key = "whatdid." + key
+        self.key = namespace + key
         UserDefaults.standard.register(defaults: [self.key: wrappedValue.asUserDefaultsValue])
         projectedValue = PrefsListeners(wrappedValue)
         projectedValue.notify(newValue: self.wrappedValue)
@@ -231,4 +231,8 @@ extension Pref: ResettablePref {
         wrappedValue = defaultValue
     }
 }
+
+let namespace = "whatdidUI."
+#else
+let namespace = "whatdid."
 #endif

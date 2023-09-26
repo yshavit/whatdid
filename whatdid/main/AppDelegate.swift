@@ -62,6 +62,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
         uiTestWindow.show()
         NSApp.setActivationPolicy(.accessory)
         if let bundleId = Bundle.main.bundleIdentifier {
+            let bundleId = bundleId + "UI" // isolate it from a release build's prefs on the same machine
             oldPrefs = UserDefaults.standard.persistentDomain(forName: bundleId)
             wdlog(.info, "Removing old preferences because this is a UI test. Saved %d to restore later.", oldPrefs?.count ?? 0)
             UserDefaults.standard.setPersistentDomain([String: Any](), forName: bundleId)
