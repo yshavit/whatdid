@@ -64,8 +64,10 @@ jobs:
     - name: Import notarization cert
       run: |
         set -eu -o pipefail
-        dev_id_certificate_path="$RUNNER_TEMP/build_dev_id_certificate.p12"
+        dev_id_certificate_path="$RUNNER_TEMP/build_dev_id.cer"
+        echo here
         echo -n "$DEV_ID_CERTIFICATE_BASE64" | base64 --decode > "$dev_id_certificate_path"
+        echo there
         security import "$dev_id_certificate_path" -k "$KEYCHAIN_PATH"
       env:
         DEV_ID_CERTIFICATE_BASE64: ${{ secrets.DEV_ID_CERTIFICATE_BASE64 }} # the "Developer ID Application" one
