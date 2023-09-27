@@ -67,25 +67,39 @@ class PrefsViewController: NSViewController {
         set(value) { Prefs.requireNotes = value}
     }
 
-    #if canImport(Sparkle)
     @IBInspectable
     dynamic var autoCheckUpdates: Bool {
         get {
+            #if canImport(Sparkle)
             AppDelegate.instance.updaterController.updater.automaticallyChecksForUpdates
+            #else
+            // This var gets read (via binding) at controller load, before we have a chance to remove the updater options stack.
+            // That means we do expect it to get invoked even if there's no Sparkle.
+            false
+            #endif
         }
         set (value) {
+            #if canImport(Sparkle)
             AppDelegate.instance.updaterController.updater.automaticallyChecksForUpdates = value
+            #else
+            wdlog(.error, "improperly invoked autoCheckUpdates:set without sparkle available")
+            #endif
         }
     }
-    #endif
     
-    #if canImport(Sparkle)
     @IBInspectable
     dynamic var includeAlphaReleases: Bool {
         get {
+            #if canImport(Sparkle)
             Prefs.updateChannels.contains(.alpha)
+            #else
+            // This var gets read (via binding) at controller load, before we have a chance to remove the updater options stack.
+            // That means we do expect it to get invoked even if there's no Sparkle.
+            false
+            #endif
         }
         set (shouldIncludeAlphas) {
+            #if canImport(Sparkle)
             var newChannels = Prefs.updateChannels
             if shouldIncludeAlphas {
                 newChannels.formUnion([.alpha])
@@ -93,9 +107,11 @@ class PrefsViewController: NSViewController {
                 newChannels.subtract([.alpha])
             }
             Prefs.updateChannels = newChannels
+            #else
+            wdlog(.error, "improperly invoked includeAlphaReleases:set without sparkle available")
+            #endif
         }
     }
-    #endif
     
     static func exportFileName(_ format: EntryExportFormat, _ scheduler: Scheduler) -> String {
         let dateFormatter = DateFormatter()
@@ -321,6 +337,7 @@ class PrefsViewController: NSViewController {
     @IBOutlet var fullVersion: NSTextField!
     @IBOutlet var shaVersion: NSButton!
     @IBOutlet var githubShaInfo: NSStackView!
+    @IBOutlet weak var updaterOptions: NSStackView!
     
     private func setUpAboutPanel() {
         shortVersion.stringValue = shortVersion.stringValue.replacingBracketedPlaceholders(with: [
@@ -339,13 +356,19 @@ class PrefsViewController: NSViewController {
             "sha": Version.gitSha.replacingOccurrences(of: ".dirty", with: "")
         ])
         githubShaInfo.isHidden = !NSEvent.modifierFlags.contains(.command)
+        #if !canImport(Sparkle)
+        updaterOptions.removeFromSuperview()
+        updaterOptions = nil
+        #endif
     }
     
-    #if canImport(Sparkle)
     @IBAction func checkUpdateNow(_ sender: Any) {
+        #if canImport(Sparkle)
         AppDelegate.instance.updaterController.checkForUpdates(sender)
+        #else
+        wdlog(.error, "improperly invoked checkUpdateNow without sparkle available")
+        #endif
     }
-    #endif
     
     //------------------------------------------------------------------
     // OTHER / COMMON
