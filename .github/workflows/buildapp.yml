@@ -11,7 +11,7 @@ jobs:
   build:
     strategy:
       matrix:
-        target: [whatdid-release, whatdid-app-store]
+        target: [release, app-store]
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
@@ -22,10 +22,7 @@ jobs:
     - name: Check actions to perform
       run: |
         set -x
-        if [[ '${{ matrix.target }}' == whatdid-app-store ]]; then
-          exit
-        fi
-        if [[ -n '${{ secrets.APPLE_ID}}' ]]; then
+        if [ -n '${{ secrets.APPLE_ID}}' ] && [ '${{ matrix.target }}' == release ]; then
           echo "should_notarize_app=yes" >> "$GITHUB_ENV"
         fi
         if [[ "${{ github.event_name }}" == 'workflow_dispatch' || "${{ github.ref }}" == 'refs/heads/main' ]]; then
@@ -77,7 +74,7 @@ jobs:
         DEV_ID_CERTIFICATE_BASE64: ${{ secrets.DEV_ID_CERTIFICATE_BASE64 }} # the "Developer ID Application" one
     - name: Build
       run: |
-        xcodebuild -scheme ${{ matrix.target }} build archive -archivePath build/whatdid
+        xcodebuild -scheme "whatdid-${{ matrix.target }}" build archive -archivePath build/whatdid
     - name: Archive
       if: env.should_upload_app
       run: |
@@ -124,11 +121,11 @@ jobs:
       uses: actions/upload-artifact@v2
       if: env.should_upload_app
       with:
-        name: Whatdid.dmg
+        name: Whatdid-${{ matrix.target }}.dmg
         path: build/Whatdid.dmg
     - name: Upload packaging logs
       uses: actions/upload-artifact@v2
       if: env.should_upload_app && env.should_notarize_app
       with:
-        name: packaging-logs
+        name: packaging-logs-${{ matrix.target }}
         path: build/logs
