@@ -84,8 +84,6 @@ jobs:
         /usr/bin/plutil -insert signingCertificate -string "${APPLE_SIGNING_CERT_NAME}" buildscripts/archive-export.plist
 
         xcodebuild -exportArchive -archivePath build/whatdid.xcarchive -exportPath build -exportOptionsPlist buildscripts/archive-export.plist
-        cd build
-        ditto -c -k --keepParent whatdid.app whatdid.zip
       env:
         APPLE_SIGNING_CERT_NAME: ${{ secrets.APPLE_SIGNING_CERT_NAME }}
         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
@@ -93,6 +91,7 @@ jobs:
       if: env.should_upload_app && env.should_notarize_app
       run: |
         cd build
+        ditto -c -k --keepParent whatdid*.app whatdid.zip
         mkdir logs
         mv DistributionSummary.plist Packaging.log logs/
 
@@ -116,7 +115,8 @@ jobs:
     - name: Create DMG
       if: env.should_upload_app
       run: |
-        dmgbuild -s buildscripts/dmgbuild_settings.py -D app=build/whatdid.app "Whatdid" build/Whatdid.dmg
+        app_name="$(cd build; echo *.app)" # "whatdid.app" or "whatdid-app-store.app"
+        dmgbuild -s buildscripts/dmgbuild_settings.py -D "app=build/$app_name" "Whatdid" build/Whatdid.dmg
     - name: Upload app
       uses: actions/upload-artifact@v2
       if: env.should_upload_app

@@ -444,7 +444,7 @@
 		7EEF62D326195C3800528000 /* DailyReportTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyReportTest.swift; sourceTree = "<group>"; };
 		7EEF62E1261964C700528000 /* PrefsUITest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsUITest.swift; sourceTree = "<group>"; };
 		7EEF62EB2619660600528000 /* LongSessionPromptTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongSessionPromptTest.swift; sourceTree = "<group>"; };
-		7EF30E462AC2B4920097FA24 /* whatdid app store.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "whatdid app store.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7EF30E462AC2B4920097FA24 /* whatdid-app-store.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "whatdid-app-store.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EF30E472AC2B4920097FA24 /* whatdid copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "whatdid copy-Info.plist"; path = "/Users/yuval/repos/whatdid/whatdid copy-Info.plist"; sourceTree = "<absolute>"; };
 		7EF58F8A2580F180002F9604 /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
 		7EF58F8B2580F180002F9604 /* TutorialViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TutorialViewController.xib; sourceTree = "<group>"; };
@@ -660,7 +660,7 @@
 				7E8C04EA23714F0800A0C3A6 /* whatdidTests.xctest */,
 				7E8C04F523714F0800A0C3A6 /* whatdidUITests.xctest */,
 				7E6FF19C252D71060071E58C /* WhatdidLauncher.app */,
-				7EF30E462AC2B4920097FA24 /* whatdid app store.app */,
+				7EF30E462AC2B4920097FA24 /* whatdid-app-store.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -995,9 +995,9 @@
 			productReference = 7E8C04F523714F0800A0C3A6 /* whatdidUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		7EF30DCF2AC2B4920097FA24 /* whatdid app store */ = {
+		7EF30DCF2AC2B4920097FA24 /* whatdid-app-store */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7EF30E422AC2B4920097FA24 /* Build configuration list for PBXNativeTarget "whatdid app store" */;
+			buildConfigurationList = 7EF30E422AC2B4920097FA24 /* Build configuration list for PBXNativeTarget "whatdid-app-store" */;
 			buildPhases = (
 				7EF30DD42AC2B4920097FA24 /* Sources */,
 				7EF30E2F2AC2B4920097FA24 /* Frameworks */,
@@ -1009,12 +1009,12 @@
 			);
 			dependencies = (
 			);
-			name = "whatdid app store";
+			name = "whatdid-app-store";
 			packageProductDependencies = (
 				7EF30DD02AC2B4920097FA24 /* KeyboardShortcuts */,
 			);
 			productName = whatdid;
-			productReference = 7EF30E462AC2B4920097FA24 /* whatdid app store.app */;
+			productReference = 7EF30E462AC2B4920097FA24 /* whatdid-app-store.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1061,7 +1061,7 @@
 			projectRoot = "";
 			targets = (
 				7E8C04D923714F0700A0C3A6 /* whatdid */,
-				7EF30DCF2AC2B4920097FA24 /* whatdid app store */,
+				7EF30DCF2AC2B4920097FA24 /* whatdid-app-store */,
 				7E8C04E923714F0800A0C3A6 /* whatdidTests */,
 				7E8C04F423714F0800A0C3A6 /* whatdidUITests */,
 				7E6FF19B252D71060071E58C /* WhatdidLauncher */,
@@ -2027,7 +2027,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7EF30E422AC2B4920097FA24 /* Build configuration list for PBXNativeTarget "whatdid app store" */ = {
+		7EF30E422AC2B4920097FA24 /* Build configuration list for PBXNativeTarget "whatdid-app-store" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7EF30E432AC2B4920097FA24 /* Debug */,
