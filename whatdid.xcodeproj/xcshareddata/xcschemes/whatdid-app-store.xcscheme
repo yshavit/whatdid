@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7EF30DCF2AC2B4920097FA24"
-               BuildableName = "whatdid-appstore.app"
+               BuildableName = "whatdid-app-store.app"
                BlueprintName = "whatdid-app-store"
                ReferencedContainer = "container:whatdid.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7EF30DCF2AC2B4920097FA24"
-            BuildableName = "whatdid-appstore.app"
+            BuildableName = "whatdid-app-store.app"
             BlueprintName = "whatdid-app-store"
             ReferencedContainer = "container:whatdid.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7EF30DCF2AC2B4920097FA24"
-            BuildableName = "whatdid-appstore.app"
+            BuildableName = "whatdid-app-store.app"
             BlueprintName = "whatdid-app-store"
             ReferencedContainer = "container:whatdid.xcodeproj">
          </BuildableReference>
