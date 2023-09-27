@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -1134,6 +1134,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		7E1C2F4F24CE33780070D8CD /* Set gitsha in Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -1148,11 +1149,12 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/buildscripts/set_plist_build.sh\n";
+			shellScript = "set -euo pipefail\n$SRCROOT/buildscripts/set_plist_build.sh\n";
 		};
 		7EF30E3F2AC2B4920097FA24 /* Set gitsha in Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			alwaysOutOfDate = 1;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
@@ -1166,7 +1168,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/buildscripts/set_plist_build.sh\n";
+			shellScript = "set -euo pipefail\n$SRCROOT/buildscripts/set_plist_build.sh\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
