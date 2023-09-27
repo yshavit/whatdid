@@ -9,6 +9,9 @@ on:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        target: [release, app-store]
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
@@ -19,11 +22,17 @@ jobs:
     - name: Check actions to perform
       run: |
         set -x
-        if [[ -n '${{ secrets.APPLE_ID}}' ]]; then
+        if [ -n '${{ secrets.APPLE_ID}}' ] && [ '${{ matrix.target }}' == release ]; then
           echo "should_notarize_app=yes" >> "$GITHUB_ENV"
         fi
         if [[ "${{ github.event_name }}" == 'workflow_dispatch' || "${{ github.ref }}" == 'refs/heads/main' ]]; then
           echo "should_upload_app=yes" >> "$GITHUB_ENV"
+        fi
+
+        if [ '${{ matrix.target }}' == release ]; then
+          echo "NAME_QUALIFIER=" >> "$GITHUB_ENV"
+        else
+          echo "NAME_QUALIFIER=-${{ matrix.target }}" >> "$GITHUB_ENV"
         fi
     - name: Will notarize
       if: env.should_notarize_app
@@ -71,7 +80,7 @@ jobs:
         DEV_ID_CERTIFICATE_BASE64: ${{ secrets.DEV_ID_CERTIFICATE_BASE64 }} # the "Developer ID Application" one
     - name: Build
       run: |
-        xcodebuild -scheme whatdid-release build archive -archivePath build/whatdid
+        xcodebuild -scheme "whatdid-${{ matrix.target }}" build archive -archivePath build/whatdid
     - name: Archive
       if: env.should_upload_app
       run: |
@@ -81,8 +90,6 @@ jobs:
         /usr/bin/plutil -insert signingCertificate -string "${APPLE_SIGNING_CERT_NAME}" buildscripts/archive-export.plist
 
         xcodebuild -exportArchive -archivePath build/whatdid.xcarchive -exportPath build -exportOptionsPlist buildscripts/archive-export.plist
-        cd build
-        ditto -c -k --keepParent whatdid.app whatdid.zip
       env:
         APPLE_SIGNING_CERT_NAME: ${{ secrets.APPLE_SIGNING_CERT_NAME }}
         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
@@ -90,6 +97,7 @@ jobs:
       if: env.should_upload_app && env.should_notarize_app
       run: |
         cd build
+        ditto -c -k --keepParent whatdid*.app whatdid.zip
         mkdir logs
         mv DistributionSummary.plist Packaging.log logs/
 
@@ -113,16 +121,17 @@ jobs:
     - name: Create DMG
       if: env.should_upload_app
       run: |
-        dmgbuild -s buildscripts/dmgbuild_settings.py -D app=build/whatdid.app "Whatdid" build/Whatdid.dmg
+        app_name="$(cd build; echo *.app)" # "whatdid.app" or "whatdid-app-store.app"
+        dmgbuild -s buildscripts/dmgbuild_settings.py -D "app=build/$app_name" "Whatdid" build/Whatdid.dmg
     - name: Upload app
       uses: actions/upload-artifact@v2
       if: env.should_upload_app
       with:
-        name: Whatdid.dmg
+        name: Whatdid${{ env.NAME_QUALIFIER }}.dmg
         path: build/Whatdid.dmg
     - name: Upload packaging logs
       uses: actions/upload-artifact@v2
       if: env.should_upload_app && env.should_notarize_app
       with:
-        name: packaging-logs
+        name: packaging-logs${{ env.NAME_QUALIFIER }}
         path: build/logs

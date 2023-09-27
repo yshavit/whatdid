@@ -12,7 +12,9 @@ struct Prefs {
     @Pref(key: "previouslyLaunchedVersion") static var tutorialVersion = -1
     @Pref(key: "requireNotes") static var requireNotes = false
     @Pref(key: "startupMessages") static var startupMessages = [StartupMessage]()
+    #if canImport(Sparkle)
     @Pref(key: "updateChannels") static var updateChannels = Set<UpdateChannel>([])
+    #endif
 }
 
 @propertyWrapper
