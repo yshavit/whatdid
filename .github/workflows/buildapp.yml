@@ -28,6 +28,12 @@ jobs:
         if [[ "${{ github.event_name }}" == 'workflow_dispatch' || "${{ github.ref }}" == 'refs/heads/main' ]]; then
           echo "should_upload_app=yes" >> "$GITHUB_ENV"
         fi
+
+        if [ '${{ matrix.target }}' == release ]; then
+          echo "NAME_QUALIFIER=" >> "$GITHUB_ENV"
+        else
+          echo "NAME_QUALIFIER=-${{ matrix.target }}" >> "$GITHUB_ENV"
+        fi
     - name: Will notarize
       if: env.should_notarize_app
       run: echo "Will notarize app"
@@ -121,11 +127,11 @@ jobs:
       uses: actions/upload-artifact@v2
       if: env.should_upload_app
       with:
-        name: Whatdid-${{ matrix.target }}.dmg
+        name: Whatdid${{ env.NAME_QUALIFIER }}.dmg
         path: build/Whatdid.dmg
     - name: Upload packaging logs
       uses: actions/upload-artifact@v2
       if: env.should_upload_app && env.should_notarize_app
       with:
-        name: packaging-logs-${{ matrix.target }}
+        name: packaging-logs${{ env.NAME_QUALIFIER }}
         path: build/logs
