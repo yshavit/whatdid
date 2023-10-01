@@ -86,9 +86,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate, NSMenuDe
     }
     
     private func kickOffInitialSchedules() {
-        mainMenu.schedule(.ptn)
-        mainMenu.schedule(.dailyEnd)
-        mainMenu.schedule(.dayStart)
+        let persistedSchedules = Prefs.scheduledOpens
+        for windowContent in MainMenu.WindowContents.allCases {
+            if let persistedSchedule = persistedSchedules[windowContent] {
+                mainMenu.schedule(windowContent, at: persistedSchedule)
+            } else {
+                mainMenu.schedule(windowContent)
+            }
+        }
         
         let currentVersion = Prefs.tutorialVersion
         if SHOW_TUTORIAL_ON_FIRST_START && currentVersion < PtnViewController.CURRENT_TUTORIAL_VERSION {

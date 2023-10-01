@@ -277,32 +277,33 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
             AppDelegate.instance.windowClosed(self)
         }
     }
-
+    
     func schedule(_ contents: WindowContents) {
-        let newTask: ScheduledTask
+        let date: Date;
         switch contents {
         case .ptn:
             let jitter = Prefs.ptnFrequencyJitterMinutes
             let jitterMinutes = Int.random(in: -jitter...jitter)
             let minutes = Double(Prefs.ptnFrequencyMinutes + jitterMinutes)
-            newTask = DefaultScheduler.instance.schedule(String(describing: contents), after: minutes * 60.0) {
-                self.opener.open(.ptn, reason: .scheduled)
-            }
+            date = DefaultScheduler.instance.now + minutes * 60.0;
         case .dailyEnd:
-            let scheduleEndOfDay = Prefs.dailyReportTime.map {hh, mm in TimeUtil.dateForTime(.next, hh: hh, mm: mm) }
-            newTask = DefaultScheduler.instance.schedule("EOD summary", at: scheduleEndOfDay) {
-                self.opener.open(.dailyEnd, reason: .scheduled)
-            }
+            date = Prefs.dailyReportTime.map {hh, mm in TimeUtil.dateForTime(.next, hh: hh, mm: mm) }
         case .dayStart:
-            let startOfDay = Prefs.dayStartTime.map {hh, mm in TimeUtil.dateForTime(.next, hh: hh, mm: mm) }
-            newTask = DefaultScheduler.instance.schedule("Day start", at: startOfDay) {
-                self.opener.open(.dayStart, reason: .scheduled)
-            }
+            date = Prefs.dayStartTime.map {hh, mm in TimeUtil.dateForTime(.next, hh: hh, mm: mm) };
+        }
+
+        schedule(contents, at: date)
+    }
+
+    func schedule(_ contents: WindowContents, at date: Date) {
+        let newTask: ScheduledTask = DefaultScheduler.instance.schedule(String(describing: contents), at: date) {
+            self.opener.open(contents, reason: .scheduled)
         }
         if let oldTask = scheduledTasks.updateValue(newTask, forKey: contents) {
             wdlog(.debug, "Replaced previously scheduled open for %{public}@", contents.description)
             oldTask.cancel()
         }
+        Prefs.scheduledOpens[contents] = date
     }
     
     func forceReschedule() {

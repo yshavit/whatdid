@@ -9,6 +9,7 @@ class Model {
     private static let BREAK_TASK_NOTES = ""
     
     @Atomic private var _lastEntryDate : Date
+    
     private let modelName: String
     private let clearAllEntriesOnStartup: Bool
     
@@ -45,7 +46,14 @@ class Model {
     init(modelName: String, clearAllEntriesOnStartup: Bool = false) {
         self.modelName = modelName
         self.clearAllEntriesOnStartup = clearAllEntriesOnStartup
-        _lastEntryDate = DefaultScheduler.instance.now
+        let lastEntryEpoch = Prefs.lastEntryEpoch
+        if lastEntryEpoch.isFinite {
+            _lastEntryDate = Date(timeIntervalSince1970: lastEntryEpoch)
+        } else {
+            let now = DefaultScheduler.instance.now
+            _lastEntryDate = now
+            setLastEntryDate(to: now)
+        }
     }
     
     private lazy var container: NSPersistentContainer = {
@@ -89,9 +97,14 @@ class Model {
         return localContainer
     }()
     
+    private func setLastEntryDate(to date: Date) {
+        _lastEntryDate = date
+        Prefs.lastEntryEpoch = date.timeIntervalSince1970
+    }
+    
     func setLastEntryDateToNow() {
         wdlog(.info, "Skipping session")
-        _lastEntryDate = DefaultScheduler.instance.now
+        setLastEntryDate(to: DefaultScheduler.instance.now)
     }
     
     var lastEntryDate: Date {
@@ -434,7 +447,7 @@ class Model {
     func addEntryNow(project: String, task: String, notes: String, callback: @escaping ()->()) {
         let lastUpdate = self._lastEntryDate
         let now = DefaultScheduler.instance.now
-        _lastEntryDate = now
+        setLastEntryDate(to: now)
         add(FlatEntry(from: lastUpdate, to: now, project: project, task: task, notes: notes), andThen: callback)
     }
     
