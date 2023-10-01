@@ -12,7 +12,11 @@ struct Prefs {
     @Pref(key: "previouslyLaunchedVersion") static var tutorialVersion = -1
     @Pref(key: "requireNotes") static var requireNotes = false
     @Pref(key: "startupMessages") static var startupMessages = [StartupMessage]()
+    
+    // The following aren't actually prefs, but rather just bits of info persisted across runs.
     @Pref(key: "scheduledOpens") static var scheduledOpens = [MainMenu.WindowContents:Date]()
+    @Pref(key: "lastEntryDate") static var lastEntryEpoch = Double.nan
+    
     #if canImport(Sparkle)
     @Pref(key: "updateChannels") static var updateChannels = Set<UpdateChannel>([])
     #endif
@@ -94,6 +98,20 @@ extension Bool: PrefType {
     
     var asUserDefaultsValue: Any {
         self
+    }
+}
+
+extension Double: PrefType {
+    static func readUserDefaultsValue(key: String) -> Double {
+        UserDefaults.standard.double(forKey: key)
+    }
+    
+    static func writeUserDefaultsValue(key: String, value: Double) {
+        UserDefaults.standard.set(value, forKey: key)
+    }
+    
+    var asUserDefaultsValue: Any {
+        Double.nan
     }
 }
 
