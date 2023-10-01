@@ -277,30 +277,33 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
             AppDelegate.instance.windowClosed(self)
         }
     }
-
+    
     func schedule(_ contents: WindowContents) {
-        let scheduler = DefaultScheduler.instance;
-        
-        let when: Date;
+        let date: Date;
         switch contents {
         case .ptn:
             let jitter = Prefs.ptnFrequencyJitterMinutes
             let jitterMinutes = Int.random(in: -jitter...jitter)
             let minutes = Double(Prefs.ptnFrequencyMinutes + jitterMinutes)
-            when = scheduler.now + minutes * 60.0;
+            date = DefaultScheduler.instance.now + minutes * 60.0;
         case .dailyEnd:
-            when = Prefs.dailyReportTime.map {hh, mm in TimeUtil.dateForTime(.next, hh: hh, mm: mm) }
+            date = Prefs.dailyReportTime.map {hh, mm in TimeUtil.dateForTime(.next, hh: hh, mm: mm) }
         case .dayStart:
-            when = Prefs.dayStartTime.map {hh, mm in TimeUtil.dateForTime(.next, hh: hh, mm: mm) };
+            date = Prefs.dayStartTime.map {hh, mm in TimeUtil.dateForTime(.next, hh: hh, mm: mm) };
         }
-        
-        let newTask: ScheduledTask = scheduler.schedule(String(describing: contents), at: when) {
+
+        schedule(contents, at: date)
+    }
+
+    func schedule(_ contents: WindowContents, at date: Date) {
+        let newTask: ScheduledTask = DefaultScheduler.instance.schedule(String(describing: contents), at: date) {
             self.opener.open(contents, reason: .scheduled)
         }
         if let oldTask = scheduledTasks.updateValue(newTask, forKey: contents) {
             wdlog(.debug, "Replaced previously scheduled open for %{public}@", contents.description)
             oldTask.cancel()
         }
+        Prefs.scheduledOpens[contents] = date
     }
     
     func forceReschedule() {

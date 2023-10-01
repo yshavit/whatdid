@@ -12,6 +12,7 @@ struct Prefs {
     @Pref(key: "previouslyLaunchedVersion") static var tutorialVersion = -1
     @Pref(key: "requireNotes") static var requireNotes = false
     @Pref(key: "startupMessages") static var startupMessages = [StartupMessage]()
+    @Pref(key: "scheduledOpens") static var scheduledOpens = [MainMenu.WindowContents:Date]()
     #if canImport(Sparkle)
     @Pref(key: "updateChannels") static var updateChannels = Set<UpdateChannel>([])
     #endif
@@ -159,6 +160,38 @@ extension Set: PrefType where Element == UpdateChannel {
     
     var asUserDefaultsValue: Any {
         NSArray(array: Array(self))
+    }
+}
+
+extension Dictionary: PrefType where Key == MainMenu.WindowContents, Value == Date {
+    static func readUserDefaultsValue(key: String) -> Dictionary<MainMenu.WindowContents, Date> {
+        guard let rawDict = UserDefaults.standard.dictionary(forKey: key) else {
+            wdlog(.info, "reading Prefs<[WindowContents: Date]>: not a dictionary")
+            return [MainMenu.WindowContents:Date]()
+        }
+        let mappedPairs = rawDict.compactMap {(key: String, val: Any) -> (MainMenu.WindowContents, Date)? in
+            if let keyInt = Int(key),
+                  let keyWinContents = MainMenu.WindowContents(rawValue: keyInt),
+                  let epoch = val as? TimeInterval
+            {
+                return (keyWinContents, Date(timeIntervalSince1970: epoch))
+            } else {
+                return nil
+            }
+        }
+        return Dictionary(uniqueKeysWithValues: mappedPairs)
+    }
+    
+    static func writeUserDefaultsValue(key: String, value: Dictionary<MainMenu.WindowContents, Date>) {
+        let mappedPairs = value.map {(key, val) in
+            (String(describing: key.rawValue), val.timeIntervalSince1970)
+        }
+        let mappedDict = Dictionary<String, TimeInterval>(uniqueKeysWithValues: mappedPairs)
+        UserDefaults.standard.set(NSDictionary(dictionary: mappedDict), forKey: key)
+    }
+    
+    var asUserDefaultsValue: Any {
+        NSDictionary(dictionary: self)
     }
 }
 
