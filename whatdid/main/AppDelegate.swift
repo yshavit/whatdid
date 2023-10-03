@@ -22,7 +22,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate, NSMenuDe
     
     #if UI_TEST
     private var uiTestWindow: UiTestWindow!
-    private var oldPrefs: [String : Any]?
     #endif
     
     var model: Model {
@@ -43,7 +42,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate, NSMenuDe
         mainMenu.reset()
         resetModel()
         kickOffInitialSchedules()
-        resetAllPrefs()
+        Prefs.resetRaw()
         globalLogHook.reset()
     }
     #endif
@@ -65,12 +64,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate, NSMenuDe
         uiTestWindow = UiTestWindow()
         uiTestWindow.show()
         NSApp.setActivationPolicy(.accessory)
-        if let bundleId = Bundle.main.bundleIdentifier {
-            let bundleId = bundleId + "UI" // isolate it from a release build's prefs on the same machine
-            oldPrefs = UserDefaults.standard.persistentDomain(forName: bundleId)
-            wdlog(.info, "Removing old preferences because this is a UI test. Saved %d to restore later.", oldPrefs?.count ?? 0)
-            UserDefaults.standard.setPersistentDomain([String: Any](), forName: bundleId)
-        }
         #endif
         
         AppDelegate.DEBUG_DATE_FORMATTER.timeZone = DefaultScheduler.instance.timeZone
@@ -117,16 +110,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate, NSMenuDe
     
     func applicationWillTerminate(_ notification: Notification) {
         wdlog(.info, "whatdid is shutting down")
-        #if UI_TEST
-        if let bundleId = Bundle.main.bundleIdentifier {
-            if let toRestore = oldPrefs {
-                wdlog(.info, "Restoring old preferences")
-                UserDefaults.standard.setPersistentDomain(toRestore, forName: bundleId)
-            } else {
-                wdlog(.info, "No previous preferences to restore")
-            }
-        }
-        #endif
     }
     
     func windowOpened(_ window: NSWindowController) {

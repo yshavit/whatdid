@@ -49,7 +49,7 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
         hideStatusItem = NSButton(checkboxWithTitle: "Hide 'Focus Whatdid' Status Item", target: nil, action: nil)
         
         showConstraints = NSButton(checkboxWithTitle: "Show UI constraints", target: nil, action: nil)
-        showConstraints.state = UserDefaults.standard.bool(forKey: WhatdidControlHooks.showUiConstraintsPrefsKey) ? .on : .off
+        showConstraints.state = Prefs.raw.bool(forKey: WhatdidControlHooks.showUiConstraintsPrefsKey) ? .on : .off
         
         super.init()
         
@@ -221,8 +221,8 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
     
     @objc private func toggleShowUiConstraints(_ toggle: NSButton) {
         let key = WhatdidControlHooks.showUiConstraintsPrefsKey
-        UserDefaults.standard.set(toggle.state == .on, forKey: key)
-        wdlog(.debug, "%@ is now %d", key, UserDefaults.standard.bool(forKey: key))
+        Prefs.raw.set(toggle.state == .on, forKey: key)
+        wdlog(.debug, "%@ is now %d", key, Prefs.raw.bool(forKey: key))
     }
     
     func populateJsonFlatEntryField() {
