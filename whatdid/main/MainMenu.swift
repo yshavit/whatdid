@@ -128,7 +128,9 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
             button.imagePosition = .imageOnly
             button.imageScaling = .scaleProportionallyUpOrDown
             #if DEBUG
-            button.contentTintColor = .systemYellow
+            if ProcessInfo.processInfo.environment["SUPPRESS_UI_TEST_MENU_TINTING"] == nil {
+                button.contentTintColor = .systemYellow
+            }
             #endif
         }
         

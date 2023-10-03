@@ -4,6 +4,10 @@ import XCTest
 
 class ScreenshotGenerator: AppUITestBase {
     
+    override class var whatdidEnvAdditions: [String:String] {
+        ["SUPPRESS_UI_TEST_MENU_TINTING": "true"]
+    }
+    
     override func uiSetUp() {
         super.uiSetUp()
         // 3. Hide the status item, and unhide it when we're done.

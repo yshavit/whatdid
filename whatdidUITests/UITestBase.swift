@@ -79,6 +79,10 @@ class UITestBase: XCTestCase {
         // nothing
     }
     
+    class var whatdidEnvAdditions: [String:String] {
+        [String:String]()
+    }
+    
     final override func setUp() {
         continueAfterFailure = false
         if UITestBase.shouldRestartApp {
@@ -90,7 +94,9 @@ class UITestBase: XCTestCase {
         }
         
         if UITestBase.app == nil {
-            UITestBase.launch(withEnv: startupEnv(suppressTutorial: true))
+            var env: [String:String] = startupEnv(suppressTutorial: true)
+            env.merge(Self.whatdidEnvAdditions, uniquingKeysWith: {(_, second) in second})
+            UITestBase.launch(withEnv: env)
         }
 
         let now = Date()
