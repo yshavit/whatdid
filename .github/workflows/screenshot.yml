@@ -16,6 +16,7 @@ jobs:
           sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate "$opt" -boolean FALSE
         done
     - name: Set dark mode
+      if: false
       run: |
             sudo osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to true'
     - name: Install xcparse
