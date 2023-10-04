@@ -23,4 +23,12 @@ extension String {
             return nil
         }
     }
+    
+    var stableHash: UInt32 {
+        var hash: UInt32 = 0
+        for byte in self.utf8 {
+            hash = hash &* 31 &+ UInt32(byte)
+        }
+        return hash
+    }
 }

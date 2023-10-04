@@ -92,8 +92,7 @@ class SegmentedTimelineView: WdView {
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         // Clear out the background
-        // TODO should consider adding an angled stripe pattern here, for missing segments
-        NSColor.windowBackgroundColor.setFill()
+        NSColor.gray.setFill()
         NSBezierPath.fill(dirtyRect)
         NSColor.gray.setStroke()
         SegmentedTimelineView.boxFillhelper.drawDiagonalLines(for: dirtyRect, within: bounds)
@@ -120,12 +119,19 @@ class SegmentedTimelineView: WdView {
             let entryRectToDraw = entryRect.intersection(dirtyRect)
             if !entryRectToDraw.isNull {
                 let isHighlighted = currentlyHighlighted.contains(entry.project)
+                let rand = SimpleRandom(seed: entry.project.stableHash)
                 
-                var color = color(for: entry.project)
+                // Use HSL, with a random hue and fixed saturation, brightness and transparency. This gives it a washed-out
+                // pastel look that seems to look good in both light and dark modes.
+                let color = NSColor(
+                    hue: CGFloat(rand.nextUnitFloat()),
+                    saturation: 0.6,
+                    brightness: 1,
+                    alpha: 0.35)
+                
                 if !isHighlighted {
-                    NSColor.lightGray.setFill()
+                    NSColor.windowBackgroundColor.setFill()
                     NSBezierPath.fill(entryRectToDraw)
-                    color = color.withAlphaComponent(0.65)
                 }
                 color.setFill()
                 NSBezierPath.fill(entryRectToDraw)
@@ -232,16 +238,6 @@ class SegmentedTimelineView: WdView {
                 height: bounds.height)
             block(segment, entryRect)
         }
-    }
-    
-    func color(for string: String) -> NSColor {
-        let hashUInt = UInt32(truncatingIfNeeded: string.hashValue)
-        let rand = SimpleRandom(seed: hashUInt)
-        return NSColor(
-            red: CGFloat(rand.nextUnitFloat()),
-            green: CGFloat(rand.nextUnitFloat()),
-            blue: CGFloat(rand.nextUnitFloat()),
-            alpha: 1.0)
     }
     
     private class Segment {
