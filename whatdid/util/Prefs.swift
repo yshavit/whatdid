@@ -12,6 +12,8 @@ struct Prefs {
     @Pref(key: "previouslyLaunchedVersion") static var tutorialVersion = -1
     @Pref(key: "requireNotes") static var requireNotes = false
     @Pref(key: "startupMessages") static var startupMessages = [StartupMessage]()
+    @Pref(key: "analyticsEnabled") static var analyticsEnabled = false
+    @Pref(key: "analyticsTrackerId") static var trackerId = UUID()
     
     // The following aren't actually prefs, but rather just bits of info persisted across runs.
     @Pref(key: "scheduledOpens") static var scheduledOpens = [MainMenu.WindowContents:Date]()
@@ -275,6 +277,26 @@ struct HoursAndMinutes: PrefType {
     
     func map<T>(_ function: (_ hh: Int, _ mm: Int) -> T) -> T {
         return function(hours, minutes)
+    }
+}
+
+extension UUID: PrefType {
+    
+    static func readUserDefaultsValue(key: String) -> UUID {
+        let s = Prefs.raw.string(forKey: key)
+        if let s = s, let uuid = UUID(uuidString: s) {
+            return uuid
+        } else {
+            return zero
+        }
+    }
+    
+    static func writeUserDefaultsValue(key: String, value: UUID) {
+        Prefs.raw.set(value.uuidString, forKey: key)
+    }
+    
+    var asUserDefaultsValue: Any {
+        uuidString
     }
 }
 

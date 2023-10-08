@@ -79,6 +79,11 @@
             value = "true"
             isEnabled = "YES">
          </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "com.apple.CoreData.SQLDebug"
+            value = "0"
+            isEnabled = "YES">
+         </EnvironmentVariable>
       </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction

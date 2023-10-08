@@ -12,10 +12,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate, NSMenuDe
     public static let instance = NSApplication.shared.delegate as! AppDelegate
     public static let DEBUG_DATE_FORMATTER = ISO8601DateFormatter()
 
-    private var _model = Model()
+    private var _model = Model() {
+        didSet {
+            analytics.setModel(model)
+        }
+    }
+    private let analytics = Analytics()
+    
     @IBOutlet weak var mainMenu: MainMenu!
     private var deactivationHooks : Atomic<[() -> Void]> = Atomic(wrappedValue: [])
     private var openWindows = [ObjectIdentifier:NSWindowController]()
+    
     #if canImport(Sparkle)
     let updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: UpdaterDelegate.instance, userDriverDelegate: nil)
     #endif
@@ -57,8 +64,33 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate, NSMenuDe
         }
     }
     
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        /// This funny little bit fossilizes the tracker id the first time the app runs.
+        ///
+        /// The way our Prefs wrapper works, they're always initialized in-memory with a default value, and then the wrapped
+        /// value returns either what's stored, or the default value. The default for the trackerId is UUID(), though, which
+        /// is a random UUID that's regenerated every time the process runs. Therefore, we never want to use this, and always
+        /// want there to be a stored value. That's what this does.
+        ///
+        /// So, the first time this app is ever launched, the read will return that randomly-generated UUID, and the write will
+        /// store it. On subsequent startups, the read will fetch that stored value, and the write will idempotently re-write it.
+        ///
+        /// We already `UUID.zero` to represent  "a bogus UUID" — for example, if someone manually sets the UUID to
+        /// `"bogus"` (which can't be parsed into a UUID) using the CLI `defaults` tool. W always want to respect
+        /// the value that's there, and not regenerate a new UUID to replace it: if the user set their trackerId to something
+        /// bogus, they probably had a good reason (like not wanting to be tracked).
+        let trackerId = Prefs.trackerId
+        if trackerId != UUID.zero {
+            Prefs.trackerId = trackerId
+        }
+    }
+    
     func applicationDidFinishLaunching(_: Notification) {
         wdlog(.info, "Starting whatdid with build %{public}@", Version.pretty)
+        // Start tracking analytics (if allowed)
+        analytics.setModel(model)
+        Prefs.$analyticsEnabled.addListener(analytics.setEnabled(_:)) // This also schedules an initial check
+        
         #if UI_TEST
         wdlog(.info, "initializing UI test hooks")
         uiTestWindow = UiTestWindow()
