@@ -1,4 +1,16 @@
-theme: jekyll-theme-modernist
+remote_theme: pages-themes/midnight@v0.2.0
 exclude:
-  - .github
-  - buildscripts
+  - .github/
+  - buildscripts/
+  - build_local/
+  # Defaults:
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
