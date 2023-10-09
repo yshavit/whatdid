@@ -19,7 +19,7 @@ class PrefsViewController: NSViewController {
     @IBOutlet var tabButtonsStack: NSStackView!
     @IBOutlet var mainTabs: NSTabView!
 
-    
+    // Hooks to general prefs controller
     @IBOutlet var generalPrefsController: PrefsGeneralPaneController!
     var ptnScheduleChanged: () -> Void {
         get {
@@ -104,7 +104,6 @@ class PrefsViewController: NSViewController {
         }
         tabButtonsStack.addArrangedSubview(NSView()) // trailing spacer
         
-        setUpHelpAndFeedbackPanel()
         setUpAboutPanel()
     }
     
@@ -146,26 +145,6 @@ class PrefsViewController: NSViewController {
         if let myWindow = view.window, let mySheetParent = myWindow.sheetParent {
             mySheetParent.endSheet(myWindow, returnCode: response)
         }
-    }
-    
-    //------------------------------------------------------------------
-    // HELP & FEEDBACK
-    //------------------------------------------------------------------
-    
-    @IBOutlet var feedbackButton: NSButton!
-    
-    private func setUpHelpAndFeedbackPanel() {
-        if let versionQuery = Version.pretty.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-            feedbackButton.toolTip = feedbackButton.toolTip?.replacingBracketedPlaceholders(with: [
-                "version": versionQuery
-            ])
-        } else {
-            feedbackButton.removeFromSuperview()
-        }
-    }
-    
-    @IBAction func showTutorial(_ sender: Any) {
-        endParentSheet(with: PrefsViewController.SHOW_TUTORIAL)
     }
     
     //------------------------------------------------------------------

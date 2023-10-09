@@ -52,6 +52,10 @@
 		7E5660612AD46BD800767E08 /* PrefsGeneralPaneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E56605E2AD46BD700767E08 /* PrefsGeneralPaneController.swift */; };
 		7E5660622AD46BD800767E08 /* PrefsGeneralPaneController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E56605F2AD46BD700767E08 /* PrefsGeneralPaneController.xib */; };
 		7E5660632AD46BD800767E08 /* PrefsGeneralPaneController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E56605F2AD46BD700767E08 /* PrefsGeneralPaneController.xib */; };
+		7E56606C2AD487A400767E08 /* PrefsFeedbackPaneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E56606A2AD487A400767E08 /* PrefsFeedbackPaneController.swift */; };
+		7E56606D2AD487A400767E08 /* PrefsFeedbackPaneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E56606A2AD487A400767E08 /* PrefsFeedbackPaneController.swift */; };
+		7E56606E2AD487A400767E08 /* PrefsFeedbackPaneController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E56606B2AD487A400767E08 /* PrefsFeedbackPaneController.xib */; };
+		7E56606F2AD487A400767E08 /* PrefsFeedbackPaneController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E56606B2AD487A400767E08 /* PrefsFeedbackPaneController.xib */; };
 		7E579F702503E2920055D9F6 /* SystemClockSchedulerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */; };
 		7E5EFA272619B14A00E7834D /* NSTextField+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */; };
 		7E63051E2846C71700565880 /* SegmentedTimelineViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E63051D2846C71700565880 /* SegmentedTimelineViewTest.swift */; };
@@ -355,6 +359,8 @@
 		7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeZone+Helpers.swift"; sourceTree = "<group>"; };
 		7E56605E2AD46BD700767E08 /* PrefsGeneralPaneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsGeneralPaneController.swift; sourceTree = "<group>"; };
 		7E56605F2AD46BD700767E08 /* PrefsGeneralPaneController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefsGeneralPaneController.xib; sourceTree = "<group>"; };
+		7E56606A2AD487A400767E08 /* PrefsFeedbackPaneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsFeedbackPaneController.swift; sourceTree = "<group>"; };
+		7E56606B2AD487A400767E08 /* PrefsFeedbackPaneController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefsFeedbackPaneController.xib; sourceTree = "<group>"; };
 		7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockSchedulerTest.swift; sourceTree = "<group>"; };
 		7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextField+Helpers.swift"; sourceTree = "<group>"; };
 		7E63051D2846C71700565880 /* SegmentedTimelineViewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedTimelineViewTest.swift; sourceTree = "<group>"; };
@@ -586,6 +592,8 @@
 				7EE250BA2515B8FE0067C5E9 /* PrefsViewController.xib */,
 				7E56605E2AD46BD700767E08 /* PrefsGeneralPaneController.swift */,
 				7E56605F2AD46BD700767E08 /* PrefsGeneralPaneController.xib */,
+				7E56606A2AD487A400767E08 /* PrefsFeedbackPaneController.swift */,
+				7E56606B2AD487A400767E08 /* PrefsFeedbackPaneController.xib */,
 			);
 			path = prefs;
 			sourceTree = "<group>";
@@ -1108,6 +1116,7 @@
 				7EF58F8D2580F180002F9604 /* TutorialViewController.xib in Resources */,
 				7EA6E22824BD6C5F004B9297 /* PtnViewController.xib in Resources */,
 				7E5660622AD46BD800767E08 /* PrefsGeneralPaneController.xib in Resources */,
+				7E56606E2AD487A400767E08 /* PrefsFeedbackPaneController.xib in Resources */,
 				7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */,
 				7E970D6924DA84AF00F634AB /* UiTestWindow.xib in Resources */,
 				7E73C95927A66A0C007F87F0 /* LargeReportController.xib in Resources */,
@@ -1142,6 +1151,7 @@
 				7EF30E372AC2B4920097FA24 /* TutorialViewController.xib in Resources */,
 				7EF30E382AC2B4920097FA24 /* PtnViewController.xib in Resources */,
 				7E5660632AD46BD800767E08 /* PrefsGeneralPaneController.xib in Resources */,
+				7E56606F2AD487A400767E08 /* PrefsFeedbackPaneController.xib in Resources */,
 				7EF30E392AC2B4920097FA24 /* MainMenu.xib in Resources */,
 				7EF30E3A2AC2B4920097FA24 /* UiTestWindow.xib in Resources */,
 				7EF30E3B2AC2B4920097FA24 /* LargeReportController.xib in Resources */,
@@ -1220,6 +1230,7 @@
 				7E5660602AD46BD700767E08 /* PrefsGeneralPaneController.swift in Sources */,
 				7EE4E39824E2523F00552AAF /* SystemClockScheduler.swift in Sources */,
 				7EAD2A4B2626CBB100153A47 /* ScrollBarHelper.swift in Sources */,
+				7E56606C2AD487A400767E08 /* PrefsFeedbackPaneController.swift in Sources */,
 				7E16AF922AD35EF90047DF13 /* ControllerDisplayView.swift in Sources */,
 				7EF70923290E5C2B00E1A045 /* EditEntriesController.swift in Sources */,
 				7EEF324624EA542D002E217A /* NSRange+Helpers.swift in Sources */,
@@ -1379,6 +1390,7 @@
 				7E5660612AD46BD800767E08 /* PrefsGeneralPaneController.swift in Sources */,
 				7EF30DDF2AC2B4920097FA24 /* SystemClockScheduler.swift in Sources */,
 				7EF30DE02AC2B4920097FA24 /* ScrollBarHelper.swift in Sources */,
+				7E56606D2AD487A400767E08 /* PrefsFeedbackPaneController.swift in Sources */,
 				7E16AF932AD35EF90047DF13 /* ControllerDisplayView.swift in Sources */,
 				7EF30DE12AC2B4920097FA24 /* EditEntriesController.swift in Sources */,
 				7EF30DE22AC2B4920097FA24 /* NSRange+Helpers.swift in Sources */,
