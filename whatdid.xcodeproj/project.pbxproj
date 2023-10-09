@@ -21,11 +21,13 @@
 		7E07C3B824D121770007FD23 /* DayEndReportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E07C3B624D121770007FD23 /* DayEndReportController.swift */; };
 		7E07C3B924D121770007FD23 /* DayEndReportController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E07C3B724D121770007FD23 /* DayEndReportController.xib */; };
 		7E087CCC2A1171180094F50B /* TextOptionsListTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E087CCB2A1171180094F50B /* TextOptionsListTest.swift */; };
+		7E16AF922AD35EF90047DF13 /* ControllerDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E16AF912AD35EF90047DF13 /* ControllerDisplayView.swift */; };
+		7E16AF932AD35EF90047DF13 /* ControllerDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E16AF912AD35EF90047DF13 /* ControllerDisplayView.swift */; };
 		7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1C2F5024CE43C40070D8CD /* Version.swift */; };
 		7E1EE6622612EEF1003314EE /* CloseConfirmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1EE6612612EEF1003314EE /* CloseConfirmer.swift */; };
 		7E1F9060250C5CC500992B7F /* TimeZone+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */; };
 		7E210AF5284BE5DC0050AD31 /* WdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E210AF4284BE5DC0050AD31 /* WdView.swift */; };
-		7E210AF7284C3CA60050AD31 /* PrefsViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E210AF6284C3CA60050AD31 /* PrefsViewControllerTest.swift */; };
+		7E210AF7284C3CA60050AD31 /* PrefsGeneralPaneControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E210AF6284C3CA60050AD31 /* PrefsGeneralPaneControllerTest.swift */; };
 		7E2159E625301BFE00EE5A11 /* MainLauncher.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E2159E525301BFE00EE5A11 /* MainLauncher.xib */; };
 		7E235E03278A968800253DD8 /* NonFocusingNSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E235E02278A968800253DD8 /* NonFocusingNSViewController.swift */; };
 		7E305CE8282466B80086574C /* SimpleRandom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E305CE7282466B80086574C /* SimpleRandom.swift */; };
@@ -46,6 +48,18 @@
 		7E4EB8E5278A4724001234F0 /* DisclosureWithLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4EB8E4278A4724001234F0 /* DisclosureWithLabel.swift */; };
 		7E506BE128EBDEAA00EBD002 /* Array+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E506BE028EBDEAA00EBD002 /* Array+Helpers.swift */; };
 		7E51DA09250BF5C60088864F /* TimeZone+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */; };
+		7E5660602AD46BD700767E08 /* PrefsGeneralPaneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E56605E2AD46BD700767E08 /* PrefsGeneralPaneController.swift */; };
+		7E5660612AD46BD800767E08 /* PrefsGeneralPaneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E56605E2AD46BD700767E08 /* PrefsGeneralPaneController.swift */; };
+		7E5660622AD46BD800767E08 /* PrefsGeneralPaneController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E56605F2AD46BD700767E08 /* PrefsGeneralPaneController.xib */; };
+		7E5660632AD46BD800767E08 /* PrefsGeneralPaneController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E56605F2AD46BD700767E08 /* PrefsGeneralPaneController.xib */; };
+		7E56606C2AD487A400767E08 /* PrefsFeedbackPaneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E56606A2AD487A400767E08 /* PrefsFeedbackPaneController.swift */; };
+		7E56606D2AD487A400767E08 /* PrefsFeedbackPaneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E56606A2AD487A400767E08 /* PrefsFeedbackPaneController.swift */; };
+		7E56606E2AD487A400767E08 /* PrefsFeedbackPaneController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E56606B2AD487A400767E08 /* PrefsFeedbackPaneController.xib */; };
+		7E56606F2AD487A400767E08 /* PrefsFeedbackPaneController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E56606B2AD487A400767E08 /* PrefsFeedbackPaneController.xib */; };
+		7E5660782AD48C0C00767E08 /* PrefsAboutPaneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5660762AD48C0C00767E08 /* PrefsAboutPaneController.swift */; };
+		7E5660792AD48C0C00767E08 /* PrefsAboutPaneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5660762AD48C0C00767E08 /* PrefsAboutPaneController.swift */; };
+		7E56607A2AD48C0C00767E08 /* PrefsAboutPaneController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E5660772AD48C0C00767E08 /* PrefsAboutPaneController.xib */; };
+		7E56607B2AD48C0C00767E08 /* PrefsAboutPaneController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E5660772AD48C0C00767E08 /* PrefsAboutPaneController.xib */; };
 		7E579F702503E2920055D9F6 /* SystemClockSchedulerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */; };
 		7E5EFA272619B14A00E7834D /* NSTextField+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */; };
 		7E63051E2846C71700565880 /* SegmentedTimelineViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E63051D2846C71700565880 /* SegmentedTimelineViewTest.swift */; };
@@ -322,10 +336,11 @@
 		7E07C3B624D121770007FD23 /* DayEndReportController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayEndReportController.swift; sourceTree = "<group>"; };
 		7E07C3B724D121770007FD23 /* DayEndReportController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DayEndReportController.xib; sourceTree = "<group>"; };
 		7E087CCB2A1171180094F50B /* TextOptionsListTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextOptionsListTest.swift; sourceTree = "<group>"; };
+		7E16AF912AD35EF90047DF13 /* ControllerDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerDisplayView.swift; sourceTree = "<group>"; };
 		7E1C2F5024CE43C40070D8CD /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
 		7E1EE6612612EEF1003314EE /* CloseConfirmer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseConfirmer.swift; sourceTree = "<group>"; };
 		7E210AF4284BE5DC0050AD31 /* WdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WdView.swift; sourceTree = "<group>"; };
-		7E210AF6284C3CA60050AD31 /* PrefsViewControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsViewControllerTest.swift; sourceTree = "<group>"; };
+		7E210AF6284C3CA60050AD31 /* PrefsGeneralPaneControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsGeneralPaneControllerTest.swift; sourceTree = "<group>"; };
 		7E2159E525301BFE00EE5A11 /* MainLauncher.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainLauncher.xib; sourceTree = "<group>"; };
 		7E235E02278A968800253DD8 /* NonFocusingNSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonFocusingNSViewController.swift; sourceTree = "<group>"; };
 		7E305CE7282466B80086574C /* SimpleRandom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleRandom.swift; sourceTree = "<group>"; };
@@ -346,6 +361,12 @@
 		7E4EB8E4278A4724001234F0 /* DisclosureWithLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclosureWithLabel.swift; sourceTree = "<group>"; };
 		7E506BE028EBDEAA00EBD002 /* Array+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Helpers.swift"; sourceTree = "<group>"; };
 		7E51DA08250BF5C60088864F /* TimeZone+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeZone+Helpers.swift"; sourceTree = "<group>"; };
+		7E56605E2AD46BD700767E08 /* PrefsGeneralPaneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsGeneralPaneController.swift; sourceTree = "<group>"; };
+		7E56605F2AD46BD700767E08 /* PrefsGeneralPaneController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefsGeneralPaneController.xib; sourceTree = "<group>"; };
+		7E56606A2AD487A400767E08 /* PrefsFeedbackPaneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsFeedbackPaneController.swift; sourceTree = "<group>"; };
+		7E56606B2AD487A400767E08 /* PrefsFeedbackPaneController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefsFeedbackPaneController.xib; sourceTree = "<group>"; };
+		7E5660762AD48C0C00767E08 /* PrefsAboutPaneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsAboutPaneController.swift; sourceTree = "<group>"; };
+		7E5660772AD48C0C00767E08 /* PrefsAboutPaneController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefsAboutPaneController.xib; sourceTree = "<group>"; };
 		7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockSchedulerTest.swift; sourceTree = "<group>"; };
 		7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextField+Helpers.swift"; sourceTree = "<group>"; };
 		7E63051D2846C71700565880 /* SegmentedTimelineViewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedTimelineViewTest.swift; sourceTree = "<group>"; };
@@ -570,6 +591,21 @@
 			path = model;
 			sourceTree = "<group>";
 		};
+		7E56605D2AD46BB300767E08 /* prefs */ = {
+			isa = PBXGroup;
+			children = (
+				7EE250B92515B8FE0067C5E9 /* PrefsViewController.swift */,
+				7EE250BA2515B8FE0067C5E9 /* PrefsViewController.xib */,
+				7E56605E2AD46BD700767E08 /* PrefsGeneralPaneController.swift */,
+				7E56605F2AD46BD700767E08 /* PrefsGeneralPaneController.xib */,
+				7E56606A2AD487A400767E08 /* PrefsFeedbackPaneController.swift */,
+				7E56606B2AD487A400767E08 /* PrefsFeedbackPaneController.xib */,
+				7E5660762AD48C0C00767E08 /* PrefsAboutPaneController.swift */,
+				7E5660772AD48C0C00767E08 /* PrefsAboutPaneController.xib */,
+			);
+			path = prefs;
+			sourceTree = "<group>";
+		};
 		7E579F6E2503E2740055D9F6 /* scheduling */ = {
 			isa = PBXGroup;
 			children = (
@@ -614,7 +650,7 @@
 		7E73C95A27A7853E007F87F0 /* controllers */ = {
 			isa = PBXGroup;
 			children = (
-				7E210AF6284C3CA60050AD31 /* PrefsViewControllerTest.swift */,
+				7E210AF6284C3CA60050AD31 /* PrefsGeneralPaneControllerTest.swift */,
 				6E012D78358839E319024F1D /* LargeReportController */,
 				6E01235C79DD985D5113CB89 /* ControllerTestBase.swift */,
 				6E01231E7D1758169D1CCC4D /* PtnViewControllerTest.swift */,
@@ -784,6 +820,7 @@
 		7EF8B9CC2615777D00834866 /* controllers */ = {
 			isa = PBXGroup;
 			children = (
+				7E56605D2AD46BB300767E08 /* prefs */,
 				7E1EE6612612EEF1003314EE /* CloseConfirmer.swift */,
 				7E7D006B262BFC08002D4CB5 /* ConfirmViewController.swift */,
 				7E7D006C262BFC08002D4CB5 /* ConfirmViewController.xib */,
@@ -791,8 +828,6 @@
 				7E07C3B724D121770007FD23 /* DayEndReportController.xib */,
 				7EF883FA260D7DD400170330 /* DayStartController.swift */,
 				7EF883FB260D7DD400170330 /* DayStartController.xib */,
-				7EE250B92515B8FE0067C5E9 /* PrefsViewController.swift */,
-				7EE250BA2515B8FE0067C5E9 /* PrefsViewController.xib */,
 				7EFEE80123B16EA6002928A2 /* PtnViewController.swift */,
 				7EA6E22724BD6C5F004B9297 /* PtnViewController.xib */,
 				7EF58F8A2580F180002F9604 /* TutorialViewController.swift */,
@@ -833,6 +868,7 @@
 				7EE27F7F28CBC01800D41366 /* TextFieldWithPopup.swift */,
 				7EE27F8128CCE29500D41366 /* TextOptionsList.swift */,
 				7E8443EA28D7A2D700D9694A /* ProjectTaskFinder.swift */,
+				7E16AF912AD35EF90047DF13 /* ControllerDisplayView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -1084,9 +1120,12 @@
 			files = (
 				7E07C3B924D121770007FD23 /* DayEndReportController.xib in Resources */,
 				7EE250BC2515B8FE0067C5E9 /* PrefsViewController.xib in Resources */,
+				7E56607A2AD48C0C00767E08 /* PrefsAboutPaneController.xib in Resources */,
 				7E8C04E023714F0800A0C3A6 /* Assets.xcassets in Resources */,
 				7EF58F8D2580F180002F9604 /* TutorialViewController.xib in Resources */,
 				7EA6E22824BD6C5F004B9297 /* PtnViewController.xib in Resources */,
+				7E5660622AD46BD800767E08 /* PrefsGeneralPaneController.xib in Resources */,
+				7E56606E2AD487A400767E08 /* PrefsFeedbackPaneController.xib in Resources */,
 				7EA6E22624BD61FD004B9297 /* MainMenu.xib in Resources */,
 				7E970D6924DA84AF00F634AB /* UiTestWindow.xib in Resources */,
 				7E73C95927A66A0C007F87F0 /* LargeReportController.xib in Resources */,
@@ -1117,9 +1156,12 @@
 			files = (
 				7EF30E342AC2B4920097FA24 /* DayEndReportController.xib in Resources */,
 				7EF30E352AC2B4920097FA24 /* PrefsViewController.xib in Resources */,
+				7E56607B2AD48C0C00767E08 /* PrefsAboutPaneController.xib in Resources */,
 				7EF30E362AC2B4920097FA24 /* Assets.xcassets in Resources */,
 				7EF30E372AC2B4920097FA24 /* TutorialViewController.xib in Resources */,
 				7EF30E382AC2B4920097FA24 /* PtnViewController.xib in Resources */,
+				7E5660632AD46BD800767E08 /* PrefsGeneralPaneController.xib in Resources */,
+				7E56606F2AD487A400767E08 /* PrefsFeedbackPaneController.xib in Resources */,
 				7EF30E392AC2B4920097FA24 /* MainMenu.xib in Resources */,
 				7EF30E3A2AC2B4920097FA24 /* UiTestWindow.xib in Resources */,
 				7EF30E3B2AC2B4920097FA24 /* LargeReportController.xib in Resources */,
@@ -1195,8 +1237,11 @@
 				7EF857A324E242AB00867832 /* ManualTickScheduler.swift in Sources */,
 				7E7C384E24DF33A000CFF3E7 /* FlatEntry+Serde.swift in Sources */,
 				7ECE46A0279E092700AF884A /* UpdateChannel.swift in Sources */,
+				7E5660602AD46BD700767E08 /* PrefsGeneralPaneController.swift in Sources */,
 				7EE4E39824E2523F00552AAF /* SystemClockScheduler.swift in Sources */,
 				7EAD2A4B2626CBB100153A47 /* ScrollBarHelper.swift in Sources */,
+				7E56606C2AD487A400767E08 /* PrefsFeedbackPaneController.swift in Sources */,
+				7E16AF922AD35EF90047DF13 /* ControllerDisplayView.swift in Sources */,
 				7EF70923290E5C2B00E1A045 /* EditEntriesController.swift in Sources */,
 				7EEF324624EA542D002E217A /* NSRange+Helpers.swift in Sources */,
 				7E4EB8E327868AAC001234F0 /* DateRangePane.swift in Sources */,
@@ -1248,6 +1293,7 @@
 				7E5EFA272619B14A00E7834D /* NSTextField+Helpers.swift in Sources */,
 				7E9C5EBD260C09AA00D839C4 /* Goal+CoreDataClass.swift in Sources */,
 				7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */,
+				7E5660782AD48C0C00767E08 /* PrefsAboutPaneController.swift in Sources */,
 				7E6305222846E7D900565880 /* DiagonalBoxFillHelper.swift in Sources */,
 				7EE27F8028CBC01800D41366 /* TextFieldWithPopup.swift in Sources */,
 				7E305CE8282466B80086574C /* SimpleRandom.swift in Sources */,
@@ -1289,7 +1335,7 @@
 				7E087CCC2A1171180094F50B /* TextOptionsListTest.swift in Sources */,
 				7E6C98D42503F5C600A712EB /* DelegatingSchedulerTest.swift in Sources */,
 				7EE0E74224E4DF8A002D03F8 /* SubsequenceMatcherTest.swift in Sources */,
-				7E210AF7284C3CA60050AD31 /* PrefsViewControllerTest.swift in Sources */,
+				7E210AF7284C3CA60050AD31 /* PrefsGeneralPaneControllerTest.swift in Sources */,
 				7E579F702503E2920055D9F6 /* SystemClockSchedulerTest.swift in Sources */,
 				7EE27F7C28CBBB9400D41366 /* SortedMapTest.swift in Sources */,
 				7E75D0A0251D9A790002DBA0 /* ModelTest.swift in Sources */,
@@ -1352,8 +1398,11 @@
 				7EF30DDC2AC2B4920097FA24 /* ManualTickScheduler.swift in Sources */,
 				7EF30DDD2AC2B4920097FA24 /* FlatEntry+Serde.swift in Sources */,
 				7EF30DDE2AC2B4920097FA24 /* UpdateChannel.swift in Sources */,
+				7E5660612AD46BD800767E08 /* PrefsGeneralPaneController.swift in Sources */,
 				7EF30DDF2AC2B4920097FA24 /* SystemClockScheduler.swift in Sources */,
 				7EF30DE02AC2B4920097FA24 /* ScrollBarHelper.swift in Sources */,
+				7E56606D2AD487A400767E08 /* PrefsFeedbackPaneController.swift in Sources */,
+				7E16AF932AD35EF90047DF13 /* ControllerDisplayView.swift in Sources */,
 				7EF30DE12AC2B4920097FA24 /* EditEntriesController.swift in Sources */,
 				7EF30DE22AC2B4920097FA24 /* NSRange+Helpers.swift in Sources */,
 				7EF30DE32AC2B4920097FA24 /* DateRangePane.swift in Sources */,
@@ -1405,6 +1454,7 @@
 				7EF30E112AC2B4920097FA24 /* NSTextField+Helpers.swift in Sources */,
 				7EF30E122AC2B4920097FA24 /* Goal+CoreDataClass.swift in Sources */,
 				7EF30E132AC2B4920097FA24 /* OpenReason.swift in Sources */,
+				7E5660792AD48C0C00767E08 /* PrefsAboutPaneController.swift in Sources */,
 				7EF30E142AC2B4920097FA24 /* DiagonalBoxFillHelper.swift in Sources */,
 				7EF30E152AC2B4920097FA24 /* TextFieldWithPopup.swift in Sources */,
 				7EF30E162AC2B4920097FA24 /* SimpleRandom.swift in Sources */,

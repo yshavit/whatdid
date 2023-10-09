@@ -373,10 +373,10 @@ class PtnViewController: NSViewController {
             
             let prefsViewController = PrefsViewController(nibName: "PrefsViewController", bundle: nil)
             prefsViewController.setSize(width: viewWindow.frame.width, minHeight: viewWindow.frame.height)
+            prefsWindow.contentViewController = prefsViewController // also loads the controller
             if let hooks = hooks {
                 prefsViewController.ptnScheduleChanged = hooks.forceReschedule
             }
-            prefsWindow.contentViewController = prefsViewController
             viewWindow.beginSheet(prefsWindow, completionHandler: {reason in
                 if reason == .stop {
                     NSApp.terminate(self)
