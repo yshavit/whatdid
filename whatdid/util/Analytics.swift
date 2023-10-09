@@ -3,6 +3,7 @@
 import Foundation
 
 class Analytics {
+    static let PRIVACY_URL = "https://whatdid.yuvalshavit.com/privacy"
     static let SEND_INTERVALS = 30.0 // TODO every 5 minutes
     static let SEND_URL = URL(string: "https://api.whatdid.yuvalshavit.com/analytics/usage")!
     

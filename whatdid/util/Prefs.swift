@@ -8,11 +8,11 @@ struct Prefs {
     @Pref(key: "daysIncludeWeekends") static var daysIncludeWeekends = false
     @Pref(key: "ptnFrequencyMinutes") static var ptnFrequencyMinutes = 12
     @Pref(key: "ptnFrequencyJitterMinutes") static var ptnFrequencyJitterMinutes = 2
-    @Pref(key: "launchAtLogin") static var launchAtLogin = false
+    @Pref(key: "launchAtLogin") static var launchAtLogin = true
     @Pref(key: "previouslyLaunchedVersion") static var tutorialVersion = -1
     @Pref(key: "requireNotes") static var requireNotes = false
     @Pref(key: "startupMessages") static var startupMessages = [StartupMessage]()
-    @Pref(key: "analyticsEnabled") static var analyticsEnabled = false
+    @Pref(key: "analyticsEnabled") static var analyticsEnabled = true
     @Pref(key: "analyticsTrackerId") static var trackerId = UUID()
     
     // The following aren't actually prefs, but rather just bits of info persisted across runs.
@@ -41,33 +41,42 @@ struct Prefs {
 
 @propertyWrapper
 class Pref<T: PrefType> {
-    private let key: String
     var projectedValue: PrefsListeners<T>
     
     init(wrappedValue: T, key: String) {
-        self.key = namespace + key
-        Prefs.raw.register(defaults: [self.key: wrappedValue.asUserDefaultsValue])
-        projectedValue = PrefsListeners(wrappedValue)
+        let key = namespace + key
+        Prefs.raw.register(defaults: [key: wrappedValue.asUserDefaultsValue])
+        projectedValue = PrefsListeners(key, wrappedValue)
         projectedValue.notify(newValue: self.wrappedValue)
     }
     
     var wrappedValue: T {
         get {
-            return T.readUserDefaultsValue(key: key)
+            projectedValue.getValue()
         }
         set(value) {
-            T.writeUserDefaultsValue(key: key, value: value)
-            projectedValue.notify(newValue: value)
+            projectedValue.setValue(to: value)
         }
     }
 }
 
-class PrefsListeners<T> {
+class PrefsListeners<T: PrefType> {
+    private let key: String
     private var currentValue: T
     private var listeners = [UUID: (T) -> Void]()
     
-    init(_ defaultValue: T) {
+    init(_ key: String, _ defaultValue: T) {
+        self.key = key
         self.currentValue = defaultValue
+    }
+    
+    func getValue() -> T {
+        return T.readUserDefaultsValue(key: key)
+    }
+    
+    func setValue(to value: T) {
+        T.writeUserDefaultsValue(key: key, value: value)
+        notify(newValue: value)
     }
     
     @discardableResult
