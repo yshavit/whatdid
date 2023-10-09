@@ -47,7 +47,7 @@
                     </textField>
                 </gridCell>
                 <gridCell row="QDy-lq-00F" column="GtT-FV-VDo" id="eSc-Ky-WtU">
-                    <stackView key="contentView" distribution="fill" orientation="horizontal" alignment="centerY" spacing="3" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" detachesHiddenViews="YES" id="31z-9k-I0X">
+                    <stackView key="contentView" distribution="fill" orientation="horizontal" alignment="centerY" spacing="3" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" id="31z-9k-I0X">
                         <rect key="frame" x="196" y="251" width="297" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
@@ -154,7 +154,7 @@
                     </textField>
                 </gridCell>
                 <gridCell row="Qje-Nu-QJC" column="GtT-FV-VDo" id="298-3J-Z5i">
-                    <stackView key="contentView" distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" detachesHiddenViews="YES" id="epm-BN-KtE">
+                    <stackView key="contentView" distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" id="epm-BN-KtE">
                         <rect key="frame" x="196" y="221" width="229" height="24"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
@@ -202,7 +202,7 @@
                     </textField>
                 </gridCell>
                 <gridCell row="NEH-1C-vok" column="GtT-FV-VDo" id="ASk-7x-fcH">
-                    <datePicker key="contentView" verticalHuggingPriority="750" ambiguous="YES" id="oh5-LA-zYz" userLabel="EOD Time picker">
+                    <datePicker key="contentView" verticalHuggingPriority="750" id="oh5-LA-zYz" userLabel="EOD Time picker">
                         <rect key="frame" x="196" y="191" width="84" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <datePickerCell key="cell" borderStyle="bezel" alignment="left" drawsBackground="NO" datePickerMode="range" id="aEi-kW-4Fe">
