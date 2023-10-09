@@ -95,14 +95,4 @@ class PrefsViewController: NSViewController {
             mySheetParent.endSheet(myWindow, returnCode: response)
         }
     }
-    
-    /// turns a button into an <a href>, with the link coming from the button's tooltip. Hacky, but easy. :-)
-    @IBAction func href(_ sender: NSButton) {
-        if let location = sender.toolTip, let url = URL(string: location) {
-            NSWorkspace.shared.open(url)
-        } else {
-            wdlog(.warn, "invalid href: %@", sender.toolTip ?? "<nil>")
-        }
-    }
-    
 }
