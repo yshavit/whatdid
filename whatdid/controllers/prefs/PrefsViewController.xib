@@ -8,17 +8,11 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="PrefsViewController" customModule="whatdid" customModuleProvider="target">
             <connections>
-                <outlet property="copyright" destination="5Nx-Hu-dbE" id="YuE-Fy-Ra5"/>
-                <outlet property="fullVersion" destination="3K9-EY-10F" id="TTt-Gz-mxh"/>
                 <outlet property="generalPrefsController" destination="uET-29-pyJ" id="hZx-Vp-QnR"/>
-                <outlet property="githubShaInfo" destination="8WU-1f-RKx" id="RZ1-rU-I3n"/>
                 <outlet property="mainTabs" destination="S38-2I-rYd" id="w8e-74-FHI"/>
                 <outlet property="outerVStackMinHeight" destination="sfZ-rm-XWd" id="HKi-ht-G3J"/>
                 <outlet property="outerVStackWidth" destination="pP3-Nb-iFv" id="WCh-2f-MdV"/>
-                <outlet property="shaVersion" destination="CCA-RA-eto" id="MH7-Sd-b5O"/>
-                <outlet property="shortVersion" destination="WTv-mo-8cX" id="viM-vP-xCV"/>
                 <outlet property="tabButtonsStack" destination="HiW-d6-AUq" id="ecR-r5-3c8"/>
-                <outlet property="updaterOptions" destination="7Xc-BT-7Yr" id="JWm-fa-Tca"/>
                 <outlet property="view" destination="kp1-1s-z5L" id="Hur-F1-Gmu"/>
             </connections>
         </customObject>
@@ -84,7 +78,7 @@
                         <constraint firstAttribute="height" constant="6" id="z0h-bq-Cxk"/>
                     </constraints>
                 </customView>
-                <tabView ambiguous="YES" controlSize="small" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="S38-2I-rYd">
+                <tabView controlSize="small" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="S38-2I-rYd">
                     <rect key="frame" x="0.0" y="92" width="550" height="148"/>
                     <tabViewItems>
                         <tabViewItem label="General" identifier="" id="3Fi-X3-Od3">
@@ -100,7 +94,7 @@
                             </userDefinedRuntimeAttributes>
                         </tabViewItem>
                         <tabViewItem label="Help &amp; Feedback" identifier="" id="c6w-je-Tyn">
-                            <view key="view" id="y90-IT-u7n" customClass="ControllerDisplayView" customModule="whatdid" customModuleProvider="target">
+                            <view key="view" id="y90-IT-u7n" userLabel="Feedback Prefs Pane" customClass="ControllerDisplayView" customModule="whatdid" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="550" height="148"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <connections>
@@ -112,189 +106,12 @@
                             </userDefinedRuntimeAttributes>
                         </tabViewItem>
                         <tabViewItem label="About" identifier="" id="NwU-Zn-0aF">
-                            <view key="view" ambiguous="YES" id="rMy-Zr-TwQ">
+                            <view key="view" id="rMy-Zr-TwQ" userLabel="About Prefs Pane" customClass="ControllerDisplayView" customModule="whatdid" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="550" height="148"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <subviews>
-                                    <stackView toolTip="https://github.com/yshavit/whatdid/" distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vRX-G9-MoD" userLabel="About VStack">
-                                        <rect key="frame" x="0.0" y="-54" width="407" height="148"/>
-                                        <subviews>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WTv-mo-8cX">
-                                                <rect key="frame" x="-2" y="132" width="110" height="16"/>
-                                                <textFieldCell key="cell" controlSize="large" lineBreakMode="clipping" title="whatdid {version}" id="bNY-1U-YZb">
-                                                    <font key="font" metaFont="system"/>
-                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                </textFieldCell>
-                                            </textField>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Nx-Hu-dbE">
-                                                <rect key="frame" x="-2" y="114" width="63" height="14"/>
-                                                <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="{copyright}" id="HLo-dq-1Tg">
-                                                    <font key="font" metaFont="smallSystem"/>
-                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                </textFieldCell>
-                                            </textField>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3K9-EY-10F" userLabel="build {fullversion}">
-                                                <rect key="frame" x="-2" y="97" width="84" height="13"/>
-                                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="build {fullversion}" id="Lir-2N-fjv">
-                                                    <font key="font" metaFont="systemUltraLight" size="10"/>
-                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                </textFieldCell>
-                                            </textField>
-                                            <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D5Z-57-06l" userLabel="Links">
-                                                <rect key="frame" x="0.0" y="54" width="90" height="39"/>
-                                                <subviews>
-                                                    <button toolTip="https://yshavit.github.io/whatdid" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OgO-k9-csc" userLabel="Website">
-                                                        <rect key="frame" x="0.0" y="12" width="15" height="15"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="15" id="ds9-kq-FNa"/>
-                                                            <constraint firstAttribute="width" constant="15" id="i0X-r5-UDC"/>
-                                                        </constraints>
-                                                        <buttonCell key="cell" type="square" alternateTitle="website" bezelStyle="shadowlessSquare" image="globey" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="fIy-Et-Man">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="href:" target="-2" id="0kF-uX-Rfh"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button toolTip="https://github.com/yshavit/whatdid" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k8K-01-WdO" userLabel="GitHub">
-                                                        <rect key="frame" x="23" y="12" width="15" height="15"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" secondItem="k8K-01-WdO" secondAttribute="height" multiplier="1:1" id="54U-ft-0Tp"/>
-                                                        </constraints>
-                                                        <buttonCell key="cell" type="square" alternateTitle="GitHub page" bezelStyle="shadowlessSquare" image="GitHub" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="VH1-HS-tMv">
-                                                            <behavior key="behavior" lightByContents="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="href:" target="-2" id="FTW-qH-3QV"/>
-                                                        </connections>
-                                                    </button>
-                                                    <stackView distribution="fill" orientation="horizontal" alignment="bottom" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8WU-1f-RKx" userLabel="GitHub sha">
-                                                        <rect key="frame" x="46" y="13" width="44" height="14"/>
-                                                        <subviews>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="O7Z-uD-enK">
-                                                                <rect key="frame" x="-2" y="0.0" width="15" height="14"/>
-                                                                <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="@" id="6se-Iw-Fwr">
-                                                                    <font key="font" metaFont="smallSystem"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <button toolTip="https://github.com/yshavit/whatdid/commit/{sha}" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CCA-RA-eto">
-                                                                <rect key="frame" x="12" y="0.0" width="32" height="14"/>
-                                                                <buttonCell key="cell" type="bevel" title="{sha}" bezelStyle="rounded" alignment="right" controlSize="small" imageScaling="proportionallyDown" inset="2" id="hMN-3N-viT">
-                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="smallSystem"/>
-                                                                </buttonCell>
-                                                                <color key="contentTintColor" name="linkColor" catalog="System" colorSpace="catalog"/>
-                                                                <connections>
-                                                                    <action selector="href:" target="-2" id="ZBY-03-RbO"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                        <visibilityPriorities>
-                                                            <integer value="1000"/>
-                                                            <integer value="1000"/>
-                                                        </visibilityPriorities>
-                                                        <customSpacing>
-                                                            <real value="3.4028234663852886e+38"/>
-                                                            <real value="3.4028234663852886e+38"/>
-                                                        </customSpacing>
-                                                    </stackView>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="k8K-01-WdO" firstAttribute="width" secondItem="OgO-k9-csc" secondAttribute="width" id="ysI-Jl-WOo"/>
-                                                </constraints>
-                                                <visibilityPriorities>
-                                                    <integer value="1000"/>
-                                                    <integer value="1000"/>
-                                                    <integer value="1000"/>
-                                                </visibilityPriorities>
-                                                <customSpacing>
-                                                    <real value="3.4028234663852886e+38"/>
-                                                    <real value="3.4028234663852886e+38"/>
-                                                    <real value="3.4028234663852886e+38"/>
-                                                </customSpacing>
-                                            </stackView>
-                                            <stackView identifier="auto-update-prefs" distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Xc-BT-7Yr" userLabel="Updater stack">
-                                                <rect key="frame" x="0.0" y="0.0" width="407" height="50"/>
-                                                <subviews>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XCR-Xh-1RZ">
-                                                        <rect key="frame" x="-2" y="16" width="138" height="18"/>
-                                                        <buttonCell key="cell" type="check" title="Check for updates" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="YaF-O1-xg4">
-                                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <binding destination="-2" name="value" keyPath="self.autoCheckUpdates" id="usD-2X-d5j"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8OA-UW-Usg">
-                                                        <rect key="frame" x="137" y="-7" width="101" height="62"/>
-                                                        <buttonCell key="cell" type="push" title="Check now" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hAL-0g-SFE">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                            <connections>
-                                                                <action selector="checkUpdateNow:" target="-2" id="o8d-KG-kxz"/>
-                                                            </connections>
-                                                        </buttonCell>
-                                                    </button>
-                                                    <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="oJl-KT-ssS">
-                                                        <rect key="frame" x="237" y="0.0" width="5" height="50"/>
-                                                    </box>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9BE-7P-c7T">
-                                                        <rect key="frame" x="246" y="16" width="161" height="18"/>
-                                                        <buttonCell key="cell" type="check" title="include alpha releases" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="7Tc-NW-Pfw">
-                                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <binding destination="-2" name="value" keyPath="includeAlphaReleases" id="9qK-8p-gQu"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="oJl-KT-ssS" firstAttribute="height" secondItem="8OA-UW-Usg" secondAttribute="height" id="IFb-rl-SqF"/>
-                                                </constraints>
-                                                <visibilityPriorities>
-                                                    <integer value="1000"/>
-                                                    <integer value="1000"/>
-                                                    <integer value="1000"/>
-                                                    <integer value="1000"/>
-                                                </visibilityPriorities>
-                                                <customSpacing>
-                                                    <real value="3.4028234663852886e+38"/>
-                                                    <real value="3.4028234663852886e+38"/>
-                                                    <real value="3.4028234663852886e+38"/>
-                                                    <real value="3.4028234663852886e+38"/>
-                                                </customSpacing>
-                                            </stackView>
-                                        </subviews>
-                                        <visibilityPriorities>
-                                            <integer value="1000"/>
-                                            <integer value="1000"/>
-                                            <integer value="1000"/>
-                                            <integer value="1000"/>
-                                            <integer value="1000"/>
-                                        </visibilityPriorities>
-                                        <customSpacing>
-                                            <real value="3.4028234663852886e+38"/>
-                                            <real value="3.4028234663852886e+38"/>
-                                            <real value="3.4028234663852886e+38"/>
-                                            <real value="3.4028234663852886e+38"/>
-                                            <real value="3.4028234663852886e+38"/>
-                                        </customSpacing>
-                                    </stackView>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="vRX-G9-MoD" firstAttribute="leading" secondItem="rMy-Zr-TwQ" secondAttribute="leading" id="1NT-RY-PfB"/>
-                                    <constraint firstItem="vRX-G9-MoD" firstAttribute="top" secondItem="rMy-Zr-TwQ" secondAttribute="top" id="82F-gS-ysP"/>
-                                    <constraint firstItem="vRX-G9-MoD" firstAttribute="height" secondItem="rMy-Zr-TwQ" secondAttribute="height" id="hnU-hO-7No"/>
-                                </constraints>
+                                <connections>
+                                    <outlet property="controllerToDisplay" destination="tub-NX-Q6p" id="kcd-es-6T6"/>
+                                </connections>
                             </view>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="image" keyPath="image" value="NSInfo"/>
@@ -302,26 +119,26 @@
                         </tabViewItem>
                     </tabViewItems>
                 </tabView>
-                <customView verticalHuggingPriority="1" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zD3-zr-z0J" userLabel="Variable spacer">
+                <customView verticalHuggingPriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="zD3-zr-z0J" userLabel="Variable spacer">
                     <rect key="frame" x="0.0" y="87" width="550" height="5"/>
                     <constraints>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" id="eUM-d2-Sw6"/>
                         <constraint firstAttribute="height" priority="800" constant="5" placeholder="YES" id="joi-31-uqX"/>
                     </constraints>
                 </customView>
-                <customView ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="huG-vK-DVR" userLabel="spacer">
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="huG-vK-DVR" userLabel="spacer">
                     <rect key="frame" x="0.0" y="81" width="163" height="6"/>
                 </customView>
-                <box verticalHuggingPriority="750" ambiguous="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="S35-fj-6x6">
+                <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="S35-fj-6x6">
                     <rect key="frame" x="0.0" y="78" width="350" height="5"/>
                 </box>
-                <customView ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KZc-3Z-vM8" userLabel="spacer">
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="KZc-3Z-vM8" userLabel="spacer">
                     <rect key="frame" x="0.0" y="74" width="163" height="6"/>
                 </customView>
-                <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" horizontalCompressionResistancePriority="999" ambiguous="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YFC-BY-e7h" userLabel="Footer HStack">
+                <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" horizontalCompressionResistancePriority="999" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YFC-BY-e7h" userLabel="Footer HStack">
                     <rect key="frame" x="0.0" y="6" width="550" height="68"/>
                     <subviews>
-                        <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SsJ-Pl-v9W">
+                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SsJ-Pl-v9W">
                             <rect key="frame" x="0.0" y="51" width="72" height="17"/>
                             <buttonCell key="cell" type="roundRect" title="Quit" bezelStyle="roundedRect" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="RFf-SH-J74">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -331,11 +148,11 @@
                                 <action selector="quitButton:" target="-2" id="NFs-i8-kKH"/>
                             </connections>
                         </button>
-                        <customView ambiguous="YES" id="4vE-b6-xfr" userLabel="Spacer">
+                        <customView id="4vE-b6-xfr" userLabel="Spacer">
                             <rect key="frame" x="72" y="52" width="180" height="16"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         </customView>
-                        <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Spf-a6-7Zd">
+                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Spf-a6-7Zd">
                             <rect key="frame" x="252" y="51" width="298" height="17"/>
                             <buttonCell key="cell" type="roundRect" title="Done" bezelStyle="roundedRect" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tch-2Y-0P2">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -408,13 +225,12 @@ Gw
             <point key="canvasLocation" x="70" y="-540"/>
         </stackView>
         <viewController id="QnT-RU-49D" customClass="PrefsFeedbackPaneController" customModule="whatdid" customModuleProvider="target"/>
+        <viewController id="tub-NX-Q6p" customClass="PrefsAboutPaneController" customModule="whatdid" customModuleProvider="target"/>
     </objects>
     <resources>
-        <image name="GitHub" width="32" height="32"/>
         <image name="Help" width="32" height="32"/>
         <image name="NSAdvanced" width="32" height="32"/>
         <image name="NSInfo" width="32" height="32"/>
         <image name="NSTouchBarComposeTemplate" width="17" height="15"/>
-        <image name="globey" width="16" height="16"/>
     </resources>
 </document>

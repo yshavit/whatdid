@@ -56,6 +56,10 @@
 		7E56606D2AD487A400767E08 /* PrefsFeedbackPaneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E56606A2AD487A400767E08 /* PrefsFeedbackPaneController.swift */; };
 		7E56606E2AD487A400767E08 /* PrefsFeedbackPaneController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E56606B2AD487A400767E08 /* PrefsFeedbackPaneController.xib */; };
 		7E56606F2AD487A400767E08 /* PrefsFeedbackPaneController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E56606B2AD487A400767E08 /* PrefsFeedbackPaneController.xib */; };
+		7E5660782AD48C0C00767E08 /* PrefsAboutPaneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5660762AD48C0C00767E08 /* PrefsAboutPaneController.swift */; };
+		7E5660792AD48C0C00767E08 /* PrefsAboutPaneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5660762AD48C0C00767E08 /* PrefsAboutPaneController.swift */; };
+		7E56607A2AD48C0C00767E08 /* PrefsAboutPaneController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E5660772AD48C0C00767E08 /* PrefsAboutPaneController.xib */; };
+		7E56607B2AD48C0C00767E08 /* PrefsAboutPaneController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E5660772AD48C0C00767E08 /* PrefsAboutPaneController.xib */; };
 		7E579F702503E2920055D9F6 /* SystemClockSchedulerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */; };
 		7E5EFA272619B14A00E7834D /* NSTextField+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */; };
 		7E63051E2846C71700565880 /* SegmentedTimelineViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E63051D2846C71700565880 /* SegmentedTimelineViewTest.swift */; };
@@ -361,6 +365,8 @@
 		7E56605F2AD46BD700767E08 /* PrefsGeneralPaneController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefsGeneralPaneController.xib; sourceTree = "<group>"; };
 		7E56606A2AD487A400767E08 /* PrefsFeedbackPaneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsFeedbackPaneController.swift; sourceTree = "<group>"; };
 		7E56606B2AD487A400767E08 /* PrefsFeedbackPaneController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefsFeedbackPaneController.xib; sourceTree = "<group>"; };
+		7E5660762AD48C0C00767E08 /* PrefsAboutPaneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsAboutPaneController.swift; sourceTree = "<group>"; };
+		7E5660772AD48C0C00767E08 /* PrefsAboutPaneController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefsAboutPaneController.xib; sourceTree = "<group>"; };
 		7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockSchedulerTest.swift; sourceTree = "<group>"; };
 		7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextField+Helpers.swift"; sourceTree = "<group>"; };
 		7E63051D2846C71700565880 /* SegmentedTimelineViewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedTimelineViewTest.swift; sourceTree = "<group>"; };
@@ -594,6 +600,8 @@
 				7E56605F2AD46BD700767E08 /* PrefsGeneralPaneController.xib */,
 				7E56606A2AD487A400767E08 /* PrefsFeedbackPaneController.swift */,
 				7E56606B2AD487A400767E08 /* PrefsFeedbackPaneController.xib */,
+				7E5660762AD48C0C00767E08 /* PrefsAboutPaneController.swift */,
+				7E5660772AD48C0C00767E08 /* PrefsAboutPaneController.xib */,
 			);
 			path = prefs;
 			sourceTree = "<group>";
@@ -1112,6 +1120,7 @@
 			files = (
 				7E07C3B924D121770007FD23 /* DayEndReportController.xib in Resources */,
 				7EE250BC2515B8FE0067C5E9 /* PrefsViewController.xib in Resources */,
+				7E56607A2AD48C0C00767E08 /* PrefsAboutPaneController.xib in Resources */,
 				7E8C04E023714F0800A0C3A6 /* Assets.xcassets in Resources */,
 				7EF58F8D2580F180002F9604 /* TutorialViewController.xib in Resources */,
 				7EA6E22824BD6C5F004B9297 /* PtnViewController.xib in Resources */,
@@ -1147,6 +1156,7 @@
 			files = (
 				7EF30E342AC2B4920097FA24 /* DayEndReportController.xib in Resources */,
 				7EF30E352AC2B4920097FA24 /* PrefsViewController.xib in Resources */,
+				7E56607B2AD48C0C00767E08 /* PrefsAboutPaneController.xib in Resources */,
 				7EF30E362AC2B4920097FA24 /* Assets.xcassets in Resources */,
 				7EF30E372AC2B4920097FA24 /* TutorialViewController.xib in Resources */,
 				7EF30E382AC2B4920097FA24 /* PtnViewController.xib in Resources */,
@@ -1283,6 +1293,7 @@
 				7E5EFA272619B14A00E7834D /* NSTextField+Helpers.swift in Sources */,
 				7E9C5EBD260C09AA00D839C4 /* Goal+CoreDataClass.swift in Sources */,
 				7EF8579B24E220EA00867832 /* OpenReason.swift in Sources */,
+				7E5660782AD48C0C00767E08 /* PrefsAboutPaneController.swift in Sources */,
 				7E6305222846E7D900565880 /* DiagonalBoxFillHelper.swift in Sources */,
 				7EE27F8028CBC01800D41366 /* TextFieldWithPopup.swift in Sources */,
 				7E305CE8282466B80086574C /* SimpleRandom.swift in Sources */,
@@ -1443,6 +1454,7 @@
 				7EF30E112AC2B4920097FA24 /* NSTextField+Helpers.swift in Sources */,
 				7EF30E122AC2B4920097FA24 /* Goal+CoreDataClass.swift in Sources */,
 				7EF30E132AC2B4920097FA24 /* OpenReason.swift in Sources */,
+				7E5660792AD48C0C00767E08 /* PrefsAboutPaneController.swift in Sources */,
 				7EF30E142AC2B4920097FA24 /* DiagonalBoxFillHelper.swift in Sources */,
 				7EF30E152AC2B4920097FA24 /* TextFieldWithPopup.swift in Sources */,
 				7EF30E162AC2B4920097FA24 /* SimpleRandom.swift in Sources */,

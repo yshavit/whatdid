@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="PrefsAboutPaneController" customModule="whatdid" customModuleProvider="target">
+            <connections>
+                <outlet property="copyright" destination="c75-qV-FJH" id="QLH-Fd-WQf"/>
+                <outlet property="fullVersion" destination="jPC-WS-prv" id="HSe-JH-5IP"/>
+                <outlet property="githubShaInfo" destination="QPB-tX-pw2" id="unC-bl-8cP"/>
+                <outlet property="shaVersion" destination="HGU-g8-oU5" id="mvh-dj-VGh"/>
+                <outlet property="shortVersion" destination="CMm-1C-Tgc" id="8gx-Fg-kJd"/>
+                <outlet property="updaterOptions" destination="lbn-g0-WES" id="MLV-pg-qOG"/>
+                <outlet property="view" destination="fU8-k4-WZ0" id="G91-x8-7Db"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <stackView toolTip="https://github.com/yshavit/whatdid/" distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" id="fU8-k4-WZ0" userLabel="About VStack">
+            <rect key="frame" x="0.0" y="0.0" width="407" height="148"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CMm-1C-Tgc">
+                    <rect key="frame" x="-2" y="132" width="110" height="16"/>
+                    <textFieldCell key="cell" controlSize="large" lineBreakMode="clipping" title="whatdid {version}" id="M60-Wa-gIo">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="c75-qV-FJH">
+                    <rect key="frame" x="-2" y="114" width="63" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="{copyright}" id="fYY-2T-w80">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jPC-WS-prv" userLabel="build {fullversion}">
+                    <rect key="frame" x="-2" y="97" width="84" height="13"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="build {fullversion}" id="ETn-ac-Alr">
+                        <font key="font" metaFont="systemUltraLight" size="10"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bx6-Mn-i19" userLabel="Links">
+                    <rect key="frame" x="0.0" y="54" width="90" height="39"/>
+                    <subviews>
+                        <button toolTip="https://yshavit.github.io/whatdid" translatesAutoresizingMaskIntoConstraints="NO" id="mOd-YO-ATB" userLabel="Website">
+                            <rect key="frame" x="0.0" y="12" width="15" height="15"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="15" id="ME0-eT-wyt"/>
+                                <constraint firstAttribute="height" constant="15" id="gCt-2e-SRA"/>
+                            </constraints>
+                            <buttonCell key="cell" type="square" alternateTitle="website" bezelStyle="shadowlessSquare" image="globey" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="J3D-lf-Oau">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="href:" target="-2" id="Ulo-9y-23L"/>
+                            </connections>
+                        </button>
+                        <button toolTip="https://github.com/yshavit/whatdid" translatesAutoresizingMaskIntoConstraints="NO" id="WmD-kM-IA8" userLabel="GitHub">
+                            <rect key="frame" x="23" y="12" width="15" height="15"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="WmD-kM-IA8" secondAttribute="height" multiplier="1:1" id="Sn3-4W-hfm"/>
+                            </constraints>
+                            <buttonCell key="cell" type="square" alternateTitle="GitHub page" bezelStyle="shadowlessSquare" image="GitHub" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="YgJ-wI-mFT">
+                                <behavior key="behavior" lightByContents="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="href:" target="-2" id="E29-CR-5xd"/>
+                            </connections>
+                        </button>
+                        <stackView distribution="fill" orientation="horizontal" alignment="bottom" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QPB-tX-pw2" userLabel="GitHub sha">
+                            <rect key="frame" x="46" y="13" width="44" height="14"/>
+                            <subviews>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9kH-Ji-Eq3">
+                                    <rect key="frame" x="-2" y="0.0" width="15" height="14"/>
+                                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="@" id="3GD-Y3-WMd">
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <button toolTip="https://github.com/yshavit/whatdid/commit/{sha}" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HGU-g8-oU5">
+                                    <rect key="frame" x="12" y="0.0" width="32" height="14"/>
+                                    <buttonCell key="cell" type="bevel" title="{sha}" bezelStyle="rounded" alignment="right" controlSize="small" imageScaling="proportionallyDown" inset="2" id="bhF-Ik-OEH">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="smallSystem"/>
+                                    </buttonCell>
+                                    <color key="contentTintColor" name="linkColor" catalog="System" colorSpace="catalog"/>
+                                    <connections>
+                                        <action selector="href:" target="-2" id="mGc-mL-WZb"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <visibilityPriorities>
+                                <integer value="1000"/>
+                                <integer value="1000"/>
+                            </visibilityPriorities>
+                            <customSpacing>
+                                <real value="3.4028234663852886e+38"/>
+                                <real value="3.4028234663852886e+38"/>
+                            </customSpacing>
+                        </stackView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="WmD-kM-IA8" firstAttribute="width" secondItem="mOd-YO-ATB" secondAttribute="width" id="apg-Fu-jlN"/>
+                    </constraints>
+                    <visibilityPriorities>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                    </visibilityPriorities>
+                    <customSpacing>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                    </customSpacing>
+                </stackView>
+                <stackView identifier="auto-update-prefs" distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lbn-g0-WES" userLabel="Updater stack">
+                    <rect key="frame" x="0.0" y="0.0" width="407" height="50"/>
+                    <subviews>
+                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DNE-6p-zxa">
+                            <rect key="frame" x="-2" y="16" width="138" height="18"/>
+                            <buttonCell key="cell" type="check" title="Check for updates" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="R9K-cM-i8N">
+                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <binding destination="-2" name="value" keyPath="self.autoCheckUpdates" id="dSm-gK-WeZ"/>
+                            </connections>
+                        </button>
+                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="N4G-xd-EzJ">
+                            <rect key="frame" x="137" y="-7" width="101" height="62"/>
+                            <buttonCell key="cell" type="push" title="Check now" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rgh-IB-W4r">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="checkUpdateNow:" target="-2" id="D8q-g5-4nr"/>
+                            </connections>
+                        </button>
+                        <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="o7c-do-2sk">
+                            <rect key="frame" x="237" y="0.0" width="5" height="50"/>
+                        </box>
+                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pe7-1A-UA8">
+                            <rect key="frame" x="246" y="16" width="161" height="18"/>
+                            <buttonCell key="cell" type="check" title="include alpha releases" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="fYj-NG-Udi">
+                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <binding destination="-2" name="value" keyPath="self.includeAlphaReleases" id="dEn-5l-ucx"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="o7c-do-2sk" firstAttribute="height" secondItem="N4G-xd-EzJ" secondAttribute="height" id="UpW-Li-vbb"/>
+                    </constraints>
+                    <visibilityPriorities>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                    </visibilityPriorities>
+                    <customSpacing>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                    </customSpacing>
+                </stackView>
+            </subviews>
+            <visibilityPriorities>
+                <integer value="1000"/>
+                <integer value="1000"/>
+                <integer value="1000"/>
+                <integer value="1000"/>
+                <integer value="1000"/>
+            </visibilityPriorities>
+            <customSpacing>
+                <real value="3.4028234663852886e+38"/>
+                <real value="3.4028234663852886e+38"/>
+                <real value="3.4028234663852886e+38"/>
+                <real value="3.4028234663852886e+38"/>
+                <real value="3.4028234663852886e+38"/>
+            </customSpacing>
+            <point key="canvasLocation" x="140" y="-121"/>
+        </stackView>
+    </objects>
+    <resources>
+        <image name="GitHub" width="32" height="32"/>
+        <image name="globey" width="16" height="16"/>
+    </resources>
+</document>

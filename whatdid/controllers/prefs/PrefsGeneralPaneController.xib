@@ -48,7 +48,7 @@
                 </gridCell>
                 <gridCell row="QDy-lq-00F" column="GtT-FV-VDo" id="eSc-Ky-WtU">
                     <stackView key="contentView" distribution="fill" orientation="horizontal" alignment="centerY" spacing="3" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" detachesHiddenViews="YES" id="31z-9k-I0X">
-                        <rect key="frame" x="156" y="251" width="297" height="21"/>
+                        <rect key="frame" x="196" y="251" width="297" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jD1-CG-6Kz">
@@ -155,7 +155,7 @@
                 </gridCell>
                 <gridCell row="Qje-Nu-QJC" column="GtT-FV-VDo" id="298-3J-Z5i">
                     <stackView key="contentView" distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" detachesHiddenViews="YES" id="epm-BN-KtE">
-                        <rect key="frame" x="156" y="221" width="229" height="24"/>
+                        <rect key="frame" x="196" y="221" width="229" height="24"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
                             <datePicker verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="8OI-2G-lBT" userLabel="Day Start Time Picker">
@@ -203,7 +203,7 @@
                 </gridCell>
                 <gridCell row="NEH-1C-vok" column="GtT-FV-VDo" id="ASk-7x-fcH">
                     <datePicker key="contentView" verticalHuggingPriority="750" ambiguous="YES" id="oh5-LA-zYz" userLabel="EOD Time picker">
-                        <rect key="frame" x="156" y="191" width="84" height="28"/>
+                        <rect key="frame" x="196" y="191" width="84" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <datePickerCell key="cell" borderStyle="bezel" alignment="left" drawsBackground="NO" datePickerMode="range" id="aEi-kW-4Fe">
                             <font key="font" metaFont="system"/>
@@ -230,7 +230,7 @@
                 </gridCell>
                 <gridCell row="Lh8-6O-Wyk" column="GtT-FV-VDo" id="sdR-56-eHW">
                     <customView key="contentView" ambiguous="YES" id="dTb-vL-dCg" userLabel="Global Shortcut Holder">
-                        <rect key="frame" x="156" y="155" width="100" height="30"/>
+                        <rect key="frame" x="196" y="155" width="100" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="100" placeholder="YES" id="IMK-fp-Gzy"/>
@@ -250,7 +250,7 @@
                 </gridCell>
                 <gridCell row="ltY-N0-Ck3" column="GtT-FV-VDo" id="Y4n-t9-QHb">
                     <button key="contentView" verticalHuggingPriority="750" ambiguous="YES" id="dRX-9c-QUg">
-                        <rect key="frame" x="154" y="132" width="18" height="18"/>
+                        <rect key="frame" x="194" y="132" width="18" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="N45-Yt-2Uk">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -282,7 +282,7 @@
                 </gridCell>
                 <gridCell row="DtY-9N-Et2" column="GtT-FV-VDo" id="71h-FS-Fr4">
                     <button key="contentView" verticalHuggingPriority="750" ambiguous="YES" id="Zuo-FJ-Tti">
-                        <rect key="frame" x="154" y="42" width="18" height="18"/>
+                        <rect key="frame" x="194" y="42" width="18" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ueU-qD-75s">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
