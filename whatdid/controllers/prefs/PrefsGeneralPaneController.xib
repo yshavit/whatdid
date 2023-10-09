@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="PrefsGeneralPaneController" customModule="whatdid" customModuleProvider="target">
+            <connections>
+                <outlet property="dailyReportTime" destination="oh5-LA-zYz" id="Guy-Ox-Krf"/>
+                <outlet property="dayStartTimePicker" destination="8OI-2G-lBT" id="LW1-Br-iUR"/>
+                <outlet property="daysIncludeWeekends" destination="wiL-3m-DDj" id="uja-Zr-CRJ"/>
+                <outlet property="exportFormatPopup" destination="UnM-lB-wcI" id="BRx-EU-F55"/>
+                <outlet property="globalShortcutHolder" destination="dTb-vL-dCg" id="Xkr-ay-nM0"/>
+                <outlet property="view" destination="jC6-Jc-Pwp" id="3Oe-Ib-nII"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <gridView xPlacement="leading" yPlacement="center" rowAlignment="none" id="jC6-Jc-Pwp">
+            <rect key="frame" x="0.0" y="0.0" width="493" height="272"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <rows>
+                <gridRow id="QDy-lq-00F"/>
+                <gridRow id="Qje-Nu-QJC"/>
+                <gridRow id="NEH-1C-vok"/>
+                <gridRow id="Lh8-6O-Wyk"/>
+                <gridRow id="ltY-N0-Ck3"/>
+                <gridRow id="V6M-kA-htg"/>
+                <gridRow id="DtY-9N-Et2"/>
+                <gridRow id="ilK-cl-GKi"/>
+                <gridRow id="mLC-jz-Qzm"/>
+            </rows>
+            <columns>
+                <gridColumn id="RQW-kR-cGn"/>
+                <gridColumn id="GtT-FV-VDo"/>
+            </columns>
+            <gridCells>
+                <gridCell row="QDy-lq-00F" column="RQW-kR-cGn" id="DYF-wO-XYk">
+                    <textField key="contentView" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kBY-Cp-Ex3">
+                        <rect key="frame" x="-2" y="254" width="85" height="16"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Prompt every" id="ZO8-IR-M0f">
+                            <font key="font" usesAppearanceFont="YES"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                </gridCell>
+                <gridCell row="QDy-lq-00F" column="GtT-FV-VDo" id="eSc-Ky-WtU">
+                    <stackView key="contentView" distribution="fill" orientation="horizontal" alignment="centerY" spacing="3" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" detachesHiddenViews="YES" id="31z-9k-I0X">
+                        <rect key="frame" x="156" y="251" width="297" height="21"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <subviews>
+                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jD1-CG-6Kz">
+                                <rect key="frame" x="0.0" y="0.0" width="35" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="35" id="hAT-EM-u4k"/>
+                                </constraints>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" usesSingleLineMode="YES" id="YK5-df-RmQ">
+                                    <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" formatWidth="-1" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="8cm-qc-FS1"/>
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <accessibility description="frequency"/>
+                                <connections>
+                                    <binding destination="-2" name="value" keyPath="self.ptnFrequencyMinutes" id="YwK-yf-Fbg"/>
+                                </connections>
+                            </textField>
+                            <stepper identifier="frequencyStepper" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIs-8G-1TO" userLabel="Frequency">
+                                <rect key="frame" x="35" y="-3" width="19" height="28"/>
+                                <stepperCell key="cell" continuous="YES" alignment="left" maxValue="120" id="ds8-8G-ySh"/>
+                                <accessibility description="frequency stepper"/>
+                                <connections>
+                                    <binding destination="-2" name="value" keyPath="self.ptnFrequencyMinutes" id="L2a-Os-vRz"/>
+                                </connections>
+                            </stepper>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kbw-s0-xTr">
+                                <rect key="frame" x="52" y="3" width="141" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="minutes, plus or minus" id="r8f-L6-OD5">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="U01-vE-HFH" userLabel="Randomness">
+                                <rect key="frame" x="194" y="0.0" width="35" height="21"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="2C9-Se-ttN">
+                                    <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" formatWidth="-1" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="gIc-4i-bHe"/>
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <accessibility description="frequency randomness"/>
+                                <connections>
+                                    <binding destination="-2" name="value" keyPath="self.ptnFrequencyJitterMinutes" id="WUE-S7-Z4l">
+                                        <dictionary key="options">
+                                            <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
+                            </textField>
+                            <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gbr-mR-wkb">
+                                <rect key="frame" x="229" y="-3" width="19" height="28"/>
+                                <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="9Km-xf-DLc"/>
+                                <accessibility description="frequency randomness stepper"/>
+                                <connections>
+                                    <binding destination="-2" name="value" keyPath="self.ptnFrequencyJitterMinutes" id="DwI-qF-BIa">
+                                        <dictionary key="options">
+                                            <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
+                            </stepper>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cyo-n4-7h3">
+                                <rect key="frame" x="246" y="3" width="53" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="minutes" id="NyH-j7-Nzy">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="U01-vE-HFH" firstAttribute="width" secondItem="jD1-CG-6Kz" secondAttribute="width" id="f7f-Os-G1L"/>
+                        </constraints>
+                        <visibilityPriorities>
+                            <integer value="1000"/>
+                            <integer value="1000"/>
+                            <integer value="1000"/>
+                            <integer value="1000"/>
+                            <integer value="1000"/>
+                            <integer value="1000"/>
+                        </visibilityPriorities>
+                        <customSpacing>
+                            <real value="3.4028234663852886e+38"/>
+                            <real value="3.4028234663852886e+38"/>
+                            <real value="3.4028234663852886e+38"/>
+                            <real value="3.4028234663852886e+38"/>
+                            <real value="3.4028234663852886e+38"/>
+                            <real value="3.4028234663852886e+38"/>
+                        </customSpacing>
+                    </stackView>
+                </gridCell>
+                <gridCell row="Qje-Nu-QJC" column="RQW-kR-cGn" id="gDM-JJ-GU8">
+                    <textField key="contentView" horizontalHuggingPriority="750" verticalHuggingPriority="750" id="NBO-vT-bGM">
+                        <rect key="frame" x="-2" y="225" width="82" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Day starts at" id="fdo-Di-qgg">
+                            <font key="font" usesAppearanceFont="YES"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                </gridCell>
+                <gridCell row="Qje-Nu-QJC" column="GtT-FV-VDo" id="298-3J-Z5i">
+                    <stackView key="contentView" distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" detachesHiddenViews="YES" id="epm-BN-KtE">
+                        <rect key="frame" x="156" y="221" width="229" height="24"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <subviews>
+                            <datePicker verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="8OI-2G-lBT" userLabel="Day Start Time Picker">
+                                <rect key="frame" x="0.0" y="0.0" width="84" height="28"/>
+                                <datePickerCell key="cell" borderStyle="bezel" alignment="left" drawsBackground="NO" id="EkB-YF-ggp">
+                                    <font key="font" metaFont="system"/>
+                                    <date key="date" timeIntervalSinceReferenceDate="718570196.84351301">
+                                        <!--2023-10-09 18:49:56 +0000-->
+                                    </date>
+                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <datePickerElements key="datePickerElements" hour="YES" minute="YES"/>
+                                </datePickerCell>
+                                <accessibility description="snooze until tomorrow time"/>
+                            </datePicker>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wiL-3m-DDj">
+                                <rect key="frame" x="83" y="3" width="146" height="18"/>
+                                <buttonCell key="cell" type="check" title="including weekends" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="9B7-at-TMx">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <accessibility description="snooze until tomorrow includes weekends"/>
+                            </button>
+                        </subviews>
+                        <visibilityPriorities>
+                            <integer value="1000"/>
+                            <integer value="1000"/>
+                        </visibilityPriorities>
+                        <customSpacing>
+                            <real value="3.4028234663852886e+38"/>
+                            <real value="3.4028234663852886e+38"/>
+                        </customSpacing>
+                    </stackView>
+                </gridCell>
+                <gridCell row="NEH-1C-vok" column="RQW-kR-cGn" id="CMw-91-7gV">
+                    <textField key="contentView" horizontalHuggingPriority="750" verticalHuggingPriority="750" id="0Xk-uR-Y3X">
+                        <rect key="frame" x="-2" y="195" width="148" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="End-of-day summary at" id="Ave-Xo-phq">
+                            <font key="font" usesAppearanceFont="YES"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                </gridCell>
+                <gridCell row="NEH-1C-vok" column="GtT-FV-VDo" id="ASk-7x-fcH">
+                    <datePicker key="contentView" verticalHuggingPriority="750" ambiguous="YES" id="oh5-LA-zYz" userLabel="EOD Time picker">
+                        <rect key="frame" x="156" y="191" width="84" height="28"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <datePickerCell key="cell" borderStyle="bezel" alignment="left" drawsBackground="NO" datePickerMode="range" id="aEi-kW-4Fe">
+                            <font key="font" metaFont="system"/>
+                            <date key="date" timeIntervalSinceReferenceDate="718570196.845456">
+                                <!--2023-10-09 18:49:56 +0000-->
+                            </date>
+                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <datePickerElements key="datePickerElements" hour="YES" minute="YES"/>
+                        </datePickerCell>
+                        <accessibility description="daily report time"/>
+                    </datePicker>
+                </gridCell>
+                <gridCell row="Lh8-6O-Wyk" column="RQW-kR-cGn" id="lQF-yV-Ef1">
+                    <textField key="contentView" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" id="pbJ-Lh-awK">
+                        <rect key="frame" x="-2" y="162" width="98" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Global shortcut" id="32r-A2-D4R">
+                            <font key="font" usesAppearanceFont="YES"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                </gridCell>
+                <gridCell row="Lh8-6O-Wyk" column="GtT-FV-VDo" id="sdR-56-eHW">
+                    <customView key="contentView" ambiguous="YES" id="dTb-vL-dCg" userLabel="Global Shortcut Holder">
+                        <rect key="frame" x="156" y="155" width="100" height="30"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="100" placeholder="YES" id="IMK-fp-Gzy"/>
+                        </constraints>
+                    </customView>
+                </gridCell>
+                <gridCell row="ltY-N0-Ck3" column="RQW-kR-cGn" id="iMB-4l-FXE">
+                    <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" id="Pwd-Rg-DZa">
+                        <rect key="frame" x="-2" y="133" width="83" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Start at login" id="pCP-gh-CGt">
+                            <font key="font" usesAppearanceFont="YES"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                </gridCell>
+                <gridCell row="ltY-N0-Ck3" column="GtT-FV-VDo" id="Y4n-t9-QHb">
+                    <button key="contentView" verticalHuggingPriority="750" ambiguous="YES" id="dRX-9c-QUg">
+                        <rect key="frame" x="154" y="132" width="18" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="N45-Yt-2Uk">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <accessibility description="Launch at Login"/>
+                        <connections>
+                            <binding destination="-2" name="value" keyPath="self.launchAtLogin" id="4vH-Ql-u2I"/>
+                        </connections>
+                    </button>
+                </gridCell>
+                <gridCell row="V6M-kA-htg" column="RQW-kR-cGn" headOfMergedCell="UnP-T1-chj" id="UnP-T1-chj">
+                    <box key="contentView" verticalHuggingPriority="750" ambiguous="YES" boxType="separator" id="zQC-Lt-Bo9">
+                        <rect key="frame" x="0.0" y="94" width="100" height="5"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </box>
+                </gridCell>
+                <gridCell row="V6M-kA-htg" column="GtT-FV-VDo" headOfMergedCell="UnP-T1-chj" id="ZMv-9e-8XP"/>
+                <gridCell row="DtY-9N-Et2" column="RQW-kR-cGn" id="fQc-le-Zgz">
+                    <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" id="Yfb-T8-hSP">
+                        <rect key="frame" x="-2" y="43" width="154" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Require notes for entries" id="eek-og-jVg">
+                            <font key="font" usesAppearanceFont="YES"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                </gridCell>
+                <gridCell row="DtY-9N-Et2" column="GtT-FV-VDo" id="71h-FS-Fr4">
+                    <button key="contentView" verticalHuggingPriority="750" ambiguous="YES" id="Zuo-FJ-Tti">
+                        <rect key="frame" x="154" y="42" width="18" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ueU-qD-75s">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <accessibility description="Require Notes"/>
+                        <connections>
+                            <binding destination="-2" name="value" keyPath="self.requireNotes" id="A1a-uD-jxv"/>
+                        </connections>
+                    </button>
+                </gridCell>
+                <gridCell row="ilK-cl-GKi" column="RQW-kR-cGn" headOfMergedCell="fHW-zW-Td8" id="fHW-zW-Td8">
+                    <box key="contentView" verticalHuggingPriority="750" ambiguous="YES" boxType="separator" id="rYT-em-f8W">
+                        <rect key="frame" x="0.0" y="34" width="100" height="5"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </box>
+                </gridCell>
+                <gridCell row="ilK-cl-GKi" column="GtT-FV-VDo" headOfMergedCell="fHW-zW-Td8" id="j0B-es-HqQ"/>
+                <gridCell row="mLC-jz-Qzm" column="RQW-kR-cGn" headOfMergedCell="dhU-xf-q3e" id="dhU-xf-q3e">
+                    <stackView key="contentView" distribution="fill" orientation="horizontal" alignment="centerY" spacing="3" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z7f-uf-jRp">
+                        <rect key="frame" x="0.0" y="5" width="156" height="20"/>
+                        <subviews>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oBI-ej-9GD">
+                                <rect key="frame" x="0.0" y="-1" width="94" height="22"/>
+                                <buttonCell key="cell" type="smallSquare" title="Export all data" bezelStyle="smallSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="scb-kP-M1P">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="handlePressExport:" target="-2" id="oHP-p3-3gq"/>
+                                </connections>
+                            </button>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kke-5O-6q0">
+                                <rect key="frame" x="95" y="2" width="18" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="as" id="hKK-cS-5kM">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="UnM-lB-wcI">
+                                <rect key="frame" x="114" y="-1" width="42" height="22"/>
+                                <popUpButtonCell key="cell" type="smallSquare" title="text" bezelStyle="smallSquare" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="1Bs-mS-f63" id="dv9-1N-cBV">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="menu"/>
+                                    <menu key="menu" id="Nmi-5X-RB3">
+                                        <items>
+                                            <menuItem title="text" state="on" id="1Bs-mS-f63"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                            </popUpButton>
+                        </subviews>
+                        <visibilityPriorities>
+                            <integer value="1000"/>
+                            <integer value="1000"/>
+                            <integer value="1000"/>
+                        </visibilityPriorities>
+                        <customSpacing>
+                            <real value="3.4028234663852886e+38"/>
+                            <real value="3.4028234663852886e+38"/>
+                            <real value="3.4028234663852886e+38"/>
+                        </customSpacing>
+                    </stackView>
+                </gridCell>
+                <gridCell row="mLC-jz-Qzm" column="GtT-FV-VDo" headOfMergedCell="dhU-xf-q3e" id="B23-VX-lug"/>
+            </gridCells>
+            <point key="canvasLocation" x="3" y="-156"/>
+        </gridView>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <userDefaultsController representsSharedInstance="YES" id="mbN-hU-oxE"/>
+    </objects>
+</document>
