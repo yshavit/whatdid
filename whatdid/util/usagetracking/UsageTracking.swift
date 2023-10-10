@@ -12,6 +12,11 @@ class UsageTracking {
     private var enabled = false
     private var backgroundRetrySendTask: DispatchWorkItem?
     
+    static let instance = UsageTracking()
+    
+    /// A private initializer, so that all analytics come in through `UsageTracking.instance`. This makes it easier to find call sites.
+    private init() {}
+    
     func setModel(_ model: Model) {
         lock.synchronized {
             self.model = model
@@ -32,7 +37,12 @@ class UsageTracking {
         }
     }
     
-    func recordAction(action: UsageAction) {
+    /// Convenience method for `UsageTracking.instance.recordAction(action)`.
+    static func recordAction(_ action: UsageAction) {
+        UsageTracking.instance.recordAction(action)
+    }
+    
+    func recordAction(_ action: UsageAction) {
         let (enabled, model) = lock.synchronizedGet { (self.enabled, self.model) }
         if !enabled {
             return
@@ -44,7 +54,7 @@ class UsageTracking {
         model.createUsage(action: action, andThen: {datum in self.immediatelySend(data: [datum])})
     }
     
-    func scheduleDeferredSend() {
+    private func scheduleDeferredSend() {
         let newTask = lock.synchronizedGet {() -> DispatchWorkItem? in
             // Never schedule a send if analytics has been disabled!
             if !enabled {

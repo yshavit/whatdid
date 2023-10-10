@@ -56,6 +56,10 @@ class PrefsViewController: NSViewController {
         tabButtonsStack.addArrangedSubview(NSView()) // trailing spacer
     }
     
+    override func viewDidAppear() {
+        UsageTracking.recordAction(.SettingsPaneOpen)
+    }
+    
     override func viewWillAppear() {
         NSAppearance.withEffectiveAppearance {
             tabButtonsStack.layer?.backgroundColor = NSColor.windowBackgroundColor.cgColor

@@ -8,4 +8,7 @@
 
 enum UsageAction: String {
     case ManualOpen;
+    case ManualReportOpen;
+    case SettingsPaneOpen;
+    case OpenInWindow;
 }

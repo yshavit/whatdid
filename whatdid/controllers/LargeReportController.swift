@@ -28,8 +28,6 @@ class LargeReportController: NSWindowController, NSWindowDelegate {
         editsController.viewDidLoad()
         editsController.model = model
         
-        
-
         // Set up the edits view
 
         // Set up the search bar
@@ -57,6 +55,7 @@ class LargeReportController: NSWindowController, NSWindowDelegate {
         AppDelegate.instance.windowOpened(self)
         super.showWindow(sender)
         dateRangePicker.prepareToShow()
+        UsageTracking.recordAction(.OpenInWindow)
     }
     
     private func setControlsEnabled(_ enabled: Bool) {
