@@ -69,8 +69,8 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zPN-a7-Zfb">
-                            <rect key="frame" x="-2" y="33" width="189" height="18"/>
-                            <buttonCell key="cell" type="check" title="Allow anonymous analytics" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="cOs-lA-zmn">
+                            <rect key="frame" x="-2" y="33" width="152" height="18"/>
+                            <buttonCell key="cell" type="check" title="Allow usage tracking" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="cOs-lA-zmn">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                 <font key="font" metaFont="system"/>
                             </buttonCell>
