@@ -671,7 +671,3 @@ class Model {
         }
     }
 }
-
-enum UsageAction: String {
-    case ManualOpen;
-}
