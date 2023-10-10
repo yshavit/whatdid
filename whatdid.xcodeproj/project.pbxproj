@@ -62,6 +62,7 @@
 		7E56607B2AD48C0C00767E08 /* PrefsAboutPaneController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E5660772AD48C0C00767E08 /* PrefsAboutPaneController.xib */; };
 		7E5660802AD4AAE700767E08 /* HrefButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E56607F2AD4AAE700767E08 /* HrefButton.swift */; };
 		7E5660812AD4AAE700767E08 /* HrefButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E56607F2AD4AAE700767E08 /* HrefButton.swift */; };
+		7E5660822AD4D28E00767E08 /* UsageTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE1CDC52AD0FACF00AEB55A /* UsageTracking.swift */; };
 		7E579F702503E2920055D9F6 /* SystemClockSchedulerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */; };
 		7E5EFA272619B14A00E7834D /* NSTextField+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */; };
 		7E63051E2846C71700565880 /* SegmentedTimelineViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E63051D2846C71700565880 /* SegmentedTimelineViewTest.swift */; };
@@ -1431,6 +1432,7 @@
 				7EF30DE52AC2B4920097FA24 /* SortedMap.swift in Sources */,
 				7EF30DE62AC2B4920097FA24 /* PtnViewController.swift in Sources */,
 				7EF30DE72AC2B4920097FA24 /* NSView+Helpers.swift in Sources */,
+				7E5660822AD4D28E00767E08 /* UsageTracking.swift in Sources */,
 				7EF30DE82AC2B4920097FA24 /* ButtonWithClosure.swift in Sources */,
 				7EF30DE92AC2B4920097FA24 /* DayStartController.swift in Sources */,
 				7EF30DEA2AC2B4920097FA24 /* PrefsViewController.swift in Sources */,
