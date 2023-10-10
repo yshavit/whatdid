@@ -143,7 +143,7 @@
 		7EE0E74624E8899E002D03F8 /* AutoCompletingField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74524E8899E002D03F8 /* AutoCompletingField.swift */; };
 		7EE0E74824EA1ECD002D03F8 /* String+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74724EA1ECD002D03F8 /* String+Helpers.swift */; };
 		7EE0E74A24EA22E7002D03F8 /* NSView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */; };
-		7EE1CDC62AD0FACF00AEB55A /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE1CDC52AD0FACF00AEB55A /* Analytics.swift */; };
+		7EE1CDC62AD0FACF00AEB55A /* UsageTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE1CDC52AD0FACF00AEB55A /* UsageTracking.swift */; };
 		7EE1CDD22AD10D6900AEB55A /* UUID+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE1CDD12AD10D6900AEB55A /* UUID+Helpers.swift */; };
 		7EE1CDD42AD12CA200AEB55A /* NSRecursiveLock+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE1CDD32AD12CA200AEB55A /* NSRecursiveLock+Helpers.swift */; };
 		7EE1CDD62AD2255000AEB55A /* UsageDatumDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE1CDD52AD2255000AEB55A /* UsageDatumDTO.swift */; };
@@ -458,7 +458,7 @@
 		7EE0E74524E8899E002D03F8 /* AutoCompletingField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletingField.swift; sourceTree = "<group>"; };
 		7EE0E74724EA1ECD002D03F8 /* String+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Helpers.swift"; sourceTree = "<group>"; };
 		7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSView+Helpers.swift"; sourceTree = "<group>"; };
-		7EE1CDC52AD0FACF00AEB55A /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		7EE1CDC52AD0FACF00AEB55A /* UsageTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageTracking.swift; sourceTree = "<group>"; };
 		7EE1CDD12AD10D6900AEB55A /* UUID+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UUID+Helpers.swift"; sourceTree = "<group>"; };
 		7EE1CDD32AD12CA200AEB55A /* NSRecursiveLock+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRecursiveLock+Helpers.swift"; sourceTree = "<group>"; };
 		7EE1CDD52AD2255000AEB55A /* UsageDatumDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageDatumDTO.swift; sourceTree = "<group>"; };
@@ -789,7 +789,7 @@
 				7E305CE7282466B80086574C /* SimpleRandom.swift */,
 				7EE27F7928CBBB6F00D41366 /* SortedMap.swift */,
 				6E01214AC5B51926451AA2BC /* PushableString.swift */,
-				7EE1CDC52AD0FACF00AEB55A /* Analytics.swift */,
+				7EE1CDC52AD0FACF00AEB55A /* UsageTracking.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -1244,7 +1244,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7EDDFF5E250097B30027E91A /* Date+Helpers.swift in Sources */,
-				7EE1CDC62AD0FACF00AEB55A /* Analytics.swift in Sources */,
+				7EE1CDC62AD0FACF00AEB55A /* UsageTracking.swift in Sources */,
 				7E37A29524C00266005BA1DF /* Model.swift in Sources */,
 				7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */,
 				7E235E03278A968800253DD8 /* NonFocusingNSViewController.swift in Sources */,

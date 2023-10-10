@@ -21,7 +21,7 @@ class PrefsFeedbackPaneController: NSViewController, NSTextFieldDelegate {
         } else {
             feedbackButton.removeFromSuperview()
         }
-        privacyUrl.toolTip = Analytics.PRIVACY_URL
+        privacyUrl.toolTip = UsageTracking.PRIVACY_URL
     }
 
     @IBInspectable

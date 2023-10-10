@@ -17,7 +17,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate, NSMenuDe
             analytics.setModel(model)
         }
     }
-    private let analytics = Analytics()
+    private let analytics = UsageTracking()
     
     @IBOutlet weak var mainMenu: MainMenu!
     private var deactivationHooks : Atomic<[() -> Void]> = Atomic(wrappedValue: [])

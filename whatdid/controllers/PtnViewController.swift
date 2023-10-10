@@ -484,7 +484,7 @@ class PtnViewController: NSViewController {
             // Analytics row
             Prefs.analyticsEnabled = true
             let privacyButton = HrefButton(title: "privacy policy", target: nil, action: nil)
-            privacyButton.toolTip = Analytics.PRIVACY_URL
+            privacyButton.toolTip = UsageTracking.PRIVACY_URL
             privacyButton.controlSize = .small
             let allowAnalytics = InitialPrefsCheckbox(pref: Prefs.$analyticsEnabled)
             optionsGrid.addRow(with: [

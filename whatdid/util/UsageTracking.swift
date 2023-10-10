@@ -2,7 +2,7 @@
 
 import Foundation
 
-class Analytics {
+class UsageTracking {
     static let PRIVACY_URL = "https://whatdid.yuvalshavit.com/privacy"
     static let SEND_INTERVALS = 30.0 // TODO every 5 minutes
     static let SEND_URL = URL(string: "https://api.whatdid.yuvalshavit.com/analytics/usage")!
@@ -60,7 +60,7 @@ class Analytics {
         }
         if let newTask = newTask {
             DispatchQueue.global(qos: .background).asyncAfter(
-                deadline: DispatchTime.now() + Analytics.SEND_INTERVALS,
+                deadline: DispatchTime.now() + UsageTracking.SEND_INTERVALS,
                 execute: newTask)
         }
     }
@@ -70,7 +70,7 @@ class Analytics {
             return
         }
         
-        var req = URLRequest(url: Analytics.SEND_URL)
+        var req = URLRequest(url: UsageTracking.SEND_URL)
         req.httpMethod = "POST"
         
         let dataDTOs = data.map(UsageDatumToJson.init(from:))
