@@ -4,6 +4,23 @@
         <title>whatdid</title>
         <item>
             <title>0.1</title>
+            <pubDate>Tue, 10 Oct 2023 04:50:29 +0000</pubDate>
+            <sparkle:channel>alpha</sparkle:channel>
+            <sparkle:version>2023.1010.043739</sparkle:version>
+            <sparkle:shortVersionString>0.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>11.0</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://whatdid.yuvalshavit.com/release-notes/Whatdid-2023.1010.043739.html</sparkle:releaseNotesLink>
+            <enclosure url="https://whatdid.yuvalshavit.com/appcast/Whatdid-2023.1010.043739.dmg" length="1856206" type="application/octet-stream" sparkle:edSignature="MbXtvxt4needYbWJSTtlhmAUIcOHRNqp8GGE20TxZPtk3VAwm49JKionhrG1UHBheyotX0YI/v/vFNVUzrBDAA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2023.1010.043739-2023.1010.032639.delta" sparkle:deltaFrom="2023.1010.032639" length="34147" type="application/octet-stream" sparkle:edSignature="MUjYcVy1TC/KWVDhjdAh57j+ODmQnNmiTePCCh8WvkG+ujwzlGSC/7Em3HO8vQCW0zJWaY3MARIUo9Q8TFTdDQ=="/>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2023.1010.043739-2023.0926.060157.delta" sparkle:deltaFrom="2023.0926.060157" length="1066117" type="application/octet-stream" sparkle:edSignature="HELP4cwgqPHJ8pW+pdunCiSsMe1lGsgjOlsixH7RQjgqv+O+z3J45v9D6VChFQYUCJOmQFKV6TGeEerJuKSGDw=="/>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2023.1010.043739-2023.0515.010804.delta" sparkle:deltaFrom="2023.0515.010804" length="1084049" type="application/octet-stream" sparkle:edSignature="mOcj0qXLdOUYUBQmva6OWd1v9zEUXpVWllEqILsrMIIUF0f9IWe8N+HIlar5oEKIxIeid+/0X7guP0mQH9jHAQ=="/>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2023.1010.043739-2023.0514.235106.delta" sparkle:deltaFrom="2023.0514.235106" length="1084352" type="application/octet-stream" sparkle:edSignature="HZB1vvhohdxLqXGPBnGXmpCwU5gQmA0Z7SYZUCMKe0FZVbUbFHJURVgLm7uJpNiCc6wt7w6asTWmZJZsxMg5CQ=="/>
+                <enclosure url="https://whatdid.yuvalshavit.com/appcast/whatdid2023.1010.043739-2022.1114.083348.delta" sparkle:deltaFrom="2022.1114.083348" length="1443296" type="application/octet-stream" sparkle:edSignature="hXKVKvL8rQsxOwAq8IN9EnqEcBOS8PAiXl1RGSWxPH/Bd/vEx7biq+DDIhlz+EEQ97xyg6cVfQQiNbGsWGkoDg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>0.1</title>
             <pubDate>Tue, 10 Oct 2023 03:54:37 +0000</pubDate>
             <sparkle:channel>alpha</sparkle:channel>
             <sparkle:version>2023.1010.032639</sparkle:version>
