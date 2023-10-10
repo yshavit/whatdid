@@ -14,10 +14,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate, NSMenuDe
 
     private var _model = Model() {
         didSet {
-            analytics.setModel(model)
+            UsageTracking.instance.setModel(model)
         }
     }
-    private let analytics = UsageTracking()
     
     @IBOutlet weak var mainMenu: MainMenu!
     private var deactivationHooks : Atomic<[() -> Void]> = Atomic(wrappedValue: [])
@@ -88,8 +87,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate, NSMenuDe
     func applicationDidFinishLaunching(_: Notification) {
         wdlog(.info, "Starting whatdid with build %{public}@", Version.pretty)
         // Start tracking analytics (if allowed)
-        analytics.setModel(model)
-        Prefs.$analyticsEnabled.addListener(analytics.setEnabled(_:)) // This also schedules an initial check
+        UsageTracking.instance.setModel(model)
+        Prefs.$analyticsEnabled.addListener(UsageTracking.instance.setEnabled(_:)) // This also schedules an initial check
         
         #if UI_TEST
         wdlog(.info, "initializing UI test hooks")

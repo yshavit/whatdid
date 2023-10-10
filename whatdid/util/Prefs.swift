@@ -8,11 +8,11 @@ struct Prefs {
     @Pref(key: "daysIncludeWeekends") static var daysIncludeWeekends = false
     @Pref(key: "ptnFrequencyMinutes") static var ptnFrequencyMinutes = 12
     @Pref(key: "ptnFrequencyJitterMinutes") static var ptnFrequencyJitterMinutes = 2
-    @Pref(key: "launchAtLogin") static var launchAtLogin = true
+    @Pref(key: "launchAtLogin") static var launchAtLogin = false
     @Pref(key: "previouslyLaunchedVersion") static var tutorialVersion = -1
     @Pref(key: "requireNotes") static var requireNotes = false
     @Pref(key: "startupMessages") static var startupMessages = [StartupMessage]()
-    @Pref(key: "analyticsEnabled") static var analyticsEnabled = true
+    @Pref(key: "analyticsEnabled") static var analyticsEnabled = false
     @Pref(key: "analyticsTrackerId") static var trackerId = UUID()
     
     // The following aren't actually prefs, but rather just bits of info persisted across runs.
