@@ -60,6 +60,12 @@
 		7E5660792AD48C0C00767E08 /* PrefsAboutPaneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5660762AD48C0C00767E08 /* PrefsAboutPaneController.swift */; };
 		7E56607A2AD48C0C00767E08 /* PrefsAboutPaneController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E5660772AD48C0C00767E08 /* PrefsAboutPaneController.xib */; };
 		7E56607B2AD48C0C00767E08 /* PrefsAboutPaneController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E5660772AD48C0C00767E08 /* PrefsAboutPaneController.xib */; };
+		7E5660802AD4AAE700767E08 /* HrefButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E56607F2AD4AAE700767E08 /* HrefButton.swift */; };
+		7E5660812AD4AAE700767E08 /* HrefButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E56607F2AD4AAE700767E08 /* HrefButton.swift */; };
+		7E5660822AD4D28E00767E08 /* UsageTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE1CDC52AD0FACF00AEB55A /* UsageTracking.swift */; };
+		7E5660832AD4D3EC00767E08 /* UsageDatumDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE1CDD52AD2255000AEB55A /* UsageDatumDTO.swift */; };
+		7E5660842AD4D41800767E08 /* UUID+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE1CDD12AD10D6900AEB55A /* UUID+Helpers.swift */; };
+		7E5660852AD4D41C00767E08 /* NSRecursiveLock+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE1CDD32AD12CA200AEB55A /* NSRecursiveLock+Helpers.swift */; };
 		7E579F702503E2920055D9F6 /* SystemClockSchedulerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */; };
 		7E5EFA272619B14A00E7834D /* NSTextField+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */; };
 		7E63051E2846C71700565880 /* SegmentedTimelineViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E63051D2846C71700565880 /* SegmentedTimelineViewTest.swift */; };
@@ -141,6 +147,10 @@
 		7EE0E74624E8899E002D03F8 /* AutoCompletingField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74524E8899E002D03F8 /* AutoCompletingField.swift */; };
 		7EE0E74824EA1ECD002D03F8 /* String+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74724EA1ECD002D03F8 /* String+Helpers.swift */; };
 		7EE0E74A24EA22E7002D03F8 /* NSView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */; };
+		7EE1CDC62AD0FACF00AEB55A /* UsageTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE1CDC52AD0FACF00AEB55A /* UsageTracking.swift */; };
+		7EE1CDD22AD10D6900AEB55A /* UUID+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE1CDD12AD10D6900AEB55A /* UUID+Helpers.swift */; };
+		7EE1CDD42AD12CA200AEB55A /* NSRecursiveLock+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE1CDD32AD12CA200AEB55A /* NSRecursiveLock+Helpers.swift */; };
+		7EE1CDD62AD2255000AEB55A /* UsageDatumDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE1CDD52AD2255000AEB55A /* UsageDatumDTO.swift */; };
 		7EE250BB2515B8FE0067C5E9 /* PrefsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE250B92515B8FE0067C5E9 /* PrefsViewController.swift */; };
 		7EE250BC2515B8FE0067C5E9 /* PrefsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EE250BA2515B8FE0067C5E9 /* PrefsViewController.xib */; };
 		7EE27F7A28CBBB6F00D41366 /* SortedMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE27F7928CBBB6F00D41366 /* SortedMap.swift */; };
@@ -367,6 +377,7 @@
 		7E56606B2AD487A400767E08 /* PrefsFeedbackPaneController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefsFeedbackPaneController.xib; sourceTree = "<group>"; };
 		7E5660762AD48C0C00767E08 /* PrefsAboutPaneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsAboutPaneController.swift; sourceTree = "<group>"; };
 		7E5660772AD48C0C00767E08 /* PrefsAboutPaneController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefsAboutPaneController.xib; sourceTree = "<group>"; };
+		7E56607F2AD4AAE700767E08 /* HrefButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HrefButton.swift; sourceTree = "<group>"; };
 		7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockSchedulerTest.swift; sourceTree = "<group>"; };
 		7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextField+Helpers.swift"; sourceTree = "<group>"; };
 		7E63051D2846C71700565880 /* SegmentedTimelineViewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedTimelineViewTest.swift; sourceTree = "<group>"; };
@@ -451,6 +462,10 @@
 		7EE0E74524E8899E002D03F8 /* AutoCompletingField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletingField.swift; sourceTree = "<group>"; };
 		7EE0E74724EA1ECD002D03F8 /* String+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Helpers.swift"; sourceTree = "<group>"; };
 		7EE0E74924EA22E7002D03F8 /* NSView+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSView+Helpers.swift"; sourceTree = "<group>"; };
+		7EE1CDC52AD0FACF00AEB55A /* UsageTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageTracking.swift; sourceTree = "<group>"; };
+		7EE1CDD12AD10D6900AEB55A /* UUID+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UUID+Helpers.swift"; sourceTree = "<group>"; };
+		7EE1CDD32AD12CA200AEB55A /* NSRecursiveLock+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRecursiveLock+Helpers.swift"; sourceTree = "<group>"; };
+		7EE1CDD52AD2255000AEB55A /* UsageDatumDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageDatumDTO.swift; sourceTree = "<group>"; };
 		7EE250B92515B8FE0067C5E9 /* PrefsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsViewController.swift; sourceTree = "<group>"; };
 		7EE250BA2515B8FE0067C5E9 /* PrefsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefsViewController.xib; sourceTree = "<group>"; };
 		7EE27F7928CBBB6F00D41366 /* SortedMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedMap.swift; sourceTree = "<group>"; };
@@ -587,6 +602,7 @@
 				7E7C384A24DF2E5E00CFF3E7 /* FlatEntry.swift */,
 				7E7C384D24DF33A000CFF3E7 /* FlatEntry+Serde.swift */,
 				7E76A140278F99920017FAE9 /* EntryExportFormats.swift */,
+				7EE1CDD52AD2255000AEB55A /* UsageDatumDTO.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -777,6 +793,7 @@
 				7E305CE7282466B80086574C /* SimpleRandom.swift */,
 				7EE27F7928CBBB6F00D41366 /* SortedMap.swift */,
 				6E01214AC5B51926451AA2BC /* PushableString.swift */,
+				7EE1CDC52AD0FACF00AEB55A /* UsageTracking.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -869,6 +886,7 @@
 				7EE27F8128CCE29500D41366 /* TextOptionsList.swift */,
 				7E8443EA28D7A2D700D9694A /* ProjectTaskFinder.swift */,
 				7E16AF912AD35EF90047DF13 /* ControllerDisplayView.swift */,
+				7E56607F2AD4AAE700767E08 /* HrefButton.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -893,6 +911,8 @@
 				7E305CED282471DE0086574C /* UInt32+Helpers.swift */,
 				7E506BE028EBDEAA00EBD002 /* Array+Helpers.swift */,
 				6E012ED1C001C59F49F03A0F /* NSTableView+Helpers.swift */,
+				7EE1CDD12AD10D6900AEB55A /* UUID+Helpers.swift */,
+				7EE1CDD32AD12CA200AEB55A /* NSRecursiveLock+Helpers.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -1228,6 +1248,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7EDDFF5E250097B30027E91A /* Date+Helpers.swift in Sources */,
+				7EE1CDC62AD0FACF00AEB55A /* UsageTracking.swift in Sources */,
 				7E37A29524C00266005BA1DF /* Model.swift in Sources */,
 				7E8C04DE23714F0700A0C3A6 /* AppDelegate.swift in Sources */,
 				7E235E03278A968800253DD8 /* NonFocusingNSViewController.swift in Sources */,
@@ -1243,6 +1264,7 @@
 				7E56606C2AD487A400767E08 /* PrefsFeedbackPaneController.swift in Sources */,
 				7E16AF922AD35EF90047DF13 /* ControllerDisplayView.swift in Sources */,
 				7EF70923290E5C2B00E1A045 /* EditEntriesController.swift in Sources */,
+				7EE1CDD42AD12CA200AEB55A /* NSRecursiveLock+Helpers.swift in Sources */,
 				7EEF324624EA542D002E217A /* NSRange+Helpers.swift in Sources */,
 				7E4EB8E327868AAC001234F0 /* DateRangePane.swift in Sources */,
 				7EA4D3DE261AC9F300EEBF17 /* PasteboardView.swift in Sources */,
@@ -1257,7 +1279,9 @@
 				7ECAF0DF250D75B70004647E /* WhatdidTextField.swift in Sources */,
 				7EE4E39624E24A3F00552AAF /* WhatdidControlHooks.swift in Sources */,
 				7E506BE128EBDEAA00EBD002 /* Array+Helpers.swift in Sources */,
+				7EE1CDD62AD2255000AEB55A /* UsageDatumDTO.swift in Sources */,
 				7E9C5EBC260C09AA00D839C4 /* Session+CoreDataProperties.swift in Sources */,
+				7E5660802AD4AAE700767E08 /* HrefButton.swift in Sources */,
 				7ECF97A724F1D50100DBF1BF /* NSControl+Helper.swift in Sources */,
 				7EE27F8228CCE29600D41366 /* TextOptionsList.swift in Sources */,
 				7EC09CE42794E89800086334 /* StartupMessage.swift in Sources */,
@@ -1283,6 +1307,7 @@
 				7E7C384B24DF2E5E00CFF3E7 /* FlatEntry.swift in Sources */,
 				7EE4E39A24E25C0200552AAF /* DefaultScheduler.swift in Sources */,
 				7E9C5EBE260C09AA00D839C4 /* Goal+CoreDataProperties.swift in Sources */,
+				7EE1CDD22AD10D6900AEB55A /* UUID+Helpers.swift in Sources */,
 				7E37A29124BFFFCB005BA1DF /* Project+CoreDataProperties.swift in Sources */,
 				7EF857A124E2420C00867832 /* Scheduler.swift in Sources */,
 				7EAD2A6D2629271800153A47 /* OSLogType+Helpers.swift in Sources */,
@@ -1396,6 +1421,7 @@
 				7EF30DDA2AC2B4920097FA24 /* FlippedView.swift in Sources */,
 				7EF30DDB2AC2B4920097FA24 /* GlobalShortcut.swift in Sources */,
 				7EF30DDC2AC2B4920097FA24 /* ManualTickScheduler.swift in Sources */,
+				7E5660832AD4D3EC00767E08 /* UsageDatumDTO.swift in Sources */,
 				7EF30DDD2AC2B4920097FA24 /* FlatEntry+Serde.swift in Sources */,
 				7EF30DDE2AC2B4920097FA24 /* UpdateChannel.swift in Sources */,
 				7E5660612AD46BD800767E08 /* PrefsGeneralPaneController.swift in Sources */,
@@ -1404,12 +1430,14 @@
 				7E56606D2AD487A400767E08 /* PrefsFeedbackPaneController.swift in Sources */,
 				7E16AF932AD35EF90047DF13 /* ControllerDisplayView.swift in Sources */,
 				7EF30DE12AC2B4920097FA24 /* EditEntriesController.swift in Sources */,
+				7E5660852AD4D41C00767E08 /* NSRecursiveLock+Helpers.swift in Sources */,
 				7EF30DE22AC2B4920097FA24 /* NSRange+Helpers.swift in Sources */,
 				7EF30DE32AC2B4920097FA24 /* DateRangePane.swift in Sources */,
 				7EF30DE42AC2B4920097FA24 /* PasteboardView.swift in Sources */,
 				7EF30DE52AC2B4920097FA24 /* SortedMap.swift in Sources */,
 				7EF30DE62AC2B4920097FA24 /* PtnViewController.swift in Sources */,
 				7EF30DE72AC2B4920097FA24 /* NSView+Helpers.swift in Sources */,
+				7E5660822AD4D28E00767E08 /* UsageTracking.swift in Sources */,
 				7EF30DE82AC2B4920097FA24 /* ButtonWithClosure.swift in Sources */,
 				7EF30DE92AC2B4920097FA24 /* DayStartController.swift in Sources */,
 				7EF30DEA2AC2B4920097FA24 /* PrefsViewController.swift in Sources */,
@@ -1436,6 +1464,7 @@
 				7EF30DFF2AC2B4920097FA24 /* NSButton+Helpers.swift in Sources */,
 				7EF30E002AC2B4920097FA24 /* DayEndReportController.swift in Sources */,
 				7EF30E012AC2B4920097FA24 /* Atomic.swift in Sources */,
+				7E5660842AD4D41800767E08 /* UUID+Helpers.swift in Sources */,
 				7EF30E022AC2B4920097FA24 /* NSStackView+Helpers.swift in Sources */,
 				7EF30E032AC2B4920097FA24 /* Model.xcdatamodeld in Sources */,
 				7EF30E042AC2B4920097FA24 /* String+Helpers.swift in Sources */,
@@ -1478,6 +1507,7 @@
 				7EF30E282AC2B4920097FA24 /* Task+CoreDataClass.swift in Sources */,
 				7EF30E292AC2B4920097FA24 /* PushableString.swift in Sources */,
 				7EF30E2A2AC2B4920097FA24 /* NSTableView+Helpers.swift in Sources */,
+				7E5660812AD4AAE700767E08 /* HrefButton.swift in Sources */,
 				7EF30E2B2AC2B4920097FA24 /* EntriesTreeController.swift in Sources */,
 				7EF30E2C2AC2B4920097FA24 /* EntriesTreeDataSource.swift in Sources */,
 				7EF30E2D2AC2B4920097FA24 /* Sorting.swift in Sources */,

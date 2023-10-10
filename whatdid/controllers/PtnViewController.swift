@@ -463,7 +463,7 @@ class PtnViewController: NSViewController {
     
     func showTutorial(forVersion prefsVersion: Int) {
         let tutorial = TutorialViewController(nibName: "TutorialViewController", bundle: nil)
-        let prefsView: (NSView, LifecycleHandler)?
+        let prefsView: (NSView, [LifecycleHandler])?
         if prefsVersion < 0 {
             let optionsGrid = NSGridView(numberOfColumns: 3, rows: 0)
             // Header
@@ -474,11 +474,23 @@ class PtnViewController: NSViewController {
             ])
             optionsGrid.row(at: 0).mergeCells(in: NSMakeRange(0, 3))
             // Launch-at-login row
-            let launchAtLoginCheckbox = LaunchAtLoginCheckbox()
+            Prefs.launchAtLogin = true
+            let launchAtLoginCheckbox = InitialPrefsCheckbox(pref: Prefs.$launchAtLogin)
             optionsGrid.addRow(with: [
                 NSTextField(labelWithString: "➤ "),
                 NSTextField(wrappingLabelWithString: "Launch Whatdid at login?"),
                 launchAtLoginCheckbox,
+            ])
+            // Analytics row
+            Prefs.analyticsEnabled = true
+            let privacyButton = HrefButton(title: "privacy policy", target: nil, action: nil)
+            privacyButton.toolTip = UsageTracking.PRIVACY_URL
+            privacyButton.controlSize = .small
+            let allowAnalytics = InitialPrefsCheckbox(pref: Prefs.$analyticsEnabled)
+            optionsGrid.addRow(with: [
+                NSTextField(labelWithString: "➤ "),
+                NSTextField(wrappingLabelWithString: "Send anonymized usage data?"),
+                NSStackView(orientation: .horizontal, allowAnalytics, privacyButton),
             ])
             // Shortcut recorder. For some reason, the recorder widget doesn't like to be in
             // a cell by itself; we need to wrap it in a view first.
@@ -492,7 +504,7 @@ class PtnViewController: NSViewController {
                 boundsAdjuster,
             ])
             // Put them together
-            prefsView = (optionsGrid, launchAtLoginCheckbox)
+            prefsView = (optionsGrid, [allowAnalytics, launchAtLoginCheckbox])
         } else {
             prefsView = nil
         }
@@ -506,7 +518,7 @@ class PtnViewController: NSViewController {
                 pointingTo: view,
                 atEdge: .minX,
                 extraView: prefsView?.0,
-                lifecycleHandler: prefsView?.1),
+                lifecycleHandlers: prefsView?.1 ?? []),
             .init(
                 title: "Projects",
                 text: [
@@ -567,19 +579,21 @@ class PtnViewController: NSViewController {
         tutorial.show()
     }
     
-    class LaunchAtLoginCheckbox: ButtonWithClosure, LifecycleHandler {
+    class InitialPrefsCheckbox: ButtonWithClosure, LifecycleHandler {
+        var pref: PrefsListeners<Bool>?
         private var listenHandler: PrefsListenHandler? = nil
         
-        convenience init() {
+        convenience init(pref: PrefsListeners<Bool>) {
             self.init(checkboxWithTitle: "", target: nil, action: nil)
             onPress {button in
-                Prefs.launchAtLogin = (button.state == .on)
+                self.pref?.setValue(to: button.state == .on)
             }
+            self.pref = pref
         }
         
         func onAppear() {
             onDisappear()
-            listenHandler = Prefs.$launchAtLogin.addListener {launchAtLogin in
+            listenHandler = pref?.addListener {launchAtLogin in
                 self.state = launchAtLogin ? .on : .off
             }
         }

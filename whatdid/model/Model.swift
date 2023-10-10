@@ -335,6 +335,76 @@ class Model {
         return results
     }
     
+    func createUsage(action: UsageAction, andThen handler: @escaping (UsageDatumDTO) -> Void) {
+        container.performBackgroundTask({context in
+            let datum = UsageDatum(context: context)
+            datum.trackerId = Prefs.trackerId
+            datum.action = action.rawValue
+            datum.timestamp = DefaultScheduler.instance.now
+            datum.datumId = UUID()
+            
+            do {
+                try context.save()
+            } catch {
+                wdlog(.error, "Couldn't save analytics tracking datum: %s %s at %s",
+                      datum.trackerId?.uuidString ?? "<unset>",
+                      datum.action ?? "<unknown action>",
+                      datum.timestamp?.utcTimestamp ?? "<unset date>"
+                )
+                return
+            }
+            guard let dto = UsageDatumDTO(from: datum) else {
+                wdlog(.error, "couldn't construct usage DTO")
+                return
+            }
+            DispatchQueue.global(qos: .background).async {
+                handler(dto)
+            }
+        })
+    }
+    
+    func recordAnalyticSubmitted(_ datum: UsageDatumDTO) {
+        container.performBackgroundTask{context in
+            func id(for a: UsageDatum) -> String {
+                a.datumId?.uuidString ?? "<unknown>"
+            }
+            if let latest = context.object(with: datum.objectID) as? UsageDatum {
+                if latest.sendSuccess == nil {
+                    latest.sendSuccess = DefaultScheduler.instance.now
+                    do {
+                        try context.save()
+                        wdlog(.info, "usage datum recorded: %@", id(for: latest))
+                    } catch {
+                        wdlog(.error, "couldn't save usage datum to record its send success: %@", id(for: latest))
+                    }
+                } else {
+                    wdlog(.warn, "usage datum has already been marked as submitted: %@", id(for: latest))
+                }
+            } else {
+                wdlog(.error, "couldn't re-fetch analytic datum to mark it as submitted: %@", datum.datumId.uuidString)
+            }
+        }
+    }
+    
+    func getUnsentUsages(andThen handler: @escaping ([UsageDatumDTO]) -> Void) {
+        container.performBackgroundTask {context in
+            let fetch = NSFetchRequest<UsageDatum>(entityName: "UsageDatum")
+            fetch.fetchLimit = 2
+            fetch.predicate = NSPredicate(format: "%K == nil", "sendSuccess")
+            let data: [UsageDatum]
+            do {
+                data = try fetch.execute()
+            } catch {
+                wdlog(.error, "couldn't fetch unsent usage data")
+                return
+            }
+            let dtos = data.compactMap(UsageDatumDTO.init(from:))
+            DispatchQueue.global(qos: .background).async {
+                handler(dtos)
+            }
+        }
+    }
+    
     func createNewSession() -> Session {
         var result: Session?
         container.viewContext.performAndWait {
@@ -600,4 +670,8 @@ class Model {
             completed != nil
         }
     }
+}
+
+enum UsageAction: String {
+    case ManualOpen;
 }

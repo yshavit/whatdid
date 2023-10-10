@@ -8,9 +8,10 @@
 
 import Cocoa
 
-class PrefsFeedbackPaneController: NSViewController {
+class PrefsFeedbackPaneController: NSViewController, NSTextFieldDelegate {
     
     @IBOutlet var feedbackButton: NSButton!
+    @IBOutlet weak var privacyUrl: HrefButton!
     
     override func viewDidLoad() {
         if let versionQuery = Version.pretty.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
@@ -20,6 +21,13 @@ class PrefsFeedbackPaneController: NSViewController {
         } else {
             feedbackButton.removeFromSuperview()
         }
+        privacyUrl.toolTip = UsageTracking.PRIVACY_URL
+    }
+
+    @IBInspectable
+    dynamic var allowAnalytics: Bool {
+        get { Prefs.analyticsEnabled }
+        set(value) { Prefs.analyticsEnabled = value}
     }
     
     @IBAction func showTutorial(_ sender: Any) {
