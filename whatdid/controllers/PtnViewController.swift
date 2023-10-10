@@ -331,6 +331,18 @@ class PtnViewController: NSViewController {
         }
     }
     
+    @IBAction func handleGoToReport(_ sender: Any) {
+        // hacky approach for now!
+        DefaultScheduler.instance.schedule("PTN -> Report: close PTN", after: 0) {
+            self.closeWindowAsync(andThen: {
+                DefaultScheduler.instance.schedule("PTN -> Report: open Report", after: 0) {
+                    AppDelegate.instance.mainMenu.open(.dailyEnd, reason: .manual)
+                }
+            })
+        }
+    }
+    
+    
     private func skipSession() {
         model.setLastEntryDateToNow()
         self.closeWindowAsync()
