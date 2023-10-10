@@ -31,7 +31,7 @@
                     <subviews>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="v8p-Bz-hcj" userLabel="Header text">
                             <rect key="frame" x="-2" y="0.0" width="303" height="28"/>
-                            <textFieldCell key="cell" title="What have you been doing the last {DURATION} (since {TIME})?" id="MHs-V5-IyC">
+                            <textFieldCell key="cell" title="What have you done the last {DURATION} (since {TIME})?" id="MHs-V5-IyC">
                                 <font key="font" metaFont="label" size="11"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
