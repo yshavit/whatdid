@@ -68,6 +68,8 @@
 		7E5660852AD4D41C00767E08 /* NSRecursiveLock+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE1CDD32AD12CA200AEB55A /* NSRecursiveLock+Helpers.swift */; };
 		7E5660882AD4D98700767E08 /* UsageAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5660872AD4D98700767E08 /* UsageAction.swift */; };
 		7E5660892AD4D98700767E08 /* UsageAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5660872AD4D98700767E08 /* UsageAction.swift */; };
+		7E56608B2AD4DB8900767E08 /* UsageTrackingJsonDatum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E56608A2AD4DB8900767E08 /* UsageTrackingJsonDatum.swift */; };
+		7E56608C2AD4DB8900767E08 /* UsageTrackingJsonDatum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E56608A2AD4DB8900767E08 /* UsageTrackingJsonDatum.swift */; };
 		7E579F702503E2920055D9F6 /* SystemClockSchedulerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */; };
 		7E5EFA272619B14A00E7834D /* NSTextField+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */; };
 		7E63051E2846C71700565880 /* SegmentedTimelineViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E63051D2846C71700565880 /* SegmentedTimelineViewTest.swift */; };
@@ -381,6 +383,7 @@
 		7E5660772AD48C0C00767E08 /* PrefsAboutPaneController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrefsAboutPaneController.xib; sourceTree = "<group>"; };
 		7E56607F2AD4AAE700767E08 /* HrefButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HrefButton.swift; sourceTree = "<group>"; };
 		7E5660872AD4D98700767E08 /* UsageAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageAction.swift; sourceTree = "<group>"; };
+		7E56608A2AD4DB8900767E08 /* UsageTrackingJsonDatum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageTrackingJsonDatum.swift; sourceTree = "<group>"; };
 		7E579F6F2503E2910055D9F6 /* SystemClockSchedulerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClockSchedulerTest.swift; sourceTree = "<group>"; };
 		7E5EFA262619B14A00E7834D /* NSTextField+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextField+Helpers.swift"; sourceTree = "<group>"; };
 		7E63051D2846C71700565880 /* SegmentedTimelineViewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedTimelineViewTest.swift; sourceTree = "<group>"; };
@@ -630,6 +633,7 @@
 			children = (
 				7EE1CDC52AD0FACF00AEB55A /* UsageTracking.swift */,
 				7E5660872AD4D98700767E08 /* UsageAction.swift */,
+				7E56608A2AD4DB8900767E08 /* UsageTrackingJsonDatum.swift */,
 			);
 			path = usagetracking;
 			sourceTree = "<group>";
@@ -1344,6 +1348,7 @@
 				7E970D6B24DA850D00F634AB /* UiTestWindow.swift in Sources */,
 				7E6C98D22503EF4900A712EB /* DelegatingScheduler.swift in Sources */,
 				7E7D006D262BFC08002D4CB5 /* ConfirmViewController.swift in Sources */,
+				7E56608B2AD4DB8900767E08 /* UsageTrackingJsonDatum.swift in Sources */,
 				7EB57AA825187549009E85F5 /* NSApperance+Helpers.swift in Sources */,
 				7E1EE6622612EEF1003314EE /* CloseConfirmer.swift in Sources */,
 				7E947C2C2779AF6F00E882BE /* DateRangePicker.swift in Sources */,
@@ -1511,6 +1516,7 @@
 				7EF30E1E2AC2B4920097FA24 /* DelegatingScheduler.swift in Sources */,
 				7EF30E1F2AC2B4920097FA24 /* ConfirmViewController.swift in Sources */,
 				7EF30E202AC2B4920097FA24 /* NSApperance+Helpers.swift in Sources */,
+				7E56608C2AD4DB8900767E08 /* UsageTrackingJsonDatum.swift in Sources */,
 				7EF30E212AC2B4920097FA24 /* CloseConfirmer.swift in Sources */,
 				7EF30E222AC2B4920097FA24 /* DateRangePicker.swift in Sources */,
 				7EF30E232AC2B4920097FA24 /* TimeUtil.swift in Sources */,

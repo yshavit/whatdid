@@ -73,7 +73,7 @@ class UsageTracking {
         var req = URLRequest(url: UsageTracking.SEND_URL)
         req.httpMethod = "POST"
         
-        let dataDTOs = data.map(UsageDatumToJson.init(from:))
+        let dataDTOs = data.map(UsageTrackingJsonDatum.init(from:))
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .millisecondsSince1970
         do {
@@ -134,28 +134,5 @@ class UsageTracking {
             self.immediatelySend(data: unsents)
             self.scheduleDeferredSend() // There may be another batch!
         }
-    }
-}
-
-fileprivate struct UsageDatumToJson: Codable {
-    let datumId: String
-    let trackerId: String
-    let action: String
-    let epochMillis: Int64
-    
-    enum CodingKeys: String, CodingKey {
-        case datumId = "datum_id"
-        case trackerId = "tracker_id"
-        case action
-        case epochMillis = "epoch_millis"
-    }
-}
-
-extension UsageDatumToJson {
-    init(from dto: UsageDatumDTO) {
-        self.datumId = dto.datumId.uuidString
-        self.trackerId = dto.trackerId.uuidString
-        self.action = dto.action
-        self.epochMillis = Int64(dto.timestamp.timeIntervalSince1970) * 1000
     }
 }
