@@ -12,4 +12,5 @@ enum UsageAction: String {
     case OpenSettingsPane;
     case OpenReportInWindow;
     case OpenReportFromEntriesForm;
+    case GlobalShortcut;
 }

@@ -100,7 +100,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate, NSMenuDe
         AppDelegate.DEBUG_DATE_FORMATTER.timeZone = DefaultScheduler.instance.timeZone
         
         // Set up the keyboard shortcut
-        KeyboardShortcuts.onKeyDown(for: .grabFocus, action: self.mainMenu.focus)
+        KeyboardShortcuts.onKeyDown(for: .grabFocus) {
+            UsageTracking.recordAction(.GlobalShortcut)
+            self.mainMenu.focus()
+        }
         // Set up the lanch-on-login functionality, if needed
         setUpLauncher()
         // Kick off the various scheduled popups (PTN, day start, day end).
