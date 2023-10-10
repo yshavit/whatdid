@@ -27,11 +27,11 @@
             <rect key="frame" x="0.0" y="0.0" width="873" height="295"/>
             <subviews>
                 <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xh1-hp-9GB" userLabel="Header stack">
-                    <rect key="frame" x="334" y="181" width="534" height="110"/>
+                    <rect key="frame" x="334" y="263" width="534" height="28"/>
                     <subviews>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="v8p-Bz-hcj" userLabel="Header text">
-                            <rect key="frame" x="-2" y="82" width="326" height="28"/>
-                            <textFieldCell key="cell" title="What have you been working on for the last {DURATION} (since {TIME})?" id="MHs-V5-IyC">
+                            <rect key="frame" x="-2" y="0.0" width="303" height="28"/>
+                            <textFieldCell key="cell" title="What have you been doing the last {DURATION} (since {TIME})?" id="MHs-V5-IyC">
                                 <font key="font" metaFont="label" size="11"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -39,10 +39,10 @@
                             <accessibility identifier="durationheader"/>
                         </textField>
                         <customView verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="maZ-n4-VKP" userLabel="Spacer">
-                            <rect key="frame" x="328" y="60" width="50" height="50"/>
+                            <rect key="frame" x="305" y="4" width="50" height="24"/>
                         </customView>
                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="HC6-YQ-v0e" userLabel="Snooze buttonopts">
-                            <rect key="frame" x="384" y="96" width="130" height="14"/>
+                            <rect key="frame" x="361" y="14" width="130" height="14"/>
                             <subviews>
                                 <button identifier="snoozebutton" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yjZ-yA-5CH" userLabel="Snooze button">
                                     <rect key="frame" x="0.0" y="-1" width="130" height="15"/>
@@ -100,8 +100,18 @@
                                 <constraint firstItem="yjZ-yA-5CH" firstAttribute="width" secondItem="HC6-YQ-v0e" secondAttribute="width" id="t7J-TH-NsM"/>
                             </constraints>
                         </customView>
+                        <button verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="HsY-gH-qvv" userLabel="Go To Report">
+                            <rect key="frame" x="497" y="7.5" width="17.5" height="13"/>
+                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="chart.bar.xaxis" catalog="system" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyUpOrDown" inset="2" id="Oxc-dh-V30">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="handleGoToReport:" target="-2" id="La3-VQ-7OC"/>
+                            </connections>
+                        </button>
                         <button verticalHuggingPriority="750" horizontalCompressionResistancePriority="150" verticalCompressionResistancePriority="150" translatesAutoresizingMaskIntoConstraints="NO" id="tkS-gq-Cbs" userLabel="Prefs Button">
-                            <rect key="frame" x="520" y="96" width="14" height="14"/>
+                            <rect key="frame" x="520" y="14" width="14" height="14"/>
                             <constraints>
                                 <constraint firstAttribute="width" secondItem="tkS-gq-Cbs" secondAttribute="height" multiplier="1:1" id="8lS-9s-VYO"/>
                             </constraints>
@@ -118,8 +128,10 @@
                     <edgeInsets key="edgeInsets" left="0.0" right="0.0" top="0.0" bottom="4"/>
                     <constraints>
                         <constraint firstItem="tkS-gq-Cbs" firstAttribute="height" secondItem="HC6-YQ-v0e" secondAttribute="height" id="4OU-FP-Fbv"/>
+                        <constraint firstItem="HsY-gH-qvv" firstAttribute="centerY" secondItem="Xh1-hp-9GB" secondAttribute="centerY" id="eRj-i6-TfV"/>
                     </constraints>
                     <visibilityPriorities>
+                        <integer value="1000"/>
                         <integer value="1000"/>
                         <integer value="1000"/>
                         <integer value="1000"/>
@@ -130,20 +142,21 @@
                         <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
                     </customSpacing>
                 </stackView>
                 <stackView identifier="ptnstack" distribution="fill" orientation="horizontal" alignment="top" spacing="1" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BPo-6t-Flu" userLabel="PTN Stack">
-                    <rect key="frame" x="329" y="153" width="544" height="28"/>
+                    <rect key="frame" x="329" y="153" width="544" height="110"/>
                     <subviews>
                         <customView identifier="pcombo" verticalHuggingPriority="750" verticalCompressionResistancePriority="850" translatesAutoresizingMaskIntoConstraints="NO" id="4Lo-U3-YED" userLabel="Project combo" customClass="AutoCompletingField" customModule="whatdid" customModuleProvider="target">
-                            <rect key="frame" x="5" y="2" width="120" height="21"/>
+                            <rect key="frame" x="5" y="84" width="120" height="21"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="21" placeholder="YES" id="AzF-nE-4ig"/>
                                 <constraint firstAttribute="width" constant="120" id="pXy-Lw-dxJ"/>
                             </constraints>
                         </customView>
                         <textField identifier="ptdiv" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xr6-Zi-WMW" userLabel="PT divider">
-                            <rect key="frame" x="124" y="7" width="11" height="16"/>
+                            <rect key="frame" x="124" y="89" width="11" height="16"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="7" id="ziZ-bF-mWC"/>
                             </constraints>
@@ -154,13 +167,13 @@
                             </textFieldCell>
                         </textField>
                         <customView identifier="tcombo" verticalHuggingPriority="750" verticalCompressionResistancePriority="850" translatesAutoresizingMaskIntoConstraints="NO" id="sxc-2C-mp9" userLabel="Task combo" customClass="AutoCompletingField" customModule="whatdid" customModuleProvider="target">
-                            <rect key="frame" x="134" y="2" width="156" height="21"/>
+                            <rect key="frame" x="134" y="84" width="156" height="21"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="21" placeholder="YES" id="cLS-DE-x90"/>
                             </constraints>
                         </customView>
                         <textField identifier="tndiv" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CYa-f2-vpT" userLabel="TN divider">
-                            <rect key="frame" x="289" y="7" width="11" height="16"/>
+                            <rect key="frame" x="289" y="89" width="11" height="16"/>
                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title=":" id="Udq-Yr-mqt">
                                 <font key="font" metaFont="system"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -168,7 +181,7 @@
                             </textFieldCell>
                         </textField>
                         <textField identifier="nfield" verticalHuggingPriority="750" verticalCompressionResistancePriority="850" translatesAutoresizingMaskIntoConstraints="NO" id="6A0-cK-Vnh" userLabel="Notes text" customClass="WhatdidTextField" customModule="whatdid" customModuleProvider="target">
-                            <rect key="frame" x="299" y="2" width="240" height="21"/>
+                            <rect key="frame" x="299" y="84" width="240" height="21"/>
                             <textFieldCell key="cell" selectable="YES" editable="YES" borderStyle="bezel" placeholderString="notes" drawsBackground="YES" id="iON-DT-Jnl">
                                 <font key="font" metaFont="system"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -249,5 +262,6 @@
     </objects>
     <resources>
         <image name="NSAdvanced" width="32" height="32"/>
+        <image name="chart.bar.xaxis" catalog="system" width="17" height="13"/>
     </resources>
 </document>

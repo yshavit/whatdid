@@ -57,7 +57,7 @@ class PrefsViewController: NSViewController {
     }
     
     override func viewDidAppear() {
-        UsageTracking.recordAction(.SettingsPaneOpen)
+        UsageTracking.recordAction(.OpenSettingsPane)
     }
     
     override func viewWillAppear() {

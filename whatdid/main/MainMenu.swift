@@ -187,10 +187,10 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
             let showWhat: MainMenu.WindowContents
             if NSEvent.modifierFlags.contains(.option) {
                 showWhat = WindowContents.dailyEnd
-                UsageTracking.recordAction(.ManualReportOpen)
+                UsageTracking.recordAction(.OpenReportManually)
             } else {
                 showWhat = WindowContents.ptn
-                UsageTracking.recordAction(.ManualOpen)
+                UsageTracking.recordAction(.OpenEntryFormManually)
             }
             opener.open(showWhat, reason: .manual)
         }

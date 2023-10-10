@@ -55,7 +55,7 @@ class LargeReportController: NSWindowController, NSWindowDelegate {
         AppDelegate.instance.windowOpened(self)
         super.showWindow(sender)
         dateRangePicker.prepareToShow()
-        UsageTracking.recordAction(.OpenInWindow)
+        UsageTracking.recordAction(.OpenReportInWindow)
     }
     
     private func setControlsEnabled(_ enabled: Bool) {

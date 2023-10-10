@@ -7,9 +7,10 @@ extension NSViewController {
     
     /// Closes the window that this controller is in. This happens from a `DispatchQueue.main.async` call, which
     /// you need in order for things to work right (I forget what, exactly).
-    func closeWindowAsync() {
+    func closeWindowAsync(andThen postHook: (@escaping () -> Void) = {}) {
         DispatchQueue.main.async {
             self.view.window?.windowController?.close()
+            postHook()
         }
     }
     
