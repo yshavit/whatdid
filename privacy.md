@@ -7,7 +7,6 @@ title: Whatdid Privacy Policy
 ## tl;dr:
 
 - All data is anonymized.
-- I don't track any automated actions the app takes.
 - I will _never_ track specific content like your projects, tasks, or notes.
 - I will never sell or give away your data.
 - You can opt out any time time, including having your data deleted on my server.
@@ -23,7 +22,7 @@ If you opt into usage:
 - All tracking is identified by a random, unique number that your computer generates the first time Whatdid runs. I cannot track this back to any individual or computer (and I don't want to try).
 - I will never, ever, ever sell or give away the data I track. (Frankly, I don't think there'll even be anything that's worth any money — but even if there is, I won't do it.)
 - I only track "what you used"-style events, like clicking on UI elements. I will never track the content of anything you type.
-- You can ask for your data at any time, or ask for it to be deleted.
+- You can ask for your data at any time, or ask for it to be deleted. See below for how.
 - Althugh I don't track IP addresses today, I reserve the right to do so if I need to for security reasons (for example, to look into someone DDoSing me).
   If I do, any such logs will be short-lived, and I will delete them as soon as my investigation is complete.
 
@@ -31,17 +30,18 @@ In short, none of the data I collect will be sensitive.
 
 ## Accessing or deleting your data
 
-To see your data, or request that I delete it, please fill out the [feedback form][feedback]. This is a Google Sheets form, but you don't need to be logged into a Google account to use it (and if you are logged in, the form doesn't record your login or email address). Simply include your request and your tracking UUID (see below). If you are requesting to see your data, please also include an email address to send it to.
+To see your data, or request that I delete it, please fill out the [feedback form][feedback]. This is a Google Sheets form, but you don't need to be logged into a Google account to use it.
+(Even if you are logged in, the form doesn't record your login or email address). Simply include your request and your tracking UUID as described below. If you are requesting to see your data,
+please also include an email address to send it to.
 
 To get your UUID:
 
 1. Open up the Terminal app by opening Spotlight, and searching for Terminal.
 2. Type:
-
    ```
    defaults read com.yuvalshavit.whatdid whatdid.analyticsTrackerId
    ```
-   (and then type enter)
+   (and then hit enter)
 
 [feedback]: https://docs.google.com/forms/d/e/1FAIpQLSdW4IfggikujQDN_emQU3_TL3aSOUK3At2HPbSYcc6ryHYzzQ/viewform
 
@@ -49,15 +49,13 @@ To get your UUID:
 
 You only need to read this section if you want a peek under the hood, at the code itself. This section is meant as a starting point to help you audit the code.
 
-All tracking is done via a UUID your computer randomly generates. You can find this UUID by opening up a Terminal and running:
+All tracking is done via a UUID your computer randomly generates. You can find this UUID by opening up a Terminal and running the `defaults` command above. You can delete this by replacing
+`read` with `delete`, but Whatdid will create a new one the next time it starts up.
 
-    defaults read com.yuvalshavit.whatdid whatdid.analyticsTrackerId
+Virtually all handling of usage tracking is done by the [`UsageTracking`][gh:UsageTracking] class. (The only other bits are the two `analytics*` vars in [`Prefs`][gh:Prefs].) This class takes in events,
+records them to the local Core Data store, and then sends them to the Whatdid server.
 
-You can delete this by replacing `read` with `delete`, but Whatdid will create a new one the next time it starts up.
-
-Virtually all handling of usage tracking is done by the [`UsageTracking`][1] class. (The only other bits are the two `analytics*` vars in [`Prefs`][gh:Prefs].) This class takes in events, records them to the local Core Data store, and then sends them to the Whatdid server.
-
-The events are defined in [`UsageTrackingJsonDatum`] — this is the only data I ever send to the server. The event types are defined in [`UsageAction`][gh:UsageAction].
+The events are defined in [`UsageTrackingJsonDatum`][gh:UsageTrackingJsonDatum] — this is the only data I ever send to the server. The event types are defined in [`UsageAction`][gh:UsageAction].
 
 Every recorded event comes in via the `recordAction` call. You can [search the code][gh:search01] to see every place this gets invoked.
 
