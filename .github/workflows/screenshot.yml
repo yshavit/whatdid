@@ -19,6 +19,10 @@ jobs:
       if: false
       run: |
             sudo osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to true'
+    - name: Get screen resolution
+      run: |
+        printf '::notice title=resolution::%s\n' "$(system_profiler SPDisplaysDataType | grep Resolution | sed 's/.*: *//')"
+
     - name: Install xcparse
       run: brew install chargepoint/xcparse/xcparse
     - name: Save current time zone

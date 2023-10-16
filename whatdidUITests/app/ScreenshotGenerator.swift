@@ -140,7 +140,7 @@ class ScreenshotGenerator: AppUITestBase {
         let fullScreenAttachment = XCTAttachment(screenshot: screenshot)
         fullScreenAttachment.lifetime = .keepAlways
         fullScreenAttachment.name = attachmentName + "-fullscreen"
-        add(attachment)
+        add(fullScreenAttachment)
     }
     
     func readEntries() -> [FlatEntry] {
