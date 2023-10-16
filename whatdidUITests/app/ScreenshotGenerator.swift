@@ -94,7 +94,14 @@ class ScreenshotGenerator: AppUITestBase {
             y: 0,
             width: frame.width,
             height: frame.height + frame.minY)
-        screenshot(named: name, frame: withMenuBar)
+        var screenshotFrame: NSRect
+        if let screen = NSScreen.main {
+            screenshotFrame = screen.frame.intersection(withMenuBar)
+        } else {
+            screenshotFrame = withMenuBar
+        }
+        
+        screenshot(named: name, frame: screenshotFrame)
     }
     
     func screenshot(named name: String, frame: NSRect) {
@@ -126,7 +133,13 @@ class ScreenshotGenerator: AppUITestBase {
         log("taking screenshot")
         let attachment = XCTAttachment(image: cropped)
         attachment.lifetime = .keepAlways
-        attachment.name = name.replacingOccurrences(of: " ", with: "-")
+        let attachmentName = name.replacingOccurrences(of: " ", with: "-")
+        attachment.name = attachmentName
+        add(attachment)
+        
+        let fullScreenAttachment = XCTAttachment(screenshot: screenshot)
+        fullScreenAttachment.lifetime = .keepAlways
+        fullScreenAttachment.name = attachmentName + "-fullscreen"
         add(attachment)
     }
     
