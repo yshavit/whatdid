@@ -94,10 +94,17 @@ class ScreenshotGenerator: AppUITestBase {
             y: 0,
             width: frame.width,
             height: frame.height + frame.minY)
-        screenshot(named: name, frame: withMenuBar)
+        var screenshotFrame: NSRect
+        if let screen = NSScreen.main {
+            screenshotFrame = screen.frame.intersection(withMenuBar)
+        } else {
+            screenshotFrame = withMenuBar
+        }
+        
+        screenshot(named: name, frame: screenshotFrame)
     }
     
-    func screenshot(named name: String, frame: NSRect) {
+    func screenshot(named name: String, frame: NSRect?) {
         let screenshot = app.screenshot()
         let sourceFrame: NSRect
         if let scalingFactor = NSScreen.main?.backingScaleFactor {
@@ -127,6 +134,11 @@ class ScreenshotGenerator: AppUITestBase {
         let attachment = XCTAttachment(image: cropped)
         attachment.lifetime = .keepAlways
         attachment.name = name.replacingOccurrences(of: " ", with: "-")
+        add(attachment)
+        
+        let fullScreenAttachment = XCTAttachment(screenshot: screenshot)
+        fullScreenAttachment.lifetime = .keepAlways
+        fullScreenAttachment.name = attachment.name + "-fullscreen"
         add(attachment)
     }
     
