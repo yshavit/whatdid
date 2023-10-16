@@ -253,7 +253,10 @@ class MainMenu: NSWindowController, NSWindowDelegate, NSMenuDelegate, PtnViewDel
             wdlog(.warn, "couldn't resolve screen to open on")
             return
         }
-        let xPosScreen = screenToOpenOn.frame.maxX - window.frame.width
+        let xPosScreen = min(
+            buttonWindow.frame.minX, // try to align to the status button, but...
+            screenToOpenOn.frame.maxX - window.frame.width // ...make sure it doesn't fall off the edge of the screen
+        )
         let posScreen = NSPoint(x: xPosScreen, y: screenToOpenOn.visibleFrame.maxY)
         window.setFrameTopLeftPoint(posScreen)
     }
