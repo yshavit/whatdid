@@ -88,7 +88,7 @@ class ScreenshotGenerator: AppUITestBase {
     func screenshot(named name: String, of element: XCUIElement) {
         // Start with the frame of the element we want to capture. Then, add 25px on each side. Then, add the menu bar.
         let padding = 25.0;
-        let frame = element.frame.insetBy(dx: -padding, dy: -padding)
+        let frame = element.frame.insetBy(dx: -(padding * 2), dy: -padding)
         let withMenuBar = NSRect(
             x: frame.minX,
             y: 0,
