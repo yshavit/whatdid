@@ -19,10 +19,21 @@ jobs:
       if: false
       run: |
             sudo osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to true'
-    - name: Get screen resolution
+    - name: Initial screen resolution
       run: |
-        printf '::notice title=resolution::%s\n' "$(system_profiler SPDisplaysDataType | grep Resolution | sed 's/.*: *//')"
-
+        printf '::notice title=initial resolution::%s\n' "$(system_profiler SPDisplaysDataType | grep Resolution | sed 's/.*: *//')"
+    - name: "displayplacer: tap"
+      run: brew tap jakehilborn/jakehilborn
+    - name: "displayplacer: install"
+      run: brew install displayplacer
+    - name: "displayplacer: set resolution"
+      run:
+        set -euo pipefail
+        screen_id="$(displayplacer list | grep 'Contextual screen id' | sed 's/.*: *//')"
+        displayplacer "id:$screen_id res:1280x800 scaling:on origin:(0,0) degree:0"
+    - name: Confirm screen resolution
+      run: |
+        printf '::notice title=used resolution::%s\n' "$(system_profiler SPDisplaysDataType | grep Resolution | sed 's/.*: *//')"
     - name: Install xcparse
       run: brew install chargepoint/xcparse/xcparse
     - name: Save current time zone
