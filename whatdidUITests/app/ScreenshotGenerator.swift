@@ -100,12 +100,21 @@ class ScreenshotGenerator: AppUITestBase {
         } else {
             screenshotFrame = withMenuBar
         }
+        let cursorPos = element.coordinate(withNormalizedOffset: .zero)
+            .withOffset(CGVector(dx: frame.width - 5, dy: frame.height - 2.5))
         
-        screenshot(named: name, frame: screenshotFrame)
+        screenshot(named: name, frame: screenshotFrame, withCursorAt: cursorPos)
     }
     
-    func screenshot(named name: String, frame: NSRect) {
+    func screenshot(named name: String, frame: NSRect, withCursorAt cursorPos: XCUICoordinate) {
+        app.windows["UI Test Window"].buttons.matching(identifier: XCUIIdentifierMinimizeWindow).firstMatch.click()
+        cursorPos.hover()
+        defer {
+            ensureUiHooksWindowVisible()
+        }
+        
         let screenshot = app.screenshot()
+        
         let sourceFrame: NSRect
         if let scalingFactor = NSScreen.main?.backingScaleFactor {
             // screenshot.image is the whole screen, but scaled. So, divide it by scalingFactor

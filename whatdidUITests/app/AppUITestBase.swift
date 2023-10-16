@@ -53,7 +53,6 @@ class AppUITestBase: UITestBase {
     }
     
     override func uiTearDown() {
-        activate()
         let logs = app.windows["UI Test Window"].textViews["uitestlogstream"].stringValue
         let attachment = XCTAttachment(string: logs)
         attachment.name = "logs for \(self.description)"
@@ -224,6 +223,10 @@ class AppUITestBase: UITestBase {
             return nil
         }
         return WindowType.byTitle[openWindow.title]
+    }
+    
+    func ensureUiHooksWindowVisible() {
+        let _ = uiHooksWindow
     }
     
     var animationFactor: Double {
