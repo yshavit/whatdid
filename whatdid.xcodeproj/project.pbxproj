@@ -416,7 +416,7 @@
 		7E8443EA28D7A2D700D9694A /* ProjectTaskFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectTaskFinder.swift; sourceTree = "<group>"; };
 		7E88CC8D261EB5A900968F64 /* AnimationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationHelper.swift; sourceTree = "<group>"; };
 		7E88F5A92529AB46002B2F2E /* Int+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Helpers.swift"; sourceTree = "<group>"; };
-		7E8C04DA23714F0700A0C3A6 /* whatdid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = whatdid.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7E8C04DA23714F0700A0C3A6 /* Whatdid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Whatdid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E8C04DD23714F0700A0C3A6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7E8C04DF23714F0800A0C3A6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7E8C04E223714F0800A0C3A6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -486,7 +486,7 @@
 		7EEF62D326195C3800528000 /* DailyReportTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyReportTest.swift; sourceTree = "<group>"; };
 		7EEF62E1261964C700528000 /* PrefsUITest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsUITest.swift; sourceTree = "<group>"; };
 		7EEF62EB2619660600528000 /* LongSessionPromptTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongSessionPromptTest.swift; sourceTree = "<group>"; };
-		7EF30E462AC2B4920097FA24 /* whatdid-app-store.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "whatdid-app-store.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7EF30E462AC2B4920097FA24 /* Whatdid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Whatdid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EF58F8A2580F180002F9604 /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
 		7EF58F8B2580F180002F9604 /* TutorialViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TutorialViewController.xib; sourceTree = "<group>"; };
 		7EF58FA02584972F002F9604 /* UITestCommonConsts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestCommonConsts.swift; sourceTree = "<group>"; };
@@ -722,11 +722,11 @@
 		7E8C04DB23714F0700A0C3A6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7E8C04DA23714F0700A0C3A6 /* whatdid.app */,
+				7E8C04DA23714F0700A0C3A6 /* Whatdid.app */,
 				7E8C04EA23714F0800A0C3A6 /* whatdidTests.xctest */,
 				7E8C04F523714F0800A0C3A6 /* whatdidUITests.xctest */,
 				7E6FF19C252D71060071E58C /* WhatdidLauncher.app */,
-				7EF30E462AC2B4920097FA24 /* whatdid-app-store.app */,
+				7EF30E462AC2B4920097FA24 /* Whatdid.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1026,7 +1026,7 @@
 				7EB537DF279374B200265FA5 /* Sparkle */,
 			);
 			productName = whatdid;
-			productReference = 7E8C04DA23714F0700A0C3A6 /* whatdid.app */;
+			productReference = 7E8C04DA23714F0700A0C3A6 /* Whatdid.app */;
 			productType = "com.apple.product-type.application";
 		};
 		7E8C04E923714F0800A0C3A6 /* whatdidTests */ = {
@@ -1084,7 +1084,7 @@
 				7EF30DD02AC2B4920097FA24 /* KeyboardShortcuts */,
 			);
 			productName = whatdid;
-			productReference = 7EF30E462AC2B4920097FA24 /* whatdid-app-store.app */;
+			productReference = 7EF30E462AC2B4920097FA24 /* Whatdid.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1768,7 +1768,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.whatdid;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Whatdid;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
@@ -1792,7 +1792,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.whatdid;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Whatdid;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
@@ -1956,7 +1956,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.whatdid;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Whatdid;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
@@ -2019,7 +2019,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.whatdid;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Whatdid;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
@@ -2042,7 +2042,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.whatdid;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Whatdid;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
@@ -2066,7 +2066,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.whatdid;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Whatdid;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
