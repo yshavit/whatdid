@@ -27,7 +27,7 @@
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2020 Yuval Shavit. All rights reserved.</string>
+	<string>Copyright © 2020  - 2023 Yuval Shavit. All rights reserved.</string>
 	<key>NSMainNibFile</key>
 	<string>MainLauncher</string>
 	<key>NSPrincipalClass</key>

@@ -35,7 +35,7 @@ extension AppDelegate: NSApplicationDelegate {
             components.removeLast()
             components.removeLast()
             components.append("MacOS")
-            components.append("whatdid") //main app name
+            components.append("Whatdid") //main app name
 
             let newPath = NSString.path(withComponents: components)
             os_log(.info, "whatdid launcher about to launch: %@", newPath)
