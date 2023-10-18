@@ -487,7 +487,6 @@
 		7EEF62E1261964C700528000 /* PrefsUITest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsUITest.swift; sourceTree = "<group>"; };
 		7EEF62EB2619660600528000 /* LongSessionPromptTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongSessionPromptTest.swift; sourceTree = "<group>"; };
 		7EF30E462AC2B4920097FA24 /* whatdid-app-store.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "whatdid-app-store.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7EF30E472AC2B4920097FA24 /* whatdid copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "whatdid copy-Info.plist"; path = "/Users/yuval/repos/whatdid/whatdid copy-Info.plist"; sourceTree = "<absolute>"; };
 		7EF58F8A2580F180002F9604 /* TutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
 		7EF58F8B2580F180002F9604 /* TutorialViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TutorialViewController.xib; sourceTree = "<group>"; };
 		7EF58FA02584972F002F9604 /* UITestCommonConsts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestCommonConsts.swift; sourceTree = "<group>"; };
@@ -717,7 +716,6 @@
 				7E8C04DB23714F0700A0C3A6 /* Products */,
 				7E2A11DA24C02D38009B18D2 /* Recovered References */,
 				7E6FF1C8252D745C0071E58C /* Frameworks */,
-				7EF30E472AC2B4920097FA24 /* whatdid copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
