@@ -1,7 +1,7 @@
 // whatdidTests?
 
 import Cocoa
-@testable import whatdid
+@testable import Whatdid
 
 /// A Scheduler that doesn't depend on any system clock.
 /// Instead, its tasks get enqueued until you manually run them via `runAllScheduled`. Useful for unit tests involving schedulers.

@@ -1,7 +1,7 @@
 // whatdidTests?
 
 import XCTest
-@testable import whatdid
+@testable import Whatdid
 
 func sendEvents(simulateTyping string: String, into view: NSView) {
     for event in createEvents(simulateTyping: string, into: view) {

@@ -1,7 +1,7 @@
 // whatdid?
 
 import XCTest
-@testable import whatdid
+@testable import Whatdid
 
 class ComponentUITests: XCTestCase {
 

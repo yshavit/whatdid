@@ -1,7 +1,7 @@
 // whatdidUITests?
 
 import XCTest
-@testable import whatdid
+@testable import Whatdid
 
 class DailyReportTest: AppUITestBase {
     let secondsIn24Hrs = 86400

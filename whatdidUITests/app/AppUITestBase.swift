@@ -1,7 +1,7 @@
 // whatdidUITests?
 
 import XCTest
-@testable import whatdid
+@testable import Whatdid
 
 class AppUITestBase: UITestBase {
     private static let SOME_TIME = Date()

@@ -1,6 +1,6 @@
 // whatdidUITests?
 import XCTest
-@testable import whatdid
+@testable import Whatdid
 
 class ScreenshotGenerator: AppUITestBase {
     

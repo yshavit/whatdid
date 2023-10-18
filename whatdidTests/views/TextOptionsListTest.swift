@@ -1,7 +1,7 @@
 // whatdidTests?
 
 import XCTest
-@testable import whatdid
+@testable import Whatdid
 
 class TextOptionsListTest: XCTestCase {
     
