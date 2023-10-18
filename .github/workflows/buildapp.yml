@@ -97,7 +97,7 @@ jobs:
       if: env.should_upload_app && env.should_notarize_app
       run: |
         cd build
-        ditto -c -k --keepParent whatdid*.app whatdid.zip
+        ditto -c -k --keepParent Whatdid*.app whatdid.zip
         mkdir logs
         mv DistributionSummary.plist Packaging.log logs/
 
@@ -112,8 +112,8 @@ jobs:
         fi
 
         pwd
-        xcrun stapler staple whatdid.app
-        spctl -vvv --assess --type exec ./whatdid.app
+        xcrun stapler staple Whatdid.app
+        spctl -vvv --assess --type exec ./Whatdid.app
       env:
         APPLE_ID: ${{ secrets.APPLE_ID }}
         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
