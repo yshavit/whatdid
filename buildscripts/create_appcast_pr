@@ -40,8 +40,17 @@ fi
 # Fetch the tag info, and from there the workflow run.
 tag_ref="refs/tags/$tag_name"
 msg "Looking for tag: $tag_ref"
+
+if echo "$tag_ref" | grep -qx '[a-zA-Z0-9/.]*'; then
+  tag_ref_pattern="$(echo "$tag_ref" | sed 's/\./\\./g')"
+else
+  err "tag_ref can only contain alphanums, slahes, and periods. This is so that I can know how to escape it for grep. Feel free to add more allowed chars (and escape appropriately) as needed."
+fi
+
 git fetch origin "$tag_ref"
-tag_sha="$(git ls-remote -t origin | grep -xF "$tag_ref" | cut -d$'\t' -f1)"
+# the awk line is basically "grep refs/tags/${tag_ref}$", except that we don't need to worry about $tag_ref containing
+# chars like . that are special in grep.
+tag_sha="$(git ls-remote -t origin | grep "\\b$tag_ref_pattern\$" | cut -d$'\t' -f1)"
 if [[ -z "$tag_sha" ]]; then
   err "Couldn't find git sha for tag \"$tag_sha\""
 fi
