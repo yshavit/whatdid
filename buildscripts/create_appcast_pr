@@ -41,7 +41,7 @@ fi
 tag_ref="refs/tags/$tag_name"
 msg "Looking for tag: $tag_ref"
 git fetch origin "$tag_ref"
-tag_sha="$(git ls-remote -t origin | grep -F "$tag_ref" | cut -d$'\t' -f1)"
+tag_sha="$(git ls-remote -t origin | grep -xF "$tag_ref" | cut -d$'\t' -f1)"
 if [[ -z "$tag_sha" ]]; then
   err "Couldn't find git sha for tag \"$tag_sha\""
 fi
