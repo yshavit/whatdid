@@ -4,7 +4,6 @@ import Cocoa
 
 class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
     
-    private static let deferCheckboxTitle = "Defer until deactivation"
     private static let showUiConstraintsPrefsKey = "NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints"
     /// Note that this is super wide. We'll also set the alpha to 0, which effectively hides the item.
     /// This lets us take screenshots of it without it getting in the way; and the wideness means that if we
@@ -15,25 +14,17 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
     let scheduler: ManualTickScheduler = DefaultScheduler.instance
     private let deferButton: NSButton
     private let autoincTimestamp: NSButton
-    private let setter: NSTextField
-    private let printUtc: NSTextField
-    private let printLocal: NSTextField
+    private let dateSetter: DateSetterView
     private let entriesField: NSTextField
     private let pasteboardButton: PasteboardView
     private let hideStatusItem: NSButton
     private let showConstraints: NSButton
     
     override init() {
-        setter = NSTextField(string: "0")
-        setter.isEditable = true
-        setter.setAccessibilityLabel("uitestwindowclock")
         
-        deferButton = NSButton(checkboxWithTitle: WhatdidControlHooks.deferCheckboxTitle, target: nil, action: nil)
+        deferButton = NSButton(checkboxWithTitle: DeferHandlerImpl.deferCheckboxTitle, target: nil, action: nil)
         autoincTimestamp = NSButton(checkboxWithTitle: "auto-increment on save", target: nil, action: nil)
         
-        printUtc = NSTextField(labelWithString: "")
-        printUtc.setAccessibilityLabel("mockclock_status")
-        printLocal = NSTextField(labelWithString: "")
         
         entriesField = NSTextField(string: "")
         entriesField.setAccessibilityLabel("uihook_flatentryjson")
@@ -51,11 +42,13 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
         showConstraints = NSButton(checkboxWithTitle: "Show UI constraints", target: nil, action: nil)
         showConstraints.state = Prefs.raw.bool(forKey: WhatdidControlHooks.showUiConstraintsPrefsKey) ? .on : .off
         
+        dateSetter = DateSetterView()
+        
         super.init()
         
-        updateDate()
-        scheduler.addListener(self.updateDateDisplays(to:))
-        setter.delegate = self
+        dateSetter.deferHandler = DeferHandlerImpl(button: deferButton)
+        dateSetter.updateDate()
+        
         
         entriesField.target = self
         pasteboardButton.action = {data in
@@ -65,12 +58,11 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
         AppDelegate.instance.model.addListener {
             self.populateJsonFlatEntryField()
             if self.autoincTimestamp.state == .on {
-                if let date = self.date {
-                    self.updateDateDisplays(to: date.addingTimeInterval(1))
+                if let date = self.dateSetter.date {
+                    self.dateSetter.updateDateDisplays(to: date.addingTimeInterval(1))
                 }
             }
         }
-        
         
         hideStatusItem.target = self
         hideStatusItem.action = #selector(self.toggleStatusItemVisibility(_:))
@@ -88,11 +80,9 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
             adder(div)
         }
         
-        adder(setter)
+        adder(dateSetter)
         adder(deferButton)
         adder(autoincTimestamp)
-        adder(printUtc)
-        adder(printLocal)
         let tzField = NSTextField(labelWithString: DefaultScheduler.instance.calendar.timeZone.identifier)
         tzField.setAccessibilityIdentifier("time_zone_identifier")
         let tzStack = NSStackView(orientation: .horizontal)
@@ -197,9 +187,9 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
             AppDelegate.instance.resetAll()
         }
         NSApp.activate(ignoringOtherApps: true)
-        if let window = setter.window {
+        if let window = dateSetter.window {
             window.makeKeyAndOrderFront(self)
-            window.makeFirstResponder(setter)
+            window.makeFirstResponder(dateSetter)
         }
     }
 
@@ -239,72 +229,33 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
         AppDelegate.instance.resetModel()
         nodes.reversed().forEach {AppDelegate.instance.model.add($0, andThen: {})}
     }
+}
+
+fileprivate class DeferHandlerImpl: DateSetterDeferHandler {
+    static let deferCheckboxTitle = "Defer until deactivation"
+    private let deferButton: NSButton
     
-    func controlTextDidEndEditing(_ obj: Notification) {
-        if NSApp.currentEvent?.modifierFlags.contains(.shift) ?? false {
-            let origValue = setter.stringValue
-            setter.isEnabled = false
-            var secondsRemaining = 3
-            Timer.scheduledTimer(withTimeInterval: TimeInterval(1), repeats: true, block: {timer in
-                if secondsRemaining == 0 {
-                    timer.invalidate()
-                    self.setter.isEnabled = true
-                    self.setter.stringValue = origValue
-                    self.updateDate()
-                } else {
-                    self.setter.stringValue = "Setting in \(secondsRemaining)..."
-                    secondsRemaining -= 1
-                }
-            }).fire()
-        }
-        if setter.isEnabled {
-            updateDate()
-        }
+    init(button: NSButton) {
+        self.deferButton = button
     }
     
-    func updateDateDisplays(to date: Date) {
-        setter.stringValue = "\(Int(date.timeIntervalSince1970))"
-        
-        let timeFormatter = ISO8601DateFormatter()
-        timeFormatter.timeZone = TimeZone.utc
-        printUtc.stringValue = timeFormatter.string(from: date)
-        
-        timeFormatter.timeZone = DefaultScheduler.instance.timeZone
-        printLocal.stringValue = timeFormatter.string(from: date)
-    }
-    
-    private var date: Date? {
-        if let dateAsInt = Int(setter.stringValue) {
-            return Date(timeIntervalSince1970: Double(dateAsInt))
-        } else {
+    func deferIfNeeded() -> DateSetterDeferredAction? {
+        switch deferButton.state {
+        case .on:
+            deferButton.title = "Deferral pending"
+            deferButton.isEnabled = false
+            return {
+                self.deferButton.title = DeferHandlerImpl.deferCheckboxTitle
+                self.deferButton.isEnabled = true
+                self.deferButton.state = .off
+            }
+        case .off:
+            return nil
+        case let x:
+            wdlog(.warn, "Unexpected state: %d", x.rawValue)
             return nil
         }
     }
-    
-    private func updateDate() {
-        if let date = date {
-            updateDateDisplays(to: date)
-            
-            switch deferButton.state {
-            case .on:
-                deferButton.title = "Deferral pending"
-                deferButton.isEnabled = false
-                AppDelegate.instance.whenNotActive {
-                    self.deferButton.title = WhatdidControlHooks.deferCheckboxTitle
-                    self.deferButton.isEnabled = true
-                    self.deferButton.state = .off
-                    self.scheduler.now = date
-                }
-            case .off:
-                scheduler.now = date
-            case let x:
-                wdlog(.warn, "Unexpected state: %d", x.rawValue)
-            }
-            
-        } else {
-            printUtc.stringValue = "ERROR"
-            printLocal.stringValue = "ERROR"
-        }
-    }
 }
+
 #endif

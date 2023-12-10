@@ -22,6 +22,7 @@
 		7E07C3B924D121770007FD23 /* DayEndReportController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E07C3B724D121770007FD23 /* DayEndReportController.xib */; };
 		7E087CCC2A1171180094F50B /* TextOptionsListTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E087CCB2A1171180094F50B /* TextOptionsListTest.swift */; };
 		7E1518B32B26535000D5E3EE /* UITestCommonConsts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF58FA02584972F002F9604 /* UITestCommonConsts.swift */; };
+		7E1518B52B2653CB00D5E3EE /* DateSetterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1518B42B2653CB00D5E3EE /* DateSetterView.swift */; };
 		7E16AF922AD35EF90047DF13 /* ControllerDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E16AF912AD35EF90047DF13 /* ControllerDisplayView.swift */; };
 		7E16AF932AD35EF90047DF13 /* ControllerDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E16AF912AD35EF90047DF13 /* ControllerDisplayView.swift */; };
 		7E1C2F5124CE43C40070D8CD /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1C2F5024CE43C40070D8CD /* Version.swift */; };
@@ -344,6 +345,7 @@
 		7E07C3B624D121770007FD23 /* DayEndReportController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayEndReportController.swift; sourceTree = "<group>"; };
 		7E07C3B724D121770007FD23 /* DayEndReportController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DayEndReportController.xib; sourceTree = "<group>"; };
 		7E087CCB2A1171180094F50B /* TextOptionsListTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextOptionsListTest.swift; sourceTree = "<group>"; };
+		7E1518B42B2653CB00D5E3EE /* DateSetterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSetterView.swift; sourceTree = "<group>"; };
 		7E16AF912AD35EF90047DF13 /* ControllerDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerDisplayView.swift; sourceTree = "<group>"; };
 		7E1C2F5024CE43C40070D8CD /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
 		7E1EE6612612EEF1003314EE /* CloseConfirmer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseConfirmer.swift; sourceTree = "<group>"; };
@@ -780,6 +782,7 @@
 				7EE4E39524E24A3F00552AAF /* WhatdidControlHooks.swift */,
 				7E8443E428D787EC00D9694A /* SampleData.swift */,
 				7E0562F8261AB07800F6CDD7 /* screenshot-entries.txt */,
+				7E1518B42B2653CB00D5E3EE /* DateSetterView.swift */,
 			);
 			path = ui_testhook;
 			sourceTree = "<group>";
@@ -1315,6 +1318,7 @@
 				7EE4E39A24E25C0200552AAF /* DefaultScheduler.swift in Sources */,
 				7E9C5EBE260C09AA00D839C4 /* Goal+CoreDataProperties.swift in Sources */,
 				7EE1CDD22AD10D6900AEB55A /* UUID+Helpers.swift in Sources */,
+				7E1518B52B2653CB00D5E3EE /* DateSetterView.swift in Sources */,
 				7E37A29124BFFFCB005BA1DF /* Project+CoreDataProperties.swift in Sources */,
 				7EF857A124E2420C00867832 /* Scheduler.swift in Sources */,
 				7EAD2A6D2629271800153A47 /* OSLogType+Helpers.swift in Sources */,
