@@ -7,32 +7,9 @@ class TimeUtil {
         // utility class
     }
     
-    private static let SEC_IN_HR = 60 * 60
-    private static let SEC_IN_DAY = TimeUtil.SEC_IN_HR * 24 // assume 24h day, since that's how people usually think
-    
-    static func daysHoursMinutes(for input: TimeInterval) -> String {
-        var interval = Int(input)
-        
-        var result = ""
-        
-        if interval < 0 {
-            result += "-"
-            interval *= -1
-        }
-        let days = interval / SEC_IN_DAY
-        if days > 0 {
-            result += "\(days)d "
-            interval -= (days * SEC_IN_DAY)
-        }
-        let hrs = interval / SEC_IN_HR
-        if hrs > 0 || days > 0 {
-            result += "\(hrs)h "
-            interval -= (hrs * SEC_IN_HR)
-        }
-        let minsDouble = Double(interval) / 60
-        result += "\(Int(minsDouble.rounded()))m"
-        
-        return result
+    static func daysHoursMinutes(for input: TimeInterval, showSeconds: Bool = false) -> String {
+        let breakdown = TimeIntervalBreakdown(from: input, roundedTo: showSeconds ? .seconds : .minutes)
+        return breakdown.description
     }
     
     static func sameDay(_ day1: Date, _ day2: Date) -> Bool {
@@ -161,4 +138,112 @@ func timed(_ action: String, _ block: () -> Void) {
     }
     #endif
     block()
+}
+
+func timeUnitsToInterval(_ units: [TimeUnit: Int]) -> TimeInterval {
+    return TimeInterval(
+        units
+            .map({(unit, value) in value * unit.toSeconds()})
+            .reduce(0, +)
+    )
+}
+
+enum TimeUnit: CaseIterable, CustomStringConvertible {
+    
+    case days
+    case hours
+    case minutes
+    case seconds
+    
+    var description: String {
+        switch self {
+        case .days:
+            return "d"
+        case .hours:
+            return "h"
+        case .minutes:
+            return "m"
+        case .seconds:
+            return "s"
+        }
+    }
+    
+    func toSeconds(hoursPerDay: Int = 24) -> Int { // assume 24h days for now
+        let SECONDS_PER_MINUTE = 60
+        let SECONDS_PER_HOUR = SECONDS_PER_MINUTE * 60
+        
+        if self == .days {
+            return SECONDS_PER_HOUR * hoursPerDay
+        } else if self == .hours {
+            return SECONDS_PER_HOUR
+        } else if self == .minutes {
+            return SECONDS_PER_MINUTE
+        } else {
+            assert(self == .seconds, "unrecognized unit")
+            return 1
+        }
+    }
+}
+
+struct TimeIntervalBreakdown: CustomStringConvertible {
+    
+    let negative: Bool
+    let components: [TimeUnit: Int]
+    
+    init(from input: TimeInterval, roundedTo roundTo: TimeUnit = .seconds) {
+        
+        var interval = Int(input)
+        
+        if interval < 0 {
+            negative = true
+            interval *= -1
+        } else {
+            negative = false
+        }
+        
+        var components: [TimeUnit: Int] = [:]
+        for unit in TimeUnit.allCases {
+            let secondsPerUnit = unit.toSeconds()
+            if unit == roundTo {
+                components[unit] = Int(
+                    (Double(interval) / Double(secondsPerUnit)).rounded()
+                )
+                break
+            } else {
+                let value = interval / secondsPerUnit
+                interval -= (value * secondsPerUnit)
+                components[unit] = value
+            }
+        }
+        self.components = components
+    }
+    
+    func componentInterval(for unit: TimeUnit) -> Int {
+        return components[unit] ?? 0
+    }
+    
+    var description: String {
+        let negation = negative ? "-" : ""
+        return negation + componentsInOrder.map(
+            {(unit, magnitude) in "\(magnitude)\(unit.description)"}
+        ).joined(separator: " ")
+    }
+    
+    private var componentsInOrder: [(TimeUnit, Int)] {
+        let entries: [(TimeUnit, Int)] = TimeUnit.allCases.compactMap({ unit in
+            if let magnitude = components[unit] {
+                return (unit, magnitude)
+            } else {
+                return nil
+            }
+        })
+        guard let mostPreciseUnit = entries.last?.0 else {
+            return [] // shouldn't happen, but let's be safe
+        }
+        let withoutLeadingZeros = entries.drop(while: {_, magnitude in magnitude == 0})
+        if withoutLeadingZeros.isEmpty {
+            return [(mostPreciseUnit, 0)]
+        }
+        return Array(withoutLeadingZeros)
+    }
 }
