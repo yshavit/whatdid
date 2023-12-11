@@ -21,10 +21,8 @@ class WhatdidControlHooks: NSObject, NSTextFieldDelegate {
     private let showConstraints: NSButton
     
     override init() {
-        
         deferButton = NSButton(checkboxWithTitle: DeferHandlerImpl.deferCheckboxTitle, target: nil, action: nil)
-        autoincTimestamp = NSButton(checkboxWithTitle: "auto-increment on save", target: nil, action: nil)
-        
+        autoincTimestamp = NSButton(checkboxWithTitle: "Auto-increment on model save", target: nil, action: nil)
         
         entriesField = NSTextField(string: "")
         entriesField.setAccessibilityLabel("uihook_flatentryjson")
