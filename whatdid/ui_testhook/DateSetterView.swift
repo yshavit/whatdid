@@ -25,11 +25,16 @@ class DateSetterView: WdView, NSTextFieldDelegate {
         
         printUtc = NSTextField(labelWithString: "")
         printUtc.setAccessibilityLabel("mockclock_status")
+        printUtc.font = printUtc.font?.withSize(NSFont.systemFontSize(for: .small))
+        
         printLocal = NSTextField(labelWithString: "")
         
         let relativeViews = NSStackView()
         relativeViews.spacing = 0
         relativeViews.orientation = .horizontal
+        let relativeViewsHeader = NSTextField(labelWithString: "epoch + ")
+        relativeViewsHeader.font = relativeViewsHeader.font?.withSize(NSFont.systemFontSize(for: .small))
+        relativeViews.addArrangedSubview(relativeViewsHeader)
         
         let integerFormatter = NumberFormatter()
         integerFormatter.numberStyle = .none
@@ -64,11 +69,12 @@ class DateSetterView: WdView, NSTextFieldDelegate {
         
         let stack = NSStackView(orientation: .vertical,
                                 epochText,
-                                printUtc,
                                 printLocal,
-                                relativeViews
+                                relativeViews,
+                                printUtc
         )
         stack.alignment = .leading
+        stack.spacing /= 2
         addSubview(stack)
         anchorAllSides(to: stack)
     }
@@ -161,7 +167,7 @@ class DateSetterView: WdView, NSTextFieldDelegate {
         
         let timeFormatter = ISO8601DateFormatter()
         timeFormatter.timeZone = TimeZone.utc
-        printUtc.stringValue = timeFormatter.string(from: date)
+        printUtc.stringValue = "(" + timeFormatter.string(from: date) + ")"
         
         timeFormatter.timeZone = DefaultScheduler.instance.timeZone
         printLocal.stringValue = timeFormatter.string(from: date)
