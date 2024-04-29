@@ -141,7 +141,7 @@ jobs:
         marketing_version="$(echo "$APP_STORE_VERSION_STR" | cut -d: -f1)"
         full_version="$(echo "$APP_STORE_VERSION_STR" | cut -d: -f2)"
         printf 'Using marketing version <%s> and full version <%s>\n' "$marketing_version" "$full_version"
-        xcrun altool --upload-package Whatdid.app -t osx --apple-id "$APPLE_ID" --bundle-id com.yuvalshavit.whatdid --bundle-short-version-string "$marketing_version" --bundle-version "$full_version" -u "$APPLE_ID" -p '@env:APPLE_NOTARYTOOL_PASSWORD'
+        xcrun altool --upload-package Whatdid.app -t osx --apple-id CUJYAXXM6G.com.yuvalshavit.whatdid --bundle-id com.yuvalshavit.whatdid --bundle-short-version-string "$marketing_version" --bundle-version "$full_version" -u "$APPLE_ID" -p '@env:APPLE_NOTARYTOOL_PASSWORD'
       env:
         APP_STORE_VERSION_STR: ${{ inputs.appStorePublishVersion }}
         APPLE_RELEASE_KEY_ISSUER: ${{ secrets.APPLE_RELEASE_KEY_ISSUER }}
