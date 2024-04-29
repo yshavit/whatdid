@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       appStorePublishVersion:
-        description: App store version: "MARKETING:FULL"
+        description: 'App store version: "MARKETING:FULL"'
         required: false
         type: string
 
@@ -134,6 +134,19 @@ jobs:
       with:
         name: Whatdid${{ env.NAME_QUALIFIER }}.dmg
         path: build/Whatdid.dmg
+    - name: Upload app to App Store
+      if: ${{ matrix.target == 'release' && inputs.appStorePublishVersion }}
+      run: |
+        marketing_version="$(echo "APP_STORE_VERSION_STR" | cut -d: -f1)"
+        full_version="$(echo "APP_STORE_VERSION_STR" | cut -d: -f2)"
+
+        xcrun altool --upload-package Whatdid.app -t osx --apple-id "$APPLE_ID" --bundle-id com.yuvalshavit.whatdid --bundle-short-version-string "$marketing_version" --bundle-version "$full_version" -u "$APPLE_ID" -p '@env:APPLE_NOTARYTOOL_PASSWORD'
+      env:
+        APP_STORE_VERSION_STR: ${{ inputs.appStorePublishVersion }}
+        APPLE_RELEASE_KEY_ISSUER: ${{{ secrets.APPLE_RELEASE_KEY_ISSUER }}
+        APPLE_RELEASE_KEY_ID: ${{{ secrets.APPLE_RELEASE_KEY_ID }}
+        APPLE_ID: ${{ secrets.APPLE_ID }}
+        APPLE_NOTARYTOOL_PASSWORD: ${{ secrets.APPLE_NOTARYTOOL_PASSWORD }}
 
     - name: Upload packaging logs
       uses: actions/upload-artifact@v2
