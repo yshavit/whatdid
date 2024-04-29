@@ -137,9 +137,9 @@ jobs:
     - name: Upload app to App Store
       if: ${{ matrix.target == 'app-store' && inputs.appStorePublishVersion != '' }}
       run: |
+        cd build
         marketing_version="$(echo "APP_STORE_VERSION_STR" | cut -d: -f1)"
         full_version="$(echo "APP_STORE_VERSION_STR" | cut -d: -f2)"
-
         xcrun altool --upload-package Whatdid.app -t osx --apple-id "$APPLE_ID" --bundle-id com.yuvalshavit.whatdid --bundle-short-version-string "$marketing_version" --bundle-version "$full_version" -u "$APPLE_ID" -p '@env:APPLE_NOTARYTOOL_PASSWORD'
       env:
         APP_STORE_VERSION_STR: ${{ inputs.appStorePublishVersion }}
