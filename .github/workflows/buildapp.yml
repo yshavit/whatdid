@@ -135,7 +135,7 @@ jobs:
         name: Whatdid${{ env.NAME_QUALIFIER }}.dmg
         path: build/Whatdid.dmg
     - name: Upload app to App Store
-      if: ${{ matrix.target == 'release' && inputs.appStorePublishVersion }}
+      if: ${{ matrix.target == 'app-store' && inputs.appStorePublishVersion != '' }}
       run: |
         marketing_version="$(echo "APP_STORE_VERSION_STR" | cut -d: -f1)"
         full_version="$(echo "APP_STORE_VERSION_STR" | cut -d: -f2)"
