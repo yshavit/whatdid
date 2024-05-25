@@ -1,4 +1,5 @@
 #!/bin/bash -e
+set -x
 
 sha="$(git log -n 1 '--pretty=format:%h')"
 if [[ $(git status -s | wc -c) -ne 0 ]]; then 
