@@ -25,5 +25,6 @@ for plist in "$info_plist" "$target_plist" "$dsym_plist"; do
     fi
   else
     echo "Missing plist: $plist"
+    exit 1
   fi
 done
