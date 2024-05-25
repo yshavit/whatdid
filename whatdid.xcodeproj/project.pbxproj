@@ -6,6 +6,20 @@
 	objectVersion = 54;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		60D5F41C2C0286430017D139 /* infoplist-preprocess-generator */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 60D5F41D2C0286430017D139 /* Build configuration list for PBXAggregateTarget "infoplist-preprocess-generator" */;
+			buildPhases = (
+				60D5F4212C02865D0017D139 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = "infoplist-preprocess-generator";
+			productName = "infoplist-preprocess-generator";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		6E01204F389CB80FC8CD75ED /* EditEntriesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E012F97EBB4C11F269A1939 /* EditEntriesDataSource.swift */; };
 		6E012216A8475ABF72DEBC69 /* EntriesTreeControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E012ED45DEC1A299BFA43AB /* EntriesTreeControllerTest.swift */; };
@@ -291,6 +305,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		60D5F4222C02868C0017D139 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7E8C04D223714F0700A0C3A6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 60D5F41C2C0286430017D139;
+			remoteInfo = "infoplist-preprocess-generator";
+		};
+		60D5F4242C0286D20017D139 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7E8C04D223714F0700A0C3A6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 60D5F41C2C0286430017D139;
+			remoteInfo = "infoplist-preprocess-generator";
+		};
 		7E8C04EB23714F0800A0C3A6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7E8C04D223714F0700A0C3A6 /* Project object */;
@@ -1010,12 +1038,12 @@
 				7E8C04D623714F0700A0C3A6 /* Sources */,
 				7E8C04D723714F0700A0C3A6 /* Frameworks */,
 				7E8C04D823714F0700A0C3A6 /* Resources */,
-				7E1C2F4F24CE33780070D8CD /* Set gitsha in Info.plist */,
 				7E6FF1C2252D73EA0071E58C /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				60D5F4232C02868C0017D139 /* PBXTargetDependency */,
 			);
 			name = whatdid;
 			packageProductDependencies = (
@@ -1069,12 +1097,12 @@
 				7EF30DD42AC2B4920097FA24 /* Sources */,
 				7EF30E2F2AC2B4920097FA24 /* Frameworks */,
 				7EF30E332AC2B4920097FA24 /* Resources */,
-				7EF30E3F2AC2B4920097FA24 /* Set gitsha in Info.plist */,
 				7EF30E402AC2B4920097FA24 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				60D5F4252C0286D20017D139 /* PBXTargetDependency */,
 			);
 			name = "whatdid-app-store";
 			packageProductDependencies = (
@@ -1094,6 +1122,9 @@
 				LastUpgradeCheck = 1320;
 				ORGANIZATIONNAME = "Yuval Shavit";
 				TargetAttributes = {
+					60D5F41C2C0286430017D139 = {
+						CreatedOnToolsVersion = 15.4;
+					};
 					7E6FF19B252D71060071E58C = {
 						CreatedOnToolsVersion = 12.0.1;
 					};
@@ -1132,6 +1163,7 @@
 				7E8C04E923714F0800A0C3A6 /* whatdidTests */,
 				7E8C04F423714F0800A0C3A6 /* whatdidUITests */,
 				7E6FF19B252D71060071E58C /* WhatdidLauncher */,
+				60D5F41C2C0286430017D139 /* infoplist-preprocess-generator */,
 			);
 		};
 /* End PBXProject section */
@@ -1203,7 +1235,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		7E1C2F4F24CE33780070D8CD /* Set gitsha in Info.plist */ = {
+		60D5F4212C02865D0017D139 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -1213,33 +1245,14 @@
 			);
 			inputPaths = (
 			);
-			name = "Set gitsha in Info.plist";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"$(SRCROOT)/buildscripts/infoplist-preprocess/compiled.h",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -euo pipefail\n$SRCROOT/buildscripts/set_plist_build.sh\n";
-		};
-		7EF30E3F2AC2B4920097FA24 /* Set gitsha in Info.plist */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 12;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Set gitsha in Info.plist";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "set -euo pipefail\n$SRCROOT/buildscripts/set_plist_build.sh\n";
+			shellScript = "set -euo pipefail\ncd \"$SRCROOT/buildscripts/\"\n./create_infoplist_preprocessor.sh\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1528,6 +1541,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		60D5F4232C02868C0017D139 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 60D5F41C2C0286430017D139 /* infoplist-preprocess-generator */;
+			targetProxy = 60D5F4222C02868C0017D139 /* PBXContainerItemProxy */;
+		};
+		60D5F4252C0286D20017D139 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 60D5F41C2C0286430017D139 /* infoplist-preprocess-generator */;
+			targetProxy = 60D5F4242C0286D20017D139 /* PBXContainerItemProxy */;
+		};
 		7E8C04EC23714F0800A0C3A6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 7E8C04D923714F0700A0C3A6 /* whatdid */;
@@ -1552,6 +1575,33 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		60D5F41E2C0286430017D139 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CUJYAXXM6G;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		60D5F41F2C0286430017D139 /* UI Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CUJYAXXM6G;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "UI Test";
+		};
+		60D5F4202C0286430017D139 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CUJYAXXM6G;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		7E6FF1A7252D71080071E58C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2004,12 +2054,14 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = whatdid/Info.plist;
+				INFOPLIST_PREFIX_HEADER = "$(PROJECT_DIR)/buildscripts/infoplist-preprocess/compiled.h";
+				INFOPLIST_PREPROCESS = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 0.2.1;
+				MARKETING_VERSION = 0.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.whatdid;
 				PRODUCT_NAME = Whatdid;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2027,12 +2079,14 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = whatdid/Info.plist;
+				INFOPLIST_PREFIX_HEADER = "$(PROJECT_DIR)/buildscripts/infoplist-preprocess/compiled.h";
+				INFOPLIST_PREPROCESS = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 0.2.1;
+				MARKETING_VERSION = 0.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.whatdid;
 				PRODUCT_NAME = Whatdid;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2051,12 +2105,14 @@
 				DEVELOPMENT_TEAM = CUJYAXXM6G;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = whatdid/Info.plist;
+				INFOPLIST_PREFIX_HEADER = "$(PROJECT_DIR)/buildscripts/infoplist-preprocess/compiled.h";
+				INFOPLIST_PREPROCESS = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 0.2.1;
+				MARKETING_VERSION = 0.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuvalshavit.whatdid;
 				PRODUCT_NAME = Whatdid;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2067,6 +2123,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		60D5F41D2C0286430017D139 /* Build configuration list for PBXAggregateTarget "infoplist-preprocess-generator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				60D5F41E2C0286430017D139 /* Debug */,
+				60D5F41F2C0286430017D139 /* UI Test */,
+				60D5F4202C0286430017D139 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		7E6FF1AA252D71080071E58C /* Build configuration list for PBXNativeTarget "WhatdidLauncher" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
