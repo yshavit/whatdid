@@ -1,0 +1,2 @@
+- fixed.h is checked in
+- compiled.h is generated from `fixed/*.h plus other stuff by `buildscripts/create_infoplist_preprocessor.sh`
